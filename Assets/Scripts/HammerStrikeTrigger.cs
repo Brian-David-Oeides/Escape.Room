@@ -22,10 +22,10 @@ public class HammerStrikeTrigger : MonoBehaviour
 
         if (other.CompareTag(hammerTag) && targetRigidbody != null)
         {
-            // Step 1: Unlock the cabinet door
+            // step 1: unlock cabinet door
             targetRigidbody.isKinematic = false;
 
-            // Step 2: Disable the XR Socket Interactor to release the stake
+            // step 2: disable the XR Socket Interactor to release stake
             if (stakeSocket != null)
             {
                 stakeSocket.enabled = false;
