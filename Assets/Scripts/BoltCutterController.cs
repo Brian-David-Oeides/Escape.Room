@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +43,7 @@ public class BoltCutterController : MonoBehaviour
         {
             isCutting = true;
             currentRotation = 0f;
+            BoltCutterCutState.IsCutting = true;
         }
     }
 
@@ -64,6 +65,7 @@ public class BoltCutterController : MonoBehaviour
 
         isCutting = false;
         isResetting = false;
+        BoltCutterCutState.IsCutting = false; // reset the flag
     }
 }
 
