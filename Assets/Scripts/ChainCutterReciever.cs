@@ -7,6 +7,9 @@ public class ChainCutterReciever : MonoBehaviour
     [Header("Assign the real chain Rigidbody here")]
     public Rigidbody chainBody;
 
+    [Header("Audio Clip for Chain Cut")]
+    public AudioSource audioSource;
+
     [Header("Delay before disabling after hit")]
     public float disableDelay = 2f;
 
@@ -19,6 +22,12 @@ public class ChainCutterReciever : MonoBehaviour
             _hasBeenCut = true;
             chainBody.isKinematic = false;
             chainBody.useGravity = true;
+
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
+
             Debug.Log("Chain cut!");
         }
     }
