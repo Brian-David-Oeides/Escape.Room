@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,9 +6,13 @@ public class ScreenFader : MonoBehaviour
 {
     public CanvasGroup fadeCanvasGroup;
 
-    private void Start()
+    void Awake()
     {
-        fadeCanvasGroup.alpha = 0f;
+        // Set screen fully black before anything renders
+        if (fadeCanvasGroup != null)
+        {
+            fadeCanvasGroup.alpha = 1f;
+        }
     }
 
     public void FadeIn(float duration = 1f)
