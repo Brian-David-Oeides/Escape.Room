@@ -5,18 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Main Menu.unity
-    guid: 5c9016770d19040449694d89273c436e
+  - enabled: 1
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: 0ef0bdde02efcd84dbdc705799596dfd
   - enabled: 1
     path: Assets/Scenes/TheBoilerDemo.unity
     guid: 84468e41ffe83b14094d501a6d6dd037
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 0
-    path: Assets/Scenes/Main Menu.unity
-    guid: 834507dddd7dd39408e84b7a71fd51c8
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 1b89aab4c54e22c4a8d2ce883c3ba0f8,
       type: 2}
