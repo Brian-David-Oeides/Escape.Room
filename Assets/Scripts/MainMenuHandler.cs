@@ -9,7 +9,7 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject xrOrigin;
     public GameObject mainMenuUI;
     public ScreenFader screenFader;
-    public Transform mainMenuSpawnPoint; // refreence for the MainMenuPosition 
+    public Transform mainMenuSpawnPoint; // reference for the MainMenuPosition 
 
 
     void Start()
@@ -19,30 +19,29 @@ public class MainMenuHandler : MonoBehaviour
         {
             if (xrOrigin != null)
             {
-                xrOrigin.transform.position = mainMenuSpawnPoint.position;
+                xrOrigin.transform.position = mainMenuSpawnPoint.position; // spawn XR Origin at spawn point
                 xrOrigin.transform.rotation = mainMenuSpawnPoint.rotation;
-                RotateOriginToFace(mainMenuUI.transform.position);
-                LockPlayerMovement();
+                RotateOriginToFace(mainMenuUI.transform.position); // face the main menu
+                LockPlayerMovement(); // disable snapturn and locomotion
             }
 
             if (mainMenuUI != null)
             {
-                mainMenuUI.SetActive(true);
+                mainMenuUI.SetActive(true); // set UI active
             }
 
             //fade in from black
             if (screenFader != null)
             {
-                screenFader.FadeOut(1f);
+                screenFader.FadeOut(1f); // fade out 
             }
         }
         else
         {
             // in the gameplay scene (i.e., "TheBoilerDemo")
-            // hide the menu UI 
             if (mainMenuUI != null)
             {
-                mainMenuUI.SetActive(false);
+                mainMenuUI.SetActive(false); // hide the menu UI 
             }
 
             //fade in from black on restart
@@ -58,40 +57,40 @@ public class MainMenuHandler : MonoBehaviour
 
     public void StartGame()
     {
-        var routine = LoadGameScene();
-        if (routine != null)
+        var routine = LoadGameScene(); // assign coroutine to var
+        if (routine != null) // check if var exists
         {
-            StartCoroutine(routine);
+            StartCoroutine(routine); // run coroutine stored in var
         }
-        else
+        else // or 
         {
-            Debug.LogWarning("LoadGameScene coroutine is null. Scene not loaded.");
+            Debug.LogWarning("LoadGameScene coroutine is null. Scene not loaded."); // log warning
         }
     }
 
     private IEnumerator LoadGameScene()
     {
-        if (screenFader != null)
+        if (screenFader != null) // check if screenfader exists
         {
-            screenFader.FadeIn(1f);
-            yield return new WaitForSeconds(1f);
+            screenFader.FadeIn(1f); // fade in
+            yield return new WaitForSeconds(1f); // delay 1 sec
         }
         else
         {
-            Debug.LogWarning("ScreenFader is not assigned.");
+            Debug.LogWarning("ScreenFader is not assigned."); // if null log warning
         }
 
-        GameMode.startFromMenu = false;
-        SceneManager.LoadScene("TheBoilerDemo");
+        GameMode.startFromMenu = false; // disable start from menu
+        SceneManager.LoadScene("TheBoilerDemo"); //load the scene via string name
     }
 
     public void ExitGame()
     {
-        Debug.Log("Quitting game...");
-        Application.Quit();
+        Debug.Log("Quitting game..."); // log the event
+        Application.Quit(); // close the application in build
 
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false; // close the application in Unity Editor
 #endif
     }
 

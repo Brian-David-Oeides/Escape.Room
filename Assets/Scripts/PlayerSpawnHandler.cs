@@ -9,11 +9,11 @@ public class PlayerSpawnHandler : MonoBehaviour
 
     void Start()
     {
-        // Player should only be moved if entering from the main menu or restarting
-        if (!GameMode.startFromMenu)
+        // only move player to this position if entering from the main menu or restarting
+        if (!GameMode.startFromMenu) // if GameMode.startFromMenu not true
         {
-            if (xrOrigin != null && startPosition != null)
-            {
+            if (xrOrigin != null && startPosition != null) // if XR Origin exists and start positiion exists in scene
+            {   // set XR origin position and rotation to startPosition
                 xrOrigin.transform.position = startPosition.position;
                 xrOrigin.transform.rotation = startPosition.rotation;
             }

@@ -43,7 +43,6 @@ public class EscapeUIButtonHandler : MonoBehaviour
         }
 
         GameMode.startFromMenu = true; // show menu UI
-
         SceneManager.LoadScene("MainMenuScene");
     }
 
