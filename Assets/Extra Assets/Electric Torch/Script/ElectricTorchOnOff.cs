@@ -70,7 +70,18 @@ public class ElectricTorchOnOff : MonoBehaviour
         }
 	}
 
-	void InputKey()
+    public void TurnFlashlightOn()
+    {
+        _flashLightOn = true;
+    }
+
+    public void TurnFlashlightOff()
+    {
+        _flashLightOn = false;
+    }
+
+
+    /*void InputKey()
     {
 		if (Input.GetKeyDown(_kCode) && _flashLightOn == true)
 		{
@@ -82,7 +93,7 @@ public class ElectricTorchOnOff : MonoBehaviour
 			_flashLightOn = true;
 
 		}
-	}
+	}*/
 
 	void NoBatteryLight()
     {
@@ -96,7 +107,7 @@ public class ElectricTorchOnOff : MonoBehaviour
 			GetComponent<Light>().intensity = 0.0f;
 			_emissionMaterialFade.OffEmission();
 		}
-		InputKey();
+        TurnFlashlightOn();
 	}
 
 	void WithBatteryLight()
@@ -128,6 +139,6 @@ public class ElectricTorchOnOff : MonoBehaviour
 			}
 		}
 
-		InputKey();
+        TurnFlashlightOn();
 	}
 }
