@@ -22,9 +22,6 @@ public class ElectricTorchOnOff : MonoBehaviour
 	public LightChoose modoLightChoose;
 	[Space]
 	[Space]
-	public string onOffLightKey = "F";
-	private KeyCode _kCode;
-	[Space]
 	[Space]
 	public bool _PowerPickUp = false;
 	[Space]
@@ -45,19 +42,15 @@ public class ElectricTorchOnOff : MonoBehaviour
 		{
 			_emissionMaterialFade = _scriptControllerEmissionFade.GetComponent<EmissionMaterialGlassTorchFadeOut>();
 		}
-		if (_scriptControllerEmissionFade  == null) {Debug.Log("Cannot find 'EmissionMaterialGlassTorchFadeOut' script");}
+		if (_scriptControllerEmissionFade  == null) 
+		{
+			Debug.Log("Cannot find 'EmissionMaterialGlassTorchFadeOut' script");
+		}
 
-		_kCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), onOffLightKey);
 	}
 
 	void Update()
 	{
-		// detecting parse error keyboard type
-		if (System.Enum.TryParse(onOffLightKey, out _kCode))
-		{
-			_kCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), onOffLightKey);
-		}
-        //
 
         switch (modoLightChoose)
         {
@@ -80,21 +73,6 @@ public class ElectricTorchOnOff : MonoBehaviour
         _flashLightOn = false;
     }
 
-
-    /*void InputKey()
-    {
-		if (Input.GetKeyDown(_kCode) && _flashLightOn == true)
-		{
-			_flashLightOn = false;
-
-		}
-		else if (Input.GetKeyDown(_kCode) && _flashLightOn == false)
-		{
-			_flashLightOn = true;
-
-		}
-	}*/
-
 	void NoBatteryLight()
     {
 		if (_flashLightOn)
@@ -107,7 +85,7 @@ public class ElectricTorchOnOff : MonoBehaviour
 			GetComponent<Light>().intensity = 0.0f;
 			_emissionMaterialFade.OffEmission();
 		}
-        TurnFlashlightOn();
+        
 	}
 
 	void WithBatteryLight()
@@ -139,6 +117,6 @@ public class ElectricTorchOnOff : MonoBehaviour
 			}
 		}
 
-        TurnFlashlightOn();
+       
 	}
 }

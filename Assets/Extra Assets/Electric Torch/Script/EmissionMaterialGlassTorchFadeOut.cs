@@ -12,6 +12,7 @@ public class EmissionMaterialGlassTorchFadeOut : MonoBehaviour
 
     Color _alphaStart;
 
+    [SerializeField]
     ElectricTorchOnOff _torchOnOff;
 
     private void Start()
@@ -19,17 +20,23 @@ public class EmissionMaterialGlassTorchFadeOut : MonoBehaviour
         _mat = GetComponent<Renderer>();
         _alphaStart = _mat.material.color;
 
-        GameObject _torchLight = GameObject.Find("Torch Light");
+        //GameObject _torchLight = GameObject.Find("Torch Light");
 
-        if (_torchLight != null) {_torchOnOff = _torchLight.GetComponent<ElectricTorchOnOff>();}
-        if (_torchLight == null) {Debug.Log("Cannot find 'ElectricTorchOnOff' script");}
+        if (_torchOnOff == null) 
+        {
+            Debug.Log("Cannot find 'ElectricTorchOnOff' script");
+            return;
+        }
 
         _intensity = _torchOnOff.intensityLight;
     }
 
     private void Update()
     {
-        _intensity = _torchOnOff.intensityLight;
+        if (_torchOnOff != null)
+        {
+            _intensity = _torchOnOff.intensityLight;
+        }
     }
 
     public void TimeEmission(float t)

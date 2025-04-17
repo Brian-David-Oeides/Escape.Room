@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7413464985485623580}
   - component: {fileID: 8503985141305437358}
   - component: {fileID: 8891439592886382946}
+  - component: {fileID: 4129353227324546305}
+  - component: {fileID: 8557184125440438755}
   m_Layer: 7
   m_Name: Electric Torch HighPoly
   m_TagString: Untagged
@@ -30,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4478003, y: 1.4478, z: 1.4478003}
+  m_LocalScale: {x: 1.277177, y: 1.2771767, z: 1.277177}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2761471592326986967}
@@ -105,7 +107,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 129
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -138,10 +140,10 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3001713506112187440}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 3001713506112187442}
+        m_TargetAssemblyTypeName: ElectricTorchOnOff, Assembly-CSharp
+        m_MethodName: TurnFlashlightOn
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -152,7 +154,19 @@ MonoBehaviour:
         m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3001713506112187442}
+        m_TargetAssemblyTypeName: ElectricTorchOnOff, Assembly-CSharp
+        m_MethodName: TurnFlashlightOff
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -272,6 +286,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.042203937, y: 0.062181663, z: 0.24988762}
   m_Center: {x: 0.0010807425, y: 0.03177774, z: -0.00086739194}
+--- !u!114 &4129353227324546305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2695777482564835125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26b868317c1bbf4eaffa1b1eec1ed78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torchScript: {fileID: 3001713506112187442}
+--- !u!114 &8557184125440438755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2695777482564835125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11dc9f3a012aeae47adb2de8dff13254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torchScript: {fileID: 3001713506112187442}
 --- !u!1 &3001713506112187440
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3001713506112187443
 Transform:
   m_ObjectHideFlags: 0
@@ -382,7 +422,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modoLightChoose: 0
-  onOffLightKey: F
   _PowerPickUp: 0
   intensityLight: 2.5
   _lightTime: 0.05
@@ -524,6 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdb63732f7cd5444682de206601a1134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _torchOnOff: {fileID: 3001713506112187442}
 --- !u!1 &6821229387637173931
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,10 +588,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6821229387637173931}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.0299, z: -0.0412}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: -0.017, y: 0.0299, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3324364588802526607}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
