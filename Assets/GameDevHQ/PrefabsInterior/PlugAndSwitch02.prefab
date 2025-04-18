@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6228411627546469236}
   - component: {fileID: 1638041990283220072}
   - component: {fileID: 5106516879593603047}
+  - component: {fileID: 1632321159473731476}
   - component: {fileID: 3077158101119590871}
   m_Layer: 0
   m_Name: SwitchOn
@@ -63,6 +64,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1632321159473731476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3675353353154773703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f287e34a5aa8b4eb630ce831ac166e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isOn: 0
+  _switchAnimator: {fileID: 0}
+  _animBoolParameterName: SwitchOn
+  OnSwitchOn:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSwitchOff:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3077158101119590871
 MonoBehaviour:
   m_ObjectHideFlags: 0
