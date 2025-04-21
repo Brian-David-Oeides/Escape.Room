@@ -5,22 +5,22 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class DoorToggle : MonoBehaviour
 {
-    [SerializeField] private Animator doorAnimator;
-    [SerializeField] private string boolParameterName = "IsOpen";
-    private bool isOpen = false;
+    [SerializeField] private Animator _doorAnimator;
+    [SerializeField] private string _boolParameterName = "IsOpen";
+    private bool _isOpen = false;
 
     void Start()
     {
         // Get the Animator if not assigned
-        if (doorAnimator == null)
+        if (_doorAnimator == null)
         {
             // Try to find the animator on the parent (door) if this script is on the handle
-            doorAnimator = GetComponentInParent<Animator>();
+            _doorAnimator = GetComponentInParent<Animator>();
 
             // If still not found, try to find it on this object
-            if (doorAnimator == null)
+            if (_doorAnimator == null)
             {
-                doorAnimator = GetComponent<Animator>();
+                _doorAnimator = GetComponent<Animator>();
             }
         }
 
@@ -39,10 +39,10 @@ public class DoorToggle : MonoBehaviour
         }
 
         // Initialize the door to closed state
-        if (doorAnimator != null)
+        if (_doorAnimator != null)
         {
-            doorAnimator.SetBool(boolParameterName, false);
-            Debug.Log("Door animator initialized with parameter: " + boolParameterName);
+            _doorAnimator.SetBool(_boolParameterName, false);
+            Debug.Log("Door animator initialized with parameter: " + _boolParameterName);
         }
         else
         {
@@ -54,17 +54,17 @@ public class DoorToggle : MonoBehaviour
     {
         Debug.Log("Handle grabbed event triggered");
 
-        if (doorAnimator == null)
+        if (_doorAnimator == null)
         {
             Debug.LogError("Door Animator not assigned in DoorToggle script");
             return;
         }
 
         // Toggle the door state
-        isOpen = !isOpen;
+        _isOpen = !_isOpen;
 
-        Debug.Log("Toggling door state to: " + (isOpen ? "Open" : "Closed"));
-        doorAnimator.SetBool(boolParameterName, isOpen);
+        Debug.Log("Toggling door state to: " + (_isOpen ? "Open" : "Closed"));
+        _doorAnimator.SetBool(_boolParameterName, _isOpen);
     }
 
     // Public method to toggle door state from other scripts or events
