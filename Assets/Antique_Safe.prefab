@@ -119,7 +119,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6911067845091374323}
-  - component: {fileID: 6520744890157479257}
   m_Layer: 0
   m_Name: Door_Handle
   m_TagString: Untagged
@@ -144,27 +143,6 @@ Transform:
   - {fileID: 1680917974679065880}
   m_Father: {fileID: 4534921962940430006}
   m_LocalEulerAnglesHint: {x: 0, y: 80, z: 180}
---- !u!95 &6520744890157479257
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796626847805172496}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7fd01037608672c4fac91a2f7d680a18, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3473435682482627457
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,6 +399,68 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!1 &3570763925513691721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7757924120486675237}
+  - component: {fileID: 4210490054693028043}
+  - component: {fileID: 3329129473279610198}
+  m_Layer: 0
+  m_Name: SafeDoorCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7757924120486675237
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3570763925513691721}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7670531, z: -0, w: 0.64158356}
+  m_LocalPosition: {x: 0.00020224453, y: 0.0024645205, z: 0.0021100964}
+  m_LocalScale: {x: 0.0038179546, y: 0.0059243627, z: 0.0013047616}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4534921962940430006}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &4210490054693028043
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3570763925513691721}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &3329129473279610198
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3570763925513691721}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7113403117748621515
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,12 +506,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd436ca31e753f7459e3323da609894a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorAnimator: {fileID: 3242641403244634694}
-  handleAnimator: {fileID: 6520744890157479257}
-  handleBool: TurnHandle
-  doorBool: IsOpen
-  handleAnimationDuration: 1
+  animator: {fileID: 0}
   grabInteractable: {fileID: 0}
+  turnHandleParam: TurnHandle
+  isOpenParam: IsOpen
+  handleAnimDuration: 1
 --- !u!1 &7505553318262232956
 GameObject:
   m_ObjectHideFlags: 0
@@ -503,6 +542,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6911067845091374323}
+  - {fileID: 7757924120486675237}
   m_Father: {fileID: 1470262753373504592}
   m_LocalEulerAnglesHint: {x: 0, y: 100.18, z: 0}
 --- !u!95 &3242641403244634694
