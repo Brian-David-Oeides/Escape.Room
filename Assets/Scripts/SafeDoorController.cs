@@ -6,62 +6,85 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class SafeDoorController : MonoBehaviour
 {
     [Header("Animator References")]
-    [SerializeField] private Animator doorAnimator;     // Animator on the parent
-    [SerializeField] private Animator handleAnimator;   // Animator on the child handle
+    [SerializeField] private Animator doorAnimator;     // Animator on Door_Hinge
+    [SerializeField] private Animator handleAnimator;   // Animator on Door_Handle
 
     [Header("Animation Parameters")]
-    [SerializeField] private string handleBool = "TurnHandle";
-    [SerializeField] private string doorBool = "IsOpen";
+    [SerializeField] private string handleBool = "TurnHandle"; // Parameter in handle Animator
+    [SerializeField] private string doorBool = "IsOpen";       // Parameter in door Animator
 
     [Header("Timing")]
-    [SerializeField] private float handleAnimationDuration = 1.0f;
+    [SerializeField] private float handleAnimationDuration = 1.0f; // How long to wait before opening door
 
-    private bool isOpen = false;
+    [Header("Interaction")]
+    [SerializeField] private XRGrabInteractable grabInteractable;  // Assigned to DoorHandleCollider
 
-    void Start()
+    private bool hasBeenUsed = false;
+
+    private void Start()
     {
-        // Auto-assign door animator if not set
-        if (doorAnimator == null)
-            doorAnimator = GetComponent<Animator>();
-
-        // Auto-assign handle animator if not set
-        if (handleAnimator == null)
-            handleAnimator = GetComponentInChildren<Animator>();
-
-        // Register grab event from the XRGrabInteractable on the handle
-        XRGrabInteractable grab = handleAnimator.GetComponent<XRGrabInteractable>();
-        if (grab != null)
+        // Try to auto-assign XR Grab Interactable if not set
+        if (grabInteractable == null)
         {
-            grab.selectEntered.AddListener(OnHandleGrabbed);
-            Debug.Log("SafeDoorController: Grab listener registered");
+            grabInteractable = GetComponentInChildren<XRGrabInteractable>();
+        }
+
+        if (grabInteractable != null)
+        {
+            grabInteractable.selectEntered.AddListener(OnHandleGrabbed);
+            Debug.Log("SafeDoorController: Grab listener registered.");
         }
         else
         {
-            Debug.LogError("SafeDoorController: XRGrabInteractable not found on handle object");
+            Debug.LogError("SafeDoorController: XRGrabInteractable not assigned or found.");
         }
 
-        // Init door state
+        // Ensure door starts in closed state
         if (doorAnimator != null)
+        {
             doorAnimator.SetBool(doorBool, false);
+        }
     }
 
     private void OnHandleGrabbed(SelectEnterEventArgs args)
     {
-        Debug.Log("SafeDoorController: Handle grabbed");
-        StartCoroutine(HandleThenToggleDoor());
+        if (hasBeenUsed) return;
+
+        hasBeenUsed = true;
+        Debug.Log("SafeDoorController: Handle grabbed, triggering animations.");
+
+        // Start handle animation
+        if (handleAnimator != null)
+        {
+            handleAnimator.SetBool(handleBool, true);
+        }
+
+        // Trigger door after short delay
+        StartCoroutine(TriggerDoorAfterDelay());
     }
 
-    private IEnumerator HandleThenToggleDoor()
+    private IEnumerator TriggerDoorAfterDelay()
     {
-        // 1. Play handle animation
-        handleAnimator.SetBool(handleBool, true);
-
-        // 2. Wait for handle animation to finish
         yield return new WaitForSeconds(handleAnimationDuration);
 
-        // 3. Toggle door open/close
-        isOpen = !isOpen;
-        doorAnimator.SetBool(doorBool, isOpen);
-        Debug.Log("SafeDoorController: Door toggled to " + (isOpen ? "Open" : "Closed"));
+        if (doorAnimator != null)
+        {
+            doorAnimator.SetBool(doorBool, true);
+            Debug.Log("SafeDoorController: Door animation triggered.");
+        }
     }
+    public void TriggerHandleAndDoor()
+    {
+        if (!hasBeenUsed)
+        {
+            hasBeenUsed = true;
+            Debug.Log("SafeDoorController: Triggered via inspector event.");
+
+            if (handleAnimator != null)
+                handleAnimator.SetBool(handleBool, true);
+
+            StartCoroutine(TriggerDoorAfterDelay());
+        }
+    }
+
 }
