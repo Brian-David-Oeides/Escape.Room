@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -7,7 +7,7 @@ public class SafeDial : MonoBehaviour
 {
     [Header("Combination Settings")]
     [Range(0, 99)] public int[] correctCombination = new int[3];
-    public float numberTolerance = 2f;
+    public float numberTolerance = 1f; // lowered slightly for better precision
 
     [Header("References")]
     public Animator doorAnimator;
@@ -23,13 +23,8 @@ public class SafeDial : MonoBehaviour
     public float maxTickVolume = 1f;
     public float maxRotationSpeed = 720f;
 
-    [Header("Haptics")]
-    public float tickHapticAmplitude = 0.2f;
-    public float tickHapticDuration = 0.02f;
-    public float correctHapticAmplitude = 0.6f;
-    public float correctHapticDuration = 0.1f;
-    public float unlockHapticAmplitude = 1f;
-    public float unlockHapticDuration = 0.3f;
+    [HideInInspector]
+    public int currentDialNumber; // unified source for dial number
 
     private float previousAngle;
     private int lastPassedNumber = -1;
@@ -40,7 +35,10 @@ public class SafeDial : MonoBehaviour
     private float correctNumberTimer = 0f;
 
     private XRGrabInteractable grabInteractable;
-    private XRBaseController controller;
+
+    // Event for SafeDialUI
+    public delegate void DialNumberChanged(int currentNumber);
+    public event DialNumberChanged OnDialNumberChanged;
 
     private void Awake()
     {
@@ -51,20 +49,20 @@ public class SafeDial : MonoBehaviour
 
     private void OnGrab(SelectEnterEventArgs args)
     {
-        controller = args.interactorObject.transform.GetComponent<XRBaseController>();
-
-        // Lock the object's position while allowing rotation
         grabInteractable.trackPosition = false;
         grabInteractable.trackRotation = true;
+
+        // notify UI
+        FindObjectOfType<SafeDialUI>()?.OnDialGrabbed();
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        controller = null;
-
-        // Reset the interactable (optional)
         grabInteractable.trackPosition = false;
         grabInteractable.trackRotation = true;
+
+        // Notify UI
+        FindObjectOfType<SafeDialUI>()?.OnDialReleased();
     }
 
     private void Update()
@@ -75,26 +73,28 @@ public class SafeDial : MonoBehaviour
         float deltaAngle = Mathf.DeltaAngle(previousAngle, currentAngle);
 
         float rotationSpeed = Mathf.Abs(deltaAngle) / Time.deltaTime;
-        float dialValue = Mathf.Repeat(currentAngle, 360f);
-        int currentNumber = Mathf.RoundToInt(dialValue / 3.6f);
 
-        if (currentNumber != lastPassedNumber)
+        // --- Calculate the dial number once and store it ---
+        float dialValue = Mathf.Repeat(currentAngle, 360f);
+        currentDialNumber = Mathf.RoundToInt(dialValue / 3.6f);
+        currentDialNumber = Mathf.Clamp(currentDialNumber, 0, 99); // safe clamp
+
+        // Play tick sound and notify UI when passing a new number
+        if (currentDialNumber != lastPassedNumber)
         {
             PlayTickSound(rotationSpeed);
-            SendHapticImpulse(tickHapticAmplitude, tickHapticDuration);
-
-            lastPassedNumber = currentNumber;
+            OnDialNumberChanged?.Invoke(currentDialNumber);
+            lastPassedNumber = currentDialNumber;
         }
 
+        // Check if landed on correct number
         correctNumberTimer -= Time.deltaTime;
 
         if (correctNumberTimer <= 0f)
         {
-            if (Mathf.Abs(currentNumber - correctCombination[currentCombinationIndex]) <= numberTolerance)
+            if (Mathf.Abs(currentDialNumber - correctCombination[currentCombinationIndex]) <= numberTolerance)
             {
                 PlaySound(correctNumberSound);
-                SendHapticImpulse(correctHapticAmplitude, correctHapticDuration);
-
                 correctNumberTimer = correctNumberCooldown;
                 currentCombinationIndex++;
 
@@ -104,7 +104,6 @@ public class SafeDial : MonoBehaviour
                 }
             }
         }
-        Debug.Log("Current Number: " + currentNumber);
 
         previousAngle = currentAngle;
     }
@@ -113,7 +112,6 @@ public class SafeDial : MonoBehaviour
     {
         isUnlocked = true;
         PlaySound(unlockSound);
-        SendHapticImpulse(unlockHapticAmplitude, unlockHapticDuration);
 
         if (doorAnimator != null)
         {
@@ -138,11 +136,9 @@ public class SafeDial : MonoBehaviour
         }
     }
 
-    private void SendHapticImpulse(float amplitude, float duration)
-    {
-        if (controller != null)
-        {
-            controller.SendHapticImpulse(amplitude, duration);
-        }
-    }
+    // --- PUBLIC GETTERS for SafeDialUI ---
+    public bool IsUnlocked => isUnlocked;
+    public int CurrentCombinationIndex => currentCombinationIndex;
+    public int[] CorrectCombination => correctCombination;
+    public float NumberTolerance => numberTolerance;
 }
