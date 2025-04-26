@@ -289,8 +289,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ced732bb0e06dc948a07391771479f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  safeDial: {fileID: 8687520702911948804}
   dialNumberText: {fileID: 6383207466506884041}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 0, g: 1, b: 0, a: 1}
+  highlightDuration: 0.5
+  safeDial: {fileID: 8687520702911948804}
+  popScaleMultiplier: 1.2
+  popDuration: 0.2
   dialCanvas: {fileID: 4796721266273164660}
 --- !u!1 &3473435682482627457
 GameObject:
@@ -806,6 +811,7 @@ GameObject:
   - component: {fileID: 4534921962940430006}
   - component: {fileID: 3242641403244634694}
   - component: {fileID: 6768893687359536860}
+  - component: {fileID: 2799268101568526085}
   m_Layer: 0
   m_Name: Door_Hinge
   m_TagString: Untagged
@@ -948,6 +954,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2799268101568526085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7505553318262232956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0976fd785aa7a498a18fe1df7894cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleAudioSource: {fileID: 6768893687359536860}
+  handleTurnSound: {fileID: 8300000, guid: 84f473cede36bc542a897d137cda6255, type: 3}
+  doorOpenSound: {fileID: 8300000, guid: e9320cbd7800a0442be4af0d87d1bdf1, type: 3}
+  doorCloseSound: {fileID: 8300000, guid: a251f1f97a3ea9045b7a56bf14723511, type: 3}
 --- !u!1 &8440318046726105645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,12 +1127,7 @@ MonoBehaviour:
   minTickVolume: 0.2
   maxTickVolume: 1
   maxRotationSpeed: 720
-  tickHapticAmplitude: 0.2
-  tickHapticDuration: 0.02
-  correctHapticAmplitude: 0.6
-  correctHapticDuration: 0.1
-  unlockHapticAmplitude: 1
-  unlockHapticDuration: 0.3
+  currentDialNumber: 0
 --- !u!54 &4065626496990687610
 Rigidbody:
   m_ObjectHideFlags: 0
