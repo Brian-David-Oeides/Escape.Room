@@ -7,11 +7,16 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SafeDialUI : MonoBehaviour
 {
+    #region Variables
+
     [Header("UI References")]
     public TextMeshProUGUI dialNumberText;
     public Color defaultColor = Color.white;
     public Color highlightColor = Color.green;
     public float highlightDuration = 0.5f;
+    
+    [Header("Canvas Reference")]
+    public Canvas dialCanvas;
 
     [Header("Safe Dial Reference")]
     public SafeDial safeDial;
@@ -26,9 +31,9 @@ public class SafeDialUI : MonoBehaviour
     private Vector3 originalScale;
     private bool isPopping = false;
 
-    [Header("Canvas Reference")]
-    public Canvas dialCanvas;
+    #endregion
 
+    #region Unity Events
 
     private void Start()
     {
@@ -64,6 +69,18 @@ public class SafeDialUI : MonoBehaviour
             }
         }
     }
+
+    private void OnDestroy()
+    {
+        if (safeDial != null)
+        {
+            safeDial.OnDialNumberChanged -= UpdateDialDisplay;
+        }
+    }
+
+    #endregion
+
+    #region Custom Methods
 
     private void UpdateDialDisplay(int number)
     {
@@ -127,14 +144,6 @@ public class SafeDialUI : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        if (safeDial != null)
-        {
-            safeDial.OnDialNumberChanged -= UpdateDialDisplay;
-        }
-    }
-
     public void OnDialGrabbed()
     {
         if (dialCanvas != null)
@@ -150,4 +159,6 @@ public class SafeDialUI : MonoBehaviour
             dialCanvas.enabled = false; // hide canvas
         }
     }
+
+    #endregion
 }

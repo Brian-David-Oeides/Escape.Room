@@ -5,6 +5,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SafeDial : MonoBehaviour
 {
+    #region Variables
+
     [Header("Combination Settings")]
     [Range(0, 99)] public int[] correctCombination = new int[3];
     public float numberTolerance = 1f; // lowered slightly for better precision
@@ -34,35 +36,32 @@ public class SafeDial : MonoBehaviour
     private float correctNumberCooldown = 1.0f;
     private float correctNumberTimer = 0f;
 
-    private XRGrabInteractable grabInteractable;
+    [SerializeField] private XRGrabInteractable grabInteractable;
 
     // Event for SafeDialUI
     public delegate void DialNumberChanged(int currentNumber);
     public event DialNumberChanged OnDialNumberChanged;
 
+    #endregion
+    #region Unity Events
+
     private void Awake()
     {
-        grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectEntered.AddListener(OnGrab);
-        grabInteractable.selectExited.AddListener(OnRelease);
-    }
+        // fallback if forgot to manually assign XR GRabInteractable
+        if (grabInteractable == null)
+        {
+            grabInteractable = GetComponent<XRGrabInteractable>();
+        }
 
-    private void OnGrab(SelectEnterEventArgs args)
-    {
-        grabInteractable.trackPosition = false;
-        grabInteractable.trackRotation = true;
-
-        // notify UI
-        FindObjectOfType<SafeDialUI>()?.OnDialGrabbed();
-    }
-
-    private void OnRelease(SelectExitEventArgs args)
-    {
-        grabInteractable.trackPosition = false;
-        grabInteractable.trackRotation = true;
-
-        // Notify UI
-        FindObjectOfType<SafeDialUI>()?.OnDialReleased();
+        if (grabInteractable != null)
+        {
+            grabInteractable.selectEntered.AddListener(OnGrab);
+            grabInteractable.selectExited.AddListener(OnRelease);
+        }
+        else
+        {
+            Debug.LogError($"[SafeDial] Missing XRGrabInteractable on {gameObject.name}! Haptics and interaction will not work.");
+        }
     }
 
     private void Update()
@@ -108,6 +107,30 @@ public class SafeDial : MonoBehaviour
         previousAngle = currentAngle;
     }
 
+    #endregion
+
+    #region Custom Methods
+
+    private void OnGrab(SelectEnterEventArgs args)
+    {
+        grabInteractable.trackPosition = false;
+        grabInteractable.trackRotation = true;
+
+        // notify UI
+        FindObjectOfType<SafeDialUI>()?.OnDialGrabbed();
+    }
+
+    private void OnRelease(SelectExitEventArgs args)
+    {
+        grabInteractable.trackPosition = false;
+        grabInteractable.trackRotation = true;
+
+        // Notify UI
+        FindObjectOfType<SafeDialUI>()?.OnDialReleased();
+    }
+
+   
+
     private void UnlockSafe()
     {
         isUnlocked = true;
@@ -136,9 +159,16 @@ public class SafeDial : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Public Getters
+
     // --- PUBLIC GETTERS for SafeDialUI ---
     public bool IsUnlocked => isUnlocked;
     public int CurrentCombinationIndex => currentCombinationIndex;
     public int[] CorrectCombination => correctCombination;
     public float NumberTolerance => numberTolerance;
+
+    #endregion
+
 }
