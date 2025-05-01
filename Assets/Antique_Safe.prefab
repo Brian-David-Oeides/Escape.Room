@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 4796721266273164660}
   - component: {fileID: 6057169113094505004}
   - component: {fileID: 1993727984676943541}
-  - component: {fileID: 8399063296442233807}
+  - component: {fileID: 2625898869735192289}
   m_Layer: 5
   m_Name: DialNumberCanvas
   m_TagString: Untagged
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8399063296442233807
+--- !u!114 &2625898869735192289
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -286,15 +286,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2407315939950056095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ced732bb0e06dc948a07391771479f01, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dba6315741139541811283a1253fdfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialNumberText: {fileID: 6383207466506884041}
+  dialNumberText: {fileID: 0}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   highlightColor: {r: 0, g: 1, b: 0, a: 1}
   highlightDuration: 0.5
-  dialCanvas: {fileID: 4796721266273164660}
-  safeDial: {fileID: 8687520702911948804}
+  dialCanvas: {fileID: 0}
+  safeDial: {fileID: 0}
   popScaleMultiplier: 1.2
   popDuration: 0.2
 --- !u!1 &3460855360821345801
@@ -313,6 +313,7 @@ GameObject:
   - component: {fileID: 5812576753537750923}
   - component: {fileID: 8254999142038745343}
   - component: {fileID: 1812747287407301484}
+  - component: {fileID: 3526965919327464206}
   m_Layer: 0
   m_Name: SafeDialVisual
   m_TagString: Untagged
@@ -415,12 +416,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3460855360821345801}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 927a812b7895cfa44a82238787c247a5, type: 3}
+  m_Script: {fileID: 11500000, guid: ec03989a7eb5f5041b7b98c7c5a15e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetRenderer: {fileID: 3509029701484018527}
-  grabInteractable: {fileID: 8254999142038745343}
-  fullyTransparentColor: {r: 1, g: 1, b: 1, a: 0}
+  hoverColor: {r: 0, g: 1, b: 1, a: 1}
+  selectColor: {r: 0, g: 1, b: 0, a: 1}
+  glowIntensity: 2
+  lerpSpeed: 5
+  grabInteractable: {fileID: 0}
 --- !u!54 &5812576753537750923
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -610,14 +613,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 3460855360821345801}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18d950708bcdfc94f9e991186ddea573, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c26b0bfd723a934798a290b27c2e51e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverColor: {r: 0.015686274, g: 0.71101224, b: 1, a: 0.08235294}
-  selectColor: {r: 0, g: 1, b: 0, a: 1}
-  glowIntensity: 2
-  lerpSpeed: 5
+  dialRenderer: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverColor: {r: 0, g: 1, b: 1, a: 1}
+  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &3526965919327464206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3460855360821345801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c2bd99bb349f0489ca5f6973c329f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 3509029701484018527}
   grabInteractable: {fileID: 8254999142038745343}
+  fullyTransparentColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &3473435682482627457
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,7 +778,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7021926688854697263}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SafeDoorController, Assembly-CSharp
         m_MethodName: TriggerHandleAndDoor
         m_Mode: 1
@@ -1079,7 +1096,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470262753373504592}
-  - component: {fileID: 7021926688854697263}
+  - component: {fileID: 4780246975636227215}
   m_Layer: 0
   m_Name: Other
   m_TagString: Untagged
@@ -1104,7 +1121,7 @@ Transform:
   - {fileID: 4534921962940430006}
   m_Father: {fileID: 8436105491544065103}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &7021926688854697263
+--- !u!114 &4780246975636227215
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1113,14 +1130,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7113403117748621515}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd436ca31e753f7459e3323da609894a, type: 3}
+  m_Script: {fileID: 11500000, guid: cbf6cb2a61ed27947b3288eb4da7f6f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  grabInteractable: {fileID: 0}
-  turnHandleParam: TurnHandle
-  isOpenParam: IsOpen
-  handleAnimDuration: 1
+  _animator: {fileID: 3242641403244634694}
+  _grabInteractable: {fileID: 6625737995168805163}
+  _turnHandleParam: TurnHandle
+  _isOpenParam: IsOpen
+  _handleAnimDuration: 1
 --- !u!1 &7505553318262232956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,7 +1149,7 @@ GameObject:
   - component: {fileID: 4534921962940430006}
   - component: {fileID: 3242641403244634694}
   - component: {fileID: 6768893687359536860}
-  - component: {fileID: 2799268101568526085}
+  - component: {fileID: 4423300767846997273}
   m_Layer: 0
   m_Name: Door_Hinge
   m_TagString: Untagged
@@ -1167,9 +1184,9 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7505553318262232956}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8770570f656299645b85453b58c29135, type: 2}
+  m_Controller: {fileID: 9100000, guid: c32c1426058c9cd4ea7eb6c7bd909440, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1276,7 +1293,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2799268101568526085
+--- !u!114 &4423300767846997273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1285,13 +1302,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7505553318262232956}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0976fd785aa7a498a18fe1df7894cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 899202c01babac94ab323469fc204d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handleAudioSource: {fileID: 6768893687359536860}
-  handleTurnSound: {fileID: 8300000, guid: 84f473cede36bc542a897d137cda6255, type: 3}
-  doorOpenSound: {fileID: 8300000, guid: e9320cbd7800a0442be4af0d87d1bdf1, type: 3}
-  doorCloseSound: {fileID: 8300000, guid: a251f1f97a3ea9045b7a56bf14723511, type: 3}
+  _handleAudioSource: {fileID: 6768893687359536860}
+  _handleTurnSound: {fileID: 8300000, guid: 84f473cede36bc542a897d137cda6255, type: 3}
+  _doorOpenSound: {fileID: 8300000, guid: e9320cbd7800a0442be4af0d87d1bdf1, type: 3}
+  _doorCloseSound: {fileID: 8300000, guid: a251f1f97a3ea9045b7a56bf14723511, type: 3}
 --- !u!1 &8440318046726105645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,13 +1414,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7604564715437674394}
-  - component: {fileID: 8687520702911948804}
+  - component: {fileID: 8521464984269990842}
   - component: {fileID: 4065626496990687610}
   - component: {fileID: 61406003912939259}
   - component: {fileID: 8029701953265742283}
   - component: {fileID: 6499384662880994761}
-  - component: {fileID: 5719981902361318791}
-  - component: {fileID: 8091526740756752963}
+  - component: {fileID: 4873641791328416715}
+  - component: {fileID: 361033979506120002}
   m_Layer: 0
   m_Name: Safe_Dial
   m_TagString: Untagged
@@ -1427,30 +1444,48 @@ Transform:
   - {fileID: 2181565878946482783}
   m_Father: {fileID: 4534921962940430006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8687520702911948804
-MonoBehaviour:
+--- !u!23 &8521464984269990842
+MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9151890794179808594}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a24f8ddb513c3244eb4212007a6c09fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  correctCombination: 000000000000000000000000
-  numberTolerance: 2
-  doorAnimator: {fileID: 0}
-  audioSource: {fileID: 0}
-  dialTickSound: {fileID: 0}
-  correctNumberSound: {fileID: 0}
-  unlockSound: {fileID: 0}
-  minTickVolume: 0.2
-  maxTickVolume: 1
-  maxRotationSpeed: 720
-  currentDialNumber: 0
-  grabInteractable: {fileID: 0}
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a7754a1955b321244b098925cf1bd528, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!54 &4065626496990687610
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1747,7 +1782,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5719981902361318791
+--- !u!114 &4873641791328416715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1756,17 +1791,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 9151890794179808594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc0a3184ab2cab94eaee435620dbb559, type: 3}
+  m_Script: {fileID: 11500000, guid: 518011839d64d2d44b423b2caeca5512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  safeDial: {fileID: 8687520702911948804}
+  safeDial: {fileID: 0}
   tickAmplitude: 0.2
   tickDuration: 0.02
   correctAmplitude: 0.6
   correctDuration: 0.1
   unlockAmplitude: 1
   unlockDuration: 0.3
---- !u!114 &8091526740756752963
+--- !u!114 &361033979506120002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1775,10 +1810,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 9151890794179808594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46676681d9499ff4995d93794e4a59ea, type: 3}
+  m_Script: {fileID: 11500000, guid: ff09fa57092394e4d8c164307557eb5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialRenderer: {fileID: 0}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  hoverColor: {r: 0, g: 1, b: 1, a: 1}
-  selectedColor: {r: 0, g: 1, b: 0, a: 1}
+  correctCombination: 000000000000000000000000
+  numberTolerance: 1
+  doorAnimator: {fileID: 0}
+  audioSource: {fileID: 0}
+  dialTickSound: {fileID: 0}
+  correctNumberSound: {fileID: 0}
+  unlockSound: {fileID: 0}
+  minTickVolume: 0.2
+  maxTickVolume: 1
+  maxRotationSpeed: 720
+  currentDialNumber: 0
+  grabInteractable: {fileID: 0}
