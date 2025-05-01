@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class SafeDoorAudioEvents : MonoBehaviour
 {
-    [SerializeField] private AudioSource handleAudioSource;
-    [SerializeField] private AudioClip handleTurnSound;
-    [SerializeField] private AudioClip doorOpenSound;
-    [SerializeField] private AudioClip doorCloseSound;
+    [SerializeField] 
+    private AudioSource _handleAudioSource;
+    [SerializeField] 
+    private AudioClip _handleTurnSound;
+    [SerializeField] 
+    private AudioClip _doorOpenSound;
+    [SerializeField] 
+    private AudioClip _doorCloseSound;
 
     public void PlayHandleSound()
     {
-        handleAudioSource.PlayOneShot(handleTurnSound);
+        _handleAudioSource.PlayOneShot(_handleTurnSound);
     }
 
     public void PlayOpenSound()
     {
-        handleAudioSource.PlayOneShot(doorOpenSound);
+        _handleAudioSource.PlayOneShot(_doorOpenSound);
     }
 
     public void PlayCloseSound()
     {
-        handleAudioSource.PlayOneShot(doorCloseSound);
+        _handleAudioSource.PlayOneShot(_doorCloseSound);
     }
 }
 

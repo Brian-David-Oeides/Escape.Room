@@ -5,52 +5,57 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SafeDoorController : MonoBehaviour
 {
-    [SerializeField] private Animator animator; // Animator on Door_Hinge
-    [SerializeField] private XRGrabInteractable grabInteractable;
+    [SerializeField] 
+    private Animator _animator; 
+    [SerializeField] 
+    private XRGrabInteractable _grabInteractable;
 
-    [SerializeField] private string turnHandleParam = "TurnHandle";
-    [SerializeField] private string isOpenParam = "IsOpen";
-    [SerializeField] private float handleAnimDuration = 1.0f;
+    [SerializeField] 
+    private string _turnHandleParam = "TurnHandle";
+    [SerializeField] 
+    private string _isOpenParam = "IsOpen";
+    [SerializeField] 
+    private float _handleAnimDuration = 1.0f;
 
-    private bool isOpen = false;
-    private bool isAnimating = false;
+    private bool _isOpen = false;
+    private bool _isAnimating = false;
 
     void Start()
     {
-        if (grabInteractable != null)
+        if (_grabInteractable != null)
         {
-            grabInteractable.selectEntered.AddListener(OnHandleGrabbed);
+            _grabInteractable.selectEntered.AddListener(OnHandleGrabbed);
         }
 
-        // Ensure states start correctly
-        animator.SetBool(turnHandleParam, false);
-        animator.SetBool(isOpenParam, false);
+        // states start in disabled state
+        _animator.SetBool(_turnHandleParam, false);
+        _animator.SetBool(_isOpenParam, false);
     }
 
     private void OnHandleGrabbed(SelectEnterEventArgs args)
     {
-        if (isAnimating) return;
+        if (_isAnimating) return;
 
         StartCoroutine(AnimateDoorToggle());
     }
 
     private IEnumerator AnimateDoorToggle()
     {
-        isAnimating = true;
+        _isAnimating = true;
 
         // Trigger handle animation
-        animator.SetBool(turnHandleParam, true);
+        _animator.SetBool(_turnHandleParam, true);
 
-        yield return new WaitForSeconds(handleAnimDuration);
+        yield return new WaitForSeconds(_handleAnimDuration);
 
         // Toggle door state
-        isOpen = !isOpen;
-        animator.SetBool(isOpenParam, isOpen);
+        _isOpen = !_isOpen;
+        _animator.SetBool(_isOpenParam, _isOpen);
 
         // Reset handle param (if used in transition)
-        animator.SetBool(turnHandleParam, false);
+        _animator.SetBool(_turnHandleParam, false);
 
-        isAnimating = false;
+        _isAnimating = false;
     }
 }
 
