@@ -28,17 +28,17 @@ public class SafeDial : MonoBehaviour
     [HideInInspector]
     public int currentDialNumber; // unified source for dial number
 
-    private float previousAngle;
-    private int lastPassedNumber = -1;
-    private int currentCombinationIndex = 0;
-    private bool isUnlocked = false;
+    private float _previousAngle;
+    private int _lastPassedNumber = -1;
+    private int _currentCombinationIndex = 0;
+    private bool _isUnlocked = false;
 
-    private float correctNumberCooldown = 1.0f;
-    private float correctNumberTimer = 0f;
+    private float _correctNumberCooldown = 1.0f;
+    private float _correctNumberTimer = 0f;
 
     [SerializeField] private XRGrabInteractable grabInteractable;
 
-    // Event for SafeDialUI
+    // event for SafeDialUI
     public delegate void DialNumberChanged(int currentNumber);
     public event DialNumberChanged OnDialNumberChanged;
 
@@ -66,45 +66,45 @@ public class SafeDial : MonoBehaviour
 
     private void Update()
     {
-        if (isUnlocked) return;
+        if (_isUnlocked) return;
 
         float currentAngle = transform.localEulerAngles.z;
-        float deltaAngle = Mathf.DeltaAngle(previousAngle, currentAngle);
+        float deltaAngle = Mathf.DeltaAngle(_previousAngle, currentAngle);
 
         float rotationSpeed = Mathf.Abs(deltaAngle) / Time.deltaTime;
 
-        // --- Calculate the dial number once and store it ---
+        // --- calculate the dial number once and store it ---
         float dialValue = Mathf.Repeat(currentAngle, 360f);
         currentDialNumber = Mathf.RoundToInt(dialValue / 3.6f);
         currentDialNumber = Mathf.Clamp(currentDialNumber, 0, 99); // safe clamp
 
-        // Play tick sound and notify UI when passing a new number
-        if (currentDialNumber != lastPassedNumber)
+        // play tick sound and notify UI when passing a new number
+        if (currentDialNumber != _lastPassedNumber)
         {
             PlayTickSound(rotationSpeed);
             OnDialNumberChanged?.Invoke(currentDialNumber);
-            lastPassedNumber = currentDialNumber;
+            _lastPassedNumber = currentDialNumber;
         }
 
-        // Check if landed on correct number
-        correctNumberTimer -= Time.deltaTime;
+        // check if landed on correct number
+        _correctNumberTimer -= Time.deltaTime;
 
-        if (correctNumberTimer <= 0f)
+        if (_correctNumberTimer <= 0f)
         {
-            if (Mathf.Abs(currentDialNumber - correctCombination[currentCombinationIndex]) <= numberTolerance)
+            if (Mathf.Abs(currentDialNumber - correctCombination[_currentCombinationIndex]) <= numberTolerance)
             {
                 PlaySound(correctNumberSound);
-                correctNumberTimer = correctNumberCooldown;
-                currentCombinationIndex++;
+                _correctNumberTimer = _correctNumberCooldown;
+                _currentCombinationIndex++;
 
-                if (currentCombinationIndex >= correctCombination.Length)
+                if (_currentCombinationIndex >= correctCombination.Length)
                 {
                     UnlockSafe();
                 }
             }
         }
 
-        previousAngle = currentAngle;
+        _previousAngle = currentAngle;
     }
 
     #endregion
@@ -133,7 +133,7 @@ public class SafeDial : MonoBehaviour
 
     private void UnlockSafe()
     {
-        isUnlocked = true;
+        _isUnlocked = true;
         PlaySound(unlockSound);
 
         if (doorAnimator != null)
@@ -164,8 +164,8 @@ public class SafeDial : MonoBehaviour
     #region Public Getters
 
     // --- PUBLIC GETTERS for SafeDialUI ---
-    public bool IsUnlocked => isUnlocked;
-    public int CurrentCombinationIndex => currentCombinationIndex;
+    public bool IsUnlocked => _isUnlocked;
+    public int CurrentCombinationIndex => _currentCombinationIndex;
     public int[] CorrectCombination => correctCombination;
     public float NumberTolerance => numberTolerance;
 
