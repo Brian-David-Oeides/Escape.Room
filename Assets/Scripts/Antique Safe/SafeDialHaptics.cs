@@ -6,9 +6,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SafeDialHaptics : MonoBehaviour
 {
+    #region Variables
+
     [Header("References")]
     public SafeDial safeDial; // Reference to the SafeDial script
-    private XRBaseInteractor currentInteractor;
+    private XRBaseInteractor _currentInteractor;
 
     [Header("Haptic Settings")]
     public float tickAmplitude = 0.2f;
@@ -18,7 +20,11 @@ public class SafeDialHaptics : MonoBehaviour
     public float unlockAmplitude = 1f;
     public float unlockDuration = 0.3f;
 
-    private int lastKnownDialNumber = -1;
+    private int _lastKnownDialNumber = -1;
+
+    #endregion
+
+    #region Unity Events
 
     private void Awake()
     {
@@ -39,29 +45,19 @@ public class SafeDialHaptics : MonoBehaviour
         }
     }
 
-    private void OnGrab(SelectEnterEventArgs args)
-    {
-        currentInteractor = args.interactorObject as XRBaseInteractor;
-    }
-
-    private void OnRelease(SelectExitEventArgs args)
-    {
-        currentInteractor = null;
-    }
-
     private void Update()
     {
-        if (safeDial == null || currentInteractor == null)
+        if (safeDial == null || _currentInteractor == null)
             return;
 
-        // Detect number changes (tick)
-        if (safeDial.currentDialNumber != lastKnownDialNumber)
+        // detect number changes (tick)
+        if (safeDial.currentDialNumber != _lastKnownDialNumber)
         {
-            lastKnownDialNumber = safeDial.currentDialNumber;
+            _lastKnownDialNumber = safeDial.currentDialNumber;
             SendHaptic(tickAmplitude, tickDuration);
         }
 
-        // Detect correct number landing
+        // detect correct number landing
         if (!safeDial.IsUnlocked && safeDial.CurrentCombinationIndex < safeDial.CorrectCombination.Length)
         {
             int target = safeDial.CorrectCombination[safeDial.CurrentCombinationIndex];
@@ -71,22 +67,38 @@ public class SafeDialHaptics : MonoBehaviour
             }
         }
 
-        // Detect unlock
-        if (safeDial.IsUnlocked && currentInteractor != null)
+        // detect unlock
+        if (safeDial.IsUnlocked && _currentInteractor != null)
         {
             SendHaptic(unlockAmplitude, unlockDuration);
         }
     }
 
+    #endregion
+
+    #region Custom Methods
+
+    private void OnGrab(SelectEnterEventArgs args)
+    {
+        _currentInteractor = args.interactorObject as XRBaseInteractor;
+    }
+
+    private void OnRelease(SelectExitEventArgs args)
+    {
+        _currentInteractor = null;
+    }
+
     private void SendHaptic(float amplitude, float duration)
     {
-        if (currentInteractor != null)
+        if (_currentInteractor != null)
         {
-            if (currentInteractor is XRBaseControllerInteractor controllerInteractor)
+            if (_currentInteractor is XRBaseControllerInteractor controllerInteractor)
             {
                 controllerInteractor.SendHapticImpulse(Mathf.Clamp01(amplitude), duration);
             }
         }
     }
+
+    #endregion
 }
 

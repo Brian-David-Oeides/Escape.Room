@@ -6,6 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class ToolboxLidOpenAudio : MonoBehaviour
 {
+    #region Variables
+
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip openClip;
@@ -17,6 +19,10 @@ public class ToolboxLidOpenAudio : MonoBehaviour
     private bool _isGrabbing = false;
     private bool _hasPlayedOpenSound = false;
 
+    #endregion
+
+    #region Unity Events
+
     private void OnEnable()
     {
         grabInteractable.selectEntered.AddListener(OnGrab);
@@ -27,17 +33,6 @@ public class ToolboxLidOpenAudio : MonoBehaviour
     {
         grabInteractable.selectEntered.RemoveListener(OnGrab);
         grabInteractable.selectExited.RemoveListener(OnRelease);
-    }
-
-    private void OnGrab(SelectEnterEventArgs args)
-    {
-        _isGrabbing = true;
-        _hasPlayedOpenSound = false;
-    }
-
-    private void OnRelease(SelectExitEventArgs args)
-    {
-        _isGrabbing = false;
     }
 
     private void FixedUpdate()
@@ -53,4 +48,22 @@ public class ToolboxLidOpenAudio : MonoBehaviour
             _hasPlayedOpenSound = true;
         }
     }
+
+    #endregion
+
+    #region Custom Methods
+
+    private void OnGrab(SelectEnterEventArgs args)
+    {
+        _isGrabbing = true;
+        _hasPlayedOpenSound = false;
+    }
+
+    private void OnRelease(SelectExitEventArgs args)
+    {
+        _isGrabbing = false;
+    }
+
+    #endregion
+
 }

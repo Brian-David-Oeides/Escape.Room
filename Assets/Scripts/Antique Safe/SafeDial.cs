@@ -43,6 +43,7 @@ public class SafeDial : MonoBehaviour
     public event DialNumberChanged OnDialNumberChanged;
 
     #endregion
+
     #region Unity Events
 
     private void Awake()

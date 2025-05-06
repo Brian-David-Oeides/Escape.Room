@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class ToolboxLidCloseAudio : MonoBehaviour
 {
+    #region Variables
+
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip closeClip;
+
+    #endregion
+
+    #region Unity Events
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -22,4 +28,6 @@ public class ToolboxLidCloseAudio : MonoBehaviour
             }
         }
     }
+
+    #endregion
 }

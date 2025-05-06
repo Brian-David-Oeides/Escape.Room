@@ -86,9 +86,9 @@ public class SafeDialUI : MonoBehaviour
     {
         if (dialNumberText != null)
         {
-            dialNumberText.text = number.ToString("D2"); // Always 2 digits
+            dialNumberText.text = number.ToString("D2"); // 2 digits
 
-            // Check if player is close to correct number
+            // check if player is close to correct number
             if (!safeDial.IsUnlocked && safeDial.CurrentCombinationIndex < safeDial.CorrectCombination.Length)
             {
                 int targetNumber = safeDial.CorrectCombination[safeDial.CurrentCombinationIndex];
@@ -117,7 +117,7 @@ public class SafeDialUI : MonoBehaviour
     {
         isPopping = true;
 
-        // Scale up immediately
+        // scale up immediately
         dialNumberText.transform.localScale = originalScale * popScaleMultiplier;
 
         float elapsed = 0f;
@@ -128,7 +128,7 @@ public class SafeDialUI : MonoBehaviour
             yield return null;
         }
 
-        // Snap back exactly
+        // snap back exactly
         dialNumberText.transform.localScale = originalScale;
 
         isPopping = false;
