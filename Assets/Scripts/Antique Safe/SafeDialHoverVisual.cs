@@ -10,23 +10,23 @@ public class SafeDialHoverVisual : MonoBehaviour
     #region Variables
 
     [Header("Visual Settings")]
-    [SerializeField] private Color hoverColor = new Color(0f, 0.8f, 1f, 1f);
-    [SerializeField] private Color selectColor = new Color(0f, 0.9f, 1f, 1f);
-    [SerializeField] private Color baseColor = new Color(0f, 0f, 0f, 0f);
+    [SerializeField] private Color _hoverColor = new Color(0f, 0.8f, 1f, 1f);
+    [SerializeField] private Color _selectColor = new Color(0f, 0.9f, 1f, 1f);
+    [SerializeField] private Color _baseColor = new Color(0f, 0f, 0f, 0f);
 
     [Header("Transition Settings")]
-    [SerializeField] private float fadeSpeed = 5f;
+    [SerializeField] private float _fadeSpeed = 5f;
 
     [Header("References")]
-    [SerializeField] private List<Renderer> tintRenderers;
-    [SerializeField] private XRBaseInteractable interactable;
+    [SerializeField] private List<Renderer> _tintRenderers;
+    [SerializeField] private XRBaseInteractable _interactable;
 
-    private MaterialPropertyBlock propertyBlock;
-    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
-    private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
+    private MaterialPropertyBlock _propertyBlock;
+    private static readonly int _EmissionColor = Shader.PropertyToID("_EmissionColor");
+    private static readonly int _BaseColor = Shader.PropertyToID("_BaseColor");
 
-    private Color currentColor;
-    private Color targetColor;
+    private Color _currentColor;
+    private Color _targetColor;
 
     #endregion
 
@@ -34,35 +34,35 @@ public class SafeDialHoverVisual : MonoBehaviour
 
     private void Awake()
     {
-        interactable = GetComponent<XRBaseInteractable>();
-        propertyBlock = new MaterialPropertyBlock();
-        currentColor = baseColor;
-        targetColor = baseColor;
+        _interactable = GetComponent<XRBaseInteractable>();
+        _propertyBlock = new MaterialPropertyBlock();
+        _currentColor = _baseColor;
+        _targetColor = _baseColor;
 
-        if (interactable != null)
+        if (_interactable != null)
         {
-            interactable.firstHoverEntered.AddListener(OnHoverEntered);
-            interactable.lastHoverExited.AddListener(OnHoverExited);
-            interactable.firstSelectEntered.AddListener(OnSelectEntered);
-            interactable.lastSelectExited.AddListener(OnSelectExited);
+            _interactable.firstHoverEntered.AddListener(OnHoverEntered);
+            _interactable.lastHoverExited.AddListener(OnHoverExited);
+            _interactable.firstSelectEntered.AddListener(OnSelectEntered);
+            _interactable.lastSelectExited.AddListener(OnSelectExited);
         }
     }
 
     private void OnDestroy()
     {
-        if (interactable != null)
+        if (_interactable != null)
         {
-            interactable.firstHoverEntered.RemoveListener(OnHoverEntered);
-            interactable.lastHoverExited.RemoveListener(OnHoverExited);
-            interactable.firstSelectEntered.RemoveListener(OnSelectEntered);
-            interactable.lastSelectExited.RemoveListener(OnSelectExited);
+            _interactable.firstHoverEntered.RemoveListener(OnHoverEntered);
+            _interactable.lastHoverExited.RemoveListener(OnHoverExited);
+            _interactable.firstSelectEntered.RemoveListener(OnSelectEntered);
+            _interactable.lastSelectExited.RemoveListener(OnSelectExited);
         }
     }
 
     private void Update()
     {
-        currentColor = Color.Lerp(currentColor, targetColor, Time.deltaTime * fadeSpeed);
-        ApplyColorToRenderers(currentColor);
+        _currentColor = Color.Lerp(_currentColor, _targetColor, Time.deltaTime * _fadeSpeed);
+        ApplyColorToRenderers(_currentColor);
     }
 
     #endregion
@@ -71,22 +71,22 @@ public class SafeDialHoverVisual : MonoBehaviour
 
     private void OnHoverEntered(HoverEnterEventArgs args)
     {
-        targetColor = hoverColor;
+        _targetColor = _hoverColor;
     }
 
     private void OnHoverExited(HoverExitEventArgs args)
     {
-        targetColor = baseColor;
+        _targetColor = _baseColor;
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
-        targetColor = selectColor;
+        _targetColor = _selectColor;
     }
 
     private void OnSelectExited(SelectExitEventArgs args)
     {
-        targetColor = baseColor;
+        _targetColor = _baseColor;
     }
 
     #endregion
@@ -95,17 +95,16 @@ public class SafeDialHoverVisual : MonoBehaviour
 
     private void ApplyColorToRenderers(Color color)
     {
-        foreach (var rend in tintRenderers)
+        foreach (var rend in _tintRenderers)
         {
             if (rend == null) continue;
 
-            rend.GetPropertyBlock(propertyBlock);
-            propertyBlock.SetColor(BaseColor, color);
-            propertyBlock.SetColor(EmissionColor, color);
-            rend.SetPropertyBlock(propertyBlock);
+            rend.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetColor(_BaseColor, color);
+            _propertyBlock.SetColor(_EmissionColor, color);
+            rend.SetPropertyBlock(_propertyBlock);
         }
     }
 
     #endregion
 }
-
