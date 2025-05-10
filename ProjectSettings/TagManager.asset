@@ -8,6 +8,7 @@ TagManager:
   - Chain
   - Floor
   - Stopper
+  - Socketable
   layers:
   - Default
   - TransparentFX
