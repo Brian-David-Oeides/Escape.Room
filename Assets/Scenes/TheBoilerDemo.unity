@@ -29232,7 +29232,8 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Socketable
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1002865306034147579, guid: 4760f786551ff9741926a09bec7a2b2f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -29261,6 +29262,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2340006510692797823}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2340006510692797828 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7171900995667433561, guid: 4760f786551ff9741926a09bec7a2b2f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2340006510692797823}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2378697951717634969
 GameObject:
   m_ObjectHideFlags: 0
@@ -30522,6 +30535,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 465004656}
     m_Modifications:
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: rotationPivot
+      value: 
+      objectReference: {fileID: 2340006510692797826}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: socketedObject
+      value: 
+      objectReference: {fileID: 2340006510692797828}
     - target: {fileID: 6103763075767406943, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -30589,9 +30612,19 @@ PrefabInstance:
       objectReference: {fileID: 2340006510692797826}
     - target: {fileID: 9001383708134141305, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
+      propertyPath: hoverMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 0b0e0b33d0f2afa409cf12daf0fa0c82, type: 2}
+    - target: {fileID: 9001383708134141305, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
       propertyPath: socketAttachPoint
       value: 
       objectReference: {fileID: 3760630585606230038}
+    - target: {fileID: 9001383708134141305, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: showHoverWhileHeld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

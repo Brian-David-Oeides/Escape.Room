@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1257613575175193210}
   - component: {fileID: 8250348407032806876}
   - component: {fileID: 9001383708134141305}
+  - component: {fileID: 1531748615371211700}
   m_Layer: 0
   m_Name: HL_valve
   m_TagString: Untagged
@@ -121,6 +122,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   validTag: Socketable
   socketAttachPoint: {fileID: 0}
+  hoverMaterial: {fileID: 0}
+  showHoverWhileHeld: 0
+  hoverScale: 1
+--- !u!114 &1531748615371211700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6942054795804906772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d5f23460f14ef4ab1c7df22c911ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  socketedObject: {fileID: 0}
+  rotationPivot: {fileID: 0}
+  maxYRotation: 45
+  rotationSpeed: 50
+  onMaxRotationReached:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7841248003728799217
 GameObject:
   m_ObjectHideFlags: 0
