@@ -1,3 +1,15 @@
+/*
+ * SocketRotator.cs
+ * 
+ * Copyright © 2025 Brian David 
+ * All Rights Reserved
+ *
+ * A Unity script for VR interactions that allows a wrench or tool to be 
+ * rotated within a socket based on hand movement in VR, with precise 
+ * control over rotation limits and locking behavior.
+ * 
+ * Created: May 12, 2025
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,81 +18,231 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SocketRotator : MonoBehaviour
 {
-    [Header("Socketed Object Settings")]
-    [Tooltip("The XRGrabInteractable object to monitor for rotation input")]
-    public XRGrabInteractable socketedObject;
+    [Header("References")]
+    public XRGrabInteractable wrench;
+    public Transform socketPivot;
+    public Collider socketTrigger;
 
-    [Tooltip("The point around which the object should rotate (e.g., the socket base)")]
-    public Transform rotationPivot;
-
-    [Tooltip("Maximum Y rotation in degrees allowed")]
-    public float maxYRotation = 45f;
-
-    [Tooltip("Speed at which the object rotates based on input")]
-    public float rotationSpeed = 50f;
+    [Header("Rotation Settings")]
+    public float maxRotationX = 90f;  // Changed to X
+    public float rotationSpeed = 75f;
 
     [Header("Events")]
-    [Tooltip("UnityEvent triggered when max rotation is reached")]
-    public UnityEvent onMaxRotationReached;
+    public UnityEvent onFullyTurned;
 
-    private float _currentYRotation = 0f;
-    private bool _isGrabbed = false;
-    private bool _eventFired = false;
-    private XRBaseInteractor _interactor;
+    // Control variables
+    private XRBaseInteractor interactor;
+    private float currentXRotation = 0f;  // Changed to X
+    private bool isGrabbed = false;
+    private bool isSocketed = false;
+    private bool eventFired = false;
+
+    // Tracking variables
+    private float _grabStartRotation = 0f;
+    private float _wrenchStartRotation = 0f;
+    private Vector3 _lastHandPosition = Vector3.zero;
+
+    private void Start()
+    {
+        // If you have an XRSocketInteractor component, ensure it knows about our custom locking
+        XRSocketInteractor socketInteractor = GetComponent<XRSocketInteractor>();
+        if (socketInteractor != null)
+        {
+            socketInteractor.selectEntered.AddListener(OnSocketed);
+        }
+    }
 
     private void OnEnable()
     {
-        if (socketedObject != null)
-        {
-            socketedObject.selectEntered.AddListener(OnGrab);
-            socketedObject.selectExited.AddListener(OnRelease);
-        }
+        wrench.selectEntered.AddListener(OnGrab);
+        wrench.selectExited.AddListener(OnRelease);
     }
 
     private void OnDisable()
     {
-        if (socketedObject != null)
+        wrench.selectEntered.RemoveListener(OnGrab);
+        wrench.selectExited.RemoveListener(OnRelease);
+    }
+
+    private void OnSocketed(SelectEnterEventArgs args)
+    {
+        // Fix the comparison to check if the interactable object is our wrench
+        IXRInteractable interactableObj = args.interactableObject;
+
+        if (eventFired && interactableObj != null &&
+            interactableObj.transform.gameObject == wrench.gameObject)
         {
-            socketedObject.selectEntered.RemoveListener(OnGrab);
-            socketedObject.selectExited.RemoveListener(OnRelease);
+            // Lock the wrench at max rotation position
+            wrench.transform.position = socketPivot.position;
+            wrench.transform.rotation = Quaternion.Euler(
+                socketPivot.rotation.eulerAngles.x + maxRotationX,
+                socketPivot.rotation.eulerAngles.y,
+                socketPivot.rotation.eulerAngles.z);
+
+            // Make sure physics don't affect it
+            Rigidbody rb = wrench.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+            }
         }
     }
 
     private void OnGrab(SelectEnterEventArgs args)
     {
-        _interactor = args.interactorObject as XRBaseInteractor;
-        _isGrabbed = true;
+        interactor = args.interactorObject as XRBaseInteractor;
+        isGrabbed = true;
+
+        if (isSocketed)
+        {
+            // Keep the wrench socketed but allow it to rotate
+            wrench.trackPosition = false;
+            wrench.trackRotation = false;
+
+            // Reset rotation tracking variables
+            _lastHandPosition = socketPivot.InverseTransformPoint(interactor.transform.position);
+            _wrenchStartRotation = currentXRotation;
+        }
+    }
+
+    public bool IsWrenchLocked()
+    {
+        return eventFired;
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        _isGrabbed = false;
-        _interactor = null;
+        isGrabbed = false;
+        interactor = null;
+        _lastHandPosition = Vector3.zero;
+
+        // Check if wrench was released inside the socket
+        if (socketTrigger.bounds.Contains(wrench.transform.position))
+        {
+            isSocketed = true;
+
+            // IMPORTANT: If we already reached max rotation, ensure the wrench stays locked
+            // at the correct rotation even when released
+            if (eventFired)
+            {
+                // Keep the rotation locked at max
+                wrench.transform.position = socketPivot.position;
+                wrench.transform.rotation = Quaternion.Euler(
+                    socketPivot.rotation.eulerAngles.x + maxRotationX,
+                    socketPivot.rotation.eulerAngles.y,
+                    socketPivot.rotation.eulerAngles.z);
+
+                // Make the wrench kinematic to prevent physics from affecting it
+                Rigidbody rb = wrench.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = true;
+                }
+            }
+        }
+        else
+        {
+            isSocketed = false;
+            wrench.trackPosition = true;
+            wrench.trackRotation = true;
+
+            // Only reset the event fired state if removed from socket
+            eventFired = false;
+            currentXRotation = 0f;
+        }
+    }
+
+    // Add this to enforce locking from outside scripts
+    public void EnforceLocking()
+    {
+        if (eventFired)
+        {
+            wrench.transform.position = socketPivot.position;
+            wrench.transform.rotation = Quaternion.Euler(
+                socketPivot.rotation.eulerAngles.x + maxRotationX,
+                socketPivot.rotation.eulerAngles.y,
+                socketPivot.rotation.eulerAngles.z);
+
+            Rigidbody rb = wrench.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+            }
+        }
+    }
+
+    // Add this to run in Update() to keep checking if it needs fixing
+    private void LateUpdate()
+    {
+        if (eventFired && isSocketed)
+        {
+            // Force lock position even after other scripts might have changed it
+            EnforceLocking();
+        }
     }
 
     private void Update()
     {
-        if (!_isGrabbed || _interactor == null || rotationPivot == null)
-            return;
+        if (!isGrabbed || !isSocketed || interactor == null) return;
 
-        // Use lateral controller movement to determine rotation amount
-        Vector3 handDirection = _interactor.transform.position - rotationPivot.position;
-        float input = handDirection.x;
-
-        float deltaRotation = input * rotationSpeed * Time.deltaTime;
-        _currentYRotation += deltaRotation;
-        _currentYRotation = Mathf.Clamp(_currentYRotation, 0f, maxYRotation);
-
-        // Apply rotation
-        socketedObject.transform.position = rotationPivot.position;
-        socketedObject.transform.rotation = Quaternion.Euler(0f, _currentYRotation, 0f) * rotationPivot.rotation;
-
-        // Trigger event once
-        if (_currentYRotation >= maxYRotation && !_eventFired)
+        if (eventFired)
         {
-            onMaxRotationReached.Invoke();
-            _eventFired = true;
+            // Keep the wrench locked at max rotation
+            wrench.transform.position = socketPivot.position;
+            wrench.transform.rotation = Quaternion.Euler(
+                socketPivot.rotation.eulerAngles.x + maxRotationX,
+                socketPivot.rotation.eulerAngles.y,
+                socketPivot.rotation.eulerAngles.z);
+            return;
+        }
+
+        // Get current hand position in socket's local space
+        Vector3 handPos = socketPivot.InverseTransformPoint(interactor.transform.position);
+
+        if (_lastHandPosition == Vector3.zero)
+        {
+            _lastHandPosition = handPos;
+            return;
+        }
+
+        // Calculate rotation based on hand movement around the pivot
+        // Now tracking movement in YZ plane (around X axis)
+        float angle = CalculateRotationAngle(handPos);
+        float rotationDelta = angle * rotationSpeed * Time.deltaTime;
+
+        // Update rotation within constraints
+        currentXRotation = Mathf.Clamp(currentXRotation + rotationDelta, 0f, maxRotationX);
+
+        // Apply the rotation to the wrench while keeping it at the socket position
+        wrench.transform.position = socketPivot.position;
+        wrench.transform.rotation = Quaternion.Euler(
+            socketPivot.rotation.eulerAngles.x + currentXRotation,
+            socketPivot.rotation.eulerAngles.y,
+            socketPivot.rotation.eulerAngles.z);
+
+        _lastHandPosition = handPos;
+
+        // Trigger event once fully rotated
+        if (currentXRotation >= maxRotationX && !eventFired)
+        {
+            onFullyTurned.Invoke();
+            eventFired = true;
+
+            // Set to exact max rotation when event is fired
+            currentXRotation = maxRotationX;
         }
     }
-}
 
+    // Calculate rotation based on hand movement relative to the socket
+    private float CalculateRotationAngle(Vector3 handPos)
+    {
+        // Convert hand position to angle in the YZ plane (around X axis)
+        float handAngle = Mathf.Atan2(handPos.z, handPos.y) * Mathf.Rad2Deg;
+        float lastHandAngle = Mathf.Atan2(_lastHandPosition.z, _lastHandPosition.y) * Mathf.Rad2Deg;
+
+        // Get the delta rotation (how much the hand has moved angularly)
+        float deltaAngle = Mathf.DeltaAngle(lastHandAngle, handAngle);
+
+        return deltaAngle;
+    }
+}

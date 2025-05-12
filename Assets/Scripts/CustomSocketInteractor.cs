@@ -1,4 +1,18 @@
-﻿using System.Collections;
+﻿/*
+ * CustomSocketInteractor.cs
+ * 
+ * Copyright © 2025 [Your Name/Company Name]
+ * All Rights Reserved
+ *
+ * A Unity script that implements a custom socket interaction system for VR,
+ * allowing objects tagged as "Socketable" to snap into predefined positions
+ * with visual hover indicators. Works in conjunction with the XR Interaction Toolkit
+ * to provide enhanced socket functionality.
+ * 
+ * Created: May 12, 2025
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -74,30 +88,36 @@ public class CustomSocketInteractor : MonoBehaviour
         float distance = Vector3.Distance(_currentHover.transform.position, socketAttachPoint.position);
         if (distance > 0.05f) return;
 
-        // Freeze physics
-        Rigidbody rb = _currentHover.GetComponent<Rigidbody>();
-        if (rb != null)
+        // Check if the object is a wrench that should be locked
+        SocketRotator rotator = GetComponent<SocketRotator>();
+        if (rotator != null && _grabCandidate.gameObject == rotator.wrench.gameObject && rotator.IsWrenchLocked())
         {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
+            // If it's a locked wrench, let the SocketRotator handle it
+            rotator.EnforceLocking();
         }
+        else
+        {
+            // Standard socket behavior for other objects
+            // Freeze physics  
+            Rigidbody rb = _currentHover.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true;
+            }
 
-        // Snap to socket
-        _currentHover.transform.SetPositionAndRotation(socketAttachPoint.position, socketAttachPoint.rotation);
-
-        // Disable future grabbing
-        _grabCandidate.interactionLayers = new InteractionLayerMask();
-
-        //StartCoroutine(FadeOutHoverMaterial(0.3f));
+            // Snap to socket  
+            _currentHover.transform.SetPositionAndRotation(socketAttachPoint.position, socketAttachPoint.rotation);
+        }
+ 
         if (hoverMaterial != null)
         {
             Color c = hoverMaterial.color;
-            hoverMaterial.color = new Color(c.r, c.g, c.b, 0f); // instantly hide it
+            hoverMaterial.color = new Color(c.r, c.g, c.b, 0f); // instantly hide it  
         }
 
-
-        // Cleanup and disable hover visual
+        // Cleanup and disable hover visual  
         _grabCandidate.selectExited.RemoveListener(OnGrabReleased);
         _isSnapped = true;
         _renderHoverVisual = false;
