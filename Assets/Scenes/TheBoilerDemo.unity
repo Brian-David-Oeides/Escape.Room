@@ -2833,6 +2833,7 @@ GameObject:
   - component: {fileID: 210884888}
   - component: {fileID: 210884893}
   - component: {fileID: 210884889}
+  - component: {fileID: 210884894}
   m_Layer: 6
   m_Name: Left Controller
   m_TagString: Untagged
@@ -3113,6 +3114,21 @@ MonoBehaviour:
     m_Reference: {fileID: -1636515391019944688, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ButtonPressPoint: 0.5
+--- !u!114 &210884894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210884887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a51b1cfb0c992f4d96afb67935696df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultIntensity: 0.7
+  defaultDuration: 0.65
+  isLeftHand: 1
 --- !u!1001 &258905590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18909,6 +18925,7 @@ GameObject:
   - component: {fileID: 1400455461}
   - component: {fileID: 1400455462}
   - component: {fileID: 1400455457}
+  - component: {fileID: 1400455464}
   m_Layer: 6
   m_Name: Right Controller
   m_TagString: Untagged
@@ -19240,6 +19257,21 @@ MonoBehaviour:
   m_RayInteractorChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1400455464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400455455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a51b1cfb0c992f4d96afb67935696df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultIntensity: 0.7
+  defaultDuration: 0.81
+  isLeftHand: 0
 --- !u!1 &1412492600
 GameObject:
   m_ObjectHideFlags: 0
@@ -30550,6 +30582,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 465004656}
     m_Modifications:
+    - target: {fileID: 825156638643406525, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: wrenchObject
+      value: 
+      objectReference: {fileID: 2340006510692797828}
+    - target: {fileID: 825156638643406525, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: xRGrabbableObject
+      value: 
+      objectReference: {fileID: 2340006510692797828}
     - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: wrench
@@ -30585,6 +30627,41 @@ PrefabInstance:
       propertyPath: socketedObject
       value: 
       objectReference: {fileID: 2340006510692797828}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3760630585606230040}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerActiveHandHaptic
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HapticCaller, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6103763075767406943, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -30688,6 +30765,18 @@ SphereCollider:
     type: 3}
   m_PrefabInstance: {fileID: 3760630585606230036}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3760630585606230040 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 825156638643406525, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+    type: 3}
+  m_PrefabInstance: {fileID: 3760630585606230036}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a5704bf6ff8dd4b8b4c8f30c31bd98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3775091975881669572
 GameObject:
   m_ObjectHideFlags: 0

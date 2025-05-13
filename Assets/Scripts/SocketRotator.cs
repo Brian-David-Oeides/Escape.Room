@@ -24,7 +24,7 @@ public class SocketRotator : MonoBehaviour
     public Collider socketTrigger;
 
     [Header("Rotation Settings")]
-    public float maxRotationX = 90f;  // Changed to X
+    public float maxRotationX = 90f;  
     public float rotationSpeed = 75f;
 
     [Header("Events")]
@@ -32,7 +32,7 @@ public class SocketRotator : MonoBehaviour
 
     // Control variables
     private XRBaseInteractor interactor;
-    private float currentXRotation = 0f;  // Changed to X
+    private float currentXRotation = 0f;  
     private bool isGrabbed = false;
     private bool isSocketed = false;
     private bool eventFired = false;
@@ -44,7 +44,7 @@ public class SocketRotator : MonoBehaviour
 
     private void Start()
     {
-        // If you have an XRSocketInteractor component, ensure it knows about our custom locking
+        // If you have an XRSocketInteractor component, make sure it knows about our custom locking
         XRSocketInteractor socketInteractor = GetComponent<XRSocketInteractor>();
         if (socketInteractor != null)
         {
@@ -121,7 +121,7 @@ public class SocketRotator : MonoBehaviour
         {
             isSocketed = true;
 
-            // IMPORTANT: If we already reached max rotation, ensure the wrench stays locked
+            // IMPORTANT: If we already reached max rotation, lock the wrench 
             // at the correct rotation even when released
             if (eventFired)
             {
@@ -152,7 +152,7 @@ public class SocketRotator : MonoBehaviour
         }
     }
 
-    // Add this to enforce locking from outside scripts
+    // enforce locking from outside scripts
     public void EnforceLocking()
     {
         if (eventFired)
@@ -171,7 +171,6 @@ public class SocketRotator : MonoBehaviour
         }
     }
 
-    // Add this to run in Update() to keep checking if it needs fixing
     private void LateUpdate()
     {
         if (eventFired && isSocketed)

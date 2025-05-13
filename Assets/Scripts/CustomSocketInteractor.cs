@@ -1,7 +1,7 @@
 ﻿/*
  * CustomSocketInteractor.cs
  * 
- * Copyright © 2025 [Your Name/Company Name]
+ * Copyright © 2025 Brian David
  * All Rights Reserved
  *
  * A Unity script that implements a custom socket interaction system for VR,
