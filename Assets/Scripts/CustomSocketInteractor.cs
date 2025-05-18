@@ -15,10 +15,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class CustomSocketInteractor : MonoBehaviour
 {
+    #region Variables
+
     [Tooltip("Name tag to identify socketable objects")]
     public string validTag = "Socketable";
 
@@ -34,6 +37,9 @@ public class CustomSocketInteractor : MonoBehaviour
     [Tooltip("Scale of the hover visual")]
     public float hoverScale = 1f;
 
+    [Header("Audio Events")]
+    public UnityEvent onObjectSocketed;
+
     private Collider _currentHover;
     private XRGrabInteractable _grabCandidate;
     private MeshFilter[] _hoverMeshFilters;
@@ -42,6 +48,8 @@ public class CustomSocketInteractor : MonoBehaviour
     private bool _renderHoverVisual = false;
 
     private Dictionary<XRGrabInteractable, InteractionLayerMask> _originalInteractionLayers = new();
+
+    #endregion
 
     private void OnTriggerEnter(Collider other)
     {
@@ -110,7 +118,10 @@ public class CustomSocketInteractor : MonoBehaviour
             // Snap to socket  
             _currentHover.transform.SetPositionAndRotation(socketAttachPoint.position, socketAttachPoint.rotation);
         }
- 
+
+        // Invoke attach audio event   
+        onObjectSocketed?.Invoke();
+
         if (hoverMaterial != null)
         {
             Color c = hoverMaterial.color;

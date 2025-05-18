@@ -18,6 +18,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SocketRotator : MonoBehaviour
 {
+    #region Variables
+
     [Header("References")]
     public XRGrabInteractable wrench;
     public Transform socketPivot;
@@ -42,9 +44,13 @@ public class SocketRotator : MonoBehaviour
     private float _wrenchStartRotation = 0f;
     private Vector3 _lastHandPosition = Vector3.zero;
 
+    #endregion
+
+    #region Unity Events
+
     private void Start()
     {
-        // If you have an XRSocketInteractor component, make sure it knows about our custom locking
+        // Listen for XRSocketInteractor component when object is socketed
         XRSocketInteractor socketInteractor = GetComponent<XRSocketInteractor>();
         if (socketInteractor != null)
         {
@@ -63,6 +69,71 @@ public class SocketRotator : MonoBehaviour
         wrench.selectEntered.RemoveListener(OnGrab);
         wrench.selectExited.RemoveListener(OnRelease);
     }
+
+    private void LateUpdate()
+    {
+        if (eventFired && isSocketed)
+        {
+            // Force lock position (CustomsocketInteractor.cs was updating it)
+            EnforceLocking();
+        }
+    }
+
+    private void Update()
+    {
+        if (!isGrabbed || !isSocketed || interactor == null) return;
+
+        if (eventFired)
+        {
+            // Keep the wrench locked at max rotation
+            wrench.transform.position = socketPivot.position;
+            wrench.transform.rotation = Quaternion.Euler(
+                socketPivot.rotation.eulerAngles.x + maxRotationX,
+                socketPivot.rotation.eulerAngles.y,
+                socketPivot.rotation.eulerAngles.z);
+            return;
+        }
+
+        // Get current hand position in socket's local space
+        Vector3 handPos = socketPivot.InverseTransformPoint(interactor.transform.position);
+
+        if (_lastHandPosition == Vector3.zero)
+        {
+            _lastHandPosition = handPos;
+            return;
+        }
+
+        // Calculate rotation based on hand movement around the pivot
+        // Now tracking movement in YZ plane (around X axis)
+        float angle = CalculateRotationAngle(handPos);
+        float rotationDelta = angle * rotationSpeed * Time.deltaTime;
+
+        // Update rotation within constraints
+        currentXRotation = Mathf.Clamp(currentXRotation + rotationDelta, 0f, maxRotationX);
+
+        // Apply the rotation to the wrench while keeping it at the socket position
+        wrench.transform.position = socketPivot.position;
+        wrench.transform.rotation = Quaternion.Euler(
+            socketPivot.rotation.eulerAngles.x + currentXRotation,
+            socketPivot.rotation.eulerAngles.y,
+            socketPivot.rotation.eulerAngles.z);
+
+        _lastHandPosition = handPos;
+
+        // Trigger event once fully rotated
+        if (currentXRotation >= maxRotationX && !eventFired)
+        {
+            onFullyTurned.Invoke();
+            eventFired = true;
+
+            // Set to exact max rotation when event is fired
+            currentXRotation = maxRotationX;
+        }
+    }
+
+    #endregion
+
+    #region Custom Methods
 
     private void OnSocketed(SelectEnterEventArgs args)
     {
@@ -121,7 +192,7 @@ public class SocketRotator : MonoBehaviour
         {
             isSocketed = true;
 
-            // IMPORTANT: If we already reached max rotation, lock the wrench 
+            // IMPORTANT: If already reached max rotation, lock the wrench 
             // at the correct rotation even when released
             if (eventFired)
             {
@@ -169,68 +240,7 @@ public class SocketRotator : MonoBehaviour
                 rb.isKinematic = true;
             }
         }
-    }
-
-    private void LateUpdate()
-    {
-        if (eventFired && isSocketed)
-        {
-            // Force lock position even after other scripts might have changed it
-            EnforceLocking();
-        }
-    }
-
-    private void Update()
-    {
-        if (!isGrabbed || !isSocketed || interactor == null) return;
-
-        if (eventFired)
-        {
-            // Keep the wrench locked at max rotation
-            wrench.transform.position = socketPivot.position;
-            wrench.transform.rotation = Quaternion.Euler(
-                socketPivot.rotation.eulerAngles.x + maxRotationX,
-                socketPivot.rotation.eulerAngles.y,
-                socketPivot.rotation.eulerAngles.z);
-            return;
-        }
-
-        // Get current hand position in socket's local space
-        Vector3 handPos = socketPivot.InverseTransformPoint(interactor.transform.position);
-
-        if (_lastHandPosition == Vector3.zero)
-        {
-            _lastHandPosition = handPos;
-            return;
-        }
-
-        // Calculate rotation based on hand movement around the pivot
-        // Now tracking movement in YZ plane (around X axis)
-        float angle = CalculateRotationAngle(handPos);
-        float rotationDelta = angle * rotationSpeed * Time.deltaTime;
-
-        // Update rotation within constraints
-        currentXRotation = Mathf.Clamp(currentXRotation + rotationDelta, 0f, maxRotationX);
-
-        // Apply the rotation to the wrench while keeping it at the socket position
-        wrench.transform.position = socketPivot.position;
-        wrench.transform.rotation = Quaternion.Euler(
-            socketPivot.rotation.eulerAngles.x + currentXRotation,
-            socketPivot.rotation.eulerAngles.y,
-            socketPivot.rotation.eulerAngles.z);
-
-        _lastHandPosition = handPos;
-
-        // Trigger event once fully rotated
-        if (currentXRotation >= maxRotationX && !eventFired)
-        {
-            onFullyTurned.Invoke();
-            eventFired = true;
-
-            // Set to exact max rotation when event is fired
-            currentXRotation = maxRotationX;
-        }
-    }
+    }  
 
     // Calculate rotation based on hand movement relative to the socket
     private float CalculateRotationAngle(Vector3 handPos)
@@ -244,4 +254,6 @@ public class SocketRotator : MonoBehaviour
 
         return deltaAngle;
     }
+
+    #endregion
 }
