@@ -15556,6 +15556,11 @@ PrefabInstance:
       propertyPath: m_UseMotor
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1112488702670252679, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2699212362040395093, guid: 95a82343fb2a76a47aad1c28e530f643,
         type: 3}
       propertyPath: m_LocalScale.z
@@ -15724,6 +15729,16 @@ PrefabInstance:
     - target: {fileID: 8028494053553952413, guid: 95a82343fb2a76a47aad1c28e530f643,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292135426306754691, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292135426306754691, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8625809445373952225, guid: 95a82343fb2a76a47aad1c28e530f643,
@@ -25302,11 +25317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f31d7d2b288f047a97080aa12cdb60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bladeLeftPivot: {fileID: 5092837518894996883}
-  bladeRightPivot: {fileID: 5371534997615009912}
-  maxRotation: 7.5
-  speed: 90
-  holdClosedDuration: 1
 --- !u!114 &919132147867355849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47067,9 +47077,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8120ff5cd9bacb47b1ac47746ec89c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chainBody: {fileID: 5337178921093224658}
-  audioSource: {fileID: 5337178921093224660}
-  disableDelay: 2
 --- !u!82 &5337178921093224660
 AudioSource:
   m_ObjectHideFlags: 0
@@ -47410,7 +47417,10 @@ GameObject:
   - component: {fileID: 5381251091441447457}
   - component: {fileID: 5381251091444314625}
   - component: {fileID: 5381251091443347649}
-  m_Layer: 0
+  - component: {fileID: 5381251091444314628}
+  - component: {fileID: 5381251091444314627}
+  - component: {fileID: 5381251091444314626}
+  m_Layer: 8
   m_Name: Note Paper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47482,6 +47492,153 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5381251091441348097}
   m_Mesh: {fileID: 4300000, guid: f20b0d262022029408709243ca4ddf61, type: 3}
+--- !u!114 &5381251091444314626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5381251091441348097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72896ae543215094db23bf2bf72c5787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &5381251091444314627
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5381251091441348097}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.106468424, y: 0.020843314, z: 0.08852027}
+  m_Center: {x: 0.000000039115548, y: 0.010421657, z: -0.0000003632158}
+--- !u!114 &5381251091444314628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5381251091441348097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 1894287950}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 512
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5381251091444314626}
+        m_TargetAssemblyTypeName: GazeTestResponder, Assembly-CSharp
+        m_MethodName: LogAndMove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!23 &5459342871365877991
 MeshRenderer:
   m_ObjectHideFlags: 0
