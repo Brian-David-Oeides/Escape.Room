@@ -118,8 +118,8 @@ GameObject:
   - component: {fileID: 794729274799792617}
   - component: {fileID: 6357951808316398864}
   - component: {fileID: 7133064370236951535}
-  - component: {fileID: 1098888167188956468}
   - component: {fileID: 1427623675324501708}
+  - component: {fileID: 9020277325294099523}
   m_Layer: 8
   m_Name: Journals
   m_TagString: Untagged
@@ -209,139 +209,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.16228531, y: 0.05530646, z: 0.20262456}
-  m_Center: {x: 0.0031103939, y: 0.020852434, z: 0}
---- !u!114 &1098888167188956468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4613706334206061004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
-  m_Colliders:
-  - {fileID: 7133064370236951535}
-  m_InteractionLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_InteractionLayers:
-    m_Bits: 512
-  m_DistanceCalculationMode: 1
-  m_SelectMode: 0
-  m_FocusMode: 1
-  m_CustomReticle: {fileID: 0}
-  m_AllowGazeInteraction: 1
-  m_AllowGazeSelect: 0
-  m_OverrideGazeTimeToSelect: 0
-  m_GazeTimeToSelect: 0.5
-  m_OverrideTimeToAutoDeselectGaze: 0
-  m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 0
-  m_FirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1427623675324501708}
-        m_TargetAssemblyTypeName: JournalPositioner, Assembly-CSharp
-        m_MethodName: MoveInFrontOfUser
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_LastHoverExited:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1427623675324501708}
-        m_TargetAssemblyTypeName: JournalPositioner, Assembly-CSharp
-        m_MethodName: ReturnToOriginalPosition
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstFocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastFocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Activated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Deactivated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_StartingInteractionStrengthFilters: []
-  m_OnFirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnLastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectCanceled:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnDeactivate:
-    m_PersistentCalls:
-      m_Calls: []
+  m_Size: {x: 0.2948724, y: 0.018832829, z: 0.20262456}
+  m_Center: {x: -0.0013234168, y: 0.0026156176, z: -0.00000043210804}
 --- !u!114 &1427623675324501708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e166b7ac02a0374cb07e446611cc76d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceFromHead: 0.8
+  distanceFromHead: 0.3
   verticalOffset: {x: 0, y: -0.1, z: 0}
   rotationOffset: {x: 90, y: 0, z: 0}
   useCustomRotation: 0
@@ -384,14 +257,58 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  pickupSound: {fileID: 0}
-  putdownSound: {fileID: 0}
+  pickupSound: {fileID: 8300000, guid: bd9622d8abb7e364e8777f4340ed4707, type: 3}
+  putdownSound: {fileID: 8300000, guid: bd9622d8abb7e364e8777f4340ed4707, type: 3}
   audioVolume: 1
   playAudioOnPickup: 1
   playAudioOnPutdown: 1
   gazeTime: 1
-  lastFrameRotationOffset: {x: 0, y: 0, z: 0}
-  debugRotationChanges: 1
+  viewPromptUI: {fileID: 0}
+  viewButtonName: AButton
+  exitButtonName: BButton
+--- !u!114 &9020277325294099523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4613706334206061004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4d2959d9e29dfd4eadfce532dbf3d12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rightPage: {fileID: 5813231402377046255}
+  leftPage: {fileID: 7378315233476034082}
+  pageRotationAngle: 180
+  pageFlipSpeed: 2
+  pageFlipCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  pageFlipSound: {fileID: 0}
+  pageAudioVolume: 0.7
+  enablePageTurning: 1
 --- !u!1 &6511753998364249480
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +410,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.13489999, y: 0.001, z: 0.19999999}
   m_Center: {x: 0.06745065, y: -0.000035499528, z: 0}
@@ -598,7 +515,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.13489999, y: 0.0006007004, z: 0.19999999}
   m_Center: {x: -0.06745017, y: 0.0005367646, z: 0}
@@ -629,14 +546,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7715689653694386116}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.034899585, w: 0.99939084}
-  m_LocalPosition: {x: 0.0024, y: 0.0109, z: -0}
+  m_LocalRotation: {x: 0.0000000010477379, y: 0.000000029802322, z: 0.0023304634,
+    w: 0.9999973}
+  m_LocalPosition: {x: 0.0115, y: -0.0035, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7378315233476034082}
   m_Father: {fileID: 8528820091511675871}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -4}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.267}
 --- !u!33 &6658996158431299568
 MeshFilter:
   m_ObjectHideFlags: 0
