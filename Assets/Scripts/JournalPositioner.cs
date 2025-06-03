@@ -317,7 +317,7 @@ public class JournalPositioner : MonoBehaviour
                     }
 
                     ShowDismissPrompt(); // Show B to Dismiss prompt
-                    Debug.Log("Journal positioned in front of user - Press B to return");
+                    // Debug.Log("Journal positioned in front of user - Press B to return");
                 }
                 else if (currentState == _JournalState.MovingToOriginal)
                 {
@@ -326,7 +326,7 @@ public class JournalPositioner : MonoBehaviour
                     // Re-enable journal collider for gaze detection
                     EnableJournalCollider();
 
-                    Debug.Log("Journal returned to original position");
+                    // Debug.Log("Journal returned to original position");
                 }
             }
         }
@@ -356,6 +356,10 @@ public class JournalPositioner : MonoBehaviour
 
         currentState = _JournalState.MovingToUser;
         _isMoving = true;
+
+        // disable collider during movement to prevent interference
+        DisableJournalCollider();
+
         PlayPickupSound();
     }
 
@@ -394,7 +398,7 @@ public class JournalPositioner : MonoBehaviour
         if (journalCollider != null)
         {
             journalCollider.enabled = false;
-            Debug.Log("Journal collider disabled - preventing gaze interference");
+            // Debug.Log("Journal collider disabled - preventing gaze interference");
         }
     }
 
@@ -404,7 +408,7 @@ public class JournalPositioner : MonoBehaviour
         if (journalCollider != null)
         {
             journalCollider.enabled = true;
-            Debug.Log("Journal collider enabled - gaze detection restored");
+            // Debug.Log("Journal collider enabled - gaze detection restored");
         }
     }
 

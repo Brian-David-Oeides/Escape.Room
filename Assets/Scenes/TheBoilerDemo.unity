@@ -25581,160 +25581,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 465004656}
     m_Modifications:
-    - target: {fileID: 1098888167188956468, guid: a564d009d733b334882aab5fe92d0483,
+    - target: {fileID: 210571873303308187, guid: a564d009d733b334882aab5fe92d0483,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1098888167188956468, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_InteractionManager
+      propertyPath: m_text
       value: 
-      objectReference: {fileID: 1894287950}
-    - target: {fileID: 1273988208579652154, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427623675324501708, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: gazeTime
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1427623675324501708, guid: a564d009d733b334882aab5fe92d0483,
         type: 3}
       propertyPath: viewPromptUI
       value: 
       objectReference: {fileID: 1324289259}
-    - target: {fileID: 1427623675324501708, guid: a564d009d733b334882aab5fe92d0483,
+    - target: {fileID: 2250573188074617226, guid: a564d009d733b334882aab5fe92d0483,
         type: 3}
-      propertyPath: viewButtonName
-      value: AButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 1642637918996482668, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.0011735831
-      objectReference: {fileID: 0}
-    - target: {fileID: 1642637918996482668, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.00025032333
-      objectReference: {fileID: 0}
-    - target: {fileID: 1642637918996482668, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.z
-      value: 0.00000001624553
-      objectReference: {fileID: 0}
-    - target: {fileID: 2856842445371686089, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.001668072
-      objectReference: {fileID: 0}
-    - target: {fileID: 2856842445371686089, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0.0674506
-      objectReference: {fileID: 0}
-    - target: {fileID: 2856842445371686089, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.y
-      value: -0.00036953547
-      objectReference: {fileID: 0}
-    - target: {fileID: 2856842445371686089, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -0.0000000071290525
-      objectReference: {fileID: 0}
-    - target: {fileID: 3475491593187910917, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.14120731
-      objectReference: {fileID: 0}
-    - target: {fileID: 3475491593187910917, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.014257746
-      objectReference: {fileID: 0}
-    - target: {fileID: 3475491593187910917, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3475491593187910917, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.x
-      value: -0.070719406
-      objectReference: {fileID: 0}
-    - target: {fileID: 3475491593187910917, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.005172274
-      objectReference: {fileID: 0}
-    - target: {fileID: 3475491593187910917, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -0.0012327544
+      propertyPath: m_text
+      value: "There's a mop in the janitor's closet for a reason. I don't want to
+        file another incident report because someone was too lazy to clean up water
+        before flipping switches.\n\n\t\tTony"
       objectReference: {fileID: 0}
     - target: {fileID: 4613706334206061004, guid: a564d009d733b334882aab5fe92d0483,
         type: 3}
       propertyPath: m_Name
-      value: JournalsClue_#
+      value: JournalsClue_#5
       objectReference: {fileID: 0}
-    - target: {fileID: 5408065091954558686, guid: a564d009d733b334882aab5fe92d0483,
+    - target: {fileID: 5643348431776992364, guid: a564d009d733b334882aab5fe92d0483,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6511753998364249480, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7004904951174922648, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7133064370236951535, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 0.282651
-      objectReference: {fileID: 0}
-    - target: {fileID: 7133064370236951535, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 0.021072652
-      objectReference: {fileID: 0}
-    - target: {fileID: 7133064370236951535, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 0.19725889
-      objectReference: {fileID: 0}
-    - target: {fileID: 7133064370236951535, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.x
-      value: -0.00056143856
-      objectReference: {fileID: 0}
-    - target: {fileID: 7133064370236951535, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.0037355293
-      objectReference: {fileID: 0}
-    - target: {fileID: 7133064370236951535, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -0.0026828796
-      objectReference: {fileID: 0}
-    - target: {fileID: 7612100380914995004, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.0047
-      objectReference: {fileID: 0}
-    - target: {fileID: 7612100380914995004, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
+      propertyPath: m_text
+      value: 'INCIDENT REPORT  #143 Date: 9/12/24 Filed by: Tony Vasquez
+
+
+        Responding
+        to emergency call at 2:15 AM. Found boiler offline, building cold.
+
+
+        WHAT
+        HAPPENED: Water leak from overhead pipe created puddle directly beneath main
+        power switch. Previous shift either didn''t notice or ignored it. Water had
+        splashed onto lower portion of electrical panel. Extremely dangerous situation.'
       objectReference: {fileID: 0}
     - target: {fileID: 8528820091511675871, guid: a564d009d733b334882aab5fe92d0483,
         type: 3}
@@ -25786,20 +25668,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9020277325294099523, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: pageFlipSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 4956524029ea15942a4a1675438f658e, type: 3}
-    - target: {fileID: 9020277325294099523, guid: a564d009d733b334882aab5fe92d0483,
-        type: 3}
-      propertyPath: pageAudioVolume
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8222897023660311005, guid: a564d009d733b334882aab5fe92d0483,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1946066544741764708, guid: a564d009d733b334882aab5fe92d0483,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1332921954897168635, guid: a564d009d733b334882aab5fe92d0483,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2069096913407396679, guid: a564d009d733b334882aab5fe92d0483,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: a564d009d733b334882aab5fe92d0483, type: 3}
 --- !u!4 &1847363379 stripped
 Transform:

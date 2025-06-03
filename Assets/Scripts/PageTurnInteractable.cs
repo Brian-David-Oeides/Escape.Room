@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 public class PageTurnInteractable : MonoBehaviour
 {
@@ -15,6 +17,12 @@ public class PageTurnInteractable : MonoBehaviour
     public float pageFlipSpeed = 2.0f;
     public AnimationCurve pageFlipCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+    [Header("Text References")]
+    public GameObject rPageSide1Text;
+    public GameObject rPageSide2Text;
+    public GameObject lPageSide1Text;
+    public GameObject lPageSide2Text;
+
     [Header("Audio Settings")]
     public AudioClip pageFlipSound;
     [Range(0f, 1f)]
@@ -26,9 +34,9 @@ public class PageTurnInteractable : MonoBehaviour
     private AudioSource audioSource;
 
     // Page state tracking
-    private bool rightPageFlipped = false;
-    private bool leftPageFlipped = false;
-    private bool isFlippingPage = false;
+    private bool _rightPageFlipped = false;
+    private bool _leftPageFlipped = false;
+    private bool _isFlippingPage = false;
 
     private void Awake()
     {
@@ -40,6 +48,37 @@ public class PageTurnInteractable : MonoBehaviour
 
         // Initialize collider states (all disabled until page turning is enabled)
         DisableAllPageColliders();
+    }
+
+    private void UpdateTextVisibility()
+    {
+        // Handle L_Page flipping on R_Page text
+        if (_leftPageFlipped)
+        {
+            // When L_Page is flipped (180 degrees), hide R_Page front text
+            if (rPageSide1Text != null) rPageSide1Text.SetActive(false);
+            if (rPageSide2Text != null) rPageSide2Text.SetActive(true);
+        }
+        else
+        {
+            // When L_Page is in original position, show R_Page front text
+            if (rPageSide1Text != null) rPageSide1Text.SetActive(true);
+            if (rPageSide2Text != null) rPageSide2Text.SetActive(false);
+        }
+
+        // Handle R_Page flipping on L_Page text
+        if (_rightPageFlipped)
+        {
+            // When R_Page is flipped (180 degrees), hide L_Page back text
+            if (lPageSide2Text != null) lPageSide2Text.SetActive(false);
+            if (lPageSide1Text != null) lPageSide1Text.SetActive(true);
+        }
+        else
+        {
+            // When R_Page is in original position, show L_Page back text normally
+            if (lPageSide2Text != null) lPageSide2Text.SetActive(true);
+            if (lPageSide1Text != null) lPageSide1Text.SetActive(true);
+        }
     }
 
     private void SetupAudioSource()
@@ -112,12 +151,12 @@ public class PageTurnInteractable : MonoBehaviour
 
     public void OnPageSelected(bool isRightPage)
     {
-        Debug.Log($"PAGE SELECTED CALLED! Right page: {isRightPage}, Enable page turning: {enablePageTurning}");
+        // Debug.Log($"PAGE SELECTED CALLED! Right page: {isRightPage}, Enable page turning: {enablePageTurning}");
 
         // Only allow page turning when journal is positioned in front of user
-        if (!enablePageTurning || isFlippingPage)
+        if (!enablePageTurning || _isFlippingPage)
         {
-            Debug.Log("Page turning disabled or already flipping");
+            // Debug.Log("Page turning disabled or already flipping");
             return;
         }
 
@@ -136,35 +175,37 @@ public class PageTurnInteractable : MonoBehaviour
     {
         if (rightPage == null) return;
 
-        Debug.Log($"FlipRightPage called - Current state: rightPageFlipped = {rightPageFlipped}");
+        // Debug.Log($"FlipRightPage called - Current state: rightPageFlipped = {rightPageFlipped}");
 
-        StartCoroutine(FlipPageCoroutine(rightPage, !rightPageFlipped));
-        rightPageFlipped = !rightPageFlipped;
+        StartCoroutine(FlipPageCoroutine(rightPage, !_rightPageFlipped));
+        _rightPageFlipped = !_rightPageFlipped;
 
         // Update collider states after changing page state
         UpdatePageColliderStates();
+        UpdateTextVisibility();
 
-        Debug.Log($"Flipping right page - now {(rightPageFlipped ? "flipped" : "unflipped")}");
+        // Debug.Log($"Flipping right page - now {(rightPageFlipped ? "flipped" : "unflipped")}");
     }
 
     private void FlipLeftPage()
     {
         if (leftPage == null) return;
 
-        Debug.Log($"FlipLeftPage called - Current state: leftPageFlipped = {leftPageFlipped}");
+        // Debug.Log($"FlipLeftPage called - Current state: leftPageFlipped = {leftPageFlipped}");
 
-        StartCoroutine(FlipPageCoroutine(leftPage, !leftPageFlipped));
-        leftPageFlipped = !leftPageFlipped;
+        StartCoroutine(FlipPageCoroutine(leftPage, !_leftPageFlipped));
+        _leftPageFlipped = !_leftPageFlipped;
 
         // Update collider states after changing page state
         UpdatePageColliderStates();
+        UpdateTextVisibility();
 
-        Debug.Log($"Flipping left page - now {(leftPageFlipped ? "flipped" : "unflipped")}");
+        // Debug.Log($"Flipping left page - now {(leftPageFlipped ? "flipped" : "unflipped")}");
     }
 
     private IEnumerator FlipPageCoroutine(Transform page, bool flipForward)
     {
-        isFlippingPage = true;
+        _isFlippingPage = true;
 
         Debug.Log($"FlipPageCoroutine started - Page: {page.name}, flipForward: {flipForward}");
 
@@ -217,9 +258,9 @@ public class PageTurnInteractable : MonoBehaviour
 
         // Ensure final rotation is exact
         page.localEulerAngles = targetRotation;
-        isFlippingPage = false;
+        _isFlippingPage = false;
 
-        Debug.Log($"Page flip completed: {page.name} - isFlippingPage now: {isFlippingPage}");
+        Debug.Log($"Page flip completed: {page.name} - isFlippingPage now: {_isFlippingPage}");
     }
 
     private void PlayPageFlipSound()
@@ -232,7 +273,7 @@ public class PageTurnInteractable : MonoBehaviour
         }
     }
 
-    // Add these methods to manage collider states
+    // manage collider states
     private void UpdatePageColliderStates()
     {
         // Enable/disable colliders based on page states
@@ -242,9 +283,9 @@ public class PageTurnInteractable : MonoBehaviour
             if (rightCollider != null)
             {
                 // Right page collider is enabled if: no pages are flipped, OR right page is already flipped (can turn back)
-                bool enableRightCollider = (!leftPageFlipped && !rightPageFlipped) || rightPageFlipped;
+                bool enableRightCollider = (!_leftPageFlipped && !_rightPageFlipped) || _rightPageFlipped;
                 rightCollider.enabled = enableRightCollider;
-                Debug.Log($"Right page collider enabled: {enableRightCollider}");
+                // Debug.Log($"Right page collider enabled: {enableRightCollider}");
             }
         }
 
@@ -254,9 +295,9 @@ public class PageTurnInteractable : MonoBehaviour
             if (leftCollider != null)
             {
                 // Left page collider is enabled if: no pages are flipped, OR left page is already flipped (can turn back)
-                bool enableLeftCollider = (!rightPageFlipped && !leftPageFlipped) || leftPageFlipped;
+                bool enableLeftCollider = (!_rightPageFlipped && !_leftPageFlipped) || _leftPageFlipped;
                 leftCollider.enabled = enableLeftCollider;
-                Debug.Log($"Left page collider enabled: {enableLeftCollider}");
+                // Debug.Log($"Left page collider enabled: {enableLeftCollider}");
             }
         }
     }
@@ -274,7 +315,7 @@ public class PageTurnInteractable : MonoBehaviour
             Collider leftCollider = leftPage.GetComponent<Collider>();
             if (leftCollider != null) leftCollider.enabled = false;
         }
-        Debug.Log("All page colliders disabled");
+        //Debug.Log("All page colliders disabled");
     }
 
 
@@ -290,7 +331,7 @@ public class PageTurnInteractable : MonoBehaviour
     {
         enablePageTurning = false;
         DisableAllPageColliders(); // Disable all page colliders
-        Debug.Log("Page turning disabled - journal moved away");
+        // Debug.Log("Page turning disabled - journal moved away");
     }
 
     // Reset pages to original state
@@ -299,13 +340,13 @@ public class PageTurnInteractable : MonoBehaviour
         if (rightPage != null)
         {
             rightPage.localEulerAngles = Vector3.zero;
-            rightPageFlipped = false;
+            _rightPageFlipped = false;
         }
 
         if (leftPage != null)
         {
             leftPage.localEulerAngles = Vector3.zero;
-            leftPageFlipped = false;
+            _leftPageFlipped = false;
         }
 
         Debug.Log("Pages reset to original positions");
