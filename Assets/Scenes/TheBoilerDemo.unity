@@ -5735,7 +5735,7 @@ Transform:
   - {fileID: 1324289260}
   - {fileID: 8528820093291338989}
   - {fileID: 8528820093472694409}
-  - {fileID: 541744518}
+  - {fileID: 2901582022446939567}
   - {fileID: 1803056262}
   - {fileID: 2026785812}
   - {fileID: 999616594}
@@ -6673,169 +6673,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1047814575492296059, guid: f17913f39b7315749b2dba2f68ea31fe,
     type: 3}
   m_PrefabInstance: {fileID: 535182726}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &541744517
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 465004656}
-    m_Modifications:
-    - target: {fileID: 116036204263795686, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 197217948231709019, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_text
-      value: 'Date: 7/18/24
-
-
-        Used something I won''t forget this time. Simple
-        but effective - same numbers as where Dad''s watch finally stopped. Figure
-        it''s a good memorial since that watch helped me keep this place running
-        on time for 20+ years.'
-      objectReference: {fileID: 0}
-    - target: {fileID: 577913801948568961, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_text
-      value: "Date: 7/17/24 \nReplacement parts for the pump arrived. Invoice and
-        paperwork in the safe. Had to reset the combination AGAIN because someone
-        (probably Mike) kept messing with it.\n"
-      objectReference: {fileID: 0}
-    - target: {fileID: 609981412148721984, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 609981412148721984, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 609981412148721984, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 905140510879002494, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 905140510879002494, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 905140510879002494, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2562518229511353932, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_Name
-      value: JournalsClue_#7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.7881
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.381
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7297448
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.68371964
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 86.27
-      objectReference: {fileID: 0}
-    - target: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5755413415181767011, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_text
-      value: "PERSONAL REMINDER Date: 7/16/24 \nFrom: Jim Hargrove\n\nDad's old pocket
-        watch finally gave out yesterday. Stopped dead at 3:27 while I was replacing
-        that valve gasket. Tried winding it but no luck - probably needs professional
-        repair. Sentimental value only, but still hurts - that watch has been ticking
-        since before I was born.\nLeft it in my toolbox for now. Will take it to
-        that repair shop on Main Street when I get paid."
-      objectReference: {fileID: 0}
-    - target: {fileID: 6648963442538921457, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7611493522721679057, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      propertyPath: viewPromptUI
-      value: 
-      objectReference: {fileID: 1324289259}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8552141608952286066, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 116036204263795686, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8379966016469461020, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2279941094590384192, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-  m_SourcePrefab: {fileID: 100100000, guid: 0e5ddc7362b0e22409cb09bf960e57c5, type: 3}
---- !u!4 &541744518 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2901582021913583658, guid: 0e5ddc7362b0e22409cb09bf960e57c5,
-    type: 3}
-  m_PrefabInstance: {fileID: 541744517}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &553068461
 PrefabInstance:
@@ -31365,6 +31202,12 @@ Transform:
   - {fileID: 997444254}
   m_Father: {fileID: 2752622452002030333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2901582022446939567 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+    type: 3}
+  m_PrefabInstance: {fileID: 6210184851570582372}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2932023127315927572
 GameObject:
   m_ObjectHideFlags: 0
@@ -53203,6 +53046,95 @@ Transform:
   m_Children: []
   m_Father: {fileID: 465004656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6210184851570582372
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 465004656}
+    m_Modifications:
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.7881
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.381
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7297448
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.68371964
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 86.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565791543597246852, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701544673733994651, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: m_Name
+      value: JournalsClue_#8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5880185708480668924, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      propertyPath: viewPromptUI
+      value: 
+      objectReference: {fileID: 1324289259}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 791910966077090902, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5508992361769333191, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3390755114859623395, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3052035975166084526, guid: 3e20946b2fcf07543a726a287465ed22,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+  m_SourcePrefab: {fileID: 100100000, guid: 3e20946b2fcf07543a726a287465ed22, type: 3}
 --- !u!4 &6261111369619213214
 Transform:
   m_ObjectHideFlags: 0

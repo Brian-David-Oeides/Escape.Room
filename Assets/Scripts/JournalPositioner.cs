@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.UI;
 
@@ -35,8 +34,6 @@ public class JournalPositioner : MonoBehaviour
 
     [Header("UI Prompt Settings")]
     public GameObject viewPromptUI; // UI element showing "Press A to view"
-    public string viewButtonName = "AButton"; // Input action name for A button
-    public string exitButtonName = "BButton"; // Input action name for B button
 
     // State management
     private enum _JournalState
@@ -61,10 +58,6 @@ public class JournalPositioner : MonoBehaviour
 
     private AudioSource _audioSource;
     private PageTurnInteractable _pageTurner;
-
-    // Input actions
-    private InputAction _viewAction;
-    private InputAction _exitAction;
 
     #endregion
 
@@ -93,8 +86,6 @@ public class JournalPositioner : MonoBehaviour
         {
             viewPromptUI.SetActive(false);
         }
-
-        SetupInputActions();
     }
 
     private void Update()
@@ -105,12 +96,6 @@ public class JournalPositioner : MonoBehaviour
     }
 
     #endregion
-
-    private void SetupInputActions()
-    {
-        // check for button presses directly in Update instead
-        Debug.Log("Input actions setup - will check for button presses in Update");
-    }
 
     private void SetupAudioSource()
     {
@@ -262,31 +247,6 @@ public class JournalPositioner : MonoBehaviour
         Debug.Log("Hiding view prompt");
     }
 
-    private void OnViewButtonPressed(InputAction.CallbackContext context)
-    {
-        Debug.Log($"A button pressed! Current state: {currentState}");
-
-        if (currentState == _JournalState.ShowingPrompt)
-        {
-            Debug.Log("A button pressed - Moving journal to user");
-            HideViewPrompt();
-            StartMoveToUser();
-        }
-        else
-        {
-            Debug.Log($"A button pressed but wrong state. Expected: ShowingPrompt, Current: {currentState}");
-        }
-    }
-
-    private void OnExitButtonPressed(InputAction.CallbackContext context)
-    {
-        if (currentState == _JournalState.InFrontOfUser)
-        {
-            Debug.Log("B button pressed - Returning journal to original position");
-            StartReturnToOriginal();
-        }
-    }
-
     private void HandleMovement()
     {
         if (_isMoving)
@@ -429,24 +389,6 @@ public class JournalPositioner : MonoBehaviour
             _audioSource.clip = putdownSound;
             _audioSource.volume = audioVolume;
             _audioSource.Play();
-        }
-    }
-
-    private void OnDestroy()
-    {
-        // Clean up input actions
-        if (_viewAction != null)
-        {
-            _viewAction.performed -= OnViewButtonPressed;
-            _viewAction.Disable();
-            _viewAction.Dispose();
-        }
-
-        if (_exitAction != null)
-        {
-            _exitAction.performed -= OnExitButtonPressed;
-            _exitAction.Disable();
-            _exitAction.Dispose();
         }
     }
 
