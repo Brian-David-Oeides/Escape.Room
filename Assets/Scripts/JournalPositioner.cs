@@ -97,6 +97,8 @@ public class JournalPositioner : MonoBehaviour
 
     #endregion
 
+    #region Custom Methods
+
     private void SetupAudioSource()
     {
         _audioSource = GetComponent<AudioSource>();
@@ -402,4 +404,6 @@ public class JournalPositioner : MonoBehaviour
     {
         StartReturnToOriginal();
     }
+
+    #endregion
 }
