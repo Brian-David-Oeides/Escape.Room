@@ -104,6 +104,10 @@ public class DocumentCarousel : MonoBehaviour
         _isActive = true;
         _currentPageIndex = 0;
         UpdatePageContent();
+
+        // Force UI refresh to make content visible immediately
+        //Canvas.ForceUpdateCanvases();
+
         ShowNavigationHelp();
 
         Debug.Log("Carousel activated");
@@ -328,7 +332,7 @@ public class DocumentCarousel : MonoBehaviour
         Color originalColor = arrowText.color;
 
         // Flash brighter/different color
-        arrowText.color = Color.yellow;
+        arrowText.color = Color.green;
         yield return new WaitForSeconds(0.15f);
 
         // Return to original
