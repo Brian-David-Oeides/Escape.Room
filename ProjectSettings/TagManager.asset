@@ -9,6 +9,7 @@ TagManager:
   - Floor
   - Stopper
   - Socketable
+  - Switch
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - XR Origin
   - Grab Interactable
   - Clue
-  - 
+  - Switch
   - 
   - 
   - 

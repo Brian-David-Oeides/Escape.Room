@@ -174,13 +174,13 @@ public class JournalPositioner : MonoBehaviour
 
                 if (_gazeTimer >= gazeTime && currentState == _JournalState.AtOriginalPosition)
                 {
-                    Debug.Log("Gaze time reached - calling ShowViewPrompt()");
+                    //Debug.Log("Gaze time reached - calling ShowViewPrompt()");
                     ShowViewPrompt();
                 }
             }
             else
             {
-                Debug.Log("Raycast didn't hit anything");
+                //Debug.Log("Raycast didn't hit anything");
                 HandleGazeExit();
             }
         }
@@ -202,11 +202,11 @@ public class JournalPositioner : MonoBehaviour
 
     private void ShowViewPrompt()
     {
-        Debug.Log("ShowViewPrompt() called");
+        //Debug.Log("ShowViewPrompt() called");
         currentState = _JournalState.ShowingPrompt;
         if (viewPromptUI != null)
         {
-            Debug.Log("Activating viewPromptUI");
+            //Debug.Log("Activating viewPromptUI");
             viewPromptUI.SetActive(true);
 
             // Update the text to show A to View
@@ -218,9 +218,9 @@ public class JournalPositioner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("viewPromptUI is null! Make sure you assigned the UI Canvas in the inspector.");
+            //Debug.LogError("viewPromptUI is null! Make sure you assigned the UI Canvas in the inspector.");
         }
-        Debug.Log("Showing view prompt - Press A to view journal");
+        //Debug.Log("Showing view prompt - Press A to view journal");
     }
 
     // show the dismiss prompt when journal is in front of user

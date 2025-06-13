@@ -103,11 +103,8 @@ public class DocumentCarousel : MonoBehaviour
     {
         _isActive = true;
         _currentPageIndex = 0;
+
         UpdatePageContent();
-
-        // Force UI refresh to make content visible immediately
-        //Canvas.ForceUpdateCanvases();
-
         ShowNavigationHelp();
 
         Debug.Log("Carousel activated");

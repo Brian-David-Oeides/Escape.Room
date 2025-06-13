@@ -2447,13 +2447,13 @@ GameObject:
   - component: {fileID: 171355006}
   - component: {fileID: 171355007}
   - component: {fileID: 171355005}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ToggleSwitchOnOff05
-  m_TagString: Untagged
+  m_TagString: Switch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &171355001
 Transform:
   m_ObjectHideFlags: 0
@@ -2495,7 +2495,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 1025
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -2598,8 +2598,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9777448, y: 3.1665852, z: 1}
-  m_Center: {x: 0.0071110516, y: 1.0832938, z: -1.4207196e-16}
+  m_Size: {x: 3.7845643, y: 3.1665852, z: 1.807383}
+  m_Center: {x: -0.014966301, y: 1.0832938, z: 0.40369156}
 --- !u!114 &171355007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32094,7 +32094,7 @@ GameObject:
   - component: {fileID: 8671613920928303697}
   - component: {fileID: 3128677387697944232}
   - component: {fileID: 8671613920928303698}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Switch05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53973,6 +53973,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8629880831751326271, guid: 8288969a8a759694b8f99b63101541d1,
+        type: 3}
+      propertyPath: targetSwitchObject
+      value: 
+      objectReference: {fileID: 171355000}
+    - target: {fileID: 8629880831751326271, guid: 8288969a8a759694b8f99b63101541d1,
+        type: 3}
+      propertyPath: targetSwitchToggle
+      value: 
+      objectReference: {fileID: 171355007}
+    - target: {fileID: 8629880831751326271, guid: 8288969a8a759694b8f99b63101541d1,
+        type: 3}
+      propertyPath: detectionLayer.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -54776,9 +54791,10 @@ GameObject:
   - component: {fileID: 9000707802791212712}
   - component: {fileID: 6818977572406844336}
   - component: {fileID: 837308488164178906}
-  m_Layer: 0
+  - component: {fileID: 9000707802791212713}
+  m_Layer: 9
   m_Name: PlugAndSwitch05
-  m_TagString: Untagged
+  m_TagString: Switch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56003,6 +56019,27 @@ Transform:
   - {fileID: 363881542156333159}
   m_Father: {fileID: 465004656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &9000707802791212713
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8533692987742918059}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.13850653, y: 0.23733777, z: 0.015262604}
+  m_Center: {x: 0.0034212768, y: -0.0010238476, z: -0.0019815415}
 --- !u!1001 &9065125403363509907
 PrefabInstance:
   m_ObjectHideFlags: 0
