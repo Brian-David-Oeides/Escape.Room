@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7953379795396499953}
-  - component: {fileID: 7631749379011571476}
   m_Layer: 0
   m_Name: Lever Switch
   m_TagString: Untagged
@@ -35,27 +34,6 @@ Transform:
   - {fileID: 7953379795396499957}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7631749379011571476
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7953379795396920785}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.5038471, y: 0.7460933, z: 0.25295064}
-  m_Center: {x: 0.010822773, y: 0.023154318, z: 0.17659606}
 --- !u!1 &7953379795396920787
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,10 +128,10 @@ GameObject:
   - component: {fileID: 7953379795396499957}
   - component: {fileID: 7953379795395729879}
   - component: {fileID: 7953379795394730775}
+  - component: {fileID: 3230005819669013467}
   - component: {fileID: 2792577336626267115}
   - component: {fileID: 4381545451888906745}
   - component: {fileID: 1583150316892300665}
-  - component: {fileID: 3230005819669013467}
   m_Layer: 0
   m_Name: Lever2
   m_TagString: Untagged
@@ -226,6 +204,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3230005819669013467
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7953379795396920789}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.11094299, y: 0.3152948, z: 0.20908265}
+  m_Center: {x: -0.000000029802322, y: 0.15080673, z: 0.093705155}
 --- !u!95 &2792577336626267115
 Animator:
   serializedVersion: 5
@@ -259,8 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56e66a5badbbc940849404fdff813c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
-  leverAnimator: {fileID: 2792577336626267115}
+  _isOn: 0
+  _leverAnimator: {fileID: 0}
   OnLeverUp:
     m_PersistentCalls:
       m_Calls: []
@@ -369,27 +368,6 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!65 &3230005819669013467
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7953379795396920789}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.11094299, y: 0.3152948, z: 0.20908265}
-  m_Center: {x: -0.000000029802322, y: 0.15080673, z: 0.093705155}
 --- !u!1 &7953379795396920791
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,10 +379,10 @@ GameObject:
   - component: {fileID: 7953379795396499959}
   - component: {fileID: 7953379795395729873}
   - component: {fileID: 7953379795394730769}
+  - component: {fileID: 4796397099003875065}
   - component: {fileID: 7703270148257487171}
   - component: {fileID: 3597039777232774931}
   - component: {fileID: 3030074670536728980}
-  - component: {fileID: 4796397099003875065}
   m_Layer: 0
   m_Name: Lever1
   m_TagString: Untagged
@@ -477,6 +455,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4796397099003875065
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7953379795396920791}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1109436, y: 0.3152948, z: 0.20908082}
+  m_Center: {x: 0, y: 0.15080673, z: 0.09370607}
 --- !u!95 &7703270148257487171
 Animator:
   serializedVersion: 5
@@ -510,8 +509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56e66a5badbbc940849404fdff813c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
-  leverAnimator: {fileID: 7703270148257487171}
+  _isOn: 0
+  _leverAnimator: {fileID: 0}
   OnLeverUp:
     m_PersistentCalls:
       m_Calls:
@@ -644,24 +643,3 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!65 &4796397099003875065
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7953379795396920791}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.1109436, y: 0.3152948, z: 0.20908082}
-  m_Center: {x: 0, y: 0.15080673, z: 0.09370607}
