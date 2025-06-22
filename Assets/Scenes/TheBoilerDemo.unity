@@ -38165,6 +38165,26 @@ PrefabInstance:
       objectReference: {fileID: 5337178919539709556}
     - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
         type: 3}
+      propertyPath: _electricArcClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 149323ec3af3cc14ab36388810af920b, type: 3}
+    - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _toggleSoundClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c878670151fae47489676cc156c34bdf, type: 3}
+    - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _electricShockClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f545ddf765114c4448022b162e72aa0b, type: 3}
+    - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _powerGeneratorClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3a5c2911f69386f46b8b6f1f78a30b0c, type: 3}
+    - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
       propertyPath: OnLeverUp.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -38333,6 +38353,26 @@ PrefabInstance:
       propertyPath: _leverAnimator
       value: 
       objectReference: {fileID: 5337178919539709555}
+    - target: {fileID: 4381545451888906745, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _electricArcClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 149323ec3af3cc14ab36388810af920b, type: 3}
+    - target: {fileID: 4381545451888906745, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _toggleSoundClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c878670151fae47489676cc156c34bdf, type: 3}
+    - target: {fileID: 4381545451888906745, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _electricShockClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f545ddf765114c4448022b162e72aa0b, type: 3}
+    - target: {fileID: 4381545451888906745, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: _powerGeneratorClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3a5c2911f69386f46b8b6f1f78a30b0c, type: 3}
     - target: {fileID: 4381545451888906745, guid: d464e9793ffe2504bacbfb4ac45f709f,
         type: 3}
       propertyPath: OnLeverUp.m_PersistentCalls.m_Calls.Array.size
