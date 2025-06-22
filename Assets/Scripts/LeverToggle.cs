@@ -14,16 +14,16 @@ public class LeverToggle : MonoBehaviour
     [SerializeField] private Animator _leverAnimator;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource _toggleAudioSource;
+    [SerializeField] private AudioSource _toggleAudioSource; // Immediate feedback
     [SerializeField] private AudioClip _toggleSoundClip;
 
-    [SerializeField] private AudioSource _electricShockAudioSource;
+    [SerializeField] private AudioSource _electricShockAudioSource; // Contextual
     [SerializeField] private AudioClip _electricShockClip;
 
-    [SerializeField] private AudioSource _powerGeneratorAudioSource;
+    [SerializeField] private AudioSource _powerGeneratorAudioSource; // State change
     [SerializeField] private AudioClip _powerGeneratorClip;
 
-    [SerializeField] private AudioSource _electricArcAudioSource;
+    [SerializeField] private AudioSource _electricArcAudioSource; // Ambient
     [SerializeField] private AudioClip _electricArcClip;
 
     [Header("Arc Audio Settings")]
