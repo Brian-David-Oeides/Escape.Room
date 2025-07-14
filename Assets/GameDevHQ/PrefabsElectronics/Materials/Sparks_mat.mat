@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DefaultParticle_HDR
+  m_Name: Sparks_mat
   m_Shader: {fileID: -6465566751694194690, guid: ce5b8f15120001643a46d230ed87eeed,
     type: 3}
   m_Parent: {fileID: 0}
@@ -45,7 +45,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 29.50883, g: 29.50883, b: 29.50883, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &2292942825093722297
 MonoBehaviour:
