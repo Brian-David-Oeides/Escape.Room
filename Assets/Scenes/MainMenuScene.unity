@@ -25117,6 +25117,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f31d7d2b288f047a97080aa12cdb60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bladeLeftPivot: {fileID: 0}
+  bladeRightPivot: {fileID: 0}
+  maxRotation: 30
+  speed: 90
+  holdClosedDuration: 1
 --- !u!114 &919132147867355849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33138,6 +33143,16 @@ PrefabInstance:
     - target: {fileID: 3030074670536728980, guid: d464e9793ffe2504bacbfb4ac45f709f,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: OnLeverUp.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3597039777232774931, guid: d464e9793ffe2504bacbfb4ac45f709f,
+        type: 3}
+      propertyPath: OnLeverDown.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6767334967751883133, guid: d464e9793ffe2504bacbfb4ac45f709f,
@@ -46875,6 +46890,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8120ff5cd9bacb47b1ac47746ec89c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chainBody: {fileID: 0}
+  audioSource: {fileID: 0}
+  disableDelay: 2
 --- !u!82 &5337178921093224660
 AudioSource:
   m_ObjectHideFlags: 0
