@@ -207,7 +207,7 @@ public class LeverToggle : MonoBehaviour
         }
     }
 
-    // Optional method to manually enable the animator
+    // method to manually enable the animator
     public void EnableAnimator()
     {
         if (_leverAnimator != null)
