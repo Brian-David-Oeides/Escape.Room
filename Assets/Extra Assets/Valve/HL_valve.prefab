@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 825156638643406525}
   - component: {fileID: 1531748615371211700}
   - component: {fileID: 3858236098014480403}
+  - component: {fileID: 7887523903822753770}
   m_Layer: 0
   m_Name: HL_valve
   m_TagString: Untagged
@@ -127,6 +128,9 @@ MonoBehaviour:
   hoverMaterial: {fileID: 0}
   showHoverWhileHeld: 0
   hoverScale: 1
+  onObjectSocketed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &825156638643406525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +261,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &7887523903822753770
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6942054795804906772}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.000729658, y: 0.00038758497, z: 0.00072556635}
+  m_Center: {x: -0.00002379329, y: -0.000037500733, z: 0.0006231204}
 --- !u!1 &7841248003728799217
 GameObject:
   m_ObjectHideFlags: 0

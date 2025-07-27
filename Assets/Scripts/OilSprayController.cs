@@ -18,14 +18,14 @@ public class OilSprayController : MonoBehaviour
 
     void Start()
     {
-        // Get the XR Grab Interactable component
+        // get the XR Grab Interactable component
         grabInteractable = GetComponent<XRGrabInteractable>();
 
-        // Subscribe to grab events
+        // subscribe to grab events
         grabInteractable.selectEntered.AddListener(OnGrabbed);
         grabInteractable.selectExited.AddListener(OnReleased);
 
-        // Ensure particle system is stopped at start
+        // particle system is stopped at start
         if (oilParticleSystem != null)
             oilParticleSystem.Stop();
     }

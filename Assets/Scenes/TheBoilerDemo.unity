@@ -29001,7 +29001,7 @@ PrefabInstance:
     - target: {fileID: 4891644850279822550, guid: c0d84f1c06744a842899e0aefd64e624,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7607664198248873949, guid: c0d84f1c06744a842899e0aefd64e624,
         type: 3}
@@ -29807,11 +29807,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_Oil_Spray
       objectReference: {fileID: 0}
-    - target: {fileID: 1192212136068072507, guid: 30b6595f80d923b46adaa98dc54c5684,
-        type: 3}
-      propertyPath: ShapeModule.type
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 5194087143111951607, guid: 30b6595f80d923b46adaa98dc54c5684,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29863,9 +29858,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 2923451475300343956, guid: 30b6595f80d923b46adaa98dc54c5684, type: 3}
-    - {fileID: 2793786958896300048, guid: 30b6595f80d923b46adaa98dc54c5684, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30b6595f80d923b46adaa98dc54c5684, type: 3}
@@ -33907,6 +33900,36 @@ PrefabInstance:
       propertyPath: socketAttachPoint
       value: 
       objectReference: {fileID: 2340006510692797826}
+    - target: {fileID: 7887523903822753770, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.00025088718
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887523903822753770, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.00023817601
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887523903822753770, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.00054768124
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887523903822753770, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.00012337288
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887523903822753770, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.00002589977
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887523903822753770, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.00071206456
+      objectReference: {fileID: 0}
     - target: {fileID: 9001383708134141305, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: hoverMaterial
