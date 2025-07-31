@@ -9,6 +9,9 @@ public class OilSprayController : MonoBehaviour
     [Header("Particle System")]
     [SerializeField] private ParticleSystem oilParticleSystem;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource sprayAudioSource;
+
     [Header("Input Actions")]
     [SerializeField] private InputActionReference leftTriggerAction;
     [SerializeField] private InputActionReference rightTriggerAction;
@@ -18,14 +21,14 @@ public class OilSprayController : MonoBehaviour
 
     void Start()
     {
-        // get the XR Grab Interactable component
+        // Get the XR Grab Interactable component
         grabInteractable = GetComponent<XRGrabInteractable>();
 
-        // subscribe to grab events
+        // Subscribe to grab events
         grabInteractable.selectEntered.AddListener(OnGrabbed);
         grabInteractable.selectExited.AddListener(OnReleased);
 
-        // particle system is stopped at start
+        // Ensure particle system is stopped at start
         if (oilParticleSystem != null)
             oilParticleSystem.Stop();
     }
@@ -78,6 +81,10 @@ public class OilSprayController : MonoBehaviour
         // Stop particle system when object is released
         if (oilParticleSystem != null && oilParticleSystem.isPlaying)
             oilParticleSystem.Stop();
+
+        // Stop spray sound effect when object is released
+        if (sprayAudioSource != null && sprayAudioSource.isPlaying)
+            sprayAudioSource.Stop();
     }
 
     private void OnTriggerPressed(InputAction.CallbackContext context)
@@ -86,6 +93,12 @@ public class OilSprayController : MonoBehaviour
         if (isGrabbed && oilParticleSystem != null)
         {
             oilParticleSystem.Play();
+
+            // Play spray sound effect
+            if (sprayAudioSource != null && sprayAudioSource.clip != null)
+            {
+                sprayAudioSource.Play();
+            }
         }
     }
 
@@ -95,6 +108,12 @@ public class OilSprayController : MonoBehaviour
         if (oilParticleSystem != null && oilParticleSystem.isPlaying)
         {
             oilParticleSystem.Stop();
+        }
+
+        // Stop spray sound effect
+        if (sprayAudioSource != null && sprayAudioSource.isPlaying)
+        {
+            sprayAudioSource.Stop();
         }
     }
 
