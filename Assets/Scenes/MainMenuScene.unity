@@ -41047,6 +41047,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToggleSwitchOnOff
       objectReference: {fileID: 0}
+    - target: {fileID: 3675353353154773703, guid: ef17984c4a9f4354eab4be502bb4b541,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5078894536664362035, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
       propertyPath: m_LocalPosition.x
