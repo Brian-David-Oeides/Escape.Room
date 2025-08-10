@@ -15,13 +15,14 @@ GameObject:
   - component: {fileID: 3077158101119590871}
   - component: {fileID: 3852556695115214645}
   - component: {fileID: 7353808878341718861}
+  - component: {fileID: 6568345952508676583}
   m_Layer: 0
   m_Name: ToggleSwitchOnOff02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6228411627546469236
 Transform:
   m_ObjectHideFlags: 0
@@ -64,8 +65,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2.5158617, z: 0.7652444}
-  m_Center: {x: -1.7198891e-15, y: -0.7579311, z: 0.40163407}
+  m_Size: {x: 1, y: 2.5158617, z: 0.41313666}
+  m_Center: {x: -4.9733804e-16, y: -0.7579311, z: 0.22558008}
 --- !u!114 &1632321159473731476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 5106516879593603047}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -311,7 +313,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -356,7 +358,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -413,11 +415,30 @@ MonoBehaviour:
   m_PokeConfiguration:
     m_UseConstant: 1
     m_ConstantValue:
-      m_PokeDirection: 3
-      m_InteractionDepthOffset: 0.1
+      m_PokeDirection: 6
+      m_InteractionDepthOffset: 0.02
       m_EnablePokeAngleThreshold: 1
       m_PokeAngleThreshold: 45
     m_Variable: {fileID: 0}
+--- !u!114 &6568345952508676583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3675353353154773703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f910e520c3c48d49be3327fc01ddbde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pokeInteractable: {fileID: 0}
+  hapticOnHover: 0
+  hapticOnPoke: 1
+  hapticOnRelease: 0
+  gentleHoverFeedback: 1
+  successPokePattern: 1
+  debugMode: 1
 --- !u!1 &7105916872250665645
 GameObject:
   m_ObjectHideFlags: 0

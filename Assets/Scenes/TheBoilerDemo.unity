@@ -48905,51 +48905,6 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1894287950}
-    - target: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_Colliders.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_Colliders.Array.data[0]
-      value: 
-      objectReference: {fileID: 5337178920344736519}
-    - target: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 973019472}
-    - target: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3675353353154773703, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3852556695115214645, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3852556695115214645, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5078894536664362035, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -49000,40 +48955,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5106516879593603047, guid: ef17984c4a9f4354eab4be502bb4b541,
+    - target: {fileID: 6568345952508676583, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
-      propertyPath: m_Size.z
-      value: 0.41313666
-      objectReference: {fileID: 0}
-    - target: {fileID: 5106516879593603047, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_Center.x
-      value: -4.9733804e-16
-      objectReference: {fileID: 0}
-    - target: {fileID: 5106516879593603047, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_Center.z
-      value: 0.22558008
-      objectReference: {fileID: 0}
-    - target: {fileID: 7353808878341718861, guid: ef17984c4a9f4354eab4be502bb4b541,
-        type: 3}
-      propertyPath: m_PokeConfiguration.m_UseConstant
+      propertyPath: debugMode
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7353808878341718861, guid: ef17984c4a9f4354eab4be502bb4b541,
+    - target: {fileID: 6568345952508676583, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
-      propertyPath: m_PokeConfiguration.m_ConstantValue.m_PokeDirection
-      value: 6
+      propertyPath: pokeDuration
+      value: 0.005
       objectReference: {fileID: 0}
-    - target: {fileID: 7353808878341718861, guid: ef17984c4a9f4354eab4be502bb4b541,
+    - target: {fileID: 6568345952508676583, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
-      propertyPath: m_PokeConfiguration.m_ConstantValue.m_PokeAngleThreshold
-      value: 45
+      propertyPath: pokeIntensity
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7353808878341718861, guid: ef17984c4a9f4354eab4be502bb4b541,
+    - target: {fileID: 6568345952508676583, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
-      propertyPath: m_PokeConfiguration.m_ConstantValue.m_InteractionDepthOffset
-      value: 0.02
+      propertyPath: gentleHoverFeedback
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8079601170158181920, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
@@ -49048,12 +48988,6 @@ PrefabInstance:
 --- !u!4 &5337178920344736518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5078894536664362035, guid: ef17984c4a9f4354eab4be502bb4b541,
-    type: 3}
-  m_PrefabInstance: {fileID: 5337178920344736517}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &5337178920344736519 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 5106516879593603047, guid: ef17984c4a9f4354eab4be502bb4b541,
     type: 3}
   m_PrefabInstance: {fileID: 5337178920344736517}
   m_PrefabAsset: {fileID: 0}
