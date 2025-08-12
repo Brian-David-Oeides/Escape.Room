@@ -55,7 +55,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
         }
         else
         {
-            Debug.LogError("XR Poke Interactor not found!");
+            //Debug.LogError("XR Poke Interactor not found!");
         }
     }
 
@@ -73,7 +73,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Using finger tip: {indexFingerTip.name}");
+        //Debug.Log($"Using finger tip: {indexFingerTip.name}");
 
         // Position the poke interactor at fingertip
         PositionPokeAtFingertip();
@@ -97,7 +97,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
         // Clear attach transform since we're positioning directly
         _pokeInteractor.attachTransform = null;
 
-        Debug.Log($"Positioned poke interactor at: {targetPosition}");
+        //Debug.Log($"Positioned poke interactor at: {targetPosition}");
     }
 
     Transform FindFingerTip()
@@ -106,7 +106,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
         bool isLeftController = gameObject.name.ToLower().Contains("left");
         bool isRightController = gameObject.name.ToLower().Contains("right");
 
-        Debug.Log($"Controller detection - Left: {isLeftController}, Right: {isRightController} for: {gameObject.name}");
+        //Debug.Log($"Controller detection - Left: {isLeftController}, Right: {isRightController} for: {gameObject.name}");
 
         // Build fingertip names based on controller type
         string[] fingerTipNames;
@@ -145,7 +145,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
             };
         }
 
-        Debug.Log($"Searching for fingertip from controller: {gameObject.name}");
+        //Debug.Log($"Searching for fingertip from controller: {gameObject.name}");
 
         foreach (string name in fingerTipNames)
         {
@@ -164,7 +164,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
         Debug.LogWarning($"Could not auto-find fingertip transform for controller: {gameObject.name}");
 
         // List available hand-related transforms for debugging
-        Debug.Log("Available hand-related transforms:");
+        //Debug.Log("Available hand-related transforms:");
         LogHandTransforms(transform.root, 0, isLeftController, isRightController);
 
         return null;
@@ -180,7 +180,7 @@ public class SetPokeInteractorPosition : MonoBehaviour
             (searchRight && (name.Contains("_r_") || name.Contains("right"))) ||
             (!searchLeft && !searchRight && (name.Contains("index") || name.Contains("finger"))))
         {
-            Debug.Log($"{indent}- {parent.name}");
+            //Debug.Log($"{indent}- {parent.name}");
         }
 
         foreach (Transform child in parent)

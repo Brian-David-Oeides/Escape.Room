@@ -2305,6 +2305,7 @@ GameObject:
   - component: {fileID: 210884888}
   - component: {fileID: 210884893}
   - component: {fileID: 210884889}
+  - component: {fileID: 210884894}
   m_Layer: 6
   m_Name: Left Controller
   m_TagString: Untagged
@@ -2360,9 +2361,9 @@ MonoBehaviour:
     type: 3}
   m_ModelParent: {fileID: 0}
   m_Model: {fileID: 0}
-  m_AnimateModel: 1
-  m_ModelSelectTransition: Select
-  m_ModelDeSelectTransition: Deselect
+  m_AnimateModel: 0
+  m_ModelSelectTransition: 
+  m_ModelDeSelectTransition: 
   m_PositionAction:
     m_UseReference: 1
     m_Action:
@@ -2585,6 +2586,21 @@ MonoBehaviour:
     m_Reference: {fileID: -1636515391019944688, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ButtonPressPoint: 0.5
+--- !u!114 &210884894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210884887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814d379b24ea34e469faa901d10f48c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xrController: {fileID: 210884893}
+  pointParameterName: Point
+  gripParameterName: Grip
 --- !u!1 &292989423
 GameObject:
   m_ObjectHideFlags: 0
@@ -17339,6 +17355,7 @@ GameObject:
   - component: {fileID: 1400455461}
   - component: {fileID: 1400455462}
   - component: {fileID: 1400455457}
+  - component: {fileID: 1400455464}
   m_Layer: 6
   m_Name: Right Controller
   m_TagString: Untagged
@@ -17395,9 +17412,9 @@ MonoBehaviour:
     type: 3}
   m_ModelParent: {fileID: 0}
   m_Model: {fileID: 0}
-  m_AnimateModel: 1
-  m_ModelSelectTransition: Select
-  m_ModelDeSelectTransition: Deselect
+  m_AnimateModel: 0
+  m_ModelSelectTransition: 
+  m_ModelDeSelectTransition: 
   m_PositionAction:
     m_UseReference: 1
     m_Action:
@@ -17670,6 +17687,21 @@ MonoBehaviour:
   m_RayInteractorChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1400455464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400455455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814d379b24ea34e469faa901d10f48c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xrController: {fileID: 1400455461}
+  pointParameterName: Point
+  gripParameterName: Grip
 --- !u!1 &1412492600
 GameObject:
   m_ObjectHideFlags: 0

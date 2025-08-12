@@ -2779,6 +2779,7 @@ GameObject:
   - component: {fileID: 210884889}
   - component: {fileID: 210884894}
   - component: {fileID: 210884895}
+  - component: {fileID: 210884896}
   m_Layer: 6
   m_Name: Left Controller
   m_TagString: Untagged
@@ -3097,6 +3098,23 @@ MonoBehaviour:
   indexFingerTip: {fileID: 0}
   positionOffset: {x: 0, y: 0, z: 0}
   useCustomOffset: 1
+--- !u!114 &210884896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210884887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814d379b24ea34e469faa901d10f48c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xrController: {fileID: 210884893}
+  handAnimator: {fileID: 653768722960534166, guid: 0505d1716fdec3741b5b4d8301fd19e3,
+    type: 3}
+  animatorController: {fileID: 9100000, guid: 739ee41b9b1bca64f8151b5143f301ef, type: 2}
+  pointParameterName: Point
 --- !u!1 &280561503
 GameObject:
   m_ObjectHideFlags: 0
@@ -21693,6 +21711,7 @@ GameObject:
   - component: {fileID: 1400455457}
   - component: {fileID: 1400455464}
   - component: {fileID: 1400455465}
+  - component: {fileID: 1400455466}
   m_Layer: 6
   m_Name: Right Controller
   m_TagString: Untagged
@@ -22063,6 +22082,23 @@ MonoBehaviour:
   indexFingerTip: {fileID: 0}
   positionOffset: {x: 0, y: 0, z: 0}
   useCustomOffset: 0
+--- !u!114 &1400455466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400455455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814d379b24ea34e469faa901d10f48c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xrController: {fileID: 1400455461}
+  handAnimator: {fileID: 7066306030607686479, guid: e6f3e892320ffeb4b95af9b4de8bf7a2,
+    type: 3}
+  animatorController: {fileID: 9100000, guid: ec8a603de86445c409b2c24ee4ceda93, type: 2}
+  pointParameterName: Point
 --- !u!1 &1412492600
 GameObject:
   m_ObjectHideFlags: 0
