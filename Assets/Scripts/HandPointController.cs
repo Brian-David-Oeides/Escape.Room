@@ -8,7 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class HandPointController : MonoBehaviour
 {
     [Header("XR Controller")]
-    public ActionBasedController xrController;
+    public ActionBasedController xRController;
 
     [Header("Animation")]
     public string pointParameterName = "Point";
@@ -53,14 +53,14 @@ public class HandPointController : MonoBehaviour
 
     private void Update()
     {
-        if (xrController != null && handAnimator != null)
+        if (xRController != null && handAnimator != null)
         {
             // Handle trigger for pointing
-            bool triggerPressed = xrController.activateInteractionState.active;
+            bool triggerPressed = xRController.activateInteractionState.active;
             handAnimator.SetBool(pointParameterName, triggerPressed);
 
             // Handle grip for fist (NEW)
-            bool gripPressed = xrController.selectInteractionState.active;
+            bool gripPressed = xRController.selectInteractionState.active;
             handAnimator.SetBool(gripParameterName, gripPressed);
 
             // Debug

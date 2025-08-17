@@ -2598,7 +2598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814d379b24ea34e469faa901d10f48c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xrController: {fileID: 210884893}
+  xRController: {fileID: 210884893}
   pointParameterName: Point
   gripParameterName: Grip
 --- !u!1 &292989423
@@ -3132,7 +3132,7 @@ MonoBehaviour:
   m_TimeToAutoDeselect: 3
   m_EnableUIInteraction: 1
   m_BlockUIOnInteractableSelection: 1
-  m_AllowAnchorControl: 1
+  m_AllowAnchorControl: 0
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
@@ -15008,7 +15008,7 @@ MonoBehaviour:
   m_TimeToAutoDeselect: 3
   m_EnableUIInteraction: 1
   m_BlockUIOnInteractableSelection: 1
-  m_AllowAnchorControl: 1
+  m_AllowAnchorControl: 0
   m_UseForceGrab: 1
   m_RotateSpeed: 180
   m_TranslateSpeed: 1
@@ -17699,7 +17699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 814d379b24ea34e469faa901d10f48c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xrController: {fileID: 1400455461}
+  xRController: {fileID: 1400455461}
   pointParameterName: Point
   gripParameterName: Grip
 --- !u!1 &1412492600

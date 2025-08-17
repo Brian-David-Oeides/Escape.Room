@@ -73,7 +73,7 @@ public class HapticCaller : MonoBehaviour
         }
     }
 
-    // This is the method to connect to Unity Events (like your SocketRotator.onFullyTurned)
+    // This method connects to Unity Events (like SocketRotator.onFullyTurned)
     public void TriggerActiveHandHaptic()
     {
         if (xRGrabbableObject == null)
