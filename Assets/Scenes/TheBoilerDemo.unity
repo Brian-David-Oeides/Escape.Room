@@ -24495,12 +24495,12 @@ GameObject:
   - component: {fileID: 2127992888}
   - component: {fileID: 2127992887}
   m_Layer: 0
-  m_Name: Clock Point Light
+  m_Name: Old Clock Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2127992886
 Transform:
   m_ObjectHideFlags: 0
@@ -33007,11 +33007,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5337178919793025701}
     m_Modifications:
-    - target: {fileID: 720379284482533979, guid: ca404544052a1534fb76e5e28a05fd92,
+    - target: {fileID: 488900628131063807, guid: ca404544052a1534fb76e5e28a05fd92,
         type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: tickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3202737e77c47b64783b4d4ccba88e02, type: 3}
+    - target: {fileID: 488900628131063807, guid: ca404544052a1534fb76e5e28a05fd92,
+        type: 3}
+      propertyPath: alarmSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 53af07fd033f2ba46bc9305b11cd9631, type: 3}
     - target: {fileID: 720379284482533979, guid: ca404544052a1534fb76e5e28a05fd92,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -33062,30 +33067,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1915086984742228642, guid: ca404544052a1534fb76e5e28a05fd92,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     - target: {fileID: 4585813395629365320, guid: ca404544052a1534fb76e5e28a05fd92,
         type: 3}
       propertyPath: m_Name
       value: Old_Clock
-      objectReference: {fileID: 0}
-    - target: {fileID: 4585813395629365320, guid: ca404544052a1534fb76e5e28a05fd92,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 8889993493536621844, guid: ca404544052a1534fb76e5e28a05fd92,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 9085733846125253301, guid: ca404544052a1534fb76e5e28a05fd92,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
