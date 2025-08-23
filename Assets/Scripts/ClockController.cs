@@ -65,19 +65,14 @@ public class ClockController : MonoBehaviour
     private bool alarmTriggered = false;
     private Coroutine alarmCoroutine;
 
-    // Hand rotation offsets (in case your hands don't start at 12 o'clock)
-    private Vector3 hourHandOffset = Vector3.zero;
-    private Vector3 minuteHandOffset = Vector3.zero;
-    private Vector3 secondHandOffset = Vector3.zero;
+    // Hand rotation offsets (based on your clock's initial rotations)
+    [Header("Hand Offsets")]
+    public Vector3 hourHandOffset = new Vector3(0, 0, 90);
+    public Vector3 minuteHandOffset = new Vector3(0, 0, 90);
+    public Vector3 secondHandOffset = new Vector3(0, 0, -90);
 
     void Start()
     {
-        // Setup audio source if not assigned
-        if (tickingAudioSource == null && enableTicking)
-        {
-            tickingAudioSource = gameObject.AddComponent<AudioSource>();
-        }
-
         if (tickingAudioSource != null)
         {
             // Apply all serialized audio settings
@@ -143,21 +138,21 @@ public class ClockController : MonoBehaviour
         int minutes = Mathf.FloorToInt((totalSeconds % 3600f) / 60f);
         float seconds = totalSeconds % 60f;
 
-        // Calculate rotations (Unity rotates clockwise, clocks go clockwise)
+        // Calculate rotations on X-axis (hands rotate around X-axis)
         // Each hour = 30 degrees, each minute = 6 degrees, each second = 6 degrees
         float hourAngle = (hours * 30f) + (minutes * 0.5f); // Hour hand moves gradually
         float minuteAngle = minutes * 6f + (seconds * 0.1f); // Minute hand moves gradually
         float secondAngle = seconds * 6f;
 
-        // Apply rotations (assuming hands rotate around Z-axis)
+        // Apply rotations on X-axis with their respective Z-axis offsets
         if (hourHand != null)
-            hourHand.localRotation = Quaternion.Euler(hourHandOffset.x, hourHandOffset.y, hourHandOffset.z - hourAngle);
+            hourHand.localRotation = Quaternion.Euler(hourAngle, hourHandOffset.y, hourHandOffset.z);
 
         if (minuteHand != null)
-            minuteHand.localRotation = Quaternion.Euler(minuteHandOffset.x, minuteHandOffset.y, minuteHandOffset.z - minuteAngle);
+            minuteHand.localRotation = Quaternion.Euler(minuteAngle, minuteHandOffset.y, minuteHandOffset.z);
 
         if (secondHand != null && showSeconds)
-            secondHand.localRotation = Quaternion.Euler(secondHandOffset.x, secondHandOffset.y, secondHandOffset.z - secondAngle);
+            secondHand.localRotation = Quaternion.Euler(secondAngle, secondHandOffset.y, secondHandOffset.z);
     }
 
     void CheckForTimeEvents()

@@ -33007,16 +33007,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5337178919793025701}
     m_Modifications:
-    - target: {fileID: 488900628131063807, guid: ca404544052a1534fb76e5e28a05fd92,
-        type: 3}
-      propertyPath: tickSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 3202737e77c47b64783b4d4ccba88e02, type: 3}
-    - target: {fileID: 488900628131063807, guid: ca404544052a1534fb76e5e28a05fd92,
-        type: 3}
-      propertyPath: alarmSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 53af07fd033f2ba46bc9305b11cd9631, type: 3}
     - target: {fileID: 720379284482533979, guid: ca404544052a1534fb76e5e28a05fd92,
         type: 3}
       propertyPath: m_LocalPosition.x
