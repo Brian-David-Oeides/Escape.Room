@@ -60,6 +60,7 @@ public class MainMenuHandler : MonoBehaviour
         var routine = LoadGameScene(); // assign coroutine to var
         if (routine != null) // check if var exists
         {
+            Debug.Log("StartGame() called from poke interaction");
             StartCoroutine(routine); // run coroutine stored in var
         }
         else // or 
@@ -70,8 +71,11 @@ public class MainMenuHandler : MonoBehaviour
 
     private IEnumerator LoadGameScene()
     {
+        Debug.Log("LoadGameScene coroutine started");
+
         if (screenFader != null) // check if screenfader exists
         {
+            Debug.Log("Starting screen fade");
             screenFader.FadeIn(1f); // fade in
             yield return new WaitForSeconds(1f); // delay 1 sec
         }
@@ -80,6 +84,7 @@ public class MainMenuHandler : MonoBehaviour
             Debug.LogWarning("ScreenFader is not assigned."); // if null log warning
         }
 
+        Debug.Log("Loading TheBoilerDemo scene");
         GameMode.startFromMenu = false; // disable start from menu
         SceneManager.LoadScene("TheBoilerDemo"); //load the scene via string name
     }
