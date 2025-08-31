@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1531748615371211700}
   - component: {fileID: 3858236098014480403}
   - component: {fileID: 7887523903822753770}
+  - component: {fileID: 7421185598413107225}
   m_Layer: 0
   m_Name: HL_valve
   m_TagString: Untagged
@@ -124,13 +125,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   validTag: Socketable
-  socketAttachPoint: {fileID: 0}
-  hoverMaterial: {fileID: 0}
-  showHoverWhileHeld: 0
+  socketAttachPoint: {fileID: 6435959351004528540}
+  hoverMaterial: {fileID: 2100000, guid: 0b0e0b33d0f2afa409cf12daf0fa0c82, type: 2}
+  showHoverWhileHeld: 1
   hoverScale: 1
   onObjectSocketed:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3858236098014480403}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: PlayOneShot
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 301db3321a02df2408a2c66644927cf1,
+            type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &825156638643406525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,13 +172,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wrench: {fileID: 0}
-  socketPivot: {fileID: 0}
-  socketTrigger: {fileID: 0}
-  maxRotationX: 45
-  rotationSpeed: 50
+  socketPivot: {fileID: 6435959351004528540}
+  socketTrigger: {fileID: 8250348407032806876}
+  maxRotationX: 90
+  rotationSpeed: 90
   onFullyTurned:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 825156638643406525}
+        m_TargetAssemblyTypeName: HapticCaller, Assembly-CSharp
+        m_MethodName: TriggerActiveHandHaptic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3858236098014480403}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &3858236098014480403
 AudioSource:
   m_ObjectHideFlags: 0
@@ -175,7 +213,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 1b2294a42feb55944ba132c4f952e41a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: e5fa62c82e8854c4a9ee810b3d200e0b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -280,8 +318,22 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.000729658, y: 0.00038758497, z: 0.00072556635}
-  m_Center: {x: -0.00002379329, y: -0.000037500733, z: 0.0006231204}
+  m_Size: {x: 0.00025088718, y: 0.00023817601, z: 0.00054768124}
+  m_Center: {x: 0.00012337288, y: -0.00002589977, z: 0.00071206456}
+--- !u!114 &7421185598413107225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6942054795804906772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632e4c25479e4454893b16efa4e45be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  socketRotator: {fileID: 1531748615371211700}
+  isOiled: 0
 --- !u!1 &7841248003728799217
 GameObject:
   m_ObjectHideFlags: 0
