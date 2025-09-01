@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: b5e6f3e394f76d74f82fedf967cbff89
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Heavy Equipment
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1d1b9f2cd73455b4f8bfbf02df6e8391, type: 3}
+  - {fileID: 12800000, guid: 3531b255e61335947a0363c36ebc11b2, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

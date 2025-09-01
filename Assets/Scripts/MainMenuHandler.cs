@@ -11,6 +11,9 @@ public class MainMenuHandler : MonoBehaviour
     public ScreenFader screenFader;
     public Transform mainMenuSpawnPoint; // reference for the MainMenuPosition 
 
+    [Header("Exit Confirmation")]
+    public GameObject exitConfirmationPanel; // Reference to the ExitConfirmationPanel
+
 
     void Start()
     {
@@ -28,6 +31,12 @@ public class MainMenuHandler : MonoBehaviour
             if (mainMenuUI != null)
             {
                 mainMenuUI.SetActive(true); // set UI active
+            }
+
+            // Make sure exit confirmation is hidden at start
+            if (exitConfirmationPanel != null)
+            {
+                exitConfirmationPanel.SetActive(false);
             }
 
             //fade in from black
@@ -89,6 +98,39 @@ public class MainMenuHandler : MonoBehaviour
         SceneManager.LoadScene("TheBoilerDemo"); //load the scene via string name
     }
 
+    // NEW METHOD: Show exit confirmation instead of directly exiting
+    public void ShowExitConfirmation()
+    {
+        Debug.Log("ShowExitConfirmation() called");
+
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("ExitConfirmationPanel is not assigned!");
+        }
+    }
+
+    // NEW METHOD: Confirm exit (called by "Yes, Exit" button)
+    public void ConfirmExit()
+    {
+        Debug.Log("Exit confirmed by user");
+        ExitGame();
+    }
+
+    // NEW METHOD: Cancel exit (called by "Cancel" button)
+    public void CancelExit()
+    {
+        Debug.Log("Exit cancelled by user");
+
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(false);
+        }
+    }
+
     public void ExitGame()
     {
         Debug.Log("Quitting game..."); // log the event
@@ -129,4 +171,3 @@ public class MainMenuHandler : MonoBehaviour
         xrOrigin.transform.Rotate(0, angle, 0);
     }
 }
-
