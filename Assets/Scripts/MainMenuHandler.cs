@@ -6,103 +6,119 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class MainMenuHandler : MonoBehaviour
 {
-    public GameObject xrOrigin;
+    [Header("Menu UI References")]
     public GameObject mainMenuUI;
-    public ScreenFader screenFader;
-    public Transform mainMenuSpawnPoint; // reference for the MainMenuPosition 
-
+    public Transform mainMenuSpawnPoint; // reference for the MainMenuPosition
+    
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel; // Reference to the ExitConfirmationPanel
-
-
-    void Start()
+    
+    private void Start()
     {
-        // run menu logic if in the actual Main Menu scene
+        // Subscribe to GameManager state changes
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged += OnGameStateChanged;
+        }
+        
+        // Initialize menu if we're in main menu scene
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            if (xrOrigin != null)
-            {
-                xrOrigin.transform.position = mainMenuSpawnPoint.position; // spawn XR Origin at spawn point
-                xrOrigin.transform.rotation = mainMenuSpawnPoint.rotation;
-                RotateOriginToFace(mainMenuUI.transform.position); // face the main menu
-                LockPlayerMovement(); // disable snapturn and locomotion
-            }
-
-            if (mainMenuUI != null)
-            {
-                mainMenuUI.SetActive(true); // set UI active
-            }
-
-            // Make sure exit confirmation is hidden at start
-            if (exitConfirmationPanel != null)
-            {
-                exitConfirmationPanel.SetActive(false);
-            }
-
-            //fade in from black
-            if (screenFader != null)
-            {
-                screenFader.FadeOut(1f); // fade out 
-            }
+            InitializeMainMenu();
         }
         else
         {
-            // in the gameplay scene (i.e., "TheBoilerDemo")
+            // In gameplay scene - hide menu UI and disable this script
             if (mainMenuUI != null)
             {
-                mainMenuUI.SetActive(false); // hide the menu UI 
+                mainMenuUI.SetActive(false);
             }
-
-            //fade in from black on restart
-            if (screenFader != null && GameMode.startFromMenu == false)
-            {
-                screenFader.FadeOut(1f);
-            }
-
-            // disable this script entirely (no Update() or coroutine logic)
             this.enabled = false;
         }
     }
-
-    public void StartGame()
+    
+    private void OnDestroy()
     {
-        var routine = LoadGameScene(); // assign coroutine to var
-        if (routine != null) // check if var exists
+        // Unsubscribe from events
+        if (GameManager.Instance != null)
         {
-            Debug.Log("StartGame() called from poke interaction");
-            StartCoroutine(routine); // run coroutine stored in var
-        }
-        else // or 
-        {
-            Debug.LogWarning("LoadGameScene coroutine is null. Scene not loaded."); // log warning
+            GameManager.Instance.OnStateChanged -= OnGameStateChanged;
         }
     }
-
-    private IEnumerator LoadGameScene()
+    
+    private void InitializeMainMenu()
     {
-        Debug.Log("LoadGameScene coroutine started");
-
-        if (screenFader != null) // check if screenfader exists
+        // Position and orient the XR Origin
+        if (GameManager.Instance != null && GameManager.Instance.xrOrigin != null)
         {
-            Debug.Log("Starting screen fade");
-            screenFader.FadeIn(1f); // fade in
-            yield return new WaitForSeconds(1f); // delay 1 sec
+            GameObject xrOrigin = GameManager.Instance.xrOrigin;
+            
+            if (mainMenuSpawnPoint != null)
+            {
+                xrOrigin.transform.position = mainMenuSpawnPoint.position;
+                xrOrigin.transform.rotation = mainMenuSpawnPoint.rotation;
+                
+                if (mainMenuUI != null)
+                {
+                    RotateOriginToFace(mainMenuUI.transform.position);
+                }
+                
+                Debug.Log("Player positioned at main menu spawn point");
+            }
+        }
+        
+        // Show main menu UI
+        if (mainMenuUI != null)
+        {
+            mainMenuUI.SetActive(true);
+        }
+        
+        // Hide exit confirmation
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(false);
+        }
+    }
+    
+    private void OnGameStateChanged(GameState newState)
+    {
+        switch (newState)
+        {
+            case GameState.MainMenu:
+                if (mainMenuUI != null)
+                {
+                    mainMenuUI.SetActive(true);
+                }
+                break;
+                
+            case GameState.Loading:
+                if (mainMenuUI != null)
+                {
+                    mainMenuUI.SetActive(false);
+                }
+                break;
+        }
+    }
+    
+    // Public methods called by UI buttons
+    public void StartGame()
+    {
+        Debug.Log("StartGame() called from UI button");
+        
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartGame();
         }
         else
         {
-            Debug.LogWarning("ScreenFader is not assigned."); // if null log warning
+            Debug.LogError("GameManager instance not found!");
         }
-
-        Debug.Log("Loading TheBoilerDemo scene");
-        GameMode.startFromMenu = false; // disable start from menu
-        SceneManager.LoadScene("TheBoilerDemo"); //load the scene via string name
     }
-
-    // NEW METHOD: Show exit confirmation instead of directly exiting
+    
     public void ShowExitConfirmation()
     {
         Debug.Log("ShowExitConfirmation() called");
-
+        
         if (exitConfirmationPanel != null)
         {
             exitConfirmationPanel.SetActive(true);
@@ -112,61 +128,47 @@ public class MainMenuHandler : MonoBehaviour
             Debug.LogWarning("ExitConfirmationPanel is not assigned!");
         }
     }
-
-    // NEW METHOD: Confirm exit (called by "Yes, Exit" button)
+    
     public void ConfirmExit()
     {
         Debug.Log("Exit confirmed by user");
         ExitGame();
     }
-
-    // NEW METHOD: Cancel exit (called by "Cancel" button)
+    
     public void CancelExit()
     {
         Debug.Log("Exit cancelled by user");
-
+        
         if (exitConfirmationPanel != null)
         {
             exitConfirmationPanel.SetActive(false);
         }
     }
-
+    
     public void ExitGame()
     {
-        Debug.Log("Quitting game..."); // log the event
-        Application.Quit(); // close the application in build
-
+        Debug.Log("Quitting game...");
+        Application.Quit();
+        
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // close the application in Unity Editor
+        UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
-
-    private void LockPlayerMovement()
-    {
-        var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-        if (teleport != null) teleport.enabled = false;
-
-        var continuousMove = xrOrigin.GetComponent<ContinuousMoveProviderBase>();
-        if (continuousMove != null) continuousMove.enabled = false;
-
-        var snapTurn = xrOrigin.GetComponent<SnapTurnProviderBase>();
-        if (snapTurn != null) snapTurn.enabled = false;
-
-        var continuousTurn = xrOrigin.GetComponent<ContinuousTurnProviderBase>();
-        if (continuousTurn != null) continuousTurn.enabled = false;
-    }
-
+    
     private void RotateOriginToFace(Vector3 targetPosition)
     {
+        if (GameManager.Instance?.xrOrigin == null) return;
+        
+        GameObject xrOrigin = GameManager.Instance.xrOrigin;
         Camera camera = xrOrigin.GetComponentInChildren<Camera>();
         if (camera == null) return;
-
+        
         Vector3 headsetForward = camera.transform.forward;
         headsetForward.y = 0;
-
+        
         Vector3 directionToUI = targetPosition - camera.transform.position;
         directionToUI.y = 0;
-
+        
         float angle = Vector3.SignedAngle(headsetForward, directionToUI, Vector3.up);
         xrOrigin.transform.Rotate(0, angle, 0);
     }

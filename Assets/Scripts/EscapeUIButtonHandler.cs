@@ -5,30 +5,113 @@ using UnityEngine.SceneManagement;
 
 public class EscapeUIButtonHandler : MonoBehaviour
 {
-    public GameObject xrOrigin;
-    public Transform mainMenuPosition;
+    [Header("UI References")]
     public GameObject escapedUI;
-    public GameObject mainMenuUI;
-    public ScreenFader screenFader;
+    public Transform mainMenuPosition;
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel; // Reference to the ExitConfirmationPanel
 
-    void Start()
+    private void Start()
     {
-        // Make sure exit confirmation is hidden at start
+        // Hide exit confirmation at start
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(false);
+        }
+
+        // Subscribe to GameManager state changes
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged += OnGameStateChanged;
+        }
+
+        // Hide escaped UI initially
+        if (escapedUI != null)
+        {
+            escapedUI.SetActive(false);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from events
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnStateChanged -= OnGameStateChanged;
+        }
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        switch (newState)
+        {
+            case GameState.Escaped:
+                ShowEscapedUI();
+                break;
+
+            case GameState.Playing:
+                HideEscapedUI();
+                break;
+
+            case GameState.Loading:
+                HideEscapedUI();
+                break;
+        }
+    }
+
+    private void ShowEscapedUI()
+    {
+        if (escapedUI != null)
+        {
+            escapedUI.SetActive(true);
+
+            // Position player for UI interaction if needed
+            PositionPlayerForUI();
+        }
+    }
+
+    private void HideEscapedUI()
+    {
+        if (escapedUI != null)
+        {
+            escapedUI.SetActive(false);
+        }
+
         if (exitConfirmationPanel != null)
         {
             exitConfirmationPanel.SetActive(false);
         }
     }
 
-    public void RestartGame()
+    private void PositionPlayerForUI()
     {
-        StartCoroutine(RestartGameRoutine());
+        // Don't move the player - they should already be positioned correctly by CutSceneManager
+        // The CutSceneManager has already moved them to the exit target position
+        // We just need to make sure they're facing the UI properly
+
+        if (GameManager.Instance?.xrOrigin != null && escapedUI != null)
+        {
+            // Optional: Rotate player to face the escaped UI if needed
+            // But don't change their position - they should stay at the exit
+        }
     }
 
-    // NEW METHOD: Show exit confirmation instead of directly returning to menu
+    // Public methods called by UI buttons
+    public void RestartGame()
+    {
+        Debug.Log("RestartGame() called from Escape UI");
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RestartGame();
+        }
+        else
+        {
+            Debug.LogError("GameManager instance not found!");
+        }
+    }
+
     public void ShowExitConfirmation()
     {
         Debug.Log("ShowExitConfirmation() called from Escape UI");
@@ -43,14 +126,12 @@ public class EscapeUIButtonHandler : MonoBehaviour
         }
     }
 
-    // NEW METHOD: Confirm exit to main menu (called by "Yes, Exit" button)
     public void ConfirmExitToMainMenu()
     {
         Debug.Log("Exit to main menu confirmed by user");
         ReturnToMainMenu();
     }
 
-    // NEW METHOD: Cancel exit (called by "Cancel" button)
     public void CancelExit()
     {
         Debug.Log("Exit to main menu cancelled by user");
@@ -63,30 +144,30 @@ public class EscapeUIButtonHandler : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        StartCoroutine(BackToMenu());
+        Debug.Log("ReturnToMainMenu() called from Escape UI");
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ReturnToMainMenu();
+        }
+        else
+        {
+            Debug.LogError("GameManager instance not found!");
+        }
     }
 
-    private IEnumerator RestartGameRoutine()
+    // Call this method when the player successfully escapes
+    public void TriggerPlayerEscaped()
     {
-        if (screenFader != null)
+        Debug.Log("Player has escaped! Triggering escaped state.");
+
+        if (GameManager.Instance != null)
         {
-            screenFader.FadeIn(1f); // fade to black
-            yield return new WaitForSeconds(1f);
+            GameManager.Instance.PlayerEscaped();
         }
-
-        GameMode.startFromMenu = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private IEnumerator BackToMenu()
-    {
-        if (screenFader != null)
+        else
         {
-            screenFader.FadeIn(1f);
-            yield return new WaitForSeconds(1f);
+            Debug.LogError("GameManager instance not found!");
         }
-
-        GameMode.startFromMenu = true; // show menu UI
-        SceneManager.LoadScene("MainMenuScene");
     }
 }

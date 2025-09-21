@@ -6,21 +6,32 @@ using TMPro;
 
 public class CutSceneManager : MonoBehaviour
 {
-    public XRBaseInteractor doorInteractor;
+    [Header("Cutscene References")]
     public Transform exitTarget;
-    public GameObject xrOrigin;
     public float moveDuration = 2f;
 
-    private ScreenFader _screenFader;
+    [Header("UI References")]
     public GameObject EscapedUI;
-    public TMP_Text timeText; 
+    public TMP_Text timeText;
 
+    private ScreenFader _screenFader;
     private CharacterController characterController;
 
     private void Start()
     {
         _screenFader = FindObjectOfType<ScreenFader>();
-        characterController = xrOrigin.GetComponent<CharacterController>();
+
+        // Get XR Origin from GameManager
+        if (GameManager.Instance?.xrOrigin != null)
+        {
+            characterController = GameManager.Instance.xrOrigin.GetComponent<CharacterController>();
+        }
+
+        // Hide escaped UI initially
+        if (EscapedUI != null)
+        {
+            EscapedUI.SetActive(false);
+        }
     }
 
     public void TriggerCutscene()
@@ -30,11 +41,24 @@ public class CutSceneManager : MonoBehaviour
 
     private IEnumerator PlayCutscene()
     {
-        // Fade to black
-        _screenFader.FadeIn(1f);
-        yield return new WaitForSeconds(1.2f);
+        // Get XR Origin from GameManager
+        GameObject xrOrigin = GameManager.Instance?.xrOrigin;
+        if (xrOrigin == null)
+        {
+            Debug.LogError("XR Origin not found in GameManager!");
+            yield break;
+        }
 
-        // Optionally lock player input here (disable locomotion scripts, etc.)
+        // Use GameManager's screen fader if available, otherwise use local one
+        ScreenFader screenFader = GameManager.Instance?.screenFader ?? _screenFader;
+
+        // Fade to black
+        if (screenFader != null)
+        {
+            screenFader.FadeIn(1f);
+            yield return new WaitForSeconds(1.2f);
+        }
+
         // Move the player to the exit position
         Vector3 startPos = xrOrigin.transform.position;
         Vector3 endPos = exitTarget.position;
@@ -50,40 +74,36 @@ public class CutSceneManager : MonoBehaviour
         xrOrigin.transform.position = endPos;
 
         // Rotate player 90° to the left
-        xrOrigin.transform.Rotate(0, -90f, 0); 
-
-        // Lock Movement
-        LockPlayerMovement();
+        xrOrigin.transform.Rotate(0, -90f, 0);
 
         // Fade back in
-        _screenFader.FadeOut(1f);
-        yield return new WaitForSeconds(1f);
+        if (screenFader != null)
+        {
+            screenFader.FadeOut(1f);
+            yield return new WaitForSeconds(1f);
+        }
 
-        Debug.Log("Showing Escaped UI now!");
-
-        // Now trigger Game Over UI or next logic
         // Stop timer
-        GameTimer.Instance.StopTimer();
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.StopTimer();
 
-        // Update UI text
-        timeText.text = "Time: " + GameTimer.Instance.GetFormattedTime();
+            // Update UI text
+            if (timeText != null)
+            {
+                timeText.text = "Time: " + GameTimer.Instance.GetFormattedTime();
+            }
+        }
 
-        // Show Game Over UI
-        EscapedUI.SetActive(true);
-    }
+        Debug.Log("Cutscene completed - Now triggering escaped state");
 
-    private void LockPlayerMovement()
-    {
-        var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-        if (teleport != null) teleport.enabled = false;
+        // NOW tell GameManager we've escaped (after the cutscene completes)
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.PlayerEscaped();
+        }
 
-        var continuousMove = xrOrigin.GetComponent<ContinuousMoveProviderBase>();
-        if (continuousMove != null) continuousMove.enabled = false;
-
-        var snapTurn = xrOrigin.GetComponent<SnapTurnProviderBase>();
-        if (snapTurn != null) snapTurn.enabled = false;
-
-        var continuousTurn = xrOrigin.GetComponent<ContinuousTurnProviderBase>();
-        if (continuousTurn != null) continuousTurn.enabled = false;
+        // The EscapedUI will be shown automatically by the EscapeUIButtonHandler
+        // when it receives the GameState.Escaped event from GameManager
     }
 }

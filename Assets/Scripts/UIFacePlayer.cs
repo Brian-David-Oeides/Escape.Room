@@ -25,4 +25,3 @@ public class UIFacePlayer : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(lookDirection);
     }
 }
-
