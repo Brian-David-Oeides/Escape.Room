@@ -35,6 +35,16 @@ public class GameTimer : MonoBehaviour
         _isRunning = false;
     }
 
+    public void PauseTimer()
+    {
+        _isRunning = false;
+    }
+
+    public void ResumeTimer()
+    {
+        _isRunning = true;
+    }
+
     public string GetFormattedTime()
     {
         int hours = Mathf.FloorToInt(_elapsedTime / 3600f);

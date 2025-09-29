@@ -127,7 +127,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void HandlePlayingState()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; 
         gamePaused = false;
 
         if (gameStartTime == 0f)
@@ -141,7 +141,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void HandlePausedState()
     {
-        Time.timeScale = 0f;
+        // Don't use Time.timeScale = 0 for VR
+        // Time.timeScale = 0f; // REMOVE or COMMENT OUT this line
         gamePaused = true;
         DisablePlayerMovement();
     }
