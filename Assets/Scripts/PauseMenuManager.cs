@@ -16,11 +16,18 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject mainMenuButton;
     public GameObject exitGameButton;
 
+    [Header("Exit Confirmation")]
+    public GameObject exitConfirmationPanel;
+    public TextMeshProUGUI confirmationText; // Text component to change the message
+    public GameObject confirmYesButton;
+    public GameObject confirmCancelButton;
+
     [Header("Input")]
     public InputActionProperty menuButtonAction; // For XR controller input
 
     private bool _isMenuButtonPressed = false;
     private Coroutine _resumeCoroutine;
+    private System.Action _pendingConfirmAction; // Store which action to execute if confirmed
 
     private void Start()
     {
@@ -28,6 +35,12 @@ public class PauseMenuManager : MonoBehaviour
         if (pauseMenuCanvas != null)
         {
             pauseMenuCanvas.SetActive(false);
+        }
+
+        // Hide exit confirmation at start
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(false);
         }
 
         // Subscribe to GameManager state changes
@@ -74,6 +87,11 @@ public class PauseMenuManager : MonoBehaviour
             }
             else if (GameManager.Instance.currentState == GameState.Paused)
             {
+                // If confirmation panel is showing, don't unpause
+                if (exitConfirmationPanel != null && exitConfirmationPanel.activeSelf)
+                {
+                    return; // Don't unpause if confirmation dialog is open
+                }
                 GameManager.Instance.TogglePause();
             }
         }
@@ -86,6 +104,9 @@ public class PauseMenuManager : MonoBehaviour
 
     private void OnGameStateChanged(GameState newState)
     {
+        // Find and notify the validator
+        var validator = FindObjectOfType<XRLocomotionValidator>();
+
         switch (newState)
         {
             case GameState.Paused:
@@ -96,6 +117,7 @@ public class PauseMenuManager : MonoBehaviour
             case GameState.Playing:
                 HidePauseMenu();
                 ResumeGameTimer();
+                HideExitConfirmation(); // Hide confirmation if game resumes
                 break;
 
             case GameState.Loading:
@@ -103,6 +125,7 @@ public class PauseMenuManager : MonoBehaviour
             case GameState.Escaped:
             case GameState.GameOver:
                 HidePauseMenu();
+                HideExitConfirmation();
                 break;
         }
     }
@@ -163,6 +186,10 @@ public class PauseMenuManager : MonoBehaviour
     public void OnResumeButtonClicked()
     {
         Debug.Log("Resume button clicked");
+
+        // Hide any open confirmation dialog
+        HideExitConfirmation();
+
         // Cancel any existing resume coroutine
         if (_resumeCoroutine != null)
         {
@@ -172,6 +199,7 @@ public class PauseMenuManager : MonoBehaviour
         // Start the resume coroutine
         _resumeCoroutine = StartCoroutine(ResumeGameCoroutine());
     }
+
     private IEnumerator ResumeGameCoroutine()
     {
         // First hide the pause menu immediately
@@ -207,12 +235,76 @@ public class PauseMenuManager : MonoBehaviour
     }
 
 
+    // Modified to show confirmation instead of direct action
     public void OnMainMenuButtonClicked()
     {
-        Debug.Log("Main Menu button clicked from pause menu");
+        Debug.Log("Main Menu button clicked - showing confirmation");
+        ShowExitConfirmation("Are you sure you want to return to the Main Menu?\nAll progress will be lost.",
+            () => ExecuteReturnToMainMenu());
+    }
+
+    // Modified to show confirmation instead of direct action
+    public void OnExitGameButtonClicked()
+    {
+        Debug.Log("Exit Game button clicked - showing confirmation");
+        ShowExitConfirmation("Are you sure you want to exit the game?",
+            () => ExecuteExitGame());
+    }
+
+    // New method to show confirmation with custom text
+    private void ShowExitConfirmation(string message, System.Action confirmAction)
+    {
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(true);
+
+            if (confirmationText != null)
+            {
+                confirmationText.text = message;
+            }
+
+            _pendingConfirmAction = confirmAction;
+        }
+        else
+        {
+            Debug.LogWarning("ExitConfirmationPanel is not assigned in PauseMenuManager!");
+            // If no confirmation panel, execute action directly
+            confirmAction?.Invoke();
+        }
+    }
+
+    // Called by "Yes" button in confirmation dialog
+    public void OnConfirmYes()
+    {
+        Debug.Log("Action confirmed by user");
+        HideExitConfirmation();
+        _pendingConfirmAction?.Invoke();
+        _pendingConfirmAction = null;
+    }
+
+    // Called by "Cancel" button in confirmation dialog
+    public void OnConfirmCancel()
+    {
+        Debug.Log("Action cancelled by user");
+        HideExitConfirmation();
+        _pendingConfirmAction = null;
+    }
+
+    private void HideExitConfirmation()
+    {
+        if (exitConfirmationPanel != null)
+        {
+            exitConfirmationPanel.SetActive(false);
+        }
+    }
+
+    // Actual execution methods (called after confirmation)
+    private void ExecuteReturnToMainMenu()
+    {
+        Debug.Log("Returning to Main Menu from pause menu");
         if (GameManager.Instance != null)
         {
-            // First unpause the game (to reset Time.timeScale)
+            // First unpause the game (to reset Time.timeScale if you're using it)
             if (GameManager.Instance.currentState == GameState.Paused)
             {
                 Time.timeScale = 1f;
@@ -221,14 +313,15 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    public void OnExitGameButtonClicked()
+    private void ExecuteExitGame()
     {
-        Debug.Log("Exit Game button clicked");
+        Debug.Log("Exiting game from pause menu");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
+
 }
