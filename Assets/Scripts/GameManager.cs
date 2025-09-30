@@ -283,38 +283,72 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    private void DisablePlayerMovement()
+{
+    if (xrOrigin == null) return;
+    
+    // Disable locomotion components
+    var teleport = xrOrigin.GetComponent<TeleportationProvider>();
+    if (teleport != null) teleport.enabled = false;
+    
+    var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+    if (continuousMove != null) continuousMove.enabled = false;
+    
+    var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
+    if (snapTurn != null) snapTurn.enabled = false;
+    
+    var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();
+    if (continuousTurn != null) continuousTurn.enabled = false;
+    
+    Debug.Log("Player movement disabled");
+}
+
     private void EnablePlayerMovement()
     {
-        if (xrOrigin == null) return;
+        if (xrOrigin == null)
+        {
+            Debug.LogWarning("XR Origin is null when trying to enable movement!");
+            return;
+        }
 
-        var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-        if (teleport != null) teleport.enabled = true;
-
-        var continuousMove = xrOrigin.GetComponent<ContinuousMoveProviderBase>();
-        if (continuousMove != null) continuousMove.enabled = true;
-
-        var snapTurn = xrOrigin.GetComponent<SnapTurnProviderBase>();
-        if (snapTurn != null) snapTurn.enabled = true;
-
-        var continuousTurn = xrOrigin.GetComponent<ContinuousTurnProviderBase>();
-        if (continuousTurn != null) continuousTurn.enabled = true;
+        StartCoroutine(EnablePlayerMovementCoroutine());
     }
 
-    private void DisablePlayerMovement()
+    private IEnumerator EnablePlayerMovementCoroutine()
     {
-        if (xrOrigin == null) return;
+        // Small delay to ensure state changes have propagated
+        yield return new WaitForSeconds(0.1f);
 
+        // Enable locomotion components with verification
         var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-        if (teleport != null) teleport.enabled = false;
+        if (teleport != null)
+        {
+            teleport.enabled = true;
+            Debug.Log($"Teleport enabled: {teleport.enabled}");
+        }
 
-        var continuousMove = xrOrigin.GetComponent<ContinuousMoveProviderBase>();
-        if (continuousMove != null) continuousMove.enabled = false;
+        var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+        if (continuousMove != null)
+        {
+            continuousMove.enabled = true;
+            Debug.Log($"Continuous move enabled: {continuousMove.enabled}");
+        }
 
-        var snapTurn = xrOrigin.GetComponent<SnapTurnProviderBase>();
-        if (snapTurn != null) snapTurn.enabled = false;
+        var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
+        if (snapTurn != null)
+        {
+            snapTurn.enabled = true;
+            Debug.Log($"Snap turn enabled: {snapTurn.enabled}");
+        }
 
-        var continuousTurn = xrOrigin.GetComponent<ContinuousTurnProviderBase>();
-        if (continuousTurn != null) continuousTurn.enabled = false;
+        var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();
+        if (continuousTurn != null)
+        {
+            continuousTurn.enabled = true;
+            Debug.Log($"Continuous turn enabled: {continuousTurn.enabled}");
+        }
+
+        Debug.Log("Player movement enable sequence completed");
     }
 
     private void PlayMusic(AudioClip clip)

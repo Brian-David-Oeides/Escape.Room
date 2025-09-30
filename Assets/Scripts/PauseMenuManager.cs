@@ -19,7 +19,8 @@ public class PauseMenuManager : MonoBehaviour
     [Header("Input")]
     public InputActionProperty menuButtonAction; // For XR controller input
 
-    private bool isMenuButtonPressed = false;
+    private bool _isMenuButtonPressed = false;
+    private Coroutine _resumeCoroutine;
 
     private void Start()
     {
@@ -62,9 +63,9 @@ public class PauseMenuManager : MonoBehaviour
 
     private void OnMenuButtonPressed(InputAction.CallbackContext context)
     {
-        if (!isMenuButtonPressed && GameManager.Instance != null)
+        if (!_isMenuButtonPressed && GameManager.Instance != null)
         {
-            isMenuButtonPressed = true;
+            _isMenuButtonPressed = true;
 
             // Only allow pausing during gameplay
             if (GameManager.Instance.currentState == GameState.Playing)
@@ -80,7 +81,7 @@ public class PauseMenuManager : MonoBehaviour
 
     private void OnMenuButtonReleased(InputAction.CallbackContext context)
     {
-        isMenuButtonPressed = false;
+        _isMenuButtonPressed = false;
     }
 
     private void OnGameStateChanged(GameState newState)
@@ -125,7 +126,7 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    private void PositionMenuInFrontOfPlayer()
+    /* private void PositionMenuInFrontOfPlayer()
     {
         if (Camera.main != null && pauseMenuCanvas != null)
         {
@@ -140,7 +141,7 @@ public class PauseMenuManager : MonoBehaviour
             lookDir.y = 0; // Keep upright
             pauseMenuCanvas.transform.rotation = Quaternion.LookRotation(lookDir);
         }
-    }
+    }*/
 
     private void PauseGameTimer()
     {
@@ -162,11 +163,49 @@ public class PauseMenuManager : MonoBehaviour
     public void OnResumeButtonClicked()
     {
         Debug.Log("Resume button clicked");
+        // Cancel any existing resume coroutine
+        if (_resumeCoroutine != null)
+        {
+            StopCoroutine(_resumeCoroutine);
+        }
+
+        // Start the resume coroutine
+        _resumeCoroutine = StartCoroutine(ResumeGameCoroutine());
+    }
+    private IEnumerator ResumeGameCoroutine()
+    {
+        // First hide the pause menu immediately
+        HidePauseMenu();
+        
+        // Wait one frame for UI to update
+        yield return null;
+        
+        // Then toggle pause state
         if (GameManager.Instance != null && GameManager.Instance.currentState == GameState.Paused)
         {
             GameManager.Instance.TogglePause();
         }
+        
+        // Wait another frame to ensure state change is processed
+        yield return null;
+        
+        // Force re-enable movement as a safety check
+        if (GameManager.Instance != null && GameManager.Instance.xrOrigin != null)
+        {
+            var continuousMove = GameManager.Instance.xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+            if (continuousMove != null)
+            {
+                // Disable then re-enable to force refresh
+                continuousMove.enabled = false;
+                yield return null;
+                continuousMove.enabled = true;
+                Debug.Log("Force re-enabled continuous move provider");
+            }
+        }
+        
+        _resumeCoroutine = null;
     }
+
 
     public void OnMainMenuButtonClicked()
     {
