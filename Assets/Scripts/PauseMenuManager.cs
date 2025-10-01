@@ -18,16 +18,35 @@ public class PauseMenuManager : MonoBehaviour
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel;
-    public TextMeshProUGUI confirmationText; // Text component to change the message
+    public GameObject mainMenuConfirmationTextObject; // GameObject with pre-styled text for Main Menu
+    public GameObject exitGameConfirmationTextObject; // GameObject with pre-styled text for Exit Game
     public GameObject confirmYesButton;
     public GameObject confirmCancelButton;
 
     [Header("Input")]
     public InputActionProperty menuButtonAction; // For XR controller input
 
+    [Header("Debug/Setup")]
+    [SerializeField] private bool showForSetup = false; // Toggle this to preview UI in Editor
+
     private bool _isMenuButtonPressed = false;
     private Coroutine _resumeCoroutine;
     private System.Action _pendingConfirmAction; // Store which action to execute if confirmed
+
+    private void OnValidate() // Runs in Editor when values change
+    {
+#if UNITY_EDITOR
+        if (!Application.isPlaying) // Only in edit mode, not during play
+        {
+            if (exitConfirmationPanel != null)
+                exitConfirmationPanel.SetActive(showForSetup);
+            if (mainMenuConfirmationTextObject != null)
+                mainMenuConfirmationTextObject.SetActive(showForSetup && exitConfirmationPanel.activeSelf);
+            if (exitGameConfirmationTextObject != null)
+                exitGameConfirmationTextObject.SetActive(showForSetup && exitConfirmationPanel.activeSelf);
+        }
+#endif
+    }
 
     private void Start()
     {
@@ -239,29 +258,32 @@ public class PauseMenuManager : MonoBehaviour
     public void OnMainMenuButtonClicked()
     {
         Debug.Log("Main Menu button clicked - showing confirmation");
-        ShowExitConfirmation("Are you sure you want to return to the Main Menu?\nAll progress will be lost.",
-            () => ExecuteReturnToMainMenu());
+        ShowExitConfirmation(mainMenuConfirmationTextObject, () => ExecuteReturnToMainMenu());
     }
 
     // Modified to show confirmation instead of direct action
     public void OnExitGameButtonClicked()
     {
         Debug.Log("Exit Game button clicked - showing confirmation");
-        ShowExitConfirmation("Are you sure you want to exit the game?",
-            () => ExecuteExitGame());
+        ShowExitConfirmation(exitGameConfirmationTextObject, () => ExecuteExitGame());
     }
 
-    // New method to show confirmation with custom text
-    private void ShowExitConfirmation(string message, System.Action confirmAction)
+    // Modified show confirmation method
+    private void ShowExitConfirmation(GameObject textObjectToShow, System.Action confirmAction)
     {
         if (exitConfirmationPanel != null)
         {
             exitConfirmationPanel.SetActive(true);
 
-            if (confirmationText != null)
-            {
-                confirmationText.text = message;
-            }
+            // Hide all confirmation texts first
+            if (mainMenuConfirmationTextObject != null)
+                mainMenuConfirmationTextObject.SetActive(false);
+            if (exitGameConfirmationTextObject != null)
+                exitGameConfirmationTextObject.SetActive(false);
+
+            // Show the appropriate text
+            if (textObjectToShow != null)
+                textObjectToShow.SetActive(true);
 
             _pendingConfirmAction = confirmAction;
         }
