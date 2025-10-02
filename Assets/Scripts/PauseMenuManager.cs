@@ -154,9 +154,8 @@ public class PauseMenuManager : MonoBehaviour
         if (pauseMenuCanvas != null)
         {
             pauseMenuCanvas.SetActive(true);
+            UIAudioManager.Instance?.PlayMenuOpen(); 
 
-            // Position menu in front of player
-            // PositionMenuInFrontOfPlayer();
         }
     }
 
@@ -165,25 +164,9 @@ public class PauseMenuManager : MonoBehaviour
         if (pauseMenuCanvas != null)
         {
             pauseMenuCanvas.SetActive(false);
+            UIAudioManager.Instance?.PlayMenuClose();
         }
     }
-
-    /* private void PositionMenuInFrontOfPlayer()
-    {
-        if (Camera.main != null && pauseMenuCanvas != null)
-        {
-            Transform cam = Camera.main.transform;
-            Vector3 forward = cam.forward;
-            Vector3 spawnPos = cam.position + forward * 2f; // 2 meters in front
-
-            pauseMenuCanvas.transform.position = spawnPos;
-
-            // Make it face the player
-            Vector3 lookDir = pauseMenuCanvas.transform.position - cam.position;
-            lookDir.y = 0; // Keep upright
-            pauseMenuCanvas.transform.rotation = Quaternion.LookRotation(lookDir);
-        }
-    }*/
 
     private void PauseGameTimer()
     {
@@ -299,6 +282,7 @@ public class PauseMenuManager : MonoBehaviour
     public void OnConfirmYes()
     {
         Debug.Log("Action confirmed by user");
+        UIAudioManager.Instance?.PlayConfirm();
         HideExitConfirmation();
         _pendingConfirmAction?.Invoke();
         _pendingConfirmAction = null;
@@ -308,6 +292,7 @@ public class PauseMenuManager : MonoBehaviour
     public void OnConfirmCancel()
     {
         Debug.Log("Action cancelled by user");
+        UIAudioManager.Instance?.PlayCancel();
         HideExitConfirmation();
         _pendingConfirmAction = null;
     }
