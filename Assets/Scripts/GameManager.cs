@@ -284,24 +284,45 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     private void DisablePlayerMovement()
-{
-    if (xrOrigin == null) return;
-    
-    // Disable locomotion components
-    var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-    if (teleport != null) teleport.enabled = false;
-    
-    var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
-    if (continuousMove != null) continuousMove.enabled = false;
-    
-    var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
-    if (snapTurn != null) snapTurn.enabled = false;
-    
-    var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();
-    if (continuousTurn != null) continuousTurn.enabled = false;
-    
-    Debug.Log("Player movement disabled");
-}
+    {
+        if (xrOrigin == null)
+        {
+            Debug.Log("Player movement disabled");
+            return;
+        }
+
+        StartCoroutine(DisableMovementSafely());
+    }
+
+    private IEnumerator DisableMovementSafely()
+    {
+        // Wait a frame to ensure any current input reads complete
+        yield return null;
+
+        // Disable locomotion components
+        var teleport = xrOrigin.GetComponent<TeleportationProvider>();
+        if (teleport != null) teleport.enabled = false;
+
+        var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+        if (continuousMove != null)
+        {
+            continuousMove.enabled = false;
+            // Force clear any cached input
+            continuousMove.leftHandMoveAction.action?.Disable();
+            continuousMove.rightHandMoveAction.action?.Disable();
+            yield return null;
+            continuousMove.leftHandMoveAction.action?.Enable();
+            continuousMove.rightHandMoveAction.action?.Enable();
+        }
+
+        var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
+        if (snapTurn != null) snapTurn.enabled = false;
+
+        var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();
+        if (continuousTurn != null) continuousTurn.enabled = false;
+
+        Debug.Log("Player movement disabled safely");
+    }
 
     private void EnablePlayerMovement()
     {
@@ -330,6 +351,9 @@ public class GameManager : MonoSingleton<GameManager>
         var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
         if (continuousMove != null)
         {
+            // Clear and reset the component
+            continuousMove.enabled = false;
+            yield return null;
             continuousMove.enabled = true;
             Debug.Log($"Continuous move enabled: {continuousMove.enabled}");
         }
