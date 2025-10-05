@@ -137,7 +137,11 @@ public class UIHoverButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointer
         if (hoverCoroutine != null)
             StopCoroutine(hoverCoroutine);
 
-        hoverCoroutine = StartCoroutine(AnimateHover(true));
+        // Check if GameObject is active before starting coroutine
+        if (gameObject.activeInHierarchy)
+        {
+            hoverCoroutine = StartCoroutine(AnimateHover(true));
+        }
     }
 
     private void EndHover()
@@ -148,7 +152,17 @@ public class UIHoverButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointer
         if (hoverCoroutine != null)
             StopCoroutine(hoverCoroutine);
 
-        hoverCoroutine = StartCoroutine(AnimateHover(false));
+        // Check if GameObject is active before starting coroutine
+        if (gameObject.activeInHierarchy)
+        {
+            hoverCoroutine = StartCoroutine(AnimateHover(false));
+        }
+        else
+        {
+            // If inactive, just reset immediately without animation
+            ResetToNormal();
+            hoverCoroutine = null;
+        }
     }
 
     private IEnumerator AnimateHover(bool hovering)

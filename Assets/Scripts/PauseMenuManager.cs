@@ -132,13 +132,11 @@ public class PauseMenuManager : MonoBehaviour
                 ShowPauseMenu();
                 PauseGameTimer();
                 break;
-
             case GameState.Playing:
                 HidePauseMenu();
                 ResumeGameTimer();
                 HideExitConfirmation(); // Hide confirmation if game resumes
                 break;
-
             case GameState.Loading:
             case GameState.MainMenu:
             case GameState.Escaped:
@@ -154,8 +152,7 @@ public class PauseMenuManager : MonoBehaviour
         if (pauseMenuCanvas != null)
         {
             pauseMenuCanvas.SetActive(true);
-            UIAudioManager.Instance?.PlayMenuOpen(); 
-
+            UIAudioManager.Instance?.PlayMenuOpen();
         }
     }
 
@@ -206,23 +203,23 @@ public class PauseMenuManager : MonoBehaviour
     {
         // First hide the pause menu immediately
         HidePauseMenu();
-        
+
         // Wait one frame for UI to update
         yield return null;
-        
+
         // Then toggle pause state
         if (GameManager.Instance != null && GameManager.Instance.currentState == GameState.Paused)
         {
             GameManager.Instance.TogglePause();
         }
-        
+
         // Wait another frame to ensure state change is processed
         yield return null;
-        
+
         // Force re-enable movement as a safety check
-        if (GameManager.Instance != null && GameManager.Instance.xrOrigin != null)
+        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
         {
-            var continuousMove = GameManager.Instance.xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+            var continuousMove = PlayerController.Instance.XROrigin.GetComponent<ActionBasedContinuousMoveProvider>();
             if (continuousMove != null)
             {
                 // Disable then re-enable to force refresh
@@ -232,10 +229,9 @@ public class PauseMenuManager : MonoBehaviour
                 Debug.Log("Force re-enabled continuous move provider");
             }
         }
-        
+
         _resumeCoroutine = null;
     }
-
 
     // Modified to show confirmation instead of direct action
     public void OnMainMenuButtonClicked()
@@ -309,6 +305,7 @@ public class PauseMenuManager : MonoBehaviour
     private void ExecuteReturnToMainMenu()
     {
         Debug.Log("Returning to Main Menu from pause menu");
+
         if (GameManager.Instance != null)
         {
             // First unpause the game (to reset Time.timeScale if you're using it)
@@ -316,6 +313,7 @@ public class PauseMenuManager : MonoBehaviour
             {
                 Time.timeScale = 1f;
             }
+
             GameManager.Instance.ReturnToMainMenu();
         }
     }
@@ -323,12 +321,10 @@ public class PauseMenuManager : MonoBehaviour
     private void ExecuteExitGame()
     {
         Debug.Log("Exiting game from pause menu");
-
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
     }
-
 }

@@ -14215,6 +14215,7 @@ MonoBehaviour:
   mainMenuUI: {fileID: 1446761296}
   mainMenuSpawnPoint: {fileID: 1536420689}
   exitConfirmationPanel: {fileID: 0}
+  lockPositionInMenu: 1
 --- !u!4 &1046887443
 Transform:
   m_ObjectHideFlags: 0
@@ -23874,6 +23875,11 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 586852589}
+    - target: {fileID: 1594373299289854335, guid: d604137420a49fe498d519e74be05778,
+        type: 3}
+      propertyPath: distanceFromCamera
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2785714428036794574, guid: d604137420a49fe498d519e74be05778,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -28176,6 +28182,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: _socketRotator
+      value: 
+      objectReference: {fileID: 3760630585606230038}
     - target: {fileID: 7841248003728799217, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: m_Layer
@@ -28192,6 +28203,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3760630585606230036}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3760630585606230038 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+    type: 3}
+  m_PrefabInstance: {fileID: 3760630585606230036}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d5f23460f14ef4ab1c7df22c911ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3775091975881669572
 GameObject:
   m_ObjectHideFlags: 0

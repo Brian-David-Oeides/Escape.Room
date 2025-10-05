@@ -49,11 +49,9 @@ public class EscapeUIButtonHandler : MonoBehaviour
             case GameState.Escaped:
                 ShowEscapedUI();
                 break;
-
             case GameState.Playing:
                 HideEscapedUI();
                 break;
-
             case GameState.Loading:
                 HideEscapedUI();
                 break;
@@ -65,7 +63,6 @@ public class EscapeUIButtonHandler : MonoBehaviour
         if (escapedUI != null)
         {
             escapedUI.SetActive(true);
-
             // Position player for UI interaction if needed
             PositionPlayerForUI();
         }
@@ -77,7 +74,6 @@ public class EscapeUIButtonHandler : MonoBehaviour
         {
             escapedUI.SetActive(false);
         }
-
         if (exitConfirmationPanel != null)
         {
             exitConfirmationPanel.SetActive(false);
@@ -89,8 +85,7 @@ public class EscapeUIButtonHandler : MonoBehaviour
         // Don't move the player - they should already be positioned correctly by CutSceneManager
         // The CutSceneManager has already moved them to the exit target position
         // We just need to make sure they're facing the UI properly
-
-        if (GameManager.Instance?.xrOrigin != null && escapedUI != null)
+        if (PlayerController.Instance?.XROrigin != null && escapedUI != null)
         {
             // Optional: Rotate player to face the escaped UI if needed
             // But don't change their position - they should stay at the exit

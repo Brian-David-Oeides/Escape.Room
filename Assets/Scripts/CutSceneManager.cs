@@ -21,10 +21,10 @@ public class CutSceneManager : MonoBehaviour
     {
         _screenFader = FindObjectOfType<ScreenFader>();
 
-        // Get XR Origin from GameManager
-        if (GameManager.Instance?.xrOrigin != null)
+        // Get XR Origin from PlayerController
+        if (PlayerController.Instance?.XROrigin != null)
         {
-            characterController = GameManager.Instance.xrOrigin.GetComponent<CharacterController>();
+            characterController = PlayerController.Instance.XROrigin.GetComponent<CharacterController>();
         }
 
         // Hide escaped UI initially
@@ -41,11 +41,11 @@ public class CutSceneManager : MonoBehaviour
 
     private IEnumerator PlayCutscene()
     {
-        // Get XR Origin from GameManager
-        GameObject xrOrigin = GameManager.Instance?.xrOrigin;
+        // Get XR Origin from PlayerController
+        GameObject xrOrigin = PlayerController.Instance?.XROrigin;
         if (xrOrigin == null)
         {
-            Debug.LogError("XR Origin not found in GameManager!");
+            Debug.LogError("XR Origin not found in PlayerController!");
             yield break;
         }
 
@@ -62,8 +62,8 @@ public class CutSceneManager : MonoBehaviour
         // Move the player to the exit position
         Vector3 startPos = xrOrigin.transform.position;
         Vector3 endPos = exitTarget.position;
-
         float elapsed = 0;
+
         while (elapsed < moveDuration)
         {
             xrOrigin.transform.position = Vector3.Lerp(startPos, endPos, elapsed / moveDuration);

@@ -1,10 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.XR.CoreUtils;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public enum GameState
 {
@@ -25,16 +21,8 @@ public class GameManager : MonoSingleton<GameManager>
     public string mainMenuSceneName = "MainMenuScene";
     public string gameplaySceneName = "TheBoilerDemo";
 
-    [Header("XR References")]
-    public GameObject xrOrigin;
-
     [Header("Fade System")]
     public ScreenFader screenFader;
-
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip menuMusic;
-    public AudioClip gameplayMusic;
 
     // Events for state changes
     public System.Action<GameState> OnStateChanged;
@@ -43,23 +31,18 @@ public class GameManager : MonoSingleton<GameManager>
     private float gameStartTime;
     private bool gamePaused = false;
 
+    protected override void Awake()
+    {
+        base.Awake(); // THIS IS CRITICAL - calls MonoSingleton's Awake first
+        Debug.Log("GameManager Awake called");
+    }
+
     public override void Init()
     {
-        // Make sure GameManager persists between scenes
+        Debug.Log("GameManager Init called");
         DontDestroyOnLoad(gameObject);
-
-        // Initialize based on current scene
-        if (SceneManager.GetActiveScene().name == mainMenuSceneName)
-        {
-            SetGameState(GameState.MainMenu);
-        }
-        else if (SceneManager.GetActiveScene().name == gameplaySceneName)
-        {
-            SetGameState(GameState.Playing);
-        }
-
-        // Subscribe to scene loaded events
         SceneManager.sceneLoaded += OnSceneLoaded;
+        StartCoroutine(DelayedInitialization());
     }
 
     private void OnDestroy()
@@ -69,7 +52,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Update()
     {
-        // Handle pause input (you can customize this for VR controllers)
+        // Handle pause input (customize for VR controllers)
         if (currentState == GameState.Playing && Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
@@ -112,12 +95,45 @@ public class GameManager : MonoSingleton<GameManager>
         OnStateChanged?.Invoke(newState);
     }
 
+    private IEnumerator DelayedInitialization()
+    {
+        Debug.Log("DelayedInitialization started");
+
+        // Wait a couple frames for all Awake/Start calls to complete
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
+        Debug.Log("Proceeding with game initialization");
+
+        // Initialize based on current scene
+        if (SceneManager.GetActiveScene().name == mainMenuSceneName)
+        {
+            currentState = GameState.Loading;
+            SetGameState(GameState.MainMenu);
+        }
+        else if (SceneManager.GetActiveScene().name == gameplaySceneName)
+        {
+            currentState = GameState.Loading;
+            SetGameState(GameState.Playing);
+        }
+    }
+
     private void HandleMainMenuState()
     {
         Time.timeScale = 1f;
         gamePaused = false;
-        PlayMusic(menuMusic);
-        // Movement will be disabled in OnSceneLoaded after XR Origin is properly set
+
+        // Play menu music
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayMenuMusic();
+        }
+
+        // Disable player movement
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.DisableMovement();
+        }
     }
 
     private void HandleLoadingState()
@@ -127,7 +143,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void HandlePlayingState()
     {
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
         gamePaused = false;
 
         if (gameStartTime == 0f)
@@ -135,28 +151,50 @@ public class GameManager : MonoSingleton<GameManager>
             gameStartTime = Time.time;
         }
 
-        PlayMusic(gameplayMusic);
-        EnablePlayerMovement();
+        // Play gameplay music with fade in
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayGameplayMusic(fadeIn: true);
+        }
+
+        // Enable player movement
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.EnableMovement();
+        }
     }
 
     private void HandlePausedState()
     {
-        // Don't use Time.timeScale = 0 for VR
-        // Time.timeScale = 0f; // REMOVE or COMMENT OUT this line
         gamePaused = true;
-        DisablePlayerMovement();
+
+        // Disable player movement
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.DisableMovement();
+        }
     }
 
     private void HandleGameOverState()
     {
         Time.timeScale = 1f;
-        DisablePlayerMovement();
+
+        // Disable player movement
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.DisableMovement();
+        }
     }
 
     private void HandleEscapedState()
     {
         Time.timeScale = 1f;
-        DisablePlayerMovement();
+
+        // Disable player movement
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.DisableMovement();
+        }
 
         float completionTime = Time.time - gameStartTime;
         Debug.Log($"Level completed in {completionTime:F2} seconds!");
@@ -206,7 +244,13 @@ public class GameManager : MonoSingleton<GameManager>
     {
         SetGameState(GameState.Loading);
 
-        // Fade out
+        // Start audio fade out
+        if (AudioManager.Instance != null)
+        {
+            StartCoroutine(AudioManager.Instance.FadeOutMusic());
+        }
+
+        // Fade out screen
         if (screenFader != null)
         {
             screenFader.FadeIn(1f);
@@ -216,174 +260,42 @@ public class GameManager : MonoSingleton<GameManager>
         // Load scene
         SceneManager.LoadScene(sceneName);
 
-        // The OnSceneLoaded callback will handle setting the target state
         yield return null;
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
     {
-        // Update XR Origin reference for the new scene
-        if (xrOrigin == null)
-        {
-            XROrigin xrOriginComponent = FindObjectOfType<XROrigin>();
-            if (xrOriginComponent != null)
-            {
-                xrOrigin = xrOriginComponent.gameObject;
-            }
-        }
-
-        // Update ScreenFader reference for the new scene
+        // Update references for the new scene
         if (screenFader == null)
         {
             screenFader = FindObjectOfType<ScreenFader>();
         }
 
-        // Handle player positioning based on scene
+        // Update PlayerController's XR Origin reference
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.UpdateXROriginReference();
+        }
+
+        // Handle scene-specific logic
         if (scene.name == mainMenuSceneName)
         {
             SetGameState(GameState.MainMenu);
-            // Now that XR Origin is set, disable movement for main menu
-            DisablePlayerMovement();
         }
         else if (scene.name == gameplaySceneName)
         {
-            // Position player at spawn point for gameplay
-            PositionPlayerAtSpawnPoint();
+            // Position player at spawn point
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.PositionAtSpawnPoint();
+            }
             SetGameState(GameState.Playing);
         }
 
-        // Fade in
+        // Fade in screen
         if (screenFader != null)
         {
             screenFader.FadeOut(1f);
-        }
-    }
-
-    private void PositionPlayerAtSpawnPoint()
-    {
-        // Find PlayerSpawnHandler in the scene
-        PlayerSpawnHandler spawnHandler = FindObjectOfType<PlayerSpawnHandler>();
-        if (spawnHandler != null && xrOrigin != null)
-        {
-            // Access the public fields from PlayerSpawnHandler
-            if (spawnHandler.xrOrigin != null && spawnHandler.startPosition != null)
-            {
-                xrOrigin.transform.position = spawnHandler.startPosition.position;
-                xrOrigin.transform.rotation = spawnHandler.startPosition.rotation;
-                Debug.Log("Player positioned at spawn point");
-            }
-            else
-            {
-                Debug.LogWarning("PlayerSpawnHandler found but xrOrigin or startPosition is null");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("PlayerSpawnHandler not found in scene or xrOrigin is null");
-        }
-    }
-
-    private void DisablePlayerMovement()
-    {
-        if (xrOrigin == null)
-        {
-            Debug.Log("Player movement disabled");
-            return;
-        }
-
-        StartCoroutine(DisableMovementSafely());
-    }
-
-    private IEnumerator DisableMovementSafely()
-    {
-        // Wait a frame to ensure any current input reads complete
-        yield return null;
-
-        // Disable locomotion components
-        var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-        if (teleport != null) teleport.enabled = false;
-
-        var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
-        if (continuousMove != null)
-        {
-            continuousMove.enabled = false;
-            // Force clear any cached input
-            continuousMove.leftHandMoveAction.action?.Disable();
-            continuousMove.rightHandMoveAction.action?.Disable();
-            yield return null;
-            continuousMove.leftHandMoveAction.action?.Enable();
-            continuousMove.rightHandMoveAction.action?.Enable();
-        }
-
-        var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
-        if (snapTurn != null) snapTurn.enabled = false;
-
-        var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();
-        if (continuousTurn != null) continuousTurn.enabled = false;
-
-        Debug.Log("Player movement disabled safely");
-    }
-
-    private void EnablePlayerMovement()
-    {
-        if (xrOrigin == null)
-        {
-            Debug.LogWarning("XR Origin is null when trying to enable movement!");
-            return;
-        }
-
-        StartCoroutine(EnablePlayerMovementCoroutine());
-    }
-
-    private IEnumerator EnablePlayerMovementCoroutine()
-    {
-        // Small delay to ensure state changes have propagated
-        yield return new WaitForSeconds(0.1f);
-
-        // Enable locomotion components with verification
-        var teleport = xrOrigin.GetComponent<TeleportationProvider>();
-        if (teleport != null)
-        {
-            teleport.enabled = true;
-            Debug.Log($"Teleport enabled: {teleport.enabled}");
-        }
-
-        var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
-        if (continuousMove != null)
-        {
-            // Clear and reset the component
-            continuousMove.enabled = false;
-            yield return null;
-            continuousMove.enabled = true;
-            Debug.Log($"Continuous move enabled: {continuousMove.enabled}");
-        }
-
-        var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
-        if (snapTurn != null)
-        {
-            snapTurn.enabled = true;
-            Debug.Log($"Snap turn enabled: {snapTurn.enabled}");
-        }
-
-        var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();
-        if (continuousTurn != null)
-        {
-            continuousTurn.enabled = true;
-            Debug.Log($"Continuous turn enabled: {continuousTurn.enabled}");
-        }
-
-        Debug.Log("Player movement enable sequence completed");
-    }
-
-    private void PlayMusic(AudioClip clip)
-    {
-        if (audioSource != null && clip != null)
-        {
-            if (audioSource.clip != clip)
-            {
-                audioSource.clip = clip;
-                audioSource.Play();
-            }
         }
     }
 

@@ -1939,8 +1939,8 @@ GameObject:
   - component: {fileID: 2162613418745935358}
   - component: {fileID: 1581423160307359991}
   - component: {fileID: 5376652021147963374}
-  - component: {fileID: 7246443100506519830}
-  - component: {fileID: 5504259567236601722}
+  - component: {fileID: 9079742068396868805}
+  - component: {fileID: 8907750619886141705}
   m_Layer: 6
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -2156,7 +2156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_System: {fileID: 1492342083464937321}
   m_DelayTime: 0
---- !u!114 &7246443100506519830
+--- !u!114 &9079742068396868805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2165,10 +2165,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5358119581657248203}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3661bcd3a9d6b194a8c06266e26faae0, type: 3}
+  m_Script: {fileID: 11500000, guid: 444e4a76d9e60074c86f89434455cca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5504259567236601722
+--- !u!114 &8907750619886141705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2177,7 +2177,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5358119581657248203}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3bb63f9d243eb45a21b503771541c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 769a4db5ca8a3e64c973878a385ee318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5451234165200170181
