@@ -146,7 +146,7 @@ public class PlayerController : MonoSingleton<PlayerController>
     private IEnumerator EnableMovementCoroutine()
     {
         // Small delay to ensure state changes have propagated
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         // Enable locomotion components with verification
         var teleport = xrOrigin.GetComponent<TeleportationProvider>();
@@ -169,8 +169,12 @@ public class PlayerController : MonoSingleton<PlayerController>
         var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
         if (snapTurn != null)
         {
-            snapTurn.enabled = true;
-            Debug.Log($"Snap turn enabled: {snapTurn.enabled}");
+            {
+                // Force disable left hand action to prevent null reference
+                snapTurn.leftHandSnapTurnAction = new UnityEngine.InputSystem.InputActionProperty();
+                snapTurn.enabled = true;
+                Debug.Log($"Snap turn enabled: {snapTurn.enabled}");
+            }
         }
 
         var continuousTurn = xrOrigin.GetComponent<ActionBasedContinuousTurnProvider>();

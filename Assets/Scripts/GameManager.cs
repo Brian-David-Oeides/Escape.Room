@@ -21,6 +21,9 @@ public class GameManager : MonoSingleton<GameManager>
     public string mainMenuSceneName = "MainMenuScene";
     public string gameplaySceneName = "TheBoilerDemo";
 
+    [Header("UI References")]
+    public LoadingScreenUI loadingScreenUI;
+
     [Header("Fade System")]
     public ScreenFader screenFader;
 
@@ -30,6 +33,7 @@ public class GameManager : MonoSingleton<GameManager>
     // Game data
     private float gameStartTime;
     private bool gamePaused = false;
+    private bool isLoading = false;
 
     protected override void Awake()
     {
@@ -123,44 +127,92 @@ public class GameManager : MonoSingleton<GameManager>
         Time.timeScale = 1f;
         gamePaused = false;
 
-        // Play menu music
+        // Hide loading screen
+        if (loadingScreenUI != null)
+        {
+            loadingScreenUI.Hide();
+        }
+
+        // Delay menu music slightly to let loading music fade complete
+        StartCoroutine(DelayedPlayMenuMusic());
+
+        if (InputModeManager.Instance != null)
+        {
+            InputModeManager.Instance.SwitchToMenuMode();
+        }
+    }
+
+    private IEnumerator DelayedPlayMenuMusic()
+    {
+        // Wait for loading music fade to complete
+        yield return new WaitForSeconds(1f);
+
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayMenuMusic();
-        }
-
-        // Disable player movement
-        if (PlayerController.Instance != null)
-        {
-            PlayerController.Instance.DisableMovement();
         }
     }
 
     private void HandleLoadingState()
     {
         Time.timeScale = 1f;
+        isLoading = true;
+
+        // Play loading music with fade in
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayLoadingMusic(fadeIn: false);
+        }
+
+        // Show loading screen and reset progress to 0%
+        if (loadingScreenUI != null)
+        {
+            loadingScreenUI.UpdateProgress(0f); // Reset to 0%
+            loadingScreenUI.Show();
+        }
+
+        // Disable player movement during loading
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.DisableMovement();
+        }
     }
 
     private void HandlePlayingState()
     {
         Time.timeScale = 1f;
         gamePaused = false;
+        isLoading = false;
 
         if (gameStartTime == 0f)
         {
             gameStartTime = Time.time;
         }
 
-        // Play gameplay music with fade in
+        // Hide loading screen
+        if (loadingScreenUI != null)
+        {
+            loadingScreenUI.Hide();
+        }
+
+        // Delay gameplay music slightly to let loading music fade complete
+        StartCoroutine(DelayedPlayGameplayMusic());
+
+        // Enable player movement
+        if (InputModeManager.Instance != null)
+        {
+            InputModeManager.Instance.SwitchToGameplayMode();
+        }
+    }
+
+    private IEnumerator DelayedPlayGameplayMusic()
+    {
+        // Wait for loading music fade to complete
+        yield return new WaitForSeconds(1f);
+
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayGameplayMusic(fadeIn: true);
-        }
-
-        // Enable player movement
-        if (PlayerController.Instance != null)
-        {
-            PlayerController.Instance.EnableMovement();
         }
     }
 
@@ -169,9 +221,9 @@ public class GameManager : MonoSingleton<GameManager>
         gamePaused = true;
 
         // Disable player movement
-        if (PlayerController.Instance != null)
+        if (InputModeManager.Instance != null)
         {
-            PlayerController.Instance.DisableMovement();
+            InputModeManager.Instance.SwitchToMenuMode();
         }
     }
 
@@ -191,9 +243,9 @@ public class GameManager : MonoSingleton<GameManager>
         Time.timeScale = 1f;
 
         // Disable player movement
-        if (PlayerController.Instance != null)
+        if (InputModeManager.Instance != null)
         {
-            PlayerController.Instance.DisableMovement();
+            InputModeManager.Instance.SwitchToMenuMode();
         }
 
         float completionTime = Time.time - gameStartTime;
@@ -244,10 +296,16 @@ public class GameManager : MonoSingleton<GameManager>
     {
         SetGameState(GameState.Loading);
 
-        // Start audio fade out
-        if (AudioManager.Instance != null)
+        // CRITICAL: Disable movement immediately before any delays
+        if (PlayerController.Instance != null)
         {
-            StartCoroutine(AudioManager.Instance.FadeOutMusic());
+            PlayerController.Instance.DisableMovement();
+        }
+
+        // Disable all input action maps during transition
+        if (InputModeManager.Instance != null && InputModeManager.Instance.inputActionAsset != null)
+        {
+            InputModeManager.Instance.inputActionAsset.Disable();
         }
 
         // Fade out screen
@@ -257,10 +315,72 @@ public class GameManager : MonoSingleton<GameManager>
             yield return new WaitForSeconds(1f);
         }
 
-        // Load scene
-        SceneManager.LoadScene(sceneName);
+        // Track loading start time
+        float loadingStartTime = Time.realtimeSinceStartup;
+        float minimumLoadingTime = 5f; // Minimum time to show loading screen
 
-        yield return null;
+        // Start async scene loading
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+
+        // Prevent the scene from activating immediately
+        asyncLoad.allowSceneActivation = false;
+
+        // Wait until the scene is almost loaded (0.9 = 90%)
+        while (asyncLoad.progress < 0.9f)
+        {
+            // use asyncLoad.progress here for progress tracking
+            // Progress goes from 0 to 0.9 (Unity reserves the last 10% for activation)
+            float loadingProgress = asyncLoad.progress / 0.9f; // Normalize to 0-1
+
+            // Update loading UI
+            if (loadingScreenUI != null)
+            {
+                loadingScreenUI.UpdateProgress(loadingProgress);
+            }
+
+            Debug.Log($"Loading progress: {loadingProgress * 100}%");
+
+            yield return null;
+        }
+
+        // Scene is loaded to 90%, continue showing progress smoothly to 100%
+        float fakeProgress = 0.9f;
+        while (fakeProgress < 1f)
+        {
+            fakeProgress += Time.deltaTime * 0.05f; // Smooth progress increment
+            fakeProgress = Mathf.Clamp01(fakeProgress);
+
+            if (loadingScreenUI != null)
+            {
+                loadingScreenUI.UpdateProgress(fakeProgress);
+            }
+
+            yield return null;
+        }
+
+        // Ensure minimum loading time has passed
+        float elapsedTime = Time.realtimeSinceStartup - loadingStartTime;
+        if (elapsedTime < minimumLoadingTime)
+        {
+            yield return new WaitForSeconds(minimumLoadingTime - elapsedTime);
+        }
+
+        // Start audio fade out
+        if (AudioManager.Instance != null)
+        {
+            StartCoroutine(AudioManager.Instance.FadeOutMusic());
+        }
+
+        // Scene is loaded, now we can activate it
+        asyncLoad.allowSceneActivation = true;
+
+        // Wait for scene activation to complete
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        Debug.Log($"Scene {sceneName} loaded successfully");
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
@@ -284,11 +404,14 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else if (scene.name == gameplaySceneName)
         {
-            // Position player at spawn point
             if (PlayerController.Instance != null)
             {
+                // CRITICAL: Update XR Origin reference first
+                PlayerController.Instance.UpdateXROriginReference();
+                // Position player at spawn point
                 PlayerController.Instance.PositionAtSpawnPoint();
             }
+
             SetGameState(GameState.Playing);
         }
 
@@ -313,5 +436,10 @@ public class GameManager : MonoSingleton<GameManager>
     public bool IsInGameplay()
     {
         return currentState == GameState.Playing || currentState == GameState.Paused;
+    }
+
+    public bool IsLoading()
+    {
+        return isLoading;
     }
 }

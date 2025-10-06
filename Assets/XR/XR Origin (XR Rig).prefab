@@ -1939,8 +1939,8 @@ GameObject:
   - component: {fileID: 2162613418745935358}
   - component: {fileID: 1581423160307359991}
   - component: {fileID: 5376652021147963374}
-  - component: {fileID: 9079742068396868805}
-  - component: {fileID: 8907750619886141705}
+  - component: {fileID: 4612491229868902721}
+  - component: {fileID: 5534387043814020369}
   m_Layer: 6
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -2156,7 +2156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_System: {fileID: 1492342083464937321}
   m_DelayTime: 0
---- !u!114 &9079742068396868805
+--- !u!114 &4612491229868902721
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2168,7 +2168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444e4a76d9e60074c86f89434455cca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8907750619886141705
+--- !u!114 &5534387043814020369
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

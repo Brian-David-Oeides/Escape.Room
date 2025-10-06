@@ -10,6 +10,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     [Header("Music Clips")]
     [SerializeField] private AudioClip menuMusic;
     [SerializeField] private AudioClip gameplayMusic;
+    [SerializeField] private AudioClip loadingMusic;
 
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 1.5f;
@@ -66,7 +67,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     /// <summary>
     /// Plays gameplay music with optional fade-in
     /// </summary>
-    public void PlayGameplayMusic(bool fadeIn = false)
+    public void PlayGameplayMusic(bool fadeIn = true)
     {
         if (fadeIn)
             PlayMusicWithFadeIn(gameplayMusic, fadeDuration);
@@ -75,11 +76,26 @@ public class AudioManager : MonoSingleton<AudioManager>
     }
 
     /// <summary>
+    /// Plays loading music with optional fade-in
+    /// </summary>
+    public void PlayLoadingMusic(bool fadeIn = true)
+    {
+        Debug.Log($"PlayLoadingMusic called - fadeIn: {fadeIn}, loadingMusic exists: {loadingMusic != null}");
+
+        if (fadeIn)
+            PlayMusicWithFadeIn(loadingMusic, fadeDuration);
+        else
+            PlayMusic(loadingMusic);
+    }
+
+    /// <summary>
     /// Fades out current music over specified duration
     /// </summary>
     public IEnumerator FadeOutMusic(float duration = -1)
     {
         if (duration < 0) duration = fadeDuration;
+
+        Debug.Log($"FadeOutMusic called - duration: {duration}");
 
         if (currentFadeCoroutine != null)
         {
@@ -168,13 +184,13 @@ public class AudioManager : MonoSingleton<AudioManager>
             musicSource.loop = true;
             musicSource.volume = 1f;
             musicSource.Play();
-            Debug.Log($"Playing music: {clip.name}");
+            Debug.Log($"Playing music: {clip.name}, isPlaying: {musicSource.isPlaying}");
         }
         else if (!musicSource.isPlaying)
         {
             musicSource.volume = 1f;
             musicSource.Play();
-            Debug.Log($"Resuming music: {clip.name}");
+            Debug.Log($"Resuming music: {clip.name}, isPlaying: {musicSource.isPlaying}");
         }
     }
 
@@ -185,6 +201,8 @@ public class AudioManager : MonoSingleton<AudioManager>
             Debug.LogWarning("Cannot play music - AudioSource or clip is null");
             return;
         }
+
+        Debug.Log($"PlayMusicWithFadeIn called - clip: {clip.name}, duration: {duration}");
 
         // Stop any ongoing fade
         if (currentFadeCoroutine != null)
