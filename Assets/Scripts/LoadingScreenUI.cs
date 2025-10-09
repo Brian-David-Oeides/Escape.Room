@@ -2,12 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadingScreenUI : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject loadingPanel;
     [SerializeField] private TextMeshProUGUI loadingText;
+    [SerializeField] private Slider progressBar; 
+    [SerializeField] private RectTransform spinningLoader; 
+
+    [Header("Spinner Settings")]
+    [SerializeField] private float spinSpeed = 200f; // Degrees per second
 
     [Header("World Space Settings")]
     [SerializeField] private float distanceFromCamera = 2f;
@@ -24,6 +30,15 @@ public class LoadingScreenUI : MonoBehaviour
         if (loadingPanel != null)
         {
             loadingPanel.SetActive(false);
+        }
+    }
+
+    private void Update()
+    {
+        // Rotate the spinner continuously
+        if (spinningLoader != null && loadingPanel != null && loadingPanel.activeSelf)
+        {
+            spinningLoader.Rotate(0f, 0f, -spinSpeed * Time.deltaTime);
         }
     }
 
@@ -75,6 +90,12 @@ public class LoadingScreenUI : MonoBehaviour
 
     public void UpdateProgress(float progress)
     {
+        // Update progress bar
+        if (progressBar != null)
+        {
+            progressBar.value = progress;
+        }
+        // Update loading text with percentage
         if (loadingText != null)
         {
             loadingText.text = $"LOADING... {Mathf.RoundToInt(progress * 100)}%";

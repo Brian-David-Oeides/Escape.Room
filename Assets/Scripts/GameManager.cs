@@ -317,7 +317,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         // Track loading start time
         float loadingStartTime = Time.realtimeSinceStartup;
-        float minimumLoadingTime = 5f; // Minimum time to show loading screen
+        float minimumLoadingTime = 3f; // Minimum time to show loading screen
 
         // Start async scene loading
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
