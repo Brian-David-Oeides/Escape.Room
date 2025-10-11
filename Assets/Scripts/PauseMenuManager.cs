@@ -13,8 +13,13 @@ public class PauseMenuManager : MonoBehaviour
 
     [Header("Button References")]
     public GameObject resumeButton;
+    public GameObject saveGameButton;  // save game button
+    public GameObject loadGameButton; // load game button
     public GameObject mainMenuButton;
     public GameObject exitGameButton;
+
+    [Header("Save/Load UI")]  // save/load menu UI reference
+    public SaveLoadMenuUI saveLoadMenuUI;
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel;
@@ -60,6 +65,12 @@ public class PauseMenuManager : MonoBehaviour
         if (exitConfirmationPanel != null)
         {
             exitConfirmationPanel.SetActive(false);
+        }
+
+        // Hide save/load panels at start
+        if (saveLoadMenuUI != null)
+        {
+            saveLoadMenuUI.HideAllPanels();
         }
 
         // Subscribe to GameManager state changes
@@ -111,6 +122,13 @@ public class PauseMenuManager : MonoBehaviour
                 {
                     return; // Don't unpause if confirmation dialog is open
                 }
+
+                if (saveLoadMenuUI != null && (saveLoadMenuUI.transform.Find("SavePanel")?.gameObject.activeSelf == true ||
+                                               saveLoadMenuUI.transform.Find("LoadPanel")?.gameObject.activeSelf == true))
+                {
+                    return;
+                }
+
                 GameManager.Instance.TogglePause();
             }
         }
@@ -136,6 +154,11 @@ public class PauseMenuManager : MonoBehaviour
                 HidePauseMenu();
                 ResumeGameTimer();
                 HideExitConfirmation(); // Hide confirmation if game resumes
+                // Hide save/load panels when resuming
+                if (saveLoadMenuUI != null)
+                {
+                    saveLoadMenuUI.HideAllPanels();
+                }
                 break;
             case GameState.Loading:
             case GameState.MainMenu:
@@ -152,8 +175,21 @@ public class PauseMenuManager : MonoBehaviour
         if (pauseMenuCanvas != null)
         {
             pauseMenuCanvas.SetActive(true);
-            UIAudioManager.Instance?.PlayMenuOpen();
+
+            // Show main pause menu panel, hide save/load panels
+            if (pauseMenuPanel != null)
+            {
+                pauseMenuPanel.SetActive(true);
+            }
+
+            if (saveLoadMenuUI != null)
+            {
+                saveLoadMenuUI.HideAllPanels();
+            }
         }
+
+        UIAudioManager.Instance?.PlayMenuOpen();
+   
     }
 
     private void HidePauseMenu()
@@ -180,6 +216,8 @@ public class PauseMenuManager : MonoBehaviour
             GameTimer.Instance.ResumeTimer();
         }
     }
+
+    #region Button Click Handlers
 
     // Public methods for button clicks
     public void OnResumeButtonClicked()
@@ -233,6 +271,64 @@ public class PauseMenuManager : MonoBehaviour
         _resumeCoroutine = null;
     }
 
+    // save Game Button
+    public void OnSaveGameButtonClicked()
+    {
+        Debug.Log("Save Game button clicked");
+
+        if (saveLoadMenuUI != null)
+        {
+            // Hide main pause menu, show save panel
+            if (pauseMenuPanel != null)
+            {
+                pauseMenuPanel.SetActive(false);
+            }
+
+            saveLoadMenuUI.ShowSavePanel();
+        }
+        else
+        {
+            Debug.LogWarning("SaveLoadMenuUI reference is missing!");
+        }
+    }
+
+    // load Game Button
+    public void OnLoadGameButtonClicked()
+    {
+        Debug.Log("Load Game button clicked");
+
+        if (saveLoadMenuUI != null)
+        {
+            // Hide main pause menu, show load panel
+            if (pauseMenuPanel != null)
+            {
+                pauseMenuPanel.SetActive(false);
+            }
+
+            saveLoadMenuUI.ShowLoadPanel();
+        }
+        else
+        {
+            Debug.LogWarning("SaveLoadMenuUI reference is missing!");
+        }
+    }
+
+    // back from Save/Load to Pause Menu
+    public void OnBackToPauseMenu()
+    {
+        Debug.Log("Back to pause menu");
+
+        if (saveLoadMenuUI != null)
+        {
+            saveLoadMenuUI.HideAllPanels();
+        }
+
+        if (pauseMenuPanel != null)
+        {
+            pauseMenuPanel.SetActive(true);
+        }
+    }
+
     // Modified to show confirmation instead of direct action
     public void OnMainMenuButtonClicked()
     {
@@ -246,6 +342,10 @@ public class PauseMenuManager : MonoBehaviour
         Debug.Log("Exit Game button clicked - showing confirmation");
         ShowExitConfirmation(exitGameConfirmationTextObject, () => ExecuteExitGame());
     }
+
+    #endregion
+
+    #region Confirmation Dialogs
 
     // Modified show confirmation method
     private void ShowExitConfirmation(GameObject textObjectToShow, System.Action confirmAction)
@@ -301,6 +401,10 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Execute Actions
+
     // Actual execution methods (called after confirmation)
     private void ExecuteReturnToMainMenu()
     {
@@ -327,4 +431,6 @@ public class PauseMenuManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+    #endregion
 }
