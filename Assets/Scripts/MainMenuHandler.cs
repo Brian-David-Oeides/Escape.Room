@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -9,6 +10,15 @@ public class MainMenuHandler : MonoBehaviour
     [Header("Menu UI References")]
     public GameObject mainMenuUI;
     public Transform mainMenuSpawnPoint; // reference for the MainMenuPosition
+
+    [Header("Main Menu Buttons")]
+    public GameObject newGameButton;
+    public GameObject continueButton;  
+    public GameObject loadGameButton;  
+    public GameObject exitButton;
+
+    [Header("Save/Load UI")]  
+    public SaveLoadMenuUI saveLoadMenuUI;
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel; // Reference to the ExitConfirmationPanel
@@ -61,6 +71,9 @@ public class MainMenuHandler : MonoBehaviour
         {
             PlayerController.Instance.DisableMovement();
         }
+
+        // Update Continue button state based on available saves
+        UpdateContinueButton();
     }
 
     private void OnDestroy()
@@ -108,6 +121,12 @@ public class MainMenuHandler : MonoBehaviour
             exitConfirmationPanel.SetActive(false);
         }
 
+        // Hide save/load panels
+        if (saveLoadMenuUI != null)
+        {
+            saveLoadMenuUI.HideAllPanels();
+        }
+
         isInMainMenu = true;
     }
 
@@ -130,6 +149,7 @@ public class MainMenuHandler : MonoBehaviour
                     mainMenuUI.SetActive(true);
                 }
                 isInMainMenu = true;
+                UpdateContinueButton();
                 break;
 
             case GameState.Loading:
@@ -146,11 +166,12 @@ public class MainMenuHandler : MonoBehaviour
         }
     }
 
-    // Public methods called by UI buttons
-    public void StartGame()
-    {
-        Debug.Log("StartGame() called from UI button");
+    #region Button Click Handlers
 
+    // Public methods called by UI buttons
+    public void StartNewGame()
+    {
+        Debug.Log("StartNewGame() called from UI button");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.StartGame();
@@ -158,6 +179,67 @@ public class MainMenuHandler : MonoBehaviour
         else
         {
             Debug.LogError("GameManager instance not found!");
+        }
+    }
+
+    // NEW: Continue (Load Most Recent Save)
+    public void OnContinueButtonClicked()
+    {
+        Debug.Log("Continue button clicked");
+
+        if (SaveManager.Instance == null)
+        {
+            Debug.LogError("SaveManager not found!");
+            return;
+        }
+
+        // Find most recent save slot
+        int mostRecentSlot = GetMostRecentSaveSlot();
+
+        if (mostRecentSlot == -1)
+        {
+            Debug.LogWarning("No saves found to continue!");
+            return;
+        }
+
+        Debug.Log($"Continuing from most recent save: Slot {mostRecentSlot}");
+        SaveManager.Instance.LoadGame(mostRecentSlot);
+    }
+
+    // NEW: Load Game (Show Load Panel)
+    public void OnLoadGameButtonClicked()
+    {
+        Debug.Log("Load Game button clicked");
+
+        if (saveLoadMenuUI != null)
+        {
+            // Hide main menu, show load panel
+            if (mainMenuUI != null)
+            {
+                mainMenuUI.SetActive(false);
+            }
+
+            saveLoadMenuUI.ShowLoadPanel();
+        }
+        else
+        {
+            Debug.LogWarning("SaveLoadMenuUI reference is missing!");
+        }
+    }
+
+    // NEW: Back from Load Panel to Main Menu
+    public void OnBackToMainMenu()
+    {
+        Debug.Log("Back to main menu");
+
+        if (saveLoadMenuUI != null)
+        {
+            saveLoadMenuUI.HideAllPanels();
+        }
+
+        if (mainMenuUI != null)
+        {
+            mainMenuUI.SetActive(true);
         }
     }
 
@@ -200,6 +282,54 @@ public class MainMenuHandler : MonoBehaviour
 #endif
     }
 
+    #endregion
+
+    #region Helper Methods
+
+    // NEW: Update Continue Button Interactability
+    private void UpdateContinueButton()
+    {
+        if (continueButton == null || SaveManager.Instance == null)
+            return;
+
+        // Check if any save slots have data
+        bool hasSaveData = SaveManager.Instance.SaveSlotExists(1) ||
+                          SaveManager.Instance.SaveSlotExists(2) ||
+                          SaveManager.Instance.SaveSlotExists(3);
+
+        // Enable/disable continue button
+        var button = continueButton.GetComponent<UnityEngine.UI.Button>();
+        if (button != null)
+        {
+            button.interactable = hasSaveData;
+        }
+
+        Debug.Log($"Continue button {(hasSaveData ? "enabled" : "disabled")} - Save data exists: {hasSaveData}");
+    }
+
+    // NEW: Find Most Recent Save Slot
+    private int GetMostRecentSaveSlot()
+    {
+        if (SaveManager.Instance == null)
+            return -1;
+
+        SaveSlotInfo[] allSlots = SaveManager.Instance.GetAllSaveSlots();
+
+        int mostRecentSlot = -1;
+        System.DateTime mostRecentTime = System.DateTime.MinValue;
+
+        foreach (SaveSlotInfo slot in allSlots)
+        {
+            if (slot.hasData && slot.saveTimestamp > mostRecentTime)
+            {
+                mostRecentTime = slot.saveTimestamp;
+                mostRecentSlot = slot.slotNumber;
+            }
+        }
+
+        return mostRecentSlot;
+    }
+
     private void RotateOriginToFace(Vector3 targetPosition)
     {
         if (PlayerController.Instance?.XROrigin == null) return;
@@ -217,4 +347,6 @@ public class MainMenuHandler : MonoBehaviour
         float angle = Vector3.SignedAngle(headsetForward, directionToUI, Vector3.up);
         xrOrigin.transform.Rotate(0, angle, 0);
     }
+
+    #endregion
 }
