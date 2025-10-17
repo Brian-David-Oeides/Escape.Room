@@ -69,23 +69,65 @@ public class SaveLoadMenuUI : MonoBehaviour
 
     public void ShowLoadPanel()
     {
+        Debug.Log("=== ShowLoadPanel START ===");
+        Debug.Log("ShowLoadPanel called");
+        Debug.Log($"loadPanel is null? {loadPanel == null}");
+
         HideAllPanels();
+        Debug.Log("HideAllPanels completed");
 
         if (loadPanel != null)
         {
+            Debug.Log($"LoadPanel name: {loadPanel.name}");
+            Debug.Log($"LoadPanel active before: {loadPanel.activeSelf}");
+
+            Debug.Log($"Activating loadPanel: {loadPanel.name}");
             loadPanel.SetActive(true);
+
+            Debug.Log($"LoadPanel active after SetActive(true): {loadPanel.activeSelf}");
+            Debug.Log($"LoadPanel parent: {loadPanel.transform.parent?.name}");
+
             RefreshLoadSlots();
+            Debug.Log($"loadPanel.activeSelf: {loadPanel.activeSelf}");
+        }
+        else
+        {
+            Debug.LogError("Load Panel reference is NULL in SaveLoadMenuUI!");
         }
 
         UIAudioManager.Instance?.PlayMenuOpen();
+        Debug.Log("=== ShowLoadPanel END ===");
     }
 
     public void HideAllPanels()
     {
-        if (savePanel != null) savePanel.SetActive(false);
-        if (loadPanel != null) loadPanel.SetActive(false);
-        if (confirmationPanel != null) confirmationPanel.SetActive(false);
-        if (feedbackPanel != null) feedbackPanel.SetActive(false);
+        Debug.Log("HideAllPanels called");
+
+        if (savePanel != null)
+        {
+            Debug.Log("Hiding savePanel");
+            savePanel.SetActive(false);
+        }
+
+        if (loadPanel != null)
+        {
+            Debug.Log($"Hiding loadPanel (was {loadPanel.activeSelf})");
+            loadPanel.SetActive(false);
+        }
+
+        if (confirmationPanel != null)
+        {
+            Debug.Log("Hiding confirmationPanel");
+            confirmationPanel.SetActive(false);
+        }
+
+        if (feedbackPanel != null)
+        {
+            Debug.Log("Hiding feedbackPanel");
+            feedbackPanel.SetActive(false);
+        }
+
+        Debug.Log("HideAllPanels finished");
     }
 
     #endregion

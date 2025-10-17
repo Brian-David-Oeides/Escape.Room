@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +10,9 @@ public class MainMenuHandler : MonoBehaviour
     [Header("Menu UI References")]
     public GameObject mainMenuUI;
     public Transform mainMenuSpawnPoint; // reference for the MainMenuPosition
+
+    [Header("UI Panels")]
+    public GameObject mainMenuPanel;
 
     [Header("Main Menu Buttons")]
     public GameObject newGameButton;
@@ -109,10 +112,10 @@ public class MainMenuHandler : MonoBehaviour
             }
         }
 
-        // Show main menu UI
-        if (mainMenuUI != null)
+        // Show main menu UI (canvas always stays active)
+        if (mainMenuPanel != null)
         {
-            mainMenuUI.SetActive(true);
+            mainMenuPanel.SetActive(true);  // Show button panel
         }
 
         // Hide exit confirmation
@@ -144,18 +147,18 @@ public class MainMenuHandler : MonoBehaviour
         switch (newState)
         {
             case GameState.MainMenu:
-                if (mainMenuUI != null)
+                if (mainMenuPanel != null)
                 {
-                    mainMenuUI.SetActive(true);
+                    mainMenuPanel.SetActive(true);  // Show buttons
                 }
                 isInMainMenu = true;
                 UpdateContinueButton();
                 break;
 
             case GameState.Loading:
-                if (mainMenuUI != null)
+                if (mainMenuPanel != null)
                 {
-                    mainMenuUI.SetActive(false);
+                    mainMenuPanel.SetActive(false);  // Hide buttons
                 }
                 isInMainMenu = false;
                 break;
@@ -182,7 +185,7 @@ public class MainMenuHandler : MonoBehaviour
         }
     }
 
-    // NEW: Continue (Load Most Recent Save)
+    // Continue (Load Most Recent Save)
     public void OnContinueButtonClicked()
     {
         Debug.Log("Continue button clicked");
@@ -196,6 +199,11 @@ public class MainMenuHandler : MonoBehaviour
         // Find most recent save slot
         int mostRecentSlot = GetMostRecentSaveSlot();
 
+        Debug.Log($"Most recent slot found: {mostRecentSlot}");
+        Debug.Log($"Slot 1 exists: {SaveManager.Instance.SaveSlotExists(1)}");
+        Debug.Log($"Slot 2 exists: {SaveManager.Instance.SaveSlotExists(2)}");
+        Debug.Log($"Slot 3 exists: {SaveManager.Instance.SaveSlotExists(3)}");
+
         if (mostRecentSlot == -1)
         {
             Debug.LogWarning("No saves found to continue!");
@@ -206,20 +214,22 @@ public class MainMenuHandler : MonoBehaviour
         SaveManager.Instance.LoadGame(mostRecentSlot);
     }
 
-    // NEW: Load Game (Show Load Panel)
+    // Load Game (Show Load Panel)
     public void OnLoadGameButtonClicked()
     {
         Debug.Log("Load Game button clicked");
 
         if (saveLoadMenuUI != null)
         {
-            // Hide main menu, show load panel
-            if (mainMenuUI != null)
+            // Hide main menu PANEL (not canvas)
+            if (mainMenuPanel != null)
             {
-                mainMenuUI.SetActive(false);
+                mainMenuPanel.SetActive(false);  // Only hides buttons
+                Debug.Log("Main menu panel hidden");
             }
 
             saveLoadMenuUI.ShowLoadPanel();
+            Debug.Log("ShowLoadPanel called");
         }
         else
         {
@@ -227,7 +237,7 @@ public class MainMenuHandler : MonoBehaviour
         }
     }
 
-    // NEW: Back from Load Panel to Main Menu
+    // Back from Load Panel to Main Menu
     public void OnBackToMainMenu()
     {
         Debug.Log("Back to main menu");
@@ -237,9 +247,9 @@ public class MainMenuHandler : MonoBehaviour
             saveLoadMenuUI.HideAllPanels();
         }
 
-        if (mainMenuUI != null)
+        if (mainMenuPanel != null)
         {
-            mainMenuUI.SetActive(true);
+            mainMenuPanel.SetActive(true);  // ✅ Re-shows buttons!
         }
     }
 
