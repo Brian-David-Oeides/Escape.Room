@@ -4618,6 +4618,59 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &667708374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 667708376}
+  - component: {fileID: 667708375}
+  m_Layer: 0
+  m_Name: HealthEnergyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &667708375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667708374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040d7f466a739384a9675e1f73af8512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  maxEnergy: 100
+  currentEnergy: 100
+  energyDrainRate: 1
+  lowEnergyThreshold: 20
+  healthDrainWhenLowEnergy: 2
+  collisionDamageCooldown: 1
+  showDebugLogs: 1
+--- !u!4 &667708376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667708374}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &686269240
 GameObject:
   m_ObjectHideFlags: 0
@@ -25729,6 +25782,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 248714965936798116, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_text
+      value: Load game in Slot X?
+      objectReference: {fileID: 0}
     - target: {fileID: 1245840176259045189, guid: 2be09666ab64d7f41852d0589d03b718,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -25774,11 +25832,101 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1046887442}
+    - target: {fileID: 3406956678438740021, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406956678438740021, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406956678438740021, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406956678438740021, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406956678438740021, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406956678438740021, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706964223988096038, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706964223988096038, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706964223988096038, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706964223988096038, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706964223988096038, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706964223988096038, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3772083951549872248, guid: 2be09666ab64d7f41852d0589d03b718,
         type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 982571980}
+    - target: {fileID: 4528887893189056794, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528887893189056794, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528887893189056794, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528887893189056794, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528887893189056794, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4528887893189056794, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4547469063301806328, guid: 2be09666ab64d7f41852d0589d03b718,
         type: 3}
       propertyPath: m_Pivot.x
@@ -25894,11 +26042,46 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1046887442}
+    - target: {fileID: 6188709313280322604, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6188709313280322604, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6188709313280322604, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6188709313280322604, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6188709313280322604, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6188709313280322604, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7083177842084960224, guid: 2be09666ab64d7f41852d0589d03b718,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1046887442}
+    - target: {fileID: 8988598655737619776, guid: 2be09666ab64d7f41852d0589d03b718,
+        type: 3}
+      propertyPath: m_text
+      value: Game Loaded!
+      objectReference: {fileID: 0}
     - target: {fileID: 9117518230585800862, guid: 2be09666ab64d7f41852d0589d03b718,
         type: 3}
       propertyPath: m_InteractionManager
@@ -48439,3 +48622,4 @@ SceneRoots:
   - {fileID: 752421121}
   - {fileID: 1731430383}
   - {fileID: 547977142}
+  - {fileID: 667708376}
