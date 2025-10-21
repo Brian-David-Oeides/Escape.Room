@@ -358,7 +358,7 @@ public class GameManager : MonoSingleton<GameManager>
             yield return null;
         }
 
-        // Ensure minimum loading time has passed
+        // Make sure minimum loading time has passed
         float elapsedTime = Time.realtimeSinceStartup - loadingStartTime;
         if (elapsedTime < minimumLoadingTime)
         {
