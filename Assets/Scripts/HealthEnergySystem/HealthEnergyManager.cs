@@ -18,25 +18,42 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     [Header("Energy Settings")]
     [SerializeField] private float maxEnergy = 100f;
     [SerializeField] private float currentEnergy = 100f;
-    [SerializeField] private float energyDrainRate = 1f; // Energy lost per second
+
+    [Space(10)]
+    [Header("Energy Drain Rates")]
+    [SerializeField] private bool useMovementBasedDrain = true;
+    [Tooltip("Energy drain when standing still")]
+    [SerializeField] private float standingDrainRate = 0.01f;
+    [Tooltip("Energy drain when walking/moving")]
+    [SerializeField] private float movingDrainRate = 0.05f;
+    [Tooltip("Energy cost per teleport")]
+    [SerializeField] private float teleportEnergyCost = 1f;
+    [Tooltip("Movement speed threshold to detect if player is moving (m/s)")]
+    [SerializeField] private float movementThreshold = 0.1f;
 
     [Header("Cascading Damage")]
-    [SerializeField] private float lowEnergyThreshold = 20f; // When to start draining health
-    [SerializeField] private float healthDrainWhenLowEnergy = 2f; // Health lost per second when energy is low
+    [SerializeField] private float lowEnergyThreshold = 20f; // When to trigger low energy warning
+    [SerializeField] private float lowHealthThreshold = 25f; // When to trigger low health warning (NEW)
+    [SerializeField] private float healthDrainWhenLowEnergy = 2f; // Health lost per second when energy is depleted
 
     [Header("Collision Damage Settings")]
-    [SerializeField] private float collisionDamageCooldown = 1f; // Prevent rapid damage
+    [SerializeField] private float collisionDamageCooldown = 1f;
     private float lastCollisionDamageTime = 0f;
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
 
     // Events
-    public System.Action<float> OnHealthChanged; // float = current health (0-100)
-    public System.Action<float> OnEnergyChanged; // float = current energy (0-100)
+    public System.Action<float> OnHealthChanged;
+    public System.Action<float> OnEnergyChanged;
     public System.Action OnPlayerDied;
-    public System.Action OnLowHealth; // Triggered at 25% health
-    public System.Action OnLowEnergy; // Triggered at low energy threshold
+    public System.Action OnLowHealth;
+    public System.Action OnLowEnergy;
+
+    // Movement tracking
+    private Vector3 lastPlayerPosition;
+    private float currentDrainRate;
+    private bool isPlayerMoving = false;
 
     private bool isDead = false;
     private bool hasTriggeredLowHealth = false;
@@ -60,15 +77,182 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
         DebugLog($"Starting Energy: {currentEnergy}/{maxEnergy}");
     }
 
+    /// <summary>
+    /// Reset health and energy to starting values (for new game)
+    /// </summary>
+    public void ResetToStartingValues()
+    {
+        currentHealth = maxHealth;
+        currentEnergy = maxEnergy;
+        isDead = false;
+        hasTriggeredLowHealth = false;
+        hasTriggeredLowEnergy = false;
+
+        // Reset movement tracking
+        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+        {
+            lastPlayerPosition = PlayerController.Instance.XROrigin.transform.position;
+        }
+        currentDrainRate = standingDrainRate;
+        isPlayerMoving = false;
+
+        // Trigger UI update
+        OnHealthChanged?.Invoke(currentHealth);
+        OnEnergyChanged?.Invoke(currentEnergy);
+
+        Debug.Log($"[HealthEnergyManager] Reset to starting values: Health {currentHealth}/{maxHealth}, Energy {currentEnergy}/{maxEnergy}");
+    }
+
+    private void Start()
+    {
+        // Initialize values
+        currentHealth = maxHealth;
+        currentEnergy = maxEnergy;
+        isDead = false;
+
+        // Initialize movement tracking
+        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+        {
+            lastPlayerPosition = PlayerController.Instance.XROrigin.transform.position;
+        }
+
+        currentDrainRate = standingDrainRate;
+
+        Debug.Log($"[HealthEnergyManager] HealthEnergyManager initialized");
+        Debug.Log($"[HealthEnergyManager] Starting Health: {currentHealth}/{maxHealth}");
+        Debug.Log($"[HealthEnergyManager] Starting Energy: {currentEnergy}/{maxEnergy}");
+        Debug.Log($"[HealthEnergyManager] Movement-based drain: {(useMovementBasedDrain ? "ENABLED" : "DISABLED")}");
+        if (useMovementBasedDrain)
+        {
+            Debug.Log($"[HealthEnergyManager] Standing drain: {standingDrainRate}/sec, Moving drain: {movingDrainRate}/sec");
+        }
+    }
+
     private void Update()
     {
         // Only drain during gameplay
         if (GameManager.Instance != null && GameManager.Instance.currentState == GameState.Playing)
         {
-            DrainEnergy(Time.deltaTime);
-            CheckCascadingHealthDrain();
+            if (!isDead)
+            {
+                // Update movement-based drain rate
+                if (useMovementBasedDrain)
+                {
+                    UpdateMovementBasedDrain();
+                }
+                else
+                {
+                    // Use legacy standing drain rate (backward compatibility)
+                    currentDrainRate = standingDrainRate;
+                }
+
+                // Drain energy over time
+                if (currentEnergy > 0)
+                {
+                    currentEnergy -= currentDrainRate * Time.deltaTime;
+                    currentEnergy = Mathf.Max(0, currentEnergy);
+                    OnEnergyChanged?.Invoke(currentEnergy);
+
+                    // Check for low energy warning
+                    if (currentEnergy <= lowEnergyThreshold && currentEnergy > 0)
+                    {
+                        if (!hasTriggeredLowEnergy)
+                        {
+                            hasTriggeredLowEnergy = true;
+                            OnLowEnergy?.Invoke();
+                            Debug.Log("[HealthEnergyManager] ⚠️ LOW ENERGY WARNING!");
+                        }
+                    }
+                }
+
+                // When energy is depleted, start draining health
+                if (currentEnergy <= 0 && currentHealth > 0)
+                {
+                    currentHealth -= healthDrainWhenLowEnergy * Time.deltaTime;
+                    currentHealth = Mathf.Max(0, currentHealth);
+                    OnHealthChanged?.Invoke(currentHealth);
+
+                    // Check for low health warning
+                    if (currentHealth <= lowHealthThreshold && currentHealth > 0)
+                    {
+                        if (!hasTriggeredLowHealth)
+                        {
+                            hasTriggeredLowHealth = true;
+                            OnLowHealth?.Invoke();
+                            Debug.Log("[HealthEnergyManager] ⚠️ LOW HEALTH WARNING!");
+                        }
+                    }
+
+                    // Check for death
+                    if (currentHealth <= 0)
+                    {
+                        Die();
+                    }
+                }
+            }
         }
     }
+
+    /// <summary>
+    /// Detect player movement and adjust energy drain rate accordingly
+    /// </summary>
+    private void UpdateMovementBasedDrain()
+    {
+        if (PlayerController.Instance == null || PlayerController.Instance.XROrigin == null)
+        {
+            currentDrainRate = standingDrainRate;
+            return;
+        }
+
+        Vector3 currentPosition = PlayerController.Instance.XROrigin.transform.position;
+
+        // Calculate movement speed
+        float movementSpeed = Vector3.Distance(currentPosition, lastPlayerPosition) / Time.deltaTime;
+
+        // Determine if player is moving
+        bool wasMoving = isPlayerMoving;
+        isPlayerMoving = movementSpeed > movementThreshold;
+
+        // Update drain rate based on movement
+        if (isPlayerMoving)
+        {
+            currentDrainRate = movingDrainRate;
+
+            // Log when player starts moving (optional, can remove if too spammy)
+            if (!wasMoving)
+            {
+                Debug.Log($"[HealthEnergyManager] Player moving - drain rate: {movingDrainRate}/sec");
+            }
+        }
+        else
+        {
+            currentDrainRate = standingDrainRate;
+
+            // Log when player stops moving (optional, can remove if too spammy)
+            if (wasMoving)
+            {
+                Debug.Log($"[HealthEnergyManager] Player standing - drain rate: {standingDrainRate}/sec");
+            }
+        }
+
+        // Update last position
+        lastPlayerPosition = currentPosition;
+    }
+
+    /// <summary>
+    /// Called by teleport system to drain energy per teleport
+    /// </summary>
+    public void OnPlayerTeleport()
+    {
+        if (isDead || currentEnergy <= 0) return;
+
+        currentEnergy -= teleportEnergyCost;
+        currentEnergy = Mathf.Max(0, currentEnergy);
+        OnEnergyChanged?.Invoke(currentEnergy);
+
+        Debug.Log($"[HealthEnergyManager] Teleport cost {teleportEnergyCost} energy! Energy: {currentEnergy:F1}/{maxEnergy}");
+    }
+
 
     #region Health Methods
 
@@ -143,56 +327,6 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     #endregion
 
     #region Energy Methods
-
-    /// <summary>
-    /// Drain energy over time
-    /// </summary>
-    private void DrainEnergy(float deltaTime)
-    {
-        if (isDead) return;
-
-        currentEnergy -= energyDrainRate * deltaTime;
-        currentEnergy = Mathf.Clamp(currentEnergy, 0f, maxEnergy);
-
-        OnEnergyChanged?.Invoke(currentEnergy);
-
-        // Check for low energy warning
-        if (currentEnergy <= lowEnergyThreshold && !hasTriggeredLowEnergy)
-        {
-            hasTriggeredLowEnergy = true;
-            OnLowEnergy?.Invoke();
-            DebugLog("⚠️ LOW ENERGY WARNING!");
-        }
-
-        // Reset flag if energy restored above threshold
-        if (currentEnergy > lowEnergyThreshold)
-        {
-            hasTriggeredLowEnergy = false;
-        }
-    }
-
-    /// <summary>
-    /// When energy is depleted, start draining health
-    /// </summary>
-    private void CheckCascadingHealthDrain()
-    {
-        if (isDead) return;
-
-        // If energy is at or below low threshold, drain health
-        if (currentEnergy <= 0f)
-        {
-            currentHealth -= healthDrainWhenLowEnergy * Time.deltaTime;
-            currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
-
-            OnHealthChanged?.Invoke(currentHealth);
-
-            // Check for death
-            if (currentHealth <= 0f && !isDead)
-            {
-                Die();
-            }
-        }
-    }
 
     /// <summary>
     /// Restore energy (from consuming food)
@@ -277,10 +411,41 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
 
     #region Settings (for difficulty adjustment)
 
-    public void SetEnergyDrainRate(float rate)
+    /// <summary>
+    /// Set the standing drain rate (when not moving)
+    /// </summary>
+    public void SetStandingDrainRate(float rate)
     {
-        energyDrainRate = rate;
-        DebugLog($"Energy drain rate set to: {rate}/second");
+        standingDrainRate = rate;
+        DebugLog($"Standing drain rate set to: {rate}/second");
+    }
+
+    /// <summary>
+    /// Set the moving drain rate (when walking)
+    /// </summary>
+    public void SetMovingDrainRate(float rate)
+    {
+        movingDrainRate = rate;
+        DebugLog($"Moving drain rate set to: {rate}/second");
+    }
+
+    /// <summary>
+    /// Set both drain rates at once (for difficulty presets)
+    /// </summary>
+    public void SetDrainRates(float standingRate, float movingRate)
+    {
+        standingDrainRate = standingRate;
+        movingDrainRate = movingRate;
+        DebugLog($"Drain rates set - Standing: {standingRate}/sec, Moving: {movingRate}/sec");
+    }
+
+    /// <summary>
+    /// Enable or disable movement-based drain
+    /// </summary>
+    public void SetMovementBasedDrain(bool enabled)
+    {
+        useMovementBasedDrain = enabled;
+        DebugLog($"Movement-based drain: {(enabled ? "ENABLED" : "DISABLED")}");
     }
 
     public void SetHealthDrainWhenLowEnergy(float rate)

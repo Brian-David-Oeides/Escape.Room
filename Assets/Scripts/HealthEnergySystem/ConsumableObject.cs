@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using static Unity.Burst.Intrinsics.Arm;
 
 /// <summary>
 /// Consumable object that can be grabbed and consumed to restore health/energy
@@ -83,6 +84,13 @@ public class ConsumableObject : MonoBehaviour, ISaveable
 
     private void Start()
     {
+        // If already consumed (loaded from save), exit early
+        if (isConsumed)
+        {
+            DebugLog($"{gameObject.name} already consumed - staying deactivated");
+            return;
+        }
+
         // Find head transform (camera)
         if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
         {
@@ -215,16 +223,28 @@ public class ConsumableObject : MonoBehaviour, ISaveable
         }
 
         // Animate consumption (shrink and destroy)
-        StartCoroutine(ConsumeAnimation());
+        StartCoroutine(ConsumeAnimationAndHide());
     }
 
-    private IEnumerator ConsumeAnimation()
+    /// <summary>
+    /// Animate consumption and hide object (keep it in scene for save system)
+    /// </summary>
+    private IEnumerator ConsumeAnimationAndHide()
     {
-        // Disable physics and interaction
-        grabInteractable.enabled = false;
-        rb.isKinematic = true;
+        // STEP 1: Immediately disable interaction (but keep visible for animation)
+        var xrGrab = GetComponent<XRGrabInteractable>();
+        if (xrGrab != null)
+        {
+            xrGrab.enabled = false;
+        }
 
-        // Shrink animation
+        var rigidBody = GetComponent<Rigidbody>();
+        if (rigidBody != null)
+        {
+            rigidBody.isKinematic = true;
+        }
+
+        // STEP 2: Play shrink animation (object still visible)
         Vector3 originalScale = transform.localScale;
         float elapsed = 0f;
 
@@ -236,15 +256,35 @@ public class ConsumableObject : MonoBehaviour, ISaveable
             yield return null;
         }
 
-        // Wait for audio to finish if playing
-        if (audioSource != null && audioSource.isPlaying)
+        // STEP 3: After animation completes, spawn particle effect
+        if (consumeEffect != null)
         {
-            yield return new WaitForSeconds(consumeSound.length);
+            Instantiate(consumeEffect, transform.position, Quaternion.identity);
         }
 
-        // Destroy the object
-        DebugLog("Destroying consumed object");
-        gameObject.SetActive(false); // Deactivate instead of destroy (for save system)
+        // STEP 4: NOW disable visuals (after animation finished)
+        var col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        var rend = GetComponent<MeshRenderer>();
+        if (rend != null)
+        {
+            rend.enabled = false;
+        }
+
+        // Keep transform at scale zero (invisible)
+        transform.localScale = Vector3.zero;
+
+        DebugLog($"{gameObject.name} ({consumableID}) hidden but kept in scene for save system");
+
+        // DO NOT use Destroy(gameObject) - we need it for save system!
+
+        // COMMENT OUT DESTROY METHOD // Destroy the object
+        //DebugLog("Destroying consumed object");
+        //gameObject.SetActive(false); // Deactivate instead of destroy (for save system)
     }
 
     #endregion
@@ -263,6 +303,11 @@ public class ConsumableObject : MonoBehaviour, ISaveable
 
     public void LoadState(SaveData saveData)
     {
+        // Debug: Show what's in the consumed list
+        string consumedList = string.Join(", ", saveData.consumedObjectIDs);
+        DebugLog($"LoadState called for {consumableID}. Consumed list: [{consumedList}]");
+
+
         // Check if this object was consumed in the save
         isConsumed = saveData.consumedObjectIDs.Contains(consumableID);
 
@@ -271,6 +316,10 @@ public class ConsumableObject : MonoBehaviour, ISaveable
             // Object was already consumed - deactivate it
             DebugLog($"Loading consumed state for {consumableID} - deactivating");
             gameObject.SetActive(false);
+        }
+        else
+        {
+            DebugLog($"{consumableID} was NOT consumed - staying active");
         }
     }
 

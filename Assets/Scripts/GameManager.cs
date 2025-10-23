@@ -255,13 +255,51 @@ public class GameManager : MonoSingleton<GameManager>
     // Public methods for scene transitions
     public void StartGame()
     {
+        // Reset all game systems for new game
+        ResetGameSystems();
+
         StartCoroutine(LoadSceneWithFade(gameplaySceneName, GameState.Playing));
     }
 
     public void RestartGame()
     {
         gameStartTime = 0f;
+
+        // Reset all game systems for new game
+        ResetGameSystems();
+
         StartCoroutine(LoadSceneWithFade(gameplaySceneName, GameState.Playing));
+    }
+
+    /// <summary>
+    /// Reset all game systems to starting values (for new game or restart)
+    /// </summary>
+    private void ResetGameSystems()
+    {
+        Debug.Log("[GameManager] Resetting all game systems for new game");
+
+        // Reset Health/Energy
+        if (HealthEnergyManager.Instance != null)
+        {
+            HealthEnergyManager.Instance.ResetToStartingValues();
+        }
+
+        // Clear save data (so consumed candy respawns, puzzles reset, etc.)
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.ClearCurrentSaveData();
+        }
+
+        // TODO: Add other system resets when implemented
+        // if (TimerManager.Instance != null)
+        // {
+        //     TimerManager.Instance.ResetTimer();
+        // }
+
+        // if (PuzzleManager.Instance != null)
+        // {
+        //     PuzzleManager.Instance.ResetAllPuzzles();
+        // }
     }
 
     public void ReturnToMainMenu()

@@ -19566,8 +19566,13 @@ MonoBehaviour:
   currentHealth: 100
   maxEnergy: 100
   currentEnergy: 100
-  energyDrainRate: 1
+  useMovementBasedDrain: 1
+  standingDrainRate: 0.01
+  movingDrainRate: 0.05
+  teleportEnergyCost: 1
+  movementThreshold: 0.1
   lowEnergyThreshold: 20
+  lowHealthThreshold: 25
   healthDrainWhenLowEnergy: 2
   collisionDamageCooldown: 1
   showDebugLogs: 1
@@ -23802,6 +23807,16 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1894287950}
+    - target: {fileID: 4330645848594715854, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_StartingGroupMembers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4330645848594715854, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_StartingGroupMembers.Array.data[2]
+      value: 
+      objectReference: {fileID: 72080982380067982}
     - target: {fileID: 5051749960548425301, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
       propertyPath: m_InteractionManager
@@ -23852,6 +23867,11 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1894287950}
+    - target: {fileID: 8172640649397377070, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_EnableUIInteraction
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8760972028363560271, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23907,6 +23927,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d4bb80b8fe5430428429f1f00a13d00, type: 3}
+--- !u!114 &72080982380067982 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2319166022844567437, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+    type: 3}
+  m_PrefabInstance: {fileID: 72080982380067981}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0924bcaa9eb50df458a783ae0e2b59f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &147857622549164904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27630,6 +27662,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1144794518}
+    - target: {fileID: 4436594673143505430, guid: bfd6189b2efe1124c9ed82ab5471f32f,
+        type: 3}
+      propertyPath: feedbackDuration
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4440875864726967470, guid: bfd6189b2efe1124c9ed82ab5471f32f,
         type: 3}
       propertyPath: m_Pivot.x
@@ -37812,49 +37849,9 @@ PrefabInstance:
       objectReference: {fileID: 1894287950}
     - target: {fileID: 3298670133884729854, guid: c6adbb72a62905e4eb0b5a8576a37784,
         type: 3}
-      propertyPath: m_MatchDirectionalInput
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3298670133884729854, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
       propertyPath: m_TeleportationProvider
       value: 
       objectReference: {fileID: 1953191397}
-    - target: {fileID: 3298670133884729854, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_InteractionLayers.m_Bits
-      value: 2147483648
-      objectReference: {fileID: 0}
-    - target: {fileID: 4638672870969968733, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 1894287950}
-    - target: {fileID: 4638672870969968733, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_Colliders.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4638672870969968733, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_TeleportationProvider
-      value: 
-      objectReference: {fileID: 1953191397}
-    - target: {fileID: 4638672870969968733, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_Colliders.Array.data[0]
-      value: 
-      objectReference: {fileID: 5337178919395323811}
-    - target: {fileID: 4638672870969968733, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_Colliders.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733823998145924213, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 5733823998145924213, guid: c6adbb72a62905e4eb0b5a8576a37784,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37910,16 +37907,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Basement_Corridor_F_Floor_4x4m
       objectReference: {fileID: 0}
-    - target: {fileID: 5733823998146285653, guid: c6adbb72a62905e4eb0b5a8576a37784,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5733823998153712533, guid: c6adbb72a62905e4eb0b5a8576a37784, type: 3}
-    - {fileID: 3599623423492204627, guid: c6adbb72a62905e4eb0b5a8576a37784, type: 3}
-    - {fileID: 4638672870969968733, guid: c6adbb72a62905e4eb0b5a8576a37784, type: 3}
-    - {fileID: 4691809743135750193, guid: c6adbb72a62905e4eb0b5a8576a37784, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

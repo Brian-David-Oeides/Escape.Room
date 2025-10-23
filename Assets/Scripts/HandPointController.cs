@@ -12,12 +12,21 @@ public class HandPointController : MonoBehaviour
 
     [Header("Animation")]
     public string pointParameterName = "Point";
-    public string gripParameterName = "Grip"; // NEW: For grip state
+    public string gripParameterName = "Grip"; // For grip state
+    public string pinchParameterName = "Pinch"; // For pinch state
 
     private Animator handAnimator;
+    private XRDirectInteractor directInteractor; // To detect hovered objects
 
     private void Start()
     {
+        // Get the Direct Interactor component for hover detection
+        directInteractor = GetComponentInChildren<XRDirectInteractor>();
+        if (directInteractor == null)
+        {
+            Debug.LogError($"No XRDirectInteractor found on {gameObject.name}");
+        }
+
         StartCoroutine(FindHandAnimatorAfterSpawn());
     }
 
@@ -57,17 +66,52 @@ public class HandPointController : MonoBehaviour
         {
             // Handle trigger for pointing
             bool triggerPressed = xRController.activateInteractionState.active;
-            handAnimator.SetBool(pointParameterName, triggerPressed);
-
-            // Handle grip for fist (NEW)
             bool gripPressed = xRController.selectInteractionState.active;
-            handAnimator.SetBool(gripParameterName, gripPressed);
 
-            // Debug
-            if (triggerPressed || gripPressed)
+            // Check if hovering over a pinchable object
+            bool isHoveringPinchable = IsHoveringPinchableObject();
+
+            // Pinch takes priority: trigger + grip + hovering pinchable object
+            bool shouldPinch = triggerPressed && gripPressed && isHoveringPinchable;
+
+            if (shouldPinch)
             {
-                Debug.Log($"{gameObject.name} - Point: {triggerPressed}, Grip: {gripPressed}");
+                // Pinch overrides everything
+                handAnimator.SetBool(pinchParameterName, true);
+                handAnimator.SetBool(pointParameterName, false);
+                handAnimator.SetBool(gripParameterName, false);
+            }
+            else
+            {
+                // Normal behavior
+                handAnimator.SetBool(pinchParameterName, false);
+                handAnimator.SetBool(pointParameterName, triggerPressed);
+                handAnimator.SetBool(gripParameterName, gripPressed);
+            }
+
+            // Debug output
+            if (triggerPressed || gripPressed || shouldPinch)
+            {
+                Debug.Log($"{gameObject.name} - Point: {triggerPressed}, Grip: {gripPressed}, Pinch: {shouldPinch}, HoveringPinchable: {isHoveringPinchable}");
             }
         }
+    }
+
+    private bool IsHoveringPinchableObject()
+    {
+        if (directInteractor == null) return false;
+
+        // Check if we're hovering over any interactables using the new API
+        foreach (var target in directInteractor.interactablesHovered)
+        {
+            // Check if the hovered object has a PinchableObject component
+            if (target is XRBaseInteractable interactable &&
+                interactable.GetComponent<PinchableObject>() != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

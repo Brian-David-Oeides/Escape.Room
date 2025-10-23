@@ -436,6 +436,16 @@ public class SaveManager : MonoSingleton<SaveManager>
     }
 
     /// <summary>
+    /// Clear current save data (for starting new game)
+    /// </summary>
+    public void ClearCurrentSaveData()
+    {
+        currentSaveData = null;
+        currentSaveSlot = -1;
+        DebugLog("Cleared current save data for new game");
+    }
+
+    /// <summary>
     /// Set auto-save interval (can be called from settings)
     /// </summary>
     public void SetAutoSaveInterval(float intervalInSeconds)

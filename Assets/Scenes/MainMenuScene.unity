@@ -4651,8 +4651,13 @@ MonoBehaviour:
   currentHealth: 100
   maxEnergy: 100
   currentEnergy: 100
-  energyDrainRate: 1
+  useMovementBasedDrain: 1
+  standingDrainRate: 0.01
+  movingDrainRate: 0.05
+  teleportEnergyCost: 1
+  movementThreshold: 0.1
   lowEnergyThreshold: 20
+  lowHealthThreshold: 25
   healthDrainWhenLowEnergy: 2
   collisionDamageCooldown: 1
   showDebugLogs: 1
@@ -19890,6 +19895,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 36523145904287899}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2032389703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1120139943446371442, guid: 212f0544f9167da4fb1660d5ac90f228,
+    type: 3}
+  m_PrefabInstance: {fileID: 5151575638549945750}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2032389711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032389703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a1017379b0aa419d9aa5ca551c394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2039365317
 GameObject:
   m_ObjectHideFlags: 0
@@ -26247,35 +26270,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5337178919848287887}
     m_Modifications:
-    - target: {fileID: 1120139943446371442, guid: 212f0544f9167da4fb1660d5ac90f228,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170332082925223818, guid: 212f0544f9167da4fb1660d5ac90f228,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 3867790464904799359, guid: 212f0544f9167da4fb1660d5ac90f228,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     - target: {fileID: 7115323645588795687, guid: 212f0544f9167da4fb1660d5ac90f228,
         type: 3}
       propertyPath: m_Name
       value: candies_fbx
-      objectReference: {fileID: 0}
-    - target: {fileID: 7115323645588795687, guid: 212f0544f9167da4fb1660d5ac90f228,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 7635120363838483357, guid: 212f0544f9167da4fb1660d5ac90f228,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 7635120363838483357, guid: 212f0544f9167da4fb1660d5ac90f228,
         type: 3}
@@ -26327,15 +26325,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7753646865019748825, guid: 212f0544f9167da4fb1660d5ac90f228,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1120139943446371442, guid: 212f0544f9167da4fb1660d5ac90f228,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2032389711}
   m_SourcePrefab: {fileID: 100100000, guid: 212f0544f9167da4fb1660d5ac90f228, type: 3}
 --- !u!1 &5184856386727659246
 GameObject:

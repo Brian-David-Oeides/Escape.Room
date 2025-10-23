@@ -15,13 +15,13 @@ GameObject:
   - component: {fileID: 4422866635258581349}
   - component: {fileID: 4185014339659471451}
   - component: {fileID: 572798341916034492}
-  - component: {fileID: 272846084490383541}
+  - component: {fileID: 9164317927420707000}
   m_Layer: 0
   m_Name: sugar_candy_red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8685226100597618872
 Transform:
@@ -325,27 +325,18 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
---- !u!65 &272846084490383541
-BoxCollider:
+--- !u!114 &9164317927420707000
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1120139943446371442}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.0006279483, y: 0.0006071408, z: 0.00052987086}
-  m_Center: {x: 0.00000520928, y: -0.000012010566, z: 0.000036753365}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a1017379b0aa419d9aa5ca551c394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1170332082925223818
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,12 +352,13 @@ GameObject:
   - component: {fileID: 2331627308110491533}
   - component: {fileID: 1942352559580169612}
   - component: {fileID: 4532614394415676906}
+  - component: {fileID: 301421733483806661}
   m_Layer: 0
   m_Name: small_candy_2 A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &5169872072396217395
 Transform:
@@ -641,7 +633,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170332082925223818}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6ab435d0236a6d4a95841cff057e43b, type: 3}
   m_Name: 
@@ -670,6 +662,18 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
+--- !u!114 &301421733483806661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170332082925223818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a1017379b0aa419d9aa5ca551c394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3867790464904799359
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,12 +689,13 @@ GameObject:
   - component: {fileID: 7793515828438564675}
   - component: {fileID: 3481785729091756543}
   - component: {fileID: 8372693406648263997}
+  - component: {fileID: 2353518217127089302}
   m_Layer: 0
   m_Name: toffee_blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1631457736012333288
 Transform:
@@ -994,6 +999,18 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
+--- !u!114 &2353518217127089302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3867790464904799359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a1017379b0aa419d9aa5ca551c394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7115323645588795687
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,12 +1061,13 @@ GameObject:
   - component: {fileID: 4373730384679067822}
   - component: {fileID: 4006058379752773400}
   - component: {fileID: 2239856389828272471}
+  - component: {fileID: 3836987095539073919}
   m_Layer: 0
   m_Name: small_gumdrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &6047490825083981619
 Transform:
@@ -1353,3 +1371,15 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
+--- !u!114 &3836987095539073919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7753646865019748825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c2a1017379b0aa419d9aa5ca551c394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
