@@ -206,8 +206,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
-  - {fileID: 3332150510068515168}
   - {fileID: 8398758620134688409}
+  - {fileID: 3332150510068515168}
   - {fileID: -8146141845346210673}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
@@ -328,6 +328,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Grip
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Pinch
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Point
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5873569158871198523}
   m_Solo: 0
@@ -437,9 +443,9 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
+  - {fileID: 399862192231452190}
   - {fileID: 2196449920357573053}
   - {fileID: -1148000227997057612}
-  - {fileID: 399862192231452190}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -494,13 +500,13 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
+  - m_ConditionMode: 2
     m_ConditionEvent: Pinch
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: Point
     m_EventTreshold: 0
-  - m_ConditionMode: 1
+  - m_ConditionMode: 2
     m_ConditionEvent: Grip
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}

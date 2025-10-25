@@ -41,7 +41,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Pinchable
   - 
   m_SortingLayers:
   - name: Default

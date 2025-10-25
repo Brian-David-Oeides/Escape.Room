@@ -17,14 +17,22 @@ public class HandPointController : MonoBehaviour
 
     private Animator handAnimator;
     private XRDirectInteractor directInteractor; // To detect hovered objects
+    private XRRayInteractor rayInteractor; // To detect ray-grabbed objects
 
     private void Start()
     {
         // Get the Direct Interactor component for hover detection
         directInteractor = GetComponentInChildren<XRDirectInteractor>();
+        rayInteractor = GetComponentInChildren<XRRayInteractor>();
+
         if (directInteractor == null)
         {
             Debug.LogError($"No XRDirectInteractor found on {gameObject.name}");
+        }
+
+        if (rayInteractor == null)
+        {
+            Debug.LogError($"No XRRayInteractor found on {gameObject.name}");
         }
 
         StartCoroutine(FindHandAnimatorAfterSpawn());
@@ -64,35 +72,47 @@ public class HandPointController : MonoBehaviour
     {
         if (xRController != null && handAnimator != null)
         {
-            // Handle trigger for pointing
+            // Get input states
             bool triggerPressed = xRController.activateInteractionState.active;
             bool gripPressed = xRController.selectInteractionState.active;
 
             // Check if hovering over a pinchable object
-            bool isHoveringPinchable = IsHoveringPinchableObject();
+            bool isHoveringPinchable = IsHoveringPinchableObject() || IsGrabbingPinchableObject();
 
-            // Pinch takes priority: trigger + grip + hovering pinchable object
-            bool shouldPinch = triggerPressed && gripPressed && isHoveringPinchable;
-
-            if (shouldPinch)
+            // Smart grip: if hovering pinchable object, grip = pinch. Otherwise grip = fist
+            if (gripPressed && isHoveringPinchable)
             {
-                // Pinch overrides everything
+                // Pinch small objects
                 handAnimator.SetBool(pinchParameterName, true);
-                handAnimator.SetBool(pointParameterName, false);
                 handAnimator.SetBool(gripParameterName, false);
+                handAnimator.SetBool(pointParameterName, false);
+            }
+            else if (gripPressed && !isHoveringPinchable)
+            {
+                // Normal fist for regular objects
+                handAnimator.SetBool(pinchParameterName, false);
+                handAnimator.SetBool(gripParameterName, true);
+                handAnimator.SetBool(pointParameterName, false);
+            }
+            else if (triggerPressed)
+            {
+                // Point gesture
+                handAnimator.SetBool(pinchParameterName, false);
+                handAnimator.SetBool(gripParameterName, false);
+                handAnimator.SetBool(pointParameterName, true);
             }
             else
             {
-                // Normal behavior
+                // Open hand (nothing pressed)
                 handAnimator.SetBool(pinchParameterName, false);
-                handAnimator.SetBool(pointParameterName, triggerPressed);
-                handAnimator.SetBool(gripParameterName, gripPressed);
+                handAnimator.SetBool(gripParameterName, false);
+                handAnimator.SetBool(pointParameterName, false);
             }
 
             // Debug output
-            if (triggerPressed || gripPressed || shouldPinch)
+            if (triggerPressed || gripPressed)
             {
-                Debug.Log($"{gameObject.name} - Point: {triggerPressed}, Grip: {gripPressed}, Pinch: {shouldPinch}, HoveringPinchable: {isHoveringPinchable}");
+                Debug.Log($"{gameObject.name} - Trigger: {triggerPressed}, Grip: {gripPressed}, Pinch: {isHoveringPinchable && gripPressed}, HoveringPinchable: {isHoveringPinchable}");
             }
         }
     }
@@ -109,6 +129,37 @@ public class HandPointController : MonoBehaviour
                 interactable.GetComponent<PinchableObject>() != null)
             {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsGrabbingPinchableObject()
+    {
+        // Check Ray Interactor's selected targets
+        if (rayInteractor != null && rayInteractor.interactablesSelected.Count > 0)
+        {
+            foreach (var target in rayInteractor.interactablesSelected)
+            {
+                if (target is XRBaseInteractable interactable &&
+                    interactable.GetComponent<PinchableObject>() != null)
+                {
+                    return true;
+                }
+            }
+        }
+
+        // Check Direct Interactor's selected targets
+        if (directInteractor != null && directInteractor.interactablesSelected.Count > 0)
+        {
+            foreach (var target in directInteractor.interactablesSelected)
+            {
+                if (target is XRBaseInteractable interactable &&
+                    interactable.GetComponent<PinchableObject>() != null)
+                {
+                    return true;
+                }
             }
         }
 

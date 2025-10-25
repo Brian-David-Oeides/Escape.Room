@@ -155,7 +155,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 1073741825
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -241,7 +241,7 @@ MonoBehaviour:
       m_Calls: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 1
+  m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
@@ -352,7 +352,7 @@ GameObject:
   - component: {fileID: 2331627308110491533}
   - component: {fileID: 1942352559580169612}
   - component: {fileID: 4532614394415676906}
-  - component: {fileID: 301421733483806661}
+  - component: {fileID: 6973181392512044119}
   m_Layer: 0
   m_Name: small_candy_2 A
   m_TagString: Untagged
@@ -492,7 +492,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 1073741825
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -578,7 +578,7 @@ MonoBehaviour:
       m_Calls: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 1
+  m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
@@ -662,7 +662,7 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
---- !u!114 &301421733483806661
+--- !u!114 &6973181392512044119
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -689,7 +689,7 @@ GameObject:
   - component: {fileID: 7793515828438564675}
   - component: {fileID: 3481785729091756543}
   - component: {fileID: 8372693406648263997}
-  - component: {fileID: 2353518217127089302}
+  - component: {fileID: 5836774461490370253}
   m_Layer: 0
   m_Name: toffee_blue
   m_TagString: Untagged
@@ -829,7 +829,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 1073741825
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -915,7 +915,7 @@ MonoBehaviour:
       m_Calls: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 1
+  m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
@@ -999,7 +999,7 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
---- !u!114 &2353518217127089302
+--- !u!114 &5836774461490370253
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1061,7 +1061,7 @@ GameObject:
   - component: {fileID: 4373730384679067822}
   - component: {fileID: 4006058379752773400}
   - component: {fileID: 2239856389828272471}
-  - component: {fileID: 3836987095539073919}
+  - component: {fileID: 7407048938082517294}
   m_Layer: 0
   m_Name: small_gumdrop
   m_TagString: Untagged
@@ -1201,7 +1201,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 1073741825
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -1287,7 +1287,7 @@ MonoBehaviour:
       m_Calls: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 1
+  m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
@@ -1371,7 +1371,7 @@ MonoBehaviour:
   consumeSound: {fileID: 8300000, guid: 41fdb4db7e99f0748b1f6c83f3a892a3, type: 3}
   audioSource: {fileID: 0}
   showDebugLogs: 1
---- !u!114 &3836987095539073919
+--- !u!114 &7407048938082517294
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
