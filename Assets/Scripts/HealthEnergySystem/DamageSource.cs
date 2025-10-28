@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
@@ -13,11 +13,27 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class DamageSource : MonoBehaviour
 {
     [Header("Damage Settings")]
-    [Tooltip("Amount of damage dealt per collision")]
-    [SerializeField] private float damageAmount = 10f;
+    [Tooltip("Base damage amount (will be multiplied by velocity)")]
+    [SerializeField] private float baseDamage = 10f;
 
     [Tooltip("Cooldown time between damage applications (prevents spam damage)")]
     [SerializeField] private float damageCooldown = 1f;
+
+    [Header("Velocity-Based Damage Multiplier")]
+    [Tooltip("Enable velocity-based damage scaling")]
+    [SerializeField] private bool useVelocityMultiplier = true;
+
+    [Tooltip("Minimum collision velocity (m/s) for minimum multiplier")]
+    [SerializeField] private float minVelocity = 0.5f;
+
+    [Tooltip("Maximum collision velocity (m/s) for maximum multiplier")]
+    [SerializeField] private float maxVelocity = 5f;
+
+    [Tooltip("Damage multiplier at minimum velocity")]
+    [SerializeField] private float minDamageMultiplier = 0.5f;
+
+    [Tooltip("Damage multiplier at maximum velocity")]
+    [SerializeField] private float maxDamageMultiplier = 2f;
 
     [Header("Damage Type (Optional - for future expansion)")]
     [SerializeField] private DamageType damageType = DamageType.Generic;
@@ -132,27 +148,39 @@ public class DamageSource : MonoBehaviour
 
     private void ApplyDamage(Collision collision)
     {
-        ApplyDamageInternal(collision.GetContact(0).point);
+        float collisionVelocity = collision.relativeVelocity.magnitude;
+        ApplyDamageInternal(collision.GetContact(0).point, collisionVelocity);
     }
 
     private void ApplyDamage(Collider other)
     {
-        ApplyDamageInternal(other.ClosestPoint(transform.position));
+        // Triggers don't have velocity data, use 0 (base damage only)
+        ApplyDamageInternal(other.ClosestPoint(transform.position), 0f);
     }
 
-    private void ApplyDamageInternal(Vector3 contactPoint)
+    private void ApplyDamageInternal(Vector3 contactPoint, float collisionVelocity)
     {
         // Update cooldown timer
         lastDamageTime = Time.time;
 
+        // Calculate final damage based on velocity
+        float finalDamage = CalculateFinalDamage(collisionVelocity);
+
         // Apply damage through HealthEnergyManager
         if (HealthEnergyManager.Instance != null)
         {
-            HealthEnergyManager.Instance.TakeDamage(damageAmount);
+            HealthEnergyManager.Instance.TakeDamage(finalDamage);
 
             if (showDebugLogs)
             {
-                Debug.Log($"[DamageSource] Applied {damageAmount} damage to player. Cooldown: {damageCooldown}s");
+                if (useVelocityMultiplier && collisionVelocity > 0)
+                {
+                    Debug.Log($"[DamageSource] Applied {finalDamage:F1} damage (Base: {baseDamage}, Velocity: {collisionVelocity:F2} m/s). Cooldown: {damageCooldown}s");
+                }
+                else
+                {
+                    Debug.Log($"[DamageSource] Applied {finalDamage:F1} damage (Base only). Cooldown: {damageCooldown}s");
+                }
             }
         }
         else
@@ -164,6 +192,37 @@ public class DamageSource : MonoBehaviour
         PlayHapticFeedback();
         PlayDamageSound();
         SpawnDamageParticles(contactPoint);
+    }
+
+    /// <summary>
+    /// Calculate final damage based on base damage and collision velocity
+    /// </summary>
+    private float CalculateFinalDamage(float collisionVelocity)
+    {
+        if (!useVelocityMultiplier || collisionVelocity <= 0)
+        {
+            // No velocity data or velocity multiplier disabled - use base damage
+            return baseDamage;
+        }
+
+        // Clamp velocity to min/max range
+        float clampedVelocity = Mathf.Clamp(collisionVelocity, minVelocity, maxVelocity);
+
+        // Calculate velocity percentage (0 to 1)
+        float velocityPercent = (clampedVelocity - minVelocity) / (maxVelocity - minVelocity);
+
+        // Interpolate between min and max multiplier
+        float damageMultiplier = Mathf.Lerp(minDamageMultiplier, maxDamageMultiplier, velocityPercent);
+
+        // Calculate final damage
+        float finalDamage = baseDamage * damageMultiplier;
+
+        if (showDebugLogs)
+        {
+            Debug.Log($"[DamageSource] Velocity: {collisionVelocity:F2} m/s → Multiplier: {damageMultiplier:F2}x → Damage: {finalDamage:F1}");
+        }
+
+        return finalDamage;
     }
 
     private void PlayHapticFeedback()
@@ -255,7 +314,7 @@ public class DamageSource : MonoBehaviour
     {
         if (Time.time - lastDamageTime >= damageCooldown)
         {
-            ApplyDamageInternal(transform.position);
+            ApplyDamageInternal(transform.position, 0f);
         }
     }
 
