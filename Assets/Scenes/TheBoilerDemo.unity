@@ -17717,7 +17717,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 7eb3eb2c397ae5c4e85c38071eef41c4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -22124,8 +22124,8 @@ MonoBehaviour:
   damageOverlay: {fileID: 1438805134}
   visualFXEnabled: 1
   damageColor: {r: 1, g: 0, b: 0, a: 0.5}
-  flashDuration: 0.3
-  flashMaxAlpha: 0.6
+  flashDuration: 0.25
+  flashMaxAlpha: 0.25
   vignetteMaxAlpha: 0.5
   highHealthThreshold: 75
   mediumHealthThreshold: 50
@@ -22134,7 +22134,7 @@ MonoBehaviour:
   heartbeatBPM_Medium: 80
   heartbeatBPM_Low: 110
   heartbeatBPM_Critical: 140
-  pulseIntensity: 0.15
+  pulseIntensity: 0.1
   audioFXEnabled: 1
   heartbeatSounds:
   - {fileID: 8300000, guid: 7ff362fdc4f0df0428cb6321f4215c11, type: 3}
