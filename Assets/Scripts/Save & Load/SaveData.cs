@@ -13,7 +13,24 @@ public class SaveData
 {
     // Save metadata
     public string saveName;
-    public DateTime saveTimestamp;
+
+    // Store timestamp as string for JSON serialization
+    public string saveTimestampString;
+
+    public DateTime saveTimestamp
+    {
+        get
+        {
+            if (DateTime.TryParse(saveTimestampString, out DateTime result))
+                return result;
+            return DateTime.MinValue;
+        }
+        set
+        {
+            saveTimestampString = value.ToString("o"); // ISO 8601 format
+        }
+    }
+
     public int saveSlotNumber; // 1, 2, or 3
 
     // Player state
@@ -85,7 +102,24 @@ public class SaveSlotInfo
     public int slotNumber;
     public bool hasData;
     public string saveName;
-    public DateTime saveTimestamp;
+
+    // Store timestamp as string for JSON serialization
+    public string saveTimestampString;
+
+    public DateTime saveTimestamp
+    {
+        get
+        {
+            if (DateTime.TryParse(saveTimestampString, out DateTime result))
+                return result;
+            return DateTime.MinValue;
+        }
+        set
+        {
+            saveTimestampString = value.ToString("o"); // ISO 8601 format
+        }
+    }
+
     public float playtime;
     public int puzzlesSolved;
     public string sceneName;

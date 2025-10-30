@@ -188,7 +188,7 @@ public class MainMenuHandler : MonoBehaviour
     // Continue (Load Most Recent Save)
     public void OnContinueButtonClicked()
     {
-        Debug.Log("Continue button clicked");
+        //Debug.Log("Continue button clicked");
 
         if (SaveManager.Instance == null)
         {
@@ -198,11 +198,7 @@ public class MainMenuHandler : MonoBehaviour
 
         // Find most recent save slot
         int mostRecentSlot = GetMostRecentSaveSlot();
-
-        Debug.Log($"Most recent slot found: {mostRecentSlot}");
-        Debug.Log($"Slot 1 exists: {SaveManager.Instance.SaveSlotExists(1)}");
-        Debug.Log($"Slot 2 exists: {SaveManager.Instance.SaveSlotExists(2)}");
-        Debug.Log($"Slot 3 exists: {SaveManager.Instance.SaveSlotExists(3)}");
+       
 
         if (mostRecentSlot == -1)
         {
@@ -210,7 +206,7 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Continuing from most recent save: Slot {mostRecentSlot}");
+        // Debug.Log($"Continuing from most recent save: Slot {mostRecentSlot}");
         SaveManager.Instance.LoadGame(mostRecentSlot);
     }
 
@@ -317,11 +313,13 @@ public class MainMenuHandler : MonoBehaviour
         Debug.Log($"Continue button {(hasSaveData ? "enabled" : "disabled")} - Save data exists: {hasSaveData}");
     }
 
-    // NEW: Find Most Recent Save Slot
+    // Find Most Recent Save Slot
     private int GetMostRecentSaveSlot()
     {
         if (SaveManager.Instance == null)
+        {
             return -1;
+        }
 
         SaveSlotInfo[] allSlots = SaveManager.Instance.GetAllSaveSlots();
 
@@ -330,7 +328,9 @@ public class MainMenuHandler : MonoBehaviour
 
         foreach (SaveSlotInfo slot in allSlots)
         {
-            if (slot.hasData && slot.saveTimestamp > mostRecentTime)
+            Debug.Log($"Slot {slot.slotNumber}: hasData={slot.hasData}, timestamp={slot.saveTimestamp}");
+
+            if (slot.hasData && slot.saveTimestamp >= mostRecentTime)
             {
                 mostRecentTime = slot.saveTimestamp;
                 mostRecentSlot = slot.slotNumber;
