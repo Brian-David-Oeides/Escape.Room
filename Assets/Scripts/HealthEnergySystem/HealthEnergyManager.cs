@@ -33,12 +33,17 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
 
     [Header("Cascading Damage")]
     [SerializeField] private float lowEnergyThreshold = 20f; // When to trigger low energy warning
-    [SerializeField] private float lowHealthThreshold = 25f; // When to trigger low health warning (NEW)
+    [SerializeField] private float lowHealthThreshold = 25f; // When to trigger low health warning
     [SerializeField] private float healthDrainWhenLowEnergy = 2f; // Health lost per second when energy is depleted
 
     [Header("Collision Damage Settings")]
+    [SerializeField] private float damageMultiplier = 1f; // Global difficulty multiplier for all damage
     [SerializeField] private float collisionDamageCooldown = 1f;
     private float lastCollisionDamageTime = 0f;
+
+    [Header("UI Settings")]
+    [SerializeField] private bool showHealthEnergyText = true;
+    [SerializeField] private bool hapticsEnabled = true;
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
@@ -409,7 +414,82 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
 
     #endregion
 
-    #region Settings (for difficulty adjustment)
+    #region Settings (for SettingsManager)
+
+    /// <summary>
+    /// Set the maximum health value (from difficulty settings)
+    /// </summary>
+    public void SetMaxHealth(float health)
+    {
+        maxHealth = Mathf.Max(25f, health);
+
+        // Adjust current health if it exceeds new max
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+            OnHealthChanged?.Invoke(currentHealth);
+        }
+
+        DebugLog($"Max health set to: {maxHealth}");
+    }
+
+    /// <summary>
+    /// Set the energy drain rate (from difficulty settings)
+    /// This sets the standing drain rate
+    /// </summary>
+    public void SetEnergyDrainRate(float rate)
+    {
+        standingDrainRate = Mathf.Max(0f, rate);
+
+        // Also scale the moving drain rate proportionally
+        if (rate == 0f)
+        {
+            movingDrainRate = 0f; // No drain at all
+        }
+        else
+        {
+            movingDrainRate = standingDrainRate * 5f; // Moving is 5x standing
+        }
+
+        DebugLog($"Energy drain rate set - Standing: {standingDrainRate}/sec, Moving: {movingDrainRate}/sec");
+    }
+
+    /// <summary>
+    /// Set global damage multiplier (from difficulty settings)
+    /// </summary>
+    public void SetDamageMultiplier(float multiplier)
+    {
+        damageMultiplier = Mathf.Max(0.1f, multiplier);
+        DebugLog($"Damage multiplier set to: {damageMultiplier}x");
+    }
+
+    /// <summary>
+    /// Set whether health/energy text is visible in UI
+    /// </summary>
+    public void SetUITextVisible(bool visible)
+    {
+        showHealthEnergyText = visible;
+        DebugLog($"UI text visibility: {visible}");
+
+        // TODO: Apply to UI when HealthEnergyUI exists
+        // if (HealthEnergyUI.Instance != null)
+        // {
+        //     HealthEnergyUI.Instance.SetTextVisible(visible);
+        // }
+    }
+
+    /// <summary>
+    /// Set whether haptics are enabled for health/energy events
+    /// </summary>
+    public void SetHapticsEnabled(bool enabled)
+    {
+        hapticsEnabled = enabled;
+        DebugLog($"Haptics enabled: {enabled}");
+    }
+
+    public bool GetUITextVisible() => showHealthEnergyText;
+    public bool GetHapticsEnabled() => hapticsEnabled;
+    public float GetDamageMultiplier() => damageMultiplier;
 
     /// <summary>
     /// Set the standing drain rate (when not moving)

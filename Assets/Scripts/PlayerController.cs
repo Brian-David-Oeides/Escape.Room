@@ -74,6 +74,78 @@ public class PlayerController : MonoSingleton<PlayerController>
         }
     }
 
+    #region Movement Settings (for SettingsManager)
+
+    /// <summary>
+    /// Set the player's movement speed
+    /// </summary>
+    public void SetMovementSpeed(float speed)
+    {
+        if (xrOrigin == null)
+        {
+            Debug.LogWarning("[PlayerController] Cannot set movement speed - XR Origin is null");
+            return;
+        }
+
+        var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+        if (continuousMove != null)
+        {
+            continuousMove.moveSpeed = speed;
+            Debug.Log($"[PlayerController] Movement speed set to: {speed}");
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerController] ActionBasedContinuousMoveProvider not found");
+        }
+    }
+
+    /// <summary>
+    /// Set the snap turn angle
+    /// </summary>
+    public void SetSnapTurnAngle(float angle)
+    {
+        if (xrOrigin == null)
+        {
+            Debug.LogWarning("[PlayerController] Cannot set snap turn angle - XR Origin is null");
+            return;
+        }
+
+        var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
+        if (snapTurn != null)
+        {
+            snapTurn.turnAmount = angle;
+            Debug.Log($"[PlayerController] Snap turn angle set to: {angle}");
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerController] ActionBasedSnapTurnProvider not found");
+        }
+    }
+
+    /// <summary>
+    /// Get the current movement speed
+    /// </summary>
+    public float GetMovementSpeed()
+    {
+        if (xrOrigin == null) return 0f;
+
+        var continuousMove = xrOrigin.GetComponent<ActionBasedContinuousMoveProvider>();
+        return continuousMove != null ? continuousMove.moveSpeed : 0f;
+    }
+
+    /// <summary>
+    /// Get the current snap turn angle
+    /// </summary>
+    public float GetSnapTurnAngle()
+    {
+        if (xrOrigin == null) return 0f;
+
+        var snapTurn = xrOrigin.GetComponent<ActionBasedSnapTurnProvider>();
+        return snapTurn != null ? snapTurn.turnAmount : 0f;
+    }
+
+    #endregion
+
     /// <summary>
     /// Disables all player movement components
     /// </summary>

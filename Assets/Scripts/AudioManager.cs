@@ -12,6 +12,11 @@ public class AudioManager : MonoSingleton<AudioManager>
     [SerializeField] private AudioClip gameplayMusic;
     [SerializeField] private AudioClip loadingMusic;
 
+    [Header("Volume Settings")]
+    [SerializeField] private float masterVolume = 1f;
+    [SerializeField] private float sfxVolume = 1f;
+    [SerializeField] private float musicVolume = 1f;
+
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 1.5f;
 
@@ -49,7 +54,59 @@ public class AudioManager : MonoSingleton<AudioManager>
                 musicSource.loop = true;
             }
         }
+
+        // Apply initial volume
+        UpdateMusicSourceVolume();
     }
+
+    #region Volume Control Methods (for SettingsManager)
+
+    /// <summary>
+    /// Set master volume (affects all audio)
+    /// </summary>
+    public void SetMasterVolume(float volume)
+    {
+        masterVolume = Mathf.Clamp01(volume);
+        UpdateMusicSourceVolume();
+        Debug.Log($"[AudioManager] Master volume set to: {masterVolume}");
+    }
+
+    /// <summary>
+    /// Set SFX volume (for sound effects - implement when SFX system is added)
+    /// </summary>
+    public void SetSFXVolume(float volume)
+    {
+        sfxVolume = Mathf.Clamp01(volume);
+        // TODO: Apply to SFX AudioSource when implemented
+        Debug.Log($"[AudioManager] SFX volume set to: {sfxVolume}");
+    }
+
+    /// <summary>
+    /// Set music volume
+    /// </summary>
+    public void SetMusicVolume(float volume)
+    {
+        musicVolume = Mathf.Clamp01(volume);
+        UpdateMusicSourceVolume();
+        Debug.Log($"[AudioManager] Music volume set to: {musicVolume}");
+    }
+
+    /// <summary>
+    /// Update the music source volume based on master and music volume settings
+    /// </summary>
+    private void UpdateMusicSourceVolume()
+    {
+        if (musicSource != null)
+        {
+            musicSource.volume = masterVolume * musicVolume;
+        }
+    }
+
+    public float GetMasterVolume() => masterVolume;
+    public float GetSFXVolume() => sfxVolume;
+    public float GetMusicVolume() => musicVolume;
+
+    #endregion
 
     /// <summary>
     /// Plays menu music with optional fade-in
@@ -120,7 +177,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         if (musicSource != null)
         {
             musicSource.Stop();
-            musicSource.volume = 1f;
+            UpdateMusicSourceVolume();
         }
     }
 
@@ -141,7 +198,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     }
 
     /// <summary>
-    /// Sets the music volume
+    /// Sets the music volume (legacy method - use SetMusicVolume instead)
     /// </summary>
     public void SetVolume(float volume)
     {
@@ -167,7 +224,6 @@ public class AudioManager : MonoSingleton<AudioManager>
         if (musicSource == null || clip == null)
         {
             Debug.LogWarning($"Cannot play music - AudioSource={musicSource != null}, clip={clip != null}");
-
             return;
         }
 
@@ -182,13 +238,13 @@ public class AudioManager : MonoSingleton<AudioManager>
         {
             musicSource.clip = clip;
             musicSource.loop = true;
-            musicSource.volume = 1f;
+            UpdateMusicSourceVolume();
             musicSource.Play();
             Debug.Log($"Playing music: {clip.name}, isPlaying: {musicSource.isPlaying}");
         }
         else if (!musicSource.isPlaying)
         {
-            musicSource.volume = 1f;
+            UpdateMusicSourceVolume();
             musicSource.Play();
             Debug.Log($"Resuming music: {clip.name}, isPlaying: {musicSource.isPlaying}");
         }
@@ -257,17 +313,18 @@ public class AudioManager : MonoSingleton<AudioManager>
         }
 
         float elapsed = 0f;
+        float targetVolume = masterVolume * musicVolume;
 
-        Debug.Log($"Fading in audio over {duration} seconds");
+        Debug.Log($"Fading in audio over {duration} seconds to volume {targetVolume}");
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            musicSource.volume = Mathf.Lerp(0f, 1f, elapsed / duration);
+            musicSource.volume = Mathf.Lerp(0f, targetVolume, elapsed / duration);
             yield return null;
         }
 
-        musicSource.volume = 1f;
+        musicSource.volume = targetVolume;
         Debug.Log("Audio fade in complete");
 
         currentFadeCoroutine = null;

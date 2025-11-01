@@ -13,7 +13,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class DamageSource : MonoBehaviour
 {
     [Header("Damage Settings")]
-    [Tooltip("Base damage amount (will be multiplied by velocity)")]
+    [Tooltip("Base damage amount (will be multiplied by velocity and difficulty)")]
     [SerializeField] private float baseDamage = 10f;
 
     [Tooltip("Cooldown time between damage applications (prevents spam damage)")]
@@ -163,7 +163,7 @@ public class DamageSource : MonoBehaviour
         // Update cooldown timer
         lastDamageTime = Time.time;
 
-        // Calculate final damage based on velocity
+        // Calculate final damage based on velocity and difficulty
         float finalDamage = CalculateFinalDamage(collisionVelocity);
 
         // Apply damage through HealthEnergyManager
@@ -195,34 +195,47 @@ public class DamageSource : MonoBehaviour
     }
 
     /// <summary>
-    /// Calculate final damage based on base damage and collision velocity
+    /// Calculate final damage based on base damage, collision velocity, and difficulty multiplier
+    /// Formula: finalDamage = baseDamage × velocityMultiplier × difficultyMultiplier
     /// </summary>
     private float CalculateFinalDamage(float collisionVelocity)
     {
-        if (!useVelocityMultiplier || collisionVelocity <= 0)
+        float damage = baseDamage;
+
+        // Apply velocity multiplier if enabled
+        if (useVelocityMultiplier && collisionVelocity > 0)
         {
-            // No velocity data or velocity multiplier disabled - use base damage
-            return baseDamage;
+            // Clamp velocity to min/max range
+            float clampedVelocity = Mathf.Clamp(collisionVelocity, minVelocity, maxVelocity);
+
+            // Calculate velocity percentage (0 to 1)
+            float velocityPercent = (clampedVelocity - minVelocity) / (maxVelocity - minVelocity);
+
+            // Interpolate between min and max multiplier
+            float velocityMultiplier = Mathf.Lerp(minDamageMultiplier, maxDamageMultiplier, velocityPercent);
+
+            // Apply velocity multiplier
+            damage *= velocityMultiplier;
+
+            if (showDebugLogs)
+            {
+                Debug.Log($"[DamageSource] Velocity: {collisionVelocity:F2} m/s → Velocity Multiplier: {velocityMultiplier:F2}x");
+            }
         }
 
-        // Clamp velocity to min/max range
-        float clampedVelocity = Mathf.Clamp(collisionVelocity, minVelocity, maxVelocity);
-
-        // Calculate velocity percentage (0 to 1)
-        float velocityPercent = (clampedVelocity - minVelocity) / (maxVelocity - minVelocity);
-
-        // Interpolate between min and max multiplier
-        float damageMultiplier = Mathf.Lerp(minDamageMultiplier, maxDamageMultiplier, velocityPercent);
-
-        // Calculate final damage
-        float finalDamage = baseDamage * damageMultiplier;
-
-        if (showDebugLogs)
+        // Apply global difficulty multiplier from HealthEnergyManager (Easy: 0.5x, Normal: 1.0x, Hard: 2.0x)
+        if (HealthEnergyManager.Instance != null)
         {
-            Debug.Log($"[DamageSource] Velocity: {collisionVelocity:F2} m/s → Multiplier: {damageMultiplier:F2}x → Damage: {finalDamage:F1}");
+            float difficultyMultiplier = HealthEnergyManager.Instance.GetDamageMultiplier();
+            damage *= difficultyMultiplier;
+
+            if (showDebugLogs)
+            {
+                Debug.Log($"[DamageSource] Base: {baseDamage} → After modifiers: {damage:F1} (Difficulty Multiplier: {difficultyMultiplier}x)");
+            }
         }
 
-        return finalDamage;
+        return damage;
     }
 
     private void PlayHapticFeedback()
