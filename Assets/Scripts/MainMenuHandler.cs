@@ -16,12 +16,16 @@ public class MainMenuHandler : MonoBehaviour
 
     [Header("Main Menu Buttons")]
     public GameObject newGameButton;
-    public GameObject continueButton;  
-    public GameObject loadGameButton;  
+    public GameObject continueButton;
+    public GameObject loadGameButton;
+    public GameObject settingsButton;
     public GameObject exitButton;
 
-    [Header("Save/Load UI")]  
+    [Header("Save/Load UI")]
     public SaveLoadMenuUI saveLoadMenuUI;
+
+    [Header("Settings UI")]
+    public SettingsMenuUI settingsMenuUI;
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel; // Reference to the ExitConfirmationPanel
@@ -130,6 +134,12 @@ public class MainMenuHandler : MonoBehaviour
             saveLoadMenuUI.HideAllPanels();
         }
 
+        // Hide settings menu
+        if (settingsMenuUI != null)
+        {
+            settingsMenuUI.HideSettings();
+        }
+
         isInMainMenu = true;
     }
 
@@ -188,8 +198,6 @@ public class MainMenuHandler : MonoBehaviour
     // Continue (Load Most Recent Save)
     public void OnContinueButtonClicked()
     {
-        //Debug.Log("Continue button clicked");
-
         if (SaveManager.Instance == null)
         {
             Debug.LogError("SaveManager not found!");
@@ -198,7 +206,6 @@ public class MainMenuHandler : MonoBehaviour
 
         // Find most recent save slot
         int mostRecentSlot = GetMostRecentSaveSlot();
-       
 
         if (mostRecentSlot == -1)
         {
@@ -206,7 +213,6 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        // Debug.Log($"Continuing from most recent save: Slot {mostRecentSlot}");
         SaveManager.Instance.LoadGame(mostRecentSlot);
     }
 
@@ -233,6 +239,29 @@ public class MainMenuHandler : MonoBehaviour
         }
     }
 
+    // Settings (Show Settings Menu)
+    public void OnSettingsButtonClicked()
+    {
+        Debug.Log("Settings button clicked");
+
+        if (settingsMenuUI != null)
+        {
+            // Hide main menu PANEL (not canvas)
+            if (mainMenuPanel != null)
+            {
+                mainMenuPanel.SetActive(false);  // Only hides buttons
+                Debug.Log("Main menu panel hidden");
+            }
+
+            settingsMenuUI.ShowSettings();
+            Debug.Log("Settings menu shown");
+        }
+        else
+        {
+            Debug.LogWarning("SettingsMenuUI reference is missing!");
+        }
+    }
+
     // Back from Load Panel to Main Menu
     public void OnBackToMainMenu()
     {
@@ -241,6 +270,11 @@ public class MainMenuHandler : MonoBehaviour
         if (saveLoadMenuUI != null)
         {
             saveLoadMenuUI.HideAllPanels();
+        }
+
+        if (settingsMenuUI != null)
+        {
+            settingsMenuUI.HideSettings();
         }
 
         if (mainMenuPanel != null)
@@ -292,7 +326,7 @@ public class MainMenuHandler : MonoBehaviour
 
     #region Helper Methods
 
-    // NEW: Update Continue Button Interactability
+    // Update Continue Button Interactability
     private void UpdateContinueButton()
     {
         if (continueButton == null || SaveManager.Instance == null)
@@ -328,8 +362,6 @@ public class MainMenuHandler : MonoBehaviour
 
         foreach (SaveSlotInfo slot in allSlots)
         {
-            Debug.Log($"Slot {slot.slotNumber}: hasData={slot.hasData}, timestamp={slot.saveTimestamp}");
-
             if (slot.hasData && slot.saveTimestamp >= mostRecentTime)
             {
                 mostRecentTime = slot.saveTimestamp;
