@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// Controls the Settings Menu UI
 /// Handles user input and communicates with SettingsManager
 /// </summary>
-///
+/// 
 
 public class SettingsMenuUI : MonoBehaviour
 {
@@ -340,6 +341,55 @@ public class SettingsMenuUI : MonoBehaviour
         }
     }
 
+    // Increment/Decrement methods for VR buttons
+    public void IncrementMasterVolume()
+    {
+        if (masterVolumeSlider != null)
+        {
+            masterVolumeSlider.value = Mathf.Min(1f, masterVolumeSlider.value + 0.1f);
+        }
+    }
+
+    public void DecrementMasterVolume()
+    {
+        if (masterVolumeSlider != null)
+        {
+            masterVolumeSlider.value = Mathf.Max(0f, masterVolumeSlider.value - 0.1f);
+        }
+    }
+
+    public void IncrementSFXVolume()
+    {
+        if (sfxVolumeSlider != null)
+        {
+            sfxVolumeSlider.value = Mathf.Min(1f, sfxVolumeSlider.value + 0.1f);
+        }
+    }
+
+    public void DecrementSFXVolume()
+    {
+        if (sfxVolumeSlider != null)
+        {
+            sfxVolumeSlider.value = Mathf.Max(0f, sfxVolumeSlider.value - 0.1f);
+        }
+    }
+
+    public void IncrementMusicVolume()
+    {
+        if (musicVolumeSlider != null)
+        {
+            musicVolumeSlider.value = Mathf.Min(1f, musicVolumeSlider.value + 0.1f);
+        }
+    }
+
+    public void DecrementMusicVolume()
+    {
+        if (musicVolumeSlider != null)
+        {
+            musicVolumeSlider.value = Mathf.Max(0f, musicVolumeSlider.value - 0.1f);
+        }
+    }
+
     private void UpdateMasterVolumeText(float value)
     {
         if (masterVolumeText != null)
@@ -397,6 +447,39 @@ public class SettingsMenuUI : MonoBehaviour
         {
             SettingsManager.Instance.SetHealthEnergyHapticsEnabled(isOn);
             DebugLog($"Haptics enabled: {isOn}");
+        }
+    }
+
+    // Increment/Decrement methods for VR buttons
+    public void IncrementMovementSpeed()
+    {
+        if (movementSpeedSlider != null)
+        {
+            movementSpeedSlider.value = Mathf.Min(5f, movementSpeedSlider.value + 0.5f);
+        }
+    }
+
+    public void DecrementMovementSpeed()
+    {
+        if (movementSpeedSlider != null)
+        {
+            movementSpeedSlider.value = Mathf.Max(0.5f, movementSpeedSlider.value - 0.5f);
+        }
+    }
+
+    public void IncrementSnapTurnAngle()
+    {
+        if (snapTurnAngleSlider != null)
+        {
+            snapTurnAngleSlider.value = Mathf.Min(90f, snapTurnAngleSlider.value + 15f);
+        }
+    }
+
+    public void DecrementSnapTurnAngle()
+    {
+        if (snapTurnAngleSlider != null)
+        {
+            snapTurnAngleSlider.value = Mathf.Max(15f, snapTurnAngleSlider.value - 15f);
         }
     }
 
