@@ -258,6 +258,12 @@ public class SettingsMenuUI : MonoBehaviour
     {
         DifficultyLevel difficulty = (DifficultyLevel)index;
 
+        // Play audio feedback
+        if (UIAudioManager.Instance != null)
+        {
+            UIAudioManager.Instance.PlayButtonClick();
+        }
+
         if (SettingsManager.Instance != null)
         {
             SettingsManager.Instance.SetDifficulty(difficulty);
@@ -434,6 +440,12 @@ public class SettingsMenuUI : MonoBehaviour
 
     private void OnHealthEnergyTextToggled(bool isOn)
     {
+        // Play audio feedback
+        if (UIAudioManager.Instance != null)
+        {
+            UIAudioManager.Instance.PlayButtonClick();
+        }
+
         if (SettingsManager.Instance != null)
         {
             SettingsManager.Instance.SetHealthEnergyTextVisible(isOn);
@@ -443,6 +455,12 @@ public class SettingsMenuUI : MonoBehaviour
 
     private void OnHapticsToggled(bool isOn)
     {
+        // Play audio feedback
+        if (UIAudioManager.Instance != null)
+        {
+            UIAudioManager.Instance.PlayButtonClick();
+        }
+
         if (SettingsManager.Instance != null)
         {
             SettingsManager.Instance.SetHealthEnergyHapticsEnabled(isOn);
