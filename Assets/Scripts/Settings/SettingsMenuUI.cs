@@ -93,9 +93,8 @@ public class SettingsMenuUI : MonoBehaviour
         // Load current settings
         LoadCurrentSettings();
 
-        // Hide settings panel initially
-        if (settingsPanel != null)
-            settingsPanel.SetActive(false);
+        // DON'T hide here - let PauseMenuManager/MainMenuHandler control visibility
+        // This prevents the panel from auto-disabling when enabled by button click
     }
 
     #region Show/Hide

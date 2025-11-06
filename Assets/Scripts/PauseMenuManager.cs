@@ -15,11 +15,15 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject resumeButton;
     public GameObject saveGameButton;  // save game button
     public GameObject loadGameButton; // load game button
+    public GameObject settingsButton; // settings button
     public GameObject mainMenuButton;
     public GameObject exitGameButton;
 
     [Header("Save/Load UI")]  // save/load menu UI reference
     public SaveLoadMenuUI saveLoadMenuUI;
+
+    [Header("Settings UI")]
+    public SettingsMenuUI settingsMenuUI;
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel;
@@ -71,6 +75,16 @@ public class PauseMenuManager : MonoBehaviour
         if (saveLoadMenuUI != null)
         {
             saveLoadMenuUI.HideAllPanels();
+        }
+
+        // Hide settings menu at start (disable entire canvas to prevent ray blocking)
+        if (settingsMenuUI != null)
+        {
+            Transform canvas = settingsMenuUI.transform.parent;
+            if (canvas != null)
+            {
+                canvas.gameObject.SetActive(false);
+            }
         }
 
         // Subscribe to GameManager state changes
@@ -159,6 +173,15 @@ public class PauseMenuManager : MonoBehaviour
                 {
                     saveLoadMenuUI.HideAllPanels();
                 }
+                // Hide settings when resuming (disable entire canvas)
+                if (settingsMenuUI != null)
+                {
+                    Transform canvas = settingsMenuUI.transform.parent;
+                    if (canvas != null)
+                    {
+                        canvas.gameObject.SetActive(false);
+                    }
+                }
                 break;
             case GameState.Loading:
             case GameState.MainMenu:
@@ -176,7 +199,7 @@ public class PauseMenuManager : MonoBehaviour
         {
             pauseMenuCanvas.SetActive(true);
 
-            // Show main pause menu panel, hide save/load panels
+            // Show main pause menu panel, hide save/load and settings panels
             if (pauseMenuPanel != null)
             {
                 pauseMenuPanel.SetActive(true);
@@ -186,10 +209,19 @@ public class PauseMenuManager : MonoBehaviour
             {
                 saveLoadMenuUI.HideAllPanels();
             }
+
+            if (settingsMenuUI != null)
+            {
+                Transform canvas = settingsMenuUI.transform.parent;
+                if (canvas != null)
+                {
+                    canvas.gameObject.SetActive(false);
+                }
+            }
         }
 
         UIAudioManager.Instance?.PlayMenuOpen();
-   
+
     }
 
     private void HidePauseMenu()
@@ -313,7 +345,83 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    // back from Save/Load to Pause Menu
+    // Settings Button (NEW)
+    public void OnSettingsButtonClicked()
+    {
+        Debug.Log("Settings button clicked");
+
+        // Hide main pause menu panel first
+        if (pauseMenuPanel != null)
+        {
+            pauseMenuPanel.SetActive(false);
+            Debug.Log("Pause menu panel hidden");
+        }
+
+        // Show settings menu
+        if (settingsMenuUI != null)
+        {
+            // CRITICAL: Enable the entire SettingsMenuCanvas (not just SettingsPanel)
+            // This allows raycasters to work and prevents invisible ray blocking during gameplay
+            Transform canvas = settingsMenuUI.transform.parent;
+            if (canvas != null)
+            {
+                canvas.gameObject.SetActive(true);
+                Debug.Log("Settings canvas enabled");
+            }
+
+            // Enable the SettingsPanel GameObject
+            settingsMenuUI.gameObject.SetActive(true);
+            Debug.Log("Settings panel GameObject enabled");
+
+            // Reposition settings menu in front of player
+            RepositionSettingsMenu();
+
+            settingsMenuUI.ShowSettings();
+            Debug.Log("Settings menu shown");
+        }
+        else
+        {
+            Debug.LogWarning("SettingsMenuUI reference is missing!");
+        }
+    }
+
+    private void RepositionSettingsMenu()
+    {
+        if (settingsMenuUI == null) return;
+
+        // Get the settings canvas (parent of SettingsPanel)
+        Transform settingsCanvas = settingsMenuUI.transform.parent;
+        if (settingsCanvas == null) return;
+
+        // Position in front of player's camera
+        if (PlayerController.Instance?.XROrigin != null)
+        {
+            Camera playerCamera = PlayerController.Instance.XROrigin.GetComponentInChildren<Camera>();
+            if (playerCamera != null)
+            {
+                // Position 0.5 units in front of camera at eye level
+                Vector3 cameraForward = playerCamera.transform.forward;
+                cameraForward.y = 0; // Keep on horizontal plane
+                cameraForward.Normalize();
+
+                Vector3 targetPosition = playerCamera.transform.position + (cameraForward * 0.5f);
+
+                settingsCanvas.position = targetPosition;
+
+                // Make it face the camera
+                Vector3 directionToCamera = playerCamera.transform.position - targetPosition;
+                directionToCamera.y = 0;
+                if (directionToCamera != Vector3.zero)
+                {
+                    settingsCanvas.rotation = Quaternion.LookRotation(-directionToCamera);
+                }
+
+                Debug.Log($"Settings menu repositioned to {targetPosition}");
+            }
+        }
+    }
+
+    // back from Save/Load/Settings to Pause Menu
     public void OnBackToPauseMenu()
     {
         Debug.Log("Back to pause menu");
@@ -321,6 +429,16 @@ public class PauseMenuManager : MonoBehaviour
         if (saveLoadMenuUI != null)
         {
             saveLoadMenuUI.HideAllPanels();
+        }
+
+        if (settingsMenuUI != null)
+        {
+            // Disable entire canvas to prevent ray blocking
+            Transform canvas = settingsMenuUI.transform.parent;
+            if (canvas != null)
+            {
+                canvas.gameObject.SetActive(false);
+            }
         }
 
         if (pauseMenuPanel != null)

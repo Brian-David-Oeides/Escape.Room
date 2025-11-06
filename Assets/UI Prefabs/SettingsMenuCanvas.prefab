@@ -9144,7 +9144,6 @@ GameObject:
   - component: {fileID: 306170945885238045}
   - component: {fileID: 8793229653585504334}
   - component: {fileID: 8306217388202002906}
-  - component: {fileID: 1632864786367472668}
   m_Layer: 5
   m_Name: SettingsMenuCanvas
   m_TagString: Untagged
@@ -9254,19 +9253,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
---- !u!114 &1632864786367472668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6096871455367354831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2dbf21d8510405428e05b301614e4ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 0.5
 --- !u!1 &6143398264804055361
 GameObject:
   m_ObjectHideFlags: 0
