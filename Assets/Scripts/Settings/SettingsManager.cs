@@ -22,6 +22,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     public System.Action<SettingsData> OnSettingsChanged;
     public System.Action<DifficultyLevel> OnDifficultyChanged;
     public System.Action<float, float, float> OnVolumeChanged; // master, sfx, music
+    public System.Action<bool, TimerMode, float> OnTimerSettingsChanged; // enabled, mode, duration
 
     private string SettingsFilePath => Path.Combine(Application.persistentDataPath, "GameSettings.json");
 
@@ -122,6 +123,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
         ApplyAudioSettings();
         ApplyMovementSettings();
         ApplyDifficultySettings();
+        ApplyTimerSettings();
 
         // Notify listeners
         OnSettingsChanged?.Invoke(currentSettings);
@@ -174,12 +176,6 @@ public class SettingsManager : MonoSingleton<SettingsManager>
             DebugLog("Health/Energy settings applied");
         }
 
-        // TODO: Apply timer duration when TimerManager exists
-        // if (TimerManager.Instance != null)
-        // {
-        //     TimerManager.Instance.SetTimerDuration(currentSettings.timerDuration);
-        // }
-
         // TODO: Apply consumable count when ConsumableManager exists
         // if (ConsumableManager.Instance != null)
         // {
@@ -187,6 +183,46 @@ public class SettingsManager : MonoSingleton<SettingsManager>
         // }
 
         DebugLog("Difficulty settings applied");
+    }
+
+    /// <summary>
+    /// Apply timer settings to GameTimer
+    /// </summary>
+    public void ApplyTimerSettings()
+    {
+        if (GameTimer.Instance != null)
+        {
+            // Convert SettingsData TimerMode enum to GameTimer.TimerMode enum
+            GameTimer.TimerMode timerMode = GameTimer.TimerMode.Disabled;
+
+            if (currentSettings.timerEnabled)
+            {
+                switch (currentSettings.timerMode)
+                {
+                    case TimerMode.CountUp:
+                        timerMode = GameTimer.TimerMode.CountUp;
+                        break;
+                    case TimerMode.CountDown:
+                        timerMode = GameTimer.TimerMode.CountDown;
+                        break;
+                    case TimerMode.Disabled:
+                        timerMode = GameTimer.TimerMode.Disabled;
+                        break;
+                }
+            }
+            else
+            {
+                // If timer is disabled in settings, force Disabled mode
+                timerMode = GameTimer.TimerMode.Disabled;
+            }
+
+            GameTimer.Instance.SetTimerMode(timerMode);
+            GameTimer.Instance.SetCountdownDuration(currentSettings.timerDuration);
+
+            DebugLog($"Timer settings applied: Mode={timerMode}, Duration={currentSettings.timerDuration}s ({currentSettings.GetTimerDurationInMinutes()} minutes)");
+        }
+
+        OnTimerSettingsChanged?.Invoke(currentSettings.timerEnabled, currentSettings.timerMode, currentSettings.timerDuration);
     }
 
     #endregion
@@ -198,12 +234,51 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     {
         currentSettings.ApplyDifficultyPreset(difficulty);
         ApplyDifficultySettings();
+        ApplyTimerSettings(); // Timer settings are part of difficulty preset
         SaveSettings();
         OnDifficultyChanged?.Invoke(difficulty);
         DebugLog($"Difficulty changed to {difficulty}");
     }
 
     public DifficultyLevel GetDifficulty() => currentSettings.difficulty;
+
+    // Timer Settings
+    public void SetTimerEnabled(bool enabled)
+    {
+        currentSettings.timerEnabled = enabled;
+        ApplyTimerSettings();
+        SaveSettings();
+        DebugLog($"Timer enabled: {enabled}");
+    }
+
+    public void SetTimerMode(TimerMode mode)
+    {
+        currentSettings.timerMode = mode;
+        ApplyTimerSettings();
+        SaveSettings();
+        DebugLog($"Timer mode: {mode}");
+    }
+
+    public void SetTimerDuration(float durationInSeconds)
+    {
+        currentSettings.timerDuration = Mathf.Max(60f, durationInSeconds);
+        ApplyTimerSettings();
+        SaveSettings();
+        DebugLog($"Timer duration: {currentSettings.timerDuration}s");
+    }
+
+    public void SetTimerDurationInMinutes(int minutes)
+    {
+        currentSettings.SetTimerDurationInMinutes(minutes);
+        ApplyTimerSettings();
+        SaveSettings();
+        DebugLog($"Timer duration: {minutes} minutes");
+    }
+
+    public bool GetTimerEnabled() => currentSettings.timerEnabled;
+    public TimerMode GetTimerMode() => currentSettings.timerMode;
+    public float GetTimerDuration() => currentSettings.timerDuration;
+    public int GetTimerDurationInMinutes() => currentSettings.GetTimerDurationInMinutes();
 
     // Audio
     public void SetMasterVolume(float volume)
@@ -274,7 +349,6 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     public bool GetHealthEnergyHapticsEnabled() => currentSettings.healthEnergyHapticsEnabled;
 
     // Difficulty values (read-only from UI, set via difficulty preset)
-    public float GetTimerDuration() => currentSettings.timerDuration;
     public float GetPlayerMaxHealth() => currentSettings.playerMaxHealth;
     public float GetEnergyDrainRate() => currentSettings.energyDrainRate;
     public int GetConsumableObjectCount() => currentSettings.consumableObjectCount;

@@ -14,6 +14,16 @@ public enum DifficultyLevel
 }
 
 /// <summary>
+/// Timer mode options
+/// </summary>
+public enum TimerMode
+{
+    Disabled,   // No timer
+    CountUp,    // Count up from 0 (stopwatch)
+    CountDown   // Count down from duration (game over when reaches 0)
+}
+
+/// <summary>
 /// Data structure for all game settings
 /// Serialized to JSON and saved to disk
 /// </summary>
@@ -23,8 +33,12 @@ public class SettingsData
     [Header("Difficulty Settings")]
     public DifficultyLevel difficulty = DifficultyLevel.Normal;
 
+    // Timer settings
+    public bool timerEnabled = true;
+    public TimerMode timerMode = TimerMode.CountDown;
+    public float timerDuration = 600f; // 10 minutes default (in seconds)
+
     // Difficulty-based values
-    public float timerDuration = 600f; // 10 minutes default
     public float playerMaxHealth = 100f;
     public float energyDrainRate = 1f; // Energy per second
     public int consumableObjectCount = 10; // Number of candies available
@@ -59,7 +73,9 @@ public class SettingsData
         switch (level)
         {
             case DifficultyLevel.Easy:
-                timerDuration = 900f; // 15 minutes
+                timerEnabled = true;
+                timerMode = TimerMode.CountDown;
+                timerDuration = 1800f; // 30 minutes (more forgiving)
                 playerMaxHealth = 150f;
                 energyDrainRate = 0f; // No energy drain
                 consumableObjectCount = 15; // More candies
@@ -67,7 +83,9 @@ public class SettingsData
                 break;
 
             case DifficultyLevel.Normal:
-                timerDuration = 600f; // 10 minutes
+                timerEnabled = true;
+                timerMode = TimerMode.CountDown;
+                timerDuration = 900f; // 15 minutes
                 playerMaxHealth = 100f;
                 energyDrainRate = 1f; // Normal drain
                 consumableObjectCount = 10; // Normal amount
@@ -75,7 +93,9 @@ public class SettingsData
                 break;
 
             case DifficultyLevel.Hard:
-                timerDuration = 300f; // 5 minutes
+                timerEnabled = true;
+                timerMode = TimerMode.CountDown;
+                timerDuration = 600f; // 10 minutes (challenging)
                 playerMaxHealth = 75f;
                 energyDrainRate = 2f; // Faster drain
                 consumableObjectCount = 5; // Fewer candies
@@ -83,7 +103,7 @@ public class SettingsData
                 break;
         }
 
-        Debug.Log($"Applied {level} difficulty preset");
+        // Debug.Log($"Applied {level} difficulty preset");
     }
 
     /// <summary>
@@ -106,5 +126,21 @@ public class SettingsData
         energyDrainRate = Mathf.Clamp(energyDrainRate, 0f, 5f);
         consumableObjectCount = Mathf.Clamp(consumableObjectCount, 1, 20);
         damageMultiplier = Mathf.Clamp(damageMultiplier, 0.1f, 5f); // 0.1x to 5x
+    }
+
+    /// <summary>
+    /// Get timer duration in minutes (for UI display)
+    /// </summary>
+    public int GetTimerDurationInMinutes()
+    {
+        return Mathf.RoundToInt(timerDuration / 60f);
+    }
+
+    /// <summary>
+    /// Set timer duration from minutes (for UI input)
+    /// </summary>
+    public void SetTimerDurationInMinutes(int minutes)
+    {
+        timerDuration = Mathf.Max(1, minutes) * 60f;
     }
 }

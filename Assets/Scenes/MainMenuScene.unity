@@ -3118,6 +3118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentSettings:
     difficulty: 1
+    timerEnabled: 1
+    timerMode: 2
     timerDuration: 600
     playerMaxHealth: 100
     energyDrainRate: 1

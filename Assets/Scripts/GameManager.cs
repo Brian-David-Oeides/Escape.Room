@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -52,6 +52,12 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        // Unsubscribe from timer events
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.OnTimerExpired -= HandleTimerExpired;
+        }
     }
 
     private void Update()
@@ -176,6 +182,12 @@ public class GameManager : MonoSingleton<GameManager>
         {
             PlayerController.Instance.DisableMovement();
         }
+
+        // Pause timer during loading
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.PauseTimer();
+        }
     }
 
     private void HandlePlayingState()
@@ -203,6 +215,9 @@ public class GameManager : MonoSingleton<GameManager>
         {
             InputModeManager.Instance.SwitchToGameplayMode();
         }
+
+        // Initialize timer with a small delay to ensure GameTimer is fully ready
+        StartCoroutine(InitializeGameTimer());
     }
 
     private IEnumerator DelayedPlayGameplayMusic()
@@ -216,6 +231,43 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    /// <summary>
+    /// Initialize GameTimer with settings after a small delay to ensure it's fully ready
+    /// </summary>
+    private IEnumerator InitializeGameTimer()
+    {
+        Debug.Log("[GameManager] InitializeGameTimer coroutine started");
+
+        // Wait a frame to ensure GameTimer's Start() has completed
+        yield return new WaitForEndOfFrame();
+
+        if (GameTimer.Instance != null)
+        {
+            Debug.Log("[GameManager] GameTimer.Instance found, subscribing to OnTimerExpired event");
+
+            // Subscribe to timer expired event (only once)
+            GameTimer.Instance.OnTimerExpired -= HandleTimerExpired; // Remove first to prevent duplicates
+            GameTimer.Instance.OnTimerExpired += HandleTimerExpired;
+
+            Debug.Log("[GameManager] Successfully subscribed to OnTimerExpired event");
+
+            // Apply current settings from SettingsManager
+            if (SettingsManager.Instance != null)
+            {
+                SettingsManager.Instance.ApplyTimerSettings();
+                Debug.Log("[GameManager] Timer settings applied on gameplay start");
+            }
+
+            // Resume the timer
+            GameTimer.Instance.ResumeTimer();
+            Debug.Log("[GameManager] Timer resumed");
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] GameTimer.Instance is null - timer not initialized");
+        }
+    }
+
     private void HandlePausedState()
     {
         gamePaused = true;
@@ -224,6 +276,13 @@ public class GameManager : MonoSingleton<GameManager>
         if (InputModeManager.Instance != null)
         {
             InputModeManager.Instance.SwitchToMenuMode();
+        }
+
+        // Pause the timer
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.PauseTimer();
+            Debug.Log("[GameManager] Timer paused");
         }
     }
 
@@ -236,6 +295,16 @@ public class GameManager : MonoSingleton<GameManager>
         {
             PlayerController.Instance.DisableMovement();
         }
+
+        // Stop the timer
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.StopTimer();
+            Debug.Log("[GameManager] Timer stopped - Game Over");
+        }
+
+        // TODO: Show Game Over UI
+        Debug.Log("GAME OVER! Timer expired or player died.");
     }
 
     private void HandleEscapedState()
@@ -248,8 +317,31 @@ public class GameManager : MonoSingleton<GameManager>
             InputModeManager.Instance.SwitchToMenuMode();
         }
 
-        float completionTime = Time.time - gameStartTime;
-        Debug.Log($"Level completed in {completionTime:F2} seconds!");
+        // Stop the timer and get final time
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.StopTimer();
+
+            string finalTime = GameTimer.Instance.GetFormattedElapsedTime();
+            Debug.Log($"Level completed! Time: {finalTime}");
+
+            // TODO: Show Escaped UI with completion time
+        }
+        else
+        {
+            float completionTime = Time.time - gameStartTime;
+            Debug.Log($"Level completed in {completionTime:F2} seconds!");
+        }
+    }
+
+    /// <summary>
+    /// Called when the GameTimer countdown reaches zero
+    /// </summary>
+    private void HandleTimerExpired()
+    {
+        Debug.Log("[GameManager] ⚠️ HandleTimerExpired() METHOD CALLED ⚠️");
+        Debug.Log("[GameManager] Timer expired event received - triggering Game Over");
+        GameOver();
     }
 
     // Public methods for scene transitions
@@ -284,6 +376,13 @@ public class GameManager : MonoSingleton<GameManager>
             HealthEnergyManager.Instance.ResetToStartingValues();
         }
 
+        // Reset Timer
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.ResetTimer();
+            Debug.Log("[GameManager] Timer reset");
+        }
+
         // Clear save data (so consumed candy respawns, puzzles reset, etc.)
         if (SaveManager.Instance != null)
         {
@@ -291,11 +390,6 @@ public class GameManager : MonoSingleton<GameManager>
         }
 
         // TODO: Add other system resets when implemented
-        // if (TimerManager.Instance != null)
-        // {
-        //     TimerManager.Instance.ResetTimer();
-        // }
-
         // if (PuzzleManager.Instance != null)
         // {
         //     PuzzleManager.Instance.ResetAllPuzzles();
@@ -305,6 +399,13 @@ public class GameManager : MonoSingleton<GameManager>
     public void ReturnToMainMenu()
     {
         gameStartTime = 0f;
+
+        // Stop timer when returning to main menu
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.StopTimer();
+        }
+
         StartCoroutine(LoadSceneWithFade(mainMenuSceneName, GameState.MainMenu));
     }
 
