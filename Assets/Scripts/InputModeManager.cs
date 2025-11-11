@@ -76,8 +76,66 @@ public class InputModeManager : MonoSingleton<InputModeManager>
 
     /// <summary>
     /// Switches to Gameplay Mode - locomotion + interaction enabled
+    /// Use this for scene transitions and restarts (has built-in delay for binding resolution)
     /// </summary>
     public void SwitchToGameplayMode()
+    {
+        StartCoroutine(SwitchToGameplayModeCoroutine());
+    }
+
+    /// <summary>
+    /// Immediately switches to gameplay mode without waiting (use with caution)
+    /// Only use this if you're certain bindings are already resolved
+    /// </summary>
+    public void SwitchToGameplayModeImmediate()
+    {
+        SwitchToGameplayModeInternal();
+    }
+
+    private IEnumerator SwitchToGameplayModeCoroutine()
+    {
+        if (inputActionAsset == null)
+        {
+            Debug.LogError("Cannot switch to Gameplay Mode - InputActionAsset is null");
+            yield break;
+        }
+
+        currentMode = InputMode.Gameplay;
+        Debug.Log("Switching to GAMEPLAY MODE (with binding resolution wait)");
+
+        // Step 1: Ensure Time.timeScale is normal
+        Time.timeScale = 1f;
+
+        // Step 2: FIRST disable locomotion providers
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.DisableMovement();
+        }
+
+        // Step 3: Enable locomotion action maps
+        EnableActionMap(leftHandLocomotionMap);
+        EnableActionMap(rightHandLocomotionMap);
+
+        // Step 4: Keep interaction maps enabled
+        EnableActionMap(leftHandInteractionMap);
+        EnableActionMap(rightHandInteractionMap);
+
+        // CRITICAL: Wait for binding resolution to complete
+        // The Input System needs time to resolve bindings and populate processor arrays
+        // Without this wait, ContinuousMoveProvider will try to read from null processor arrays
+        yield return null; // Wait 1 frame
+        yield return null; // Wait another frame to be safe
+
+        // Step 5: NOW it's safe to enable locomotion providers
+        if (PlayerController.Instance != null)
+        {
+            PlayerController.Instance.EnableMovement();
+        }
+
+        Debug.Log("Gameplay Mode activated (with safe binding resolution)");
+    }
+
+    private void SwitchToGameplayModeInternal()
     {
         if (inputActionAsset == null)
         {
@@ -86,18 +144,18 @@ public class InputModeManager : MonoSingleton<InputModeManager>
         }
 
         currentMode = InputMode.Gameplay;
-        Debug.Log("Switching to GAMEPLAY MODE");
+        Debug.Log("Switching to GAMEPLAY MODE (immediate)");
 
-        // Step 1: Ensure Time.timeScale is normal (if you use timeScale for pause)
+        // Step 1: Ensure Time.timeScale is normal
         Time.timeScale = 1f;
 
-        // Step 2: FIRST disable locomotion providers (to prevent them from reading during switch)
+        // Step 2: FIRST disable locomotion providers
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.DisableMovement();
         }
 
-        // Step 3: Enable locomotion action maps WHILE providers are disabled
+        // Step 3: Enable locomotion action maps
         EnableActionMap(leftHandLocomotionMap);
         EnableActionMap(rightHandLocomotionMap);
 
@@ -105,13 +163,13 @@ public class InputModeManager : MonoSingleton<InputModeManager>
         EnableActionMap(leftHandInteractionMap);
         EnableActionMap(rightHandInteractionMap);
 
-        // Step 5: Enable locomotion providers (via PlayerController)
+        // Step 5: Enable locomotion providers
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.EnableMovement();
         }
 
-        Debug.Log("Gameplay Mode activated");
+        Debug.Log("Gameplay Mode activated (immediate)");
     }
 
     /// <summary>
@@ -148,6 +206,7 @@ public class InputModeManager : MonoSingleton<InputModeManager>
         }
         else
         {
+            // Use the coroutine version for proper timing
             SwitchToGameplayMode();
         }
 

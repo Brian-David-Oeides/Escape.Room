@@ -380,6 +380,7 @@ GameObject:
   - component: {fileID: 47452316}
   - component: {fileID: 47452315}
   - component: {fileID: 47452314}
+  - component: {fileID: 47452320}
   m_Layer: 5
   m_Name: GameOverCanvas
   m_TagString: Untagged
@@ -418,7 +419,8 @@ MonoBehaviour:
   useFadeIn: 1
   fadeInDuration: 1
   delayBeforeShow: 0.5
-  screenOffset: {x: 0, y: 0.5, z: 2}
+  autoPosition: 1
+  screenOffset: {x: 0, y: 0.5, z: 0.5}
   playGameOverSound: 1
 --- !u!225 &47452315
 CanvasGroup:
@@ -439,7 +441,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47452313}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -502,19 +504,38 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47452313}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.12619898, y: 0, z: 0, w: 0.992005}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1246116821}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -14.5, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.82}
+  m_AnchoredPosition: {x: 0, y: 1.3}
   m_SizeDelta: {x: 800, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &47452320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47452313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!1 &63218696
 GameObject:
   m_ObjectHideFlags: 0
@@ -3266,7 +3287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSettings:
-    difficulty: 1
+    difficulty: 0
     timerEnabled: 1
     timerMode: 2
     timerDuration: 600

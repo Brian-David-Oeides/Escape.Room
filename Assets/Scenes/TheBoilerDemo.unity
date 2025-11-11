@@ -1282,6 +1282,7 @@ GameObject:
   - component: {fileID: 180447884}
   - component: {fileID: 180447888}
   - component: {fileID: 180447889}
+  - component: {fileID: 180447890}
   m_Layer: 5
   m_Name: GameOverCanvas
   m_TagString: Untagged
@@ -1359,17 +1360,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 180447883}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.12619898, y: 0, z: 0, w: 0.992005}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 287326104}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -14.5, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.82}
+  m_AnchoredPosition: {x: 0, y: 1.3}
   m_SizeDelta: {x: 800, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &180447888
@@ -1415,8 +1416,28 @@ MonoBehaviour:
   useFadeIn: 1
   fadeInDuration: 1
   delayBeforeShow: 0.5
-  screenOffset: {x: 0, y: 0.5, z: 2}
+  autoPosition: 1
+  screenOffset: {x: 0, y: 0, z: 0.5}
   playGameOverSound: 1
+--- !u!114 &180447890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180447883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
 --- !u!1 &193489694
 GameObject:
   m_ObjectHideFlags: 0
@@ -23598,7 +23619,7 @@ MonoBehaviour:
   audioFXEnabled: 1
   heartbeatSounds:
   - {fileID: 8300000, guid: 7ff362fdc4f0df0428cb6321f4215c11, type: 3}
-  heartbeatVolume: 0.5
+  heartbeatVolume: 1
   hapticFXEnabled: 1
   hapticIntensity: 0.3
   hapticDuration: 0.1
@@ -68914,6 +68935,8 @@ SceneRoots:
   - {fileID: 734033477}
   - {fileID: 1046887443}
   - {fileID: 1536420689}
+  - {fileID: 1144794519}
+  - {fileID: 3448150166748466797}
   - {fileID: 1173117123}
   - {fileID: 656829017}
   - {fileID: 1581577115}
@@ -68922,10 +68945,9 @@ SceneRoots:
   - {fileID: 1536138929}
   - {fileID: 4499741379986609401}
   - {fileID: 1630071646}
+  - {fileID: 1949267799}
   - {fileID: 2060308114}
   - {fileID: 688804006}
-  - {fileID: 1144794519}
-  - {fileID: 3448150166748466797}
   - {fileID: 106263325}
   - {fileID: 180447887}
   - {fileID: 5337178920147391811}
@@ -68940,5 +68962,4 @@ SceneRoots:
   - {fileID: 72080982380067981}
   - {fileID: 1544877779}
   - {fileID: 217767894}
-  - {fileID: 1949267799}
   - {fileID: 6076464266167723971}

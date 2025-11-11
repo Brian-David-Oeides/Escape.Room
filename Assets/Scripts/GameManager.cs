@@ -210,13 +210,7 @@ public class GameManager : MonoSingleton<GameManager>
         // Delay gameplay music slightly to let loading music fade complete
         StartCoroutine(DelayedPlayGameplayMusic());
 
-        // Enable player movement
-        if (InputModeManager.Instance != null)
-        {
-            InputModeManager.Instance.SwitchToGameplayMode();
-        }
-
-        // Initialize timer with a small delay to ensure GameTimer is fully ready
+        // Initialize timer and enable gameplay mode with proper timing
         StartCoroutine(InitializeGameTimer());
     }
 
@@ -232,14 +226,24 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     /// <summary>
-    /// Initialize GameTimer with settings after a small delay to ensure it's fully ready
+    /// Initialize GameTimer with settings
     /// </summary>
     private IEnumerator InitializeGameTimer()
     {
         Debug.Log("[GameManager] InitializeGameTimer coroutine started");
 
-        // Wait a frame to ensure GameTimer's Start() has completed
-        yield return new WaitForEndOfFrame();
+        // Wait for scene to be fully loaded
+        yield return null;
+
+        // Switch to gameplay mode (this now properly waits for binding resolution)
+        if (InputModeManager.Instance != null)
+        {
+            InputModeManager.Instance.SwitchToGameplayMode();
+            Debug.Log("[GameManager] Called SwitchToGameplayMode");
+        }
+
+        // Wait for the gameplay mode switch to complete (it's a coroutine that takes ~2 frames)
+        yield return new WaitForSeconds(0.1f);
 
         if (GameTimer.Instance != null)
         {

@@ -40,7 +40,8 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private float delayBeforeShow = 0.5f;
 
     [Header("Position Settings")]
-    [SerializeField] private Vector3 screenOffset = new Vector3(0f, 0.5f, 2f); // Distance from camera
+    [SerializeField] private bool autoPosition = false; // When false, uses Inspector Rect Transform
+    [SerializeField] private Vector3 screenOffset = new Vector3(0f, 0.5f, 2f); // Only used if autoPosition is true
 
     [Header("Audio")]
     [SerializeField] private bool playGameOverSound = true;
@@ -325,6 +326,14 @@ public class GameOverUI : MonoBehaviour
 
     private void PositionScreen()
     {
+        // If auto position is disabled, respect Inspector Rect Transform settings
+        if (!autoPosition)
+        {
+            Debug.Log("GameOverUI using manual positioning from Inspector Rect Transform");
+            return;
+        }
+
+        // Auto position mode - calculate position based on camera
         if (PlayerController.Instance == null || PlayerController.Instance.XROrigin == null)
         {
             Debug.LogWarning("Cannot position Game Over screen - PlayerController or XROrigin not found");
@@ -346,6 +355,8 @@ public class GameOverUI : MonoBehaviour
 
         // Face the camera
         transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
+
+        Debug.Log("GameOverUI auto-positioned in front of camera");
     }
 
     private IEnumerator FadeIn()
