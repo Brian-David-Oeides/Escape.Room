@@ -73,10 +73,10 @@ public class MainMenuHandler : MonoBehaviour
 
         InitializeMainMenu();
 
-        // Force disable movement again to ensure it's locked
-        if (PlayerController.Instance != null)
+        // Ensure locomotion is in menu mode
+        if (LocomotionController.Instance != null)
         {
-            PlayerController.Instance.DisableMovement();
+            LocomotionController.Instance.SwitchToMenuMode();
         }
 
         // Update Continue button state based on available saves

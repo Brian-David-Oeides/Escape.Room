@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,6 +35,8 @@ public class GameManager : MonoSingleton<GameManager>
     private float gameStartTime;
     private bool gamePaused = false;
     private bool isLoading = false;
+    private bool isLoadingFromSave = false;
+    private SaveData pendingSaveData = null;
 
     protected override void Awake()
     {
@@ -46,6 +49,10 @@ public class GameManager : MonoSingleton<GameManager>
         Debug.Log("GameManager Init called");
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // Subscribe to Locomotion events (will be set up in DelayedInitialization)
+        // LocomotionController might not be ready yet during Awake
+
         StartCoroutine(DelayedInitialization());
     }
 
@@ -57,6 +64,13 @@ public class GameManager : MonoSingleton<GameManager>
         if (GameTimer.Instance != null)
         {
             GameTimer.Instance.OnTimerExpired -= HandleTimerExpired;
+        }
+
+        // Unsubscribe from Locomotion events
+        if (LocomotionController.Instance != null)
+        {
+            LocomotionController.Instance.OnLocomotionReady -= OnLocomotionReady;
+            LocomotionController.Instance.OnLocomotionFailed -= OnLocomotionFailed;
         }
     }
 
@@ -113,6 +127,18 @@ public class GameManager : MonoSingleton<GameManager>
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
+        // NOW subscribe to LocomotionController events (it should be ready now)
+        if (LocomotionController.Instance != null)
+        {
+            LocomotionController.Instance.OnLocomotionReady += OnLocomotionReady;
+            LocomotionController.Instance.OnLocomotionFailed += OnLocomotionFailed;
+            Debug.Log("[GameManager] ✓ Subscribed to LocomotionController events");
+        }
+        else
+        {
+            Debug.LogError("[GameManager] LocomotionController.Instance is still null after delayed init!");
+        }
+
         Debug.Log("Proceeding with game initialization");
 
         // Initialize based on current scene
@@ -142,9 +168,10 @@ public class GameManager : MonoSingleton<GameManager>
         // Delay menu music slightly to let loading music fade complete
         StartCoroutine(DelayedPlayMenuMusic());
 
-        if (InputModeManager.Instance != null)
+        // Switch to Menu Mode using LocomotionController
+        if (LocomotionController.Instance != null)
         {
-            InputModeManager.Instance.SwitchToMenuMode();
+            LocomotionController.Instance.SwitchToMenuMode();
         }
     }
 
@@ -177,11 +204,8 @@ public class GameManager : MonoSingleton<GameManager>
             loadingScreenUI.Show();
         }
 
-        // Disable player movement during loading
-        if (PlayerController.Instance != null)
-        {
-            PlayerController.Instance.DisableMovement();
-        }
+        // LocomotionController handles disabling movement internally
+        // No need to call PlayerController.DisableMovement() anymore
 
         // Pause timer during loading
         if (GameTimer.Instance != null)
@@ -210,8 +234,29 @@ public class GameManager : MonoSingleton<GameManager>
         // Delay gameplay music slightly to let loading music fade complete
         StartCoroutine(DelayedPlayGameplayMusic());
 
-        // Initialize timer and enable gameplay mode with proper timing
-        StartCoroutine(InitializeGameTimer());
+        // Initialize Locomotion System with validation and retry logic
+        if (LocomotionController.Instance != null)
+        {
+            Debug.Log("[GameManager] Initializing Locomotion for gameplay...");
+
+            LocomotionController.Instance.InitializeForGameplay(
+                onSuccess: () =>
+                {
+                    Debug.Log("[GameManager] ✓ Locomotion ready - Starting timer");
+                    InitializeGameTimer();
+                },
+                onFailure: () =>
+                {
+                    Debug.LogError("[GameManager] ✗ Locomotion initialization failed!");
+                    // Return to menu on failure
+                    ReturnToMainMenu();
+                }
+            );
+        }
+        else
+        {
+            Debug.LogError("[GameManager] LocomotionController.Instance is null!");
+        }
     }
 
     private IEnumerator DelayedPlayGameplayMusic()
@@ -226,24 +271,11 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     /// <summary>
-    /// Initialize GameTimer with settings
+    /// Initialize GameTimer with settings - Called after Locomotion System is ready
     /// </summary>
-    private IEnumerator InitializeGameTimer()
+    private void InitializeGameTimer()
     {
-        Debug.Log("[GameManager] InitializeGameTimer coroutine started");
-
-        // Wait for scene to be fully loaded
-        yield return null;
-
-        // Switch to gameplay mode (this now properly waits for binding resolution)
-        if (InputModeManager.Instance != null)
-        {
-            InputModeManager.Instance.SwitchToGameplayMode();
-            Debug.Log("[GameManager] Called SwitchToGameplayMode");
-        }
-
-        // Wait for the gameplay mode switch to complete (it's a coroutine that takes ~2 frames)
-        yield return new WaitForSeconds(0.1f);
+        Debug.Log("[GameManager] InitializeGameTimer called");
 
         if (GameTimer.Instance != null)
         {
@@ -276,10 +308,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         gamePaused = true;
 
-        // Disable player movement
-        if (InputModeManager.Instance != null)
+        // Switch to Menu Mode (disables locomotion)
+        if (LocomotionController.Instance != null)
         {
-            InputModeManager.Instance.SwitchToMenuMode();
+            LocomotionController.Instance.SwitchToMenuMode();
         }
 
         // Pause the timer
@@ -294,10 +326,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Time.timeScale = 1f;
 
-        // Disable player movement
-        if (PlayerController.Instance != null)
+        // Switch to Menu Mode so player can interact with Game Over UI
+        if (LocomotionController.Instance != null)
         {
-            PlayerController.Instance.DisableMovement();
+            LocomotionController.Instance.SwitchToMenuMode();
         }
 
         // Stop the timer
@@ -315,10 +347,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Time.timeScale = 1f;
 
-        // Disable player movement
-        if (InputModeManager.Instance != null)
+        // Switch to Menu Mode
+        if (LocomotionController.Instance != null)
         {
-            InputModeManager.Instance.SwitchToMenuMode();
+            LocomotionController.Instance.SwitchToMenuMode();
         }
 
         // Stop the timer and get final time
@@ -346,6 +378,22 @@ public class GameManager : MonoSingleton<GameManager>
         Debug.Log("[GameManager] ⚠️ HandleTimerExpired() METHOD CALLED ⚠️");
         Debug.Log("[GameManager] Timer expired event received - triggering Game Over");
         GameOver();
+    }
+
+    /// <summary>
+    /// Called when Locomotion System successfully initializes
+    /// </summary>
+    private void OnLocomotionReady()
+    {
+        Debug.Log("[GameManager] Locomotion System ready event received");
+    }
+
+    /// <summary>
+    /// Called when Locomotion System fails to initialize
+    /// </summary>
+    private void OnLocomotionFailed()
+    {
+        Debug.LogError("[GameManager] Locomotion System failed event received");
     }
 
     // Public methods for scene transitions
@@ -400,6 +448,21 @@ public class GameManager : MonoSingleton<GameManager>
         // }
     }
 
+    /// <summary>
+    /// Load a saved game properly through GameManager's scene system
+    /// </summary>
+    public void LoadSavedGame(SaveData saveData)
+    {
+        Debug.Log($"[GameManager] Loading saved game from scene: {saveData.currentSceneName}");
+
+        // Store the save data to restore after scene loads
+        pendingSaveData = saveData;
+        isLoadingFromSave = true;
+
+        // Use proper scene loading
+        StartCoroutine(LoadSceneWithFade(saveData.currentSceneName, GameState.Playing));
+    }
+
     public void ReturnToMainMenu()
     {
         gameStartTime = 0f;
@@ -439,16 +502,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         SetGameState(GameState.Loading);
 
-        // CRITICAL: Disable movement immediately before any delays
-        if (PlayerController.Instance != null)
+        // CRITICAL: Disable locomotion immediately via LocomotionController
+        if (LocomotionController.Instance != null)
         {
-            PlayerController.Instance.DisableMovement();
-        }
-
-        // Disable all input action maps during transition
-        if (InputModeManager.Instance != null && InputModeManager.Instance.inputActionAsset != null)
-        {
-            InputModeManager.Instance.inputActionAsset.Disable();
+            LocomotionController.Instance.SwitchToMenuMode();
         }
 
         // Fade out screen
@@ -534,7 +591,13 @@ public class GameManager : MonoSingleton<GameManager>
             screenFader = FindObjectOfType<ScreenFader>();
         }
 
-        // Update PlayerController's XR Origin reference
+        // Update LocomotionController's XR Origin reference
+        if (LocomotionController.Instance != null)
+        {
+            LocomotionController.Instance.UpdateXROriginReference();
+        }
+
+        // Update PlayerController's XR Origin reference (still needed for positioning)
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.UpdateXROriginReference();
@@ -547,15 +610,23 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else if (scene.name == gameplaySceneName)
         {
-            if (PlayerController.Instance != null)
+            // Check if we're loading from a save
+            if (isLoadingFromSave && pendingSaveData != null)
             {
-                // CRITICAL: Update XR Origin reference first
-                PlayerController.Instance.UpdateXROriginReference();
-                // Position player at spawn point
-                PlayerController.Instance.PositionAtSpawnPoint();
+                Debug.Log("[GameManager] Restoring save data after scene load");
+                StartCoroutine(RestoreSaveDataAfterSceneLoad(pendingSaveData));
             }
+            else
+            {
+                // Normal new game start
+                if (PlayerController.Instance != null)
+                {
+                    // Position player at spawn point
+                    PlayerController.Instance.PositionAtSpawnPoint();
+                }
 
-            SetGameState(GameState.Playing);
+                SetGameState(GameState.Playing);
+            }
         }
 
         // Fade in screen
@@ -563,6 +634,54 @@ public class GameManager : MonoSingleton<GameManager>
         {
             screenFader.FadeOut(1f);
         }
+    }
+
+    /// <summary>
+    /// Restore save data after scene has loaded
+    /// </summary>
+    private IEnumerator RestoreSaveDataAfterSceneLoad(SaveData data)
+    {
+        Debug.Log("[GameManager] Starting save data restoration");
+
+        // Wait for scene to fully initialize
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
+        // Restore player position FIRST (before locomotion initializes)
+        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+        {
+            PlayerController.Instance.XROrigin.transform.position = data.playerPosition;
+            PlayerController.Instance.XROrigin.transform.rotation = data.playerRotation;
+            Debug.Log($"[GameManager] Player position restored to {data.playerPosition}");
+        }
+
+        // Restore health/energy
+        if (HealthEnergyManager.Instance != null)
+        {
+            HealthEnergyManager.Instance.SetHealth(data.currentHealth);
+            HealthEnergyManager.Instance.SetEnergy(data.currentEnergy);
+
+            // CRITICAL: Reinitialize movement tracking after player position is restored
+            HealthEnergyManager.Instance.InitializeMovementTracking();
+
+            Debug.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
+        }
+
+        // Restore all ISaveable objects
+        ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
+        foreach (ISaveable saveable in saveableObjects)
+        {
+            saveable.LoadState(data);
+        }
+
+        // Clear flags
+        isLoadingFromSave = false;
+        pendingSaveData = null;
+
+        Debug.Log("[GameManager] Save data restoration complete");
+
+        // NOW trigger Playing state (which initializes locomotion)
+        SetGameState(GameState.Playing);
     }
 
     // Utility methods

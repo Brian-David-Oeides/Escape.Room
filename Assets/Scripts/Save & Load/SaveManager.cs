@@ -87,6 +87,13 @@ public class SaveManager : MonoSingleton<SaveManager>
             return false;
         }
 
+        // Don't allow saving when player is dead
+        if (HealthEnergyManager.Instance != null && HealthEnergyManager.Instance.GetCurrentHealth() <= 0)
+        {
+            DebugLog("Cannot save - player health is 0");
+            return false;
+        }
+
         try
         {
             // Create new save data or use existing
@@ -142,13 +149,23 @@ public class SaveManager : MonoSingleton<SaveManager>
             data.playerRotation = PlayerController.Instance.XROrigin.transform.rotation;
         }
 
-        // Save health/energy (when HealthEnergyManager exists)
-        // TODO: Uncomment when HealthEnergyManager is implemented
-        // if (HealthEnergyManager.Instance != null)
-        // {
-        //     data.currentHealth = HealthEnergyManager.Instance.CurrentHealth;
-        //     data.currentEnergy = HealthEnergyManager.Instance.CurrentEnergy;
-        // }
+        // Save health/energy
+        if (HealthEnergyManager.Instance != null)
+        {
+            // Don't save if health is 0 (game over state)
+            if (HealthEnergyManager.Instance.GetCurrentHealth() > 0)
+            {
+                data.currentHealth = HealthEnergyManager.Instance.GetCurrentHealth();
+                data.currentEnergy = HealthEnergyManager.Instance.GetCurrentEnergy();
+            }
+            else
+            {
+                // If health is 0, save with starting values instead
+                data.currentHealth = HealthEnergyManager.Instance.GetMaxHealth();
+                data.currentEnergy = HealthEnergyManager.Instance.GetMaxEnergy();
+                DebugLog("Health was 0, saving with starting values instead");
+            }
+        }
 
         // Save timer state (when TimerManager exists)
         // TODO: Uncomment when TimerManager is implemented
@@ -223,8 +240,19 @@ public class SaveManager : MonoSingleton<SaveManager>
 
             DebugLog($"Loaded save from slot {slotNumber}");
 
-            // Start coroutine to load the saved scene
-            StartCoroutine(LoadGameCoroutine(loadedData));
+            // Let GameManager handle the scene loading properly
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.LoadSavedGame(loadedData);
+            }
+            else
+            {
+                Debug.LogError("GameManager not found!");
+                return false;
+            }
+
+            // Notify listeners
+            OnGameLoaded?.Invoke(currentSaveSlot);
 
             return true;
         }
@@ -232,92 +260,6 @@ public class SaveManager : MonoSingleton<SaveManager>
         {
             Debug.LogError($"Failed to load game from slot {slotNumber}: {e.Message}");
             return false;
-        }
-    }
-
-    /// <summary>
-    /// Coroutine to load the saved scene and restore game state
-    /// </summary>
-    private IEnumerator LoadGameCoroutine(SaveData data)
-    {
-        // If we're not in the correct scene, load it first
-        if (SceneManager.GetActiveScene().name != data.currentSceneName)
-        {
-            DebugLog($"Loading scene: {data.currentSceneName}");
-
-            // Use GameManager's scene loading system
-            if (GameManager.Instance != null)
-            {
-                // Trigger loading state
-                GameManager.Instance.SetGameState(GameState.Loading);
-
-                // Wait for scene to load
-                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(data.currentSceneName);
-                while (!asyncLoad.isDone)
-                {
-                    yield return null;
-                }
-            }
-            else
-            {
-                // Fallback if GameManager doesn't exist
-                SceneManager.LoadScene(data.currentSceneName);
-                yield return null;
-            }
-        }
-
-        // Wait a frame for scene to initialize
-        yield return new WaitForEndOfFrame();
-
-        // Restore game state
-        RestoreGameState(data);
-
-        // Notify listeners
-        OnGameLoaded?.Invoke(currentSaveSlot);
-
-        DebugLog("Game state restored");
-    }
-
-    /// <summary>
-    /// Restore all game state from loaded data
-    /// </summary>
-    private void RestoreGameState(SaveData data)
-    {
-        // Restore player position
-        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
-        {
-            PlayerController.Instance.XROrigin.transform.position = data.playerPosition;
-            PlayerController.Instance.XROrigin.transform.rotation = data.playerRotation;
-            DebugLog($"Player position restored to {data.playerPosition}");
-        }
-
-        // Restore health/energy (when implemented)
-        // TODO: Uncomment when HealthEnergyManager exists
-        // if (HealthEnergyManager.Instance != null)
-        // {
-        //     HealthEnergyManager.Instance.SetHealth(data.currentHealth);
-        //     HealthEnergyManager.Instance.SetEnergy(data.currentEnergy);
-        // }
-
-        // Restore timer (when implemented)
-        // TODO: Uncomment when TimerManager exists
-        // if (TimerManager.Instance != null)
-        // {
-        //     TimerManager.Instance.SetTimeRemaining(data.timeRemaining);
-        //     TimerManager.Instance.SetTimerEnabled(data.timerEnabled);
-        // }
-
-        // Restore all ISaveable objects in the scene
-        ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
-        foreach (ISaveable saveable in saveableObjects)
-        {
-            saveable.LoadState(data);
-        }
-
-        // Set game state
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.SetGameState(data.gameState);
         }
     }
 

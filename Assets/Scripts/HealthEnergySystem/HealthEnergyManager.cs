@@ -64,6 +64,8 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     private bool hasTriggeredLowHealth = false;
     private bool hasTriggeredLowEnergy = false;
 
+    private bool hasBeenInitializedFromSave = false;
+
     protected override void Awake()
     {
         base.Awake();
@@ -110,7 +112,22 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
 
     private void Start()
     {
-        // Initialize values
+        // Don't reset if we've been initialized from a save
+        if (hasBeenInitializedFromSave)
+        {
+            Debug.Log("[HealthEnergyManager] Skipping Start() - already initialized from save");
+
+            // Still need to initialize movement tracking
+            if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+            {
+                lastPlayerPosition = PlayerController.Instance.XROrigin.transform.position;
+            }
+
+            hasBeenInitializedFromSave = false; // Reset flag
+            return;
+        }
+
+        // Initialize values (only for new game)
         currentHealth = maxHealth;
         currentEnergy = maxEnergy;
         isDead = false;
@@ -245,6 +262,25 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     }
 
     /// <summary>
+    /// Manually initialize movement tracking (called after loading save data)
+    /// </summary>
+    public void InitializeMovementTracking()
+    {
+        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+        {
+            lastPlayerPosition = PlayerController.Instance.XROrigin.transform.position;
+            isPlayerMoving = false;
+            currentDrainRate = standingDrainRate;
+
+            Debug.Log($"[HealthEnergyManager] Movement tracking initialized at position: {lastPlayerPosition}");
+        }
+        else
+        {
+            Debug.LogWarning("[HealthEnergyManager] Could not initialize movement tracking - XR Origin not found");
+        }
+    }
+
+    /// <summary>
     /// Called by teleport system to drain energy per teleport
     /// </summary>
     public void OnPlayerTeleport()
@@ -325,6 +361,16 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     public void SetHealth(float value)
     {
         currentHealth = Mathf.Clamp(value, 0f, maxHealth);
+        hasBeenInitializedFromSave = true;
+
+        // CRITICAL: Reset death state if health is restored
+        if (currentHealth > 0)
+        {
+            isDead = false;
+            hasTriggeredLowHealth = false;
+            Debug.Log("[HealthEnergyManager] Death state reset - player is alive");
+        }
+
         OnHealthChanged?.Invoke(currentHealth);
         DebugLog($"Health set to: {currentHealth}/{maxHealth}");
     }
@@ -354,6 +400,14 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     public void SetEnergy(float value)
     {
         currentEnergy = Mathf.Clamp(value, 0f, maxEnergy);
+        hasBeenInitializedFromSave = true;
+
+        // Reset low energy warning flag
+        if (currentEnergy > lowEnergyThreshold)
+        {
+            hasTriggeredLowEnergy = false;
+        }
+
         OnEnergyChanged?.Invoke(currentEnergy);
         DebugLog($"Energy set to: {currentEnergy}/{maxEnergy}");
     }
