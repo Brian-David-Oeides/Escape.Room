@@ -112,7 +112,7 @@ public class HandPointController : MonoBehaviour
             // Debug output
             if (triggerPressed || gripPressed)
             {
-                Debug.Log($"{gameObject.name} - Trigger: {triggerPressed}, Grip: {gripPressed}, Pinch: {isHoveringPinchable && gripPressed}, HoveringPinchable: {isHoveringPinchable}");
+                // Debug.Log($"{gameObject.name} - Trigger: {triggerPressed}, Grip: {gripPressed}, Pinch: {isHoveringPinchable && gripPressed}, HoveringPinchable: {isHoveringPinchable}");
             }
         }
     }

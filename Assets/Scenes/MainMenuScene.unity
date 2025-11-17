@@ -3287,11 +3287,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSettings:
-    difficulty: 0
+    difficulty: 2
     timerEnabled: 1
     timerMode: 2
     timerDuration: 600
-    playerMaxHealth: 100
+    playerMaxHealth: 600
     energyDrainRate: 1
     consumableObjectCount: 10
     damageMultiplier: 1

@@ -137,10 +137,10 @@ public class PauseMenuManager : MonoBehaviour
                     return; // Don't unpause if confirmation dialog is open
                 }
 
-                if (saveLoadMenuUI != null && (saveLoadMenuUI.transform.Find("SavePanel")?.gameObject.activeSelf == true ||
-                                               saveLoadMenuUI.transform.Find("LoadPanel")?.gameObject.activeSelf == true))
+                // If pause menu panel is hidden, that means a sub-panel is showing (save/load/settings)
+                if (pauseMenuPanel != null && !pauseMenuPanel.activeSelf)
                 {
-                    return;
+                    return; // Don't unpause if we're in a sub-menu
                 }
 
                 GameManager.Instance.TogglePause();
@@ -277,6 +277,7 @@ public class PauseMenuManager : MonoBehaviour
         // Wait one frame for UI to update
         yield return null;
 
+        // REsume game from the GM
         // Then toggle pause state
         if (GameManager.Instance != null && GameManager.Instance.currentState == GameState.Paused)
         {
@@ -284,10 +285,10 @@ public class PauseMenuManager : MonoBehaviour
         }
 
         // Wait another frame to ensure state change is processed
-        yield return null;
+        // yield return null;
 
         // Force re-enable movement as a safety check
-        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+        /* if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
         {
             var continuousMove = PlayerController.Instance.XROrigin.GetComponent<ActionBasedContinuousMoveProvider>();
             if (continuousMove != null)
@@ -298,7 +299,7 @@ public class PauseMenuManager : MonoBehaviour
                 continuousMove.enabled = true;
                 Debug.Log("Force re-enabled continuous move provider");
             }
-        }
+        } */
 
         _resumeCoroutine = null;
     }

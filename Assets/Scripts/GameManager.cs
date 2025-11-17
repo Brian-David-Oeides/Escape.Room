@@ -85,6 +85,9 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void SetGameState(GameState newState)
     {
+        Debug.Log($"[GameManager] SetGameState called: {currentState} → {newState}");
+        Debug.Log($"[GameManager] Call stack: {System.Environment.StackTrace}");
+
         if (currentState == newState) return;
 
         GameState previousState = currentState;

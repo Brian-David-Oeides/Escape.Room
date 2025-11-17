@@ -56,15 +56,37 @@ public class SaveLoadMenuUI : MonoBehaviour
 
     public void ShowSavePanel()
     {
+        Debug.Log("=== ShowSavePanel START ===");
+
         HideAllPanels();
+        Debug.Log("HideAllPanels completed");
 
         if (savePanel != null)
         {
+            Debug.Log($"savePanel is NOT null. Current active state: {savePanel.activeSelf}");
+            Debug.Log($"Attempting to activate savePanel: {savePanel.name}");
+
             savePanel.SetActive(true);
+
+            Debug.Log($"savePanel.SetActive(true) called. New active state: {savePanel.activeSelf}");
+            Debug.Log($"savePanel parent: {savePanel.transform.parent?.name}");
+            Debug.Log($"savePanel parent active: {savePanel.transform.parent?.gameObject.activeSelf}");
+
             RefreshSaveSlots();
+            Debug.Log("RefreshSaveSlots completed");
+        }
+        else
+        {
+            Debug.LogError("savePanel is NULL!");
         }
 
-        UIAudioManager.Instance?.PlayMenuOpen();
+        if (UIAudioManager.Instance != null)
+        {
+            UIAudioManager.Instance.PlayMenuOpen();
+            Debug.Log("UIAudioManager.PlayMenuOpen called");
+        }
+
+        Debug.Log("=== ShowSavePanel END ===");
     }
 
     public void ShowLoadPanel()
@@ -225,7 +247,7 @@ public class SaveLoadMenuUI : MonoBehaviour
             RefreshSaveSlots();
 
             // Close save panel after short delay
-            StartCoroutine(ClosePanelAfterDelay(savePanel, 1.5f));
+            // StartCoroutine(ClosePanelAfterDelay(savePanel, 1.5f));
         }
         else
         {

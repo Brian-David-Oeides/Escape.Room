@@ -308,10 +308,10 @@ public class LocomotionController : MonoBehaviour
             attemptCount++;
             Log($"Initialization attempt {attemptCount}/{maxRetryAttempts}");
 
-            // Step 1: Ensure components are disabled (they should already be from ForceDisableAllComponents)
+            // Step 1: Ensure components are disabled
             ForceDisableAllComponents();
 
-            // Step 2: KEEP interaction maps enabled (needed for hand animations and grabbing)
+            // Step 2: KEEP interaction maps enabled
             EnableActionMap(_leftHandInteraction);
             EnableActionMap(_rightHandInteraction);
 
@@ -319,19 +319,23 @@ public class LocomotionController : MonoBehaviour
             EnableActionMap(_leftHandLocomotion);
             EnableActionMap(_rightHandLocomotion);
 
-            // Step 4: CRITICAL - Wait for binding resolution
-            Log($"Waiting {bindingResolutionFrames} frames for binding resolution...");
-            for (int i = 0; i < bindingResolutionFrames; i++)
+            // Step 4: CRITICAL FIX - Explicitly enable all actions in the maps
+            EnableAllActionsInMap(_leftHandLocomotion);
+            EnableAllActionsInMap(_rightHandLocomotion);
+
+            // Step 5: Wait longer for Input System to fully rebind
+            Log($"Waiting {bindingResolutionFrames + 2} frames for binding resolution...");
+            for (int i = 0; i < bindingResolutionFrames + 2; i++) // Changed: Wait 2 extra frames
             {
                 yield return null;
             }
 
-            // Step 5: Validate bindings are ready
-            if (ValidateActionMaps())
+            // Step 6: Validate bindings AND test if actions can be read
+            if (ValidateActionMaps() && ValidateActionsCanBeRead())
             {
                 Log("✓ Bindings validated successfully");
 
-                // Step 6: NOW SAFE to enable components
+                // Step 7: NOW SAFE to enable components
                 EnableAllComponents();
 
                 success = true;
@@ -398,6 +402,24 @@ public class LocomotionController : MonoBehaviour
 
     #region Helper Methods
 
+    /// <summary>
+    /// Explicitly enable all actions within an action map
+    /// </summary>
+    private void EnableAllActionsInMap(InputActionMap map)
+    {
+        if (map == null) return;
+
+        foreach (var action in map.actions)
+        {
+            if (!action.enabled)
+            {
+                action.Enable();
+            }
+        }
+
+        Log($"✓ Enabled all actions in map: {map.name}");
+    }
+
     private void EnableActionMap(InputActionMap map)
     {
         if (map == null) return;
@@ -427,6 +449,55 @@ public class LocomotionController : MonoBehaviour
             Log($"State changed: {_state} → {newState}");
             _state = newState;
             OnStateChanged?.Invoke(newState);
+        }
+    }
+
+    /// <summary>
+    /// Test if actions can actually be read without throwing exceptions
+    /// </summary>
+    private bool ValidateActionsCanBeRead()
+    {
+        try
+        {
+            // Test reading from move provider's actions
+            if (_moveProvider != null)
+            {
+                // Test left hand move action
+                if (_moveProvider.leftHandMoveAction != null && _moveProvider.leftHandMoveAction.action != null)
+                {
+                    var testValue = _moveProvider.leftHandMoveAction.action.ReadValue<Vector2>();
+                }
+
+                // Test right hand move action
+                if (_moveProvider.rightHandMoveAction != null && _moveProvider.rightHandMoveAction.action != null)
+                {
+                    var testValue = _moveProvider.rightHandMoveAction.action.ReadValue<Vector2>();
+                }
+            }
+
+            // Test reading from snap turn provider's actions
+            if (_snapTurnProvider != null)
+            {
+                // Test left hand snap turn action
+                if (_snapTurnProvider.leftHandSnapTurnAction != null && _snapTurnProvider.leftHandSnapTurnAction.action != null)
+                {
+                    var testValue = _snapTurnProvider.leftHandSnapTurnAction.action.ReadValue<Vector2>();
+                }
+
+                // Test right hand snap turn action
+                if (_snapTurnProvider.rightHandSnapTurnAction != null && _snapTurnProvider.rightHandSnapTurnAction.action != null)
+                {
+                    var testValue = _snapTurnProvider.rightHandSnapTurnAction.action.ReadValue<Vector2>();
+                }
+            }
+
+            Log("✓ Actions can be read successfully");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            LogWarning($"Action read test failed: {ex.Message}");
+            return false;
         }
     }
 
