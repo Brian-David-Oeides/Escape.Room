@@ -306,7 +306,6 @@ public class LocomotionController : MonoBehaviour
         while (attemptCount < maxRetryAttempts && !success)
         {
             attemptCount++;
-            Log($"Initialization attempt {attemptCount}/{maxRetryAttempts}");
 
             // Step 1: Ensure components are disabled
             ForceDisableAllComponents();
@@ -324,7 +323,6 @@ public class LocomotionController : MonoBehaviour
             EnableAllActionsInMap(_rightHandLocomotion);
 
             // Step 5: Wait longer for Input System to fully rebind
-            Log($"Waiting {bindingResolutionFrames + 2} frames for binding resolution...");
             for (int i = 0; i < bindingResolutionFrames + 2; i++) // Changed: Wait 2 extra frames
             {
                 yield return null;
@@ -347,11 +345,8 @@ public class LocomotionController : MonoBehaviour
             }
             else
             {
-                LogWarning($"Validation failed on attempt {attemptCount}");
-
                 if (attemptCount < maxRetryAttempts)
                 {
-                    Log($"Retrying in {retryDelaySeconds} seconds...");
                     yield return new WaitForSeconds(retryDelaySeconds);
                 }
             }

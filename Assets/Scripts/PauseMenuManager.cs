@@ -193,6 +193,8 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
+    #region Menu Navigation
+
     private void ShowPauseMenu()
     {
         if (pauseMenuCanvas != null)
@@ -233,6 +235,10 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Pause/Resume
+
     private void PauseGameTimer()
     {
         if (GameTimer.Instance != null)
@@ -249,13 +255,13 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region Button Click Handlers
 
     // Public methods for button clicks
     public void OnResumeButtonClicked()
     {
-        Debug.Log("Resume button clicked");
-
         // Hide any open confirmation dialog
         HideExitConfirmation();
 
@@ -284,24 +290,8 @@ public class PauseMenuManager : MonoBehaviour
             GameManager.Instance.TogglePause();
         }
 
-        // Wait another frame to ensure state change is processed
-        // yield return null;
-
-        // Force re-enable movement as a safety check
-        /* if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
-        {
-            var continuousMove = PlayerController.Instance.XROrigin.GetComponent<ActionBasedContinuousMoveProvider>();
-            if (continuousMove != null)
-            {
-                // Disable then re-enable to force refresh
-                continuousMove.enabled = false;
-                yield return null;
-                continuousMove.enabled = true;
-                Debug.Log("Force re-enabled continuous move provider");
-            }
-        } */
-
         _resumeCoroutine = null;
+
     }
 
     // save Game Button
