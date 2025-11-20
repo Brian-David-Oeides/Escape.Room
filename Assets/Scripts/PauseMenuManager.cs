@@ -519,6 +519,17 @@ public class PauseMenuManager : MonoBehaviour
     {
         Debug.Log("Returning to Main Menu from pause menu");
 
+        // CRITICAL: Save to Continue Slot (Slot 0) before returning to menu
+        if (SaveManager.Instance != null)
+        {
+            bool saveSuccess = SaveManager.Instance.SaveGame(0);
+            Debug.Log($"[PauseMenu] Game saved to Continue Slot before returning to menu: {saveSuccess}");
+        }
+        else
+        {
+            Debug.LogError("[PauseMenu] SaveManager not found - cannot save before returning to menu!");
+        }
+
         if (GameManager.Instance != null)
         {
             // First unpause the game (to reset Time.timeScale if you're using it)

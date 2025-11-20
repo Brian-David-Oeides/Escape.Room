@@ -195,7 +195,7 @@ public class MainMenuHandler : MonoBehaviour
         }
     }
 
-    // Continue (Load Most Recent Save)
+    // Continue (Load from Continue Slot 0)
     public void OnContinueButtonClicked()
     {
         if (SaveManager.Instance == null)
@@ -204,16 +204,15 @@ public class MainMenuHandler : MonoBehaviour
             return;
         }
 
-        // Find most recent save slot
-        int mostRecentSlot = GetMostRecentSaveSlot();
-
-        if (mostRecentSlot == -1)
+        // CRITICAL: Continue always loads from Slot 0 (hidden continue slot)
+        if (!SaveManager.Instance.SaveSlotExists(0))
         {
-            Debug.LogWarning("No saves found to continue!");
+            Debug.LogWarning("No continue save found!");
             return;
         }
 
-        SaveManager.Instance.LoadGame(mostRecentSlot);
+        Debug.Log("[MainMenu] Loading from Continue Slot (Slot 0)");
+        SaveManager.Instance.LoadGame(0);
     }
 
     // Load Game (Show Load Panel)
@@ -332,44 +331,17 @@ public class MainMenuHandler : MonoBehaviour
         if (continueButton == null || SaveManager.Instance == null)
             return;
 
-        // Check if any save slots have data
-        bool hasSaveData = SaveManager.Instance.SaveSlotExists(1) ||
-                          SaveManager.Instance.SaveSlotExists(2) ||
-                          SaveManager.Instance.SaveSlotExists(3);
+        // CRITICAL: Continue button only checks Slot 0 (continue slot)
+        bool hasContinueData = SaveManager.Instance.SaveSlotExists(0);
 
         // Enable/disable continue button
         var button = continueButton.GetComponent<UnityEngine.UI.Button>();
         if (button != null)
         {
-            button.interactable = hasSaveData;
+            button.interactable = hasContinueData;
         }
 
-        Debug.Log($"Continue button {(hasSaveData ? "enabled" : "disabled")} - Save data exists: {hasSaveData}");
-    }
-
-    // Find Most Recent Save Slot
-    private int GetMostRecentSaveSlot()
-    {
-        if (SaveManager.Instance == null)
-        {
-            return -1;
-        }
-
-        SaveSlotInfo[] allSlots = SaveManager.Instance.GetAllSaveSlots();
-
-        int mostRecentSlot = -1;
-        System.DateTime mostRecentTime = System.DateTime.MinValue;
-
-        foreach (SaveSlotInfo slot in allSlots)
-        {
-            if (slot.hasData && slot.saveTimestamp >= mostRecentTime)
-            {
-                mostRecentTime = slot.saveTimestamp;
-                mostRecentSlot = slot.slotNumber;
-            }
-        }
-
-        return mostRecentSlot;
+        Debug.Log($"Continue button {(hasContinueData ? "enabled" : "disabled")} - Continue Slot exists: {hasContinueData}");
     }
 
     private void RotateOriginToFace(Vector3 targetPosition)

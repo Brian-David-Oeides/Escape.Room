@@ -438,10 +438,17 @@ public class GameManager : MonoSingleton<GameManager>
             Debug.Log("[GameManager] Timer reset");
         }
 
-        // Clear save data (so consumed candy respawns, puzzles reset, etc.)
+        // CRITICAL: Clear save data AND delete Continue Slot (Slot 0)
         if (SaveManager.Instance != null)
         {
             SaveManager.Instance.ClearCurrentSaveData();
+
+            // Delete old Continue Slot for fresh start
+            if (SaveManager.Instance.SaveSlotExists(0))
+            {
+                SaveManager.Instance.DeleteSave(0);
+                Debug.Log("[GameManager] Deleted old Continue Slot for new game");
+            }
         }
 
         // TODO: Add other system resets when implemented

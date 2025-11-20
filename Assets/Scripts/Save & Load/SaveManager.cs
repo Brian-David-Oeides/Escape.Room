@@ -64,12 +64,9 @@ public class SaveManager : MonoSingleton<SaveManager>
             {
                 autoSaveTimer = 0f;
 
-                // Auto-save to current slot (if one is loaded)
-                if (currentSaveSlot != -1)
-                {
-                    DebugLog("Auto-save triggered");
-                    SaveGame(currentSaveSlot, isAutoSave: true);
-                }
+                // CRITICAL: Auto-save always goes to Continue Slot (Slot 0)
+                DebugLog("Auto-save triggered");
+                SaveGame(0, isAutoSave: true);
             }
         }
     }
@@ -81,9 +78,11 @@ public class SaveManager : MonoSingleton<SaveManager>
     /// </summary>
     public bool SaveGame(int slotNumber, bool isAutoSave = false)
     {
-        if (slotNumber < 1 || slotNumber > 3)
+        // Slot 0 = Continue slot (hidden from user)
+        // Slots 1-3 = Manual save slots
+        if (slotNumber < 0 || slotNumber > 3)
         {
-            Debug.LogError($"Invalid save slot number: {slotNumber}. Must be 1-3.");
+            Debug.LogError($"Invalid save slot number: {slotNumber}. Must be 0-3.");
             return false;
         }
 
@@ -119,7 +118,8 @@ public class SaveManager : MonoSingleton<SaveManager>
             currentSaveSlot = slotNumber;
 
             string saveType = isAutoSave ? "Auto-saved" : "Saved";
-            DebugLog($"{saveType} game to slot {slotNumber}");
+            string slotName = slotNumber == 0 ? "Continue Slot" : $"Slot {slotNumber}";
+            DebugLog($"{saveType} game to {slotName}");
 
             // Notify listeners
             OnGameSaved?.Invoke(slotNumber);
@@ -169,12 +169,16 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         // Save timer state (when TimerManager exists)
         // TODO: Uncomment when TimerManager is implemented
-        // if (TimerManager.Instance != null)
-        // {
-        //     data.timeRemaining = TimerManager.Instance.TimeRemaining;
-        //     data.timerEnabled = TimerManager.Instance.IsTimerEnabled;
-        //     data.timerDuration = TimerManager.Instance.TimerDuration;
-        // }
+        // Save timer state
+        if (GameTimer.Instance != null)
+        {
+            data.timeRemaining = GameTimer.Instance.RemainingTime;
+            data.timerEnabled = GameTimer.Instance.IsRunning;
+            data.timerDuration = GameTimer.Instance.Mode == GameTimer.TimerMode.CountDown ?
+                                 GameTimer.Instance.RemainingTime + GameTimer.Instance.ElapsedTime : 0f;
+
+            DebugLog($"Timer state saved - Remaining: {data.timeRemaining}s, Running: {data.timerEnabled}");
+        }
 
         // Save statistics
         if (GameManager.Instance != null)
@@ -206,9 +210,9 @@ public class SaveManager : MonoSingleton<SaveManager>
     /// </summary>
     public bool LoadGame(int slotNumber)
     {
-        if (slotNumber < 1 || slotNumber > 3)
+        if (slotNumber < 0 || slotNumber > 3)
         {
-            Debug.LogError($"Invalid save slot number: {slotNumber}. Must be 1-3.");
+            Debug.LogError($"Invalid save slot number: {slotNumber}. Must be 0-3.");
             return false;
         }
 
@@ -216,7 +220,8 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         if (!File.Exists(filePath))
         {
-            Debug.LogWarning($"No save file found in slot {slotNumber}");
+            string slotName = slotNumber == 0 ? "Continue Slot" : $"Slot {slotNumber}";
+            Debug.LogWarning($"No save file found in {slotName}");
             return false;
         }
 
@@ -238,7 +243,8 @@ public class SaveManager : MonoSingleton<SaveManager>
             currentSaveSlot = slotNumber;
             currentSaveData.timesLoaded++;
 
-            DebugLog($"Loaded save from slot {slotNumber}");
+            string slotName = slotNumber == 0 ? "Continue Slot" : $"Slot {slotNumber}";
+            DebugLog($"Loaded save from {slotName}");
 
             // Let GameManager handle the scene loading properly
             if (GameManager.Instance != null)
@@ -272,7 +278,7 @@ public class SaveManager : MonoSingleton<SaveManager>
     /// </summary>
     public bool DeleteSave(int slotNumber)
     {
-        if (slotNumber < 1 || slotNumber > 3)
+        if (slotNumber < 0 || slotNumber > 3)
         {
             Debug.LogError($"Invalid save slot number: {slotNumber}");
             return false;
@@ -285,7 +291,8 @@ public class SaveManager : MonoSingleton<SaveManager>
             try
             {
                 File.Delete(filePath);
-                DebugLog($"Deleted save slot {slotNumber}");
+                string slotName = slotNumber == 0 ? "Continue Slot" : $"Slot {slotNumber}";
+                DebugLog($"Deleted {slotName}");
 
                 // Clear current save if it was this slot
                 if (currentSaveSlot == slotNumber)

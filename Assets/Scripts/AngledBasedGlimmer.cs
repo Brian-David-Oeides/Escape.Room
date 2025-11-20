@@ -57,7 +57,7 @@ public class AngledBasedGlimmer : MonoBehaviour
             // Only trigger if current angle is above minimum threshold
             if (currentWatchAngle >= minTriggerAngle)
             {
-                Debug.Log($"Head rotation relative to watch: {currentWatchAngle:F1} degrees - Glimmer triggered!");
+                // Debug.Log($"Head rotation relative to watch: {currentWatchAngle:F1} degrees - Glimmer triggered!");
                 glimmerParticles.Emit(1);
                 lastGlimmerTime = Time.time;
             }
