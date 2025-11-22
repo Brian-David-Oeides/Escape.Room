@@ -162,6 +162,22 @@ public class GameTimer : MonoBehaviour
         InitializeTimer();
     }
 
+    /// <summary>
+    /// Restore timer state from save data
+    /// </summary>
+    public void RestoreTimerState(float remainingTime, float duration, bool wasRunning)
+    {
+        Debug.Log($"[GameTimer] RestoreTimerState called - Remaining: {remainingTime}s, Duration: {duration}s, Running: {wasRunning}");
+
+        _remainingTime = remainingTime;
+        _countdownDuration = duration > 0 ? duration : _countdownDuration; // Use saved duration if valid
+        _elapsedTime = 0f; // Reset elapsed time on load
+        _timerExpired = remainingTime <= 0;
+        _isRunning = wasRunning && !_timerExpired; // Don't resume if expired
+
+        Debug.Log($"[GameTimer] Timer state restored - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}");
+    }
+
     public void SetCountdownDuration(float durationInSeconds)
     {
         _countdownDuration = durationInSeconds;

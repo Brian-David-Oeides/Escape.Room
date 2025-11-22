@@ -519,6 +519,12 @@ public class PauseMenuManager : MonoBehaviour
     {
         Debug.Log("Returning to Main Menu from pause menu");
 
+        // DEBUG: Check timer state before saving
+        if (GameTimer.Instance != null)
+        {
+            Debug.Log($"[DEBUG] Timer before save - RemainingTime: {GameTimer.Instance.RemainingTime}, IsRunning: {GameTimer.Instance.IsRunning}, Mode: {GameTimer.Instance.Mode}");
+        }
+
         // CRITICAL: Save to Continue Slot (Slot 0) before returning to menu
         if (SaveManager.Instance != null)
         {

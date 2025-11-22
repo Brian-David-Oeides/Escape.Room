@@ -169,15 +169,14 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         // Save timer state (when TimerManager exists)
         // TODO: Uncomment when TimerManager is implemented
-        // Save timer state
-        if (GameTimer.Instance != null)
+        // Save timer state (save if any time remains, regardless of mode)
+        if (GameTimer.Instance != null && GameTimer.Instance.RemainingTime > 0)
         {
             data.timeRemaining = GameTimer.Instance.RemainingTime;
-            data.timerEnabled = GameTimer.Instance.IsRunning;
-            data.timerDuration = GameTimer.Instance.Mode == GameTimer.TimerMode.CountDown ?
-                                 GameTimer.Instance.RemainingTime + GameTimer.Instance.ElapsedTime : 0f;
+            data.timerEnabled = !GameTimer.Instance.TimerExpired;
+            data.timerDuration = GameTimer.Instance.RemainingTime + GameTimer.Instance.ElapsedTime;
 
-            DebugLog($"Timer state saved - Remaining: {data.timeRemaining}s, Running: {data.timerEnabled}");
+            DebugLog($"Timer state saved - Remaining: {data.timeRemaining}s, Enabled: {data.timerEnabled}, Expired: {GameTimer.Instance.TimerExpired}, Mode: {GameTimer.Instance.Mode}");
         }
 
         // Save statistics

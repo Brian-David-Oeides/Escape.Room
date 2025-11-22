@@ -278,32 +278,34 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void InitializeGameTimer()
     {
-        Debug.Log("[GameManager] InitializeGameTimer called");
+        Debug.Log($"[GameManager] InitializeGameTimer called - isLoadingFromSave: {isLoadingFromSave}");
 
         if (GameTimer.Instance != null)
         {
             Debug.Log("[GameManager] GameTimer.Instance found, subscribing to OnTimerExpired event");
 
             // Subscribe to timer expired event (only once)
-            GameTimer.Instance.OnTimerExpired -= HandleTimerExpired; // Remove first to prevent duplicates
+            GameTimer.Instance.OnTimerExpired -= HandleTimerExpired;
             GameTimer.Instance.OnTimerExpired += HandleTimerExpired;
 
             Debug.Log("[GameManager] Successfully subscribed to OnTimerExpired event");
 
-            // Apply current settings from SettingsManager
-            if (SettingsManager.Instance != null)
+            // CRITICAL: Only apply settings if NOT loading from save
+            if (!isLoadingFromSave && SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.ApplyTimerSettings();
                 Debug.Log("[GameManager] Timer settings applied on gameplay start");
+            }
+            else if (isLoadingFromSave)
+            {
+                Debug.Log("[GameManager] Skipping timer settings - loading from save (timer already restored)");
+                // CRITICAL: Clear the flag NOW (after we've used it)
+                isLoadingFromSave = false;
             }
 
             // Resume the timer
             GameTimer.Instance.ResumeTimer();
             Debug.Log("[GameManager] Timer resumed");
-        }
-        else
-        {
-            Debug.LogWarning("[GameManager] GameTimer.Instance is null - timer not initialized");
         }
     }
 
@@ -677,6 +679,13 @@ public class GameManager : MonoSingleton<GameManager>
             Debug.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
         }
 
+        // Restore timer state BEFORE ISaveable objects (in case puzzles depend on timer)
+        if (GameTimer.Instance != null && data.timeRemaining > 0)
+        {
+            GameTimer.Instance.RestoreTimerState(data.timeRemaining, data.timerDuration, true); // Always restore as running if time remains
+            Debug.Log($"[GameManager] Timer state restored from save: {data.timeRemaining}s remaining");
+        }
+
         // Restore all ISaveable objects
         ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
         foreach (ISaveable saveable in saveableObjects)
@@ -684,14 +693,14 @@ public class GameManager : MonoSingleton<GameManager>
             saveable.LoadState(data);
         }
 
-        // Clear flags
-        isLoadingFromSave = false;
-        pendingSaveData = null;
-
         Debug.Log("[GameManager] Save data restoration complete");
 
         // NOW trigger Playing state (which initializes locomotion)
         SetGameState(GameState.Playing);
+
+        // DON'T clear flags here - InitializeGameTimer will clear them after checking
+        // isLoadingFromSave = false;  // REMOVED
+        pendingSaveData = null; // Clear this one since it's safe
     }
 
     // Utility methods
