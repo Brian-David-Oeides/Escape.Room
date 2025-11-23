@@ -115,6 +115,7 @@ public class PauseMenuManager : MonoBehaviour
         {
             menuButtonAction.action.performed -= OnMenuButtonPressed;
             menuButtonAction.action.canceled -= OnMenuButtonReleased;
+            menuButtonAction.action.Disable();
         }
     }
 
@@ -155,8 +156,6 @@ public class PauseMenuManager : MonoBehaviour
 
     private void OnGameStateChanged(GameState newState)
     {
-        // Find and notify the validator
-        var validator = FindObjectOfType<XRLocomotionValidator>();
 
         switch (newState)
         {

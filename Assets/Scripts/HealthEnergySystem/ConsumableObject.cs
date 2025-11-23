@@ -110,6 +110,12 @@ public class ConsumableObject : MonoBehaviour, ISaveable
             grabInteractable.selectEntered.RemoveListener(OnGrabbed);
             grabInteractable.selectExited.RemoveListener(OnReleased);
         }
+
+        // Symmetric disable for consumeAction
+        if (allowButtonConsumption && consumeAction.action != null)
+        {
+            consumeAction.action.Disable();
+        }
     }
 
     private void Update()

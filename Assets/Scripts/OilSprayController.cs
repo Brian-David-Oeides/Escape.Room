@@ -35,48 +35,66 @@ public class OilSprayController : MonoBehaviour
 
     void OnEnable()
     {
-        // Enable input actions
+        // Only subscribe to events when component is enabled
         if (leftTriggerAction != null)
         {
             leftTriggerAction.action.performed += OnTriggerPressed;
             leftTriggerAction.action.canceled += OnTriggerReleased;
-            leftTriggerAction.action.Enable();
         }
 
         if (rightTriggerAction != null)
         {
             rightTriggerAction.action.performed += OnTriggerPressed;
             rightTriggerAction.action.canceled += OnTriggerReleased;
-            rightTriggerAction.action.Enable();
         }
     }
 
     void OnDisable()
     {
-        // Disable input actions
+        // Only unsubscribe when component is disabled
         if (leftTriggerAction != null)
         {
             leftTriggerAction.action.performed -= OnTriggerPressed;
             leftTriggerAction.action.canceled -= OnTriggerReleased;
-            leftTriggerAction.action.Disable();
         }
 
         if (rightTriggerAction != null)
         {
             rightTriggerAction.action.performed -= OnTriggerPressed;
             rightTriggerAction.action.canceled -= OnTriggerReleased;
-            rightTriggerAction.action.Disable();
         }
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
     {
         isGrabbed = true;
+
+        // Enable actions ONLY when grabbed
+        if (leftTriggerAction != null)
+        {
+            leftTriggerAction.action.Enable();
+        }
+
+        if (rightTriggerAction != null)
+        {
+            rightTriggerAction.action.Enable();
+        }
     }
 
     private void OnReleased(SelectExitEventArgs args)
     {
         isGrabbed = false;
+
+        // Disable actions when released
+        if (leftTriggerAction != null)
+        {
+            leftTriggerAction.action.Disable();
+        }
+
+        if (rightTriggerAction != null)
+        {
+            rightTriggerAction.action.Disable();
+        }
 
         // Stop particle system when object is released
         if (oilParticleSystem != null && oilParticleSystem.isPlaying)
