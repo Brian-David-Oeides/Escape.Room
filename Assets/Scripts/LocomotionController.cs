@@ -191,6 +191,13 @@ public class LocomotionController : MonoBehaviour
     /// </summary>
     private void EnableAllComponents()
     {
+        // ONLY enable if we're actually in Ready state
+        if (_state != LocomotionState.Ready)
+        {
+            LogWarning("Attempted to enable components but state is not Ready - aborting");
+            return;
+        }
+
         if (_moveProvider != null)
         {
             _moveProvider.enabled = true;
@@ -334,10 +341,12 @@ public class LocomotionController : MonoBehaviour
                 Log("✓ Bindings validated successfully");
 
                 // Step 7: NOW SAFE to enable components
-                EnableAllComponents();
-
                 success = true;
                 ChangeState(LocomotionState.Ready);
+
+                // Step 8: NOW SAFE to enable components (state is Ready)
+                EnableAllComponents();
+
                 Log("=== Gameplay Locomotion Initialization SUCCESSFUL ===");
 
                 OnLocomotionReady?.Invoke();
@@ -385,11 +394,20 @@ public class LocomotionController : MonoBehaviour
             if (action.controls.Count == 0)
             {
                 LogWarning($"Action '{action.name}' has no bound controls!");
+
+                // User-facing message
+                if (action.name.Contains("Teleport") || action.name.Contains("Move") || action.name.Contains("Turn"))
+                {
+                    Debug.LogError($"[LocomotionController] Cannot initialize: '{action.name}' action not bound. " +
+                                  "This usually means a VR controller is not detected. " +
+                                  "Check controller power/connection.");
+                }
+
                 return false;
             }
         }
 
-        Log("✓ Action maps validated successfully");
+        Log(" Action maps validated successfully");
         return true;
     }
 
