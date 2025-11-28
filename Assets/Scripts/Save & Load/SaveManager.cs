@@ -30,6 +30,11 @@ public class SaveManager : MonoSingleton<SaveManager>
     private int currentSaveSlot = -1; // -1 means no slot loaded
     private float autoSaveTimer = 0f;
 
+    // ARCHITECTURAL FIX: Persistent tracking for accumulated data (survives scene reloads)
+    // These HashSets maintain state across multiple save/load cycles
+    private HashSet<string> persistentConsumedIDs = new HashSet<string>();
+    private HashSet<string> persistentCompletedPuzzleIDs = new HashSet<string>();
+
     // Save file paths
     private string SaveFolderPath => Path.Combine(Application.persistentDataPath, "Saves");
 
@@ -135,6 +140,7 @@ public class SaveManager : MonoSingleton<SaveManager>
 
     /// <summary>
     /// Gather all data from game systems to save
+    /// ARCHITECTURAL FIX: Accumulates consumed/completed IDs instead of replacing them
     /// </summary>
     private void GatherGameData(SaveData data)
     {
@@ -185,19 +191,53 @@ public class SaveManager : MonoSingleton<SaveManager>
             data.totalPlaytime = GameManager.Instance.GetGameTime();
         }
 
-        // Clear lists before gathering (prevent duplicates)
+        // ARCHITECTURAL FIX: Clear lists before gathering CURRENT SCENE STATE ONLY
         data.completedPuzzleIDs.Clear();
         data.consumedObjectIDs.Clear();
         data.moveableObjects.Clear();
 
-        // Gather data from all ISaveable objects in the scene
+        // Gather data from all ISaveable objects in CURRENT SCENE
         ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
         foreach (ISaveable saveable in saveableObjects)
         {
             saveable.SaveState(data);
         }
 
-        DebugLog($"Gathered data: {data.completedPuzzleIDs.Count} puzzles, {data.consumedObjectIDs.Count} consumables, {data.moveableObjects.Count} moveable objects");
+        DebugLog($"Current scene data: {data.completedPuzzleIDs.Count} puzzles, {data.consumedObjectIDs.Count} consumables, {data.moveableObjects.Count} moveable objects");
+
+        // ARCHITECTURAL FIX: Merge current scene data with persistent accumulated data
+        // This ensures consumed/completed items from previous sessions are preserved
+        MergeWithPersistentData(data);
+
+        DebugLog($"After merge: {data.completedPuzzleIDs.Count} puzzles, {data.consumedObjectIDs.Count} consumables total");
+    }
+
+    /// <summary>
+    /// ARCHITECTURAL FIX: Merge current scene state with accumulated persistent data
+    /// This prevents loss of consumed/completed items from previous sessions
+    /// </summary>
+    private void MergeWithPersistentData(SaveData data)
+    {
+        // Add current scene's consumed/completed items to persistent sets
+        foreach (string id in data.consumedObjectIDs)
+        {
+            persistentConsumedIDs.Add(id);
+        }
+
+        foreach (string id in data.completedPuzzleIDs)
+        {
+            persistentCompletedPuzzleIDs.Add(id);
+        }
+
+        // Write accumulated data back to SaveData
+        data.consumedObjectIDs.Clear();
+        data.consumedObjectIDs.AddRange(persistentConsumedIDs);
+
+        data.completedPuzzleIDs.Clear();
+        data.completedPuzzleIDs.AddRange(persistentCompletedPuzzleIDs);
+
+        DebugLog($"Merged persistent data: Consumed IDs = [{string.Join(", ", persistentConsumedIDs)}]");
+        DebugLog($"Merged persistent data: Completed Puzzles = [{string.Join(", ", persistentCompletedPuzzleIDs)}]");
     }
 
     #endregion
@@ -242,6 +282,10 @@ public class SaveManager : MonoSingleton<SaveManager>
             currentSaveSlot = slotNumber;
             currentSaveData.timesLoaded++;
 
+            // ARCHITECTURAL FIX: Populate persistent HashSets from loaded save data
+            // This ensures accumulated data persists across save/load cycles
+            PopulatePersistentData(loadedData);
+
             string slotName = slotNumber == 0 ? "Continue Slot" : $"Slot {slotNumber}";
             DebugLog($"Loaded save from {slotName}");
 
@@ -266,6 +310,31 @@ public class SaveManager : MonoSingleton<SaveManager>
             Debug.LogError($"Failed to load game from slot {slotNumber}: {e.Message}");
             return false;
         }
+    }
+
+    /// <summary>
+    /// ARCHITECTURAL FIX: Populate persistent HashSets from loaded save data
+    /// Ensures accumulated consumed/completed items are tracked across sessions
+    /// </summary>
+    private void PopulatePersistentData(SaveData loadedData)
+    {
+        // Clear existing persistent data
+        persistentConsumedIDs.Clear();
+        persistentCompletedPuzzleIDs.Clear();
+
+        // Populate from loaded save data
+        foreach (string id in loadedData.consumedObjectIDs)
+        {
+            persistentConsumedIDs.Add(id);
+        }
+
+        foreach (string id in loadedData.completedPuzzleIDs)
+        {
+            persistentCompletedPuzzleIDs.Add(id);
+        }
+
+        DebugLog($"Populated persistent data: {persistentConsumedIDs.Count} consumed, {persistentCompletedPuzzleIDs.Count} puzzles");
+        DebugLog($"Consumed IDs loaded: [{string.Join(", ", persistentConsumedIDs)}]");
     }
 
     #endregion
@@ -298,6 +367,14 @@ public class SaveManager : MonoSingleton<SaveManager>
                 {
                     currentSaveData = null;
                     currentSaveSlot = -1;
+
+                    // ARCHITECTURAL FIX: Clear persistent data when deleting Continue slot
+                    if (slotNumber == 0)
+                    {
+                        persistentConsumedIDs.Clear();
+                        persistentCompletedPuzzleIDs.Clear();
+                        DebugLog("Cleared persistent accumulated data (Continue slot deleted)");
+                    }
                 }
 
                 OnSaveDeleted?.Invoke(slotNumber);
@@ -385,12 +462,18 @@ public class SaveManager : MonoSingleton<SaveManager>
 
     /// <summary>
     /// Clear current save data (for starting new game)
+    /// ARCHITECTURAL FIX: Also clears persistent accumulated data
     /// </summary>
     public void ClearCurrentSaveData()
     {
         currentSaveData = null;
         currentSaveSlot = -1;
-        DebugLog("Cleared current save data for new game");
+
+        // Clear persistent accumulated data for new game
+        persistentConsumedIDs.Clear();
+        persistentCompletedPuzzleIDs.Clear();
+
+        DebugLog("Cleared current save data and persistent data for new game");
     }
 
     /// <summary>
