@@ -253,6 +253,55 @@ public class LocomotionController : MonoBehaviour
     }
 
     /// <summary>
+    /// Switch to gameplay mode (resume from pause - no validation needed)
+    /// Includes fallback to full initialization if quick resume fails
+    /// </summary>
+    public void SwitchToGameplayMode(Action onSuccess = null, Action onFailure = null)
+    {
+        // Safety Check #2: Verify we're not in a Failed state
+        if (_state == LocomotionState.Failed)
+        {
+            LogError("Cannot quick-resume - locomotion was in Failed state. Falling back to full initialization.");
+            InitializeForGameplay(onSuccess, onFailure);
+            return;
+        }
+
+        Log("Switching to GAMEPLAY MODE (resume from pause)");
+
+        try
+        {
+            // Enable locomotion action maps
+            EnableActionMap(_leftHandLocomotion);
+            EnableActionMap(_rightHandLocomotion);
+
+            // Keep interaction maps enabled (for grabbables, UI, etc.)
+            EnableActionMap(_leftHandInteraction);
+            EnableActionMap(_rightHandInteraction);
+
+            // Explicitly enable all actions in locomotion maps
+            EnableAllActionsInMap(_leftHandLocomotion);
+            EnableAllActionsInMap(_rightHandLocomotion);
+
+            // Change state to Ready FIRST (required by EnableAllComponents)
+            ChangeState(LocomotionState.Ready);
+
+            // NOW safe to enable locomotion components
+            EnableAllComponents();
+
+            Log("✓ Gameplay mode enabled (resume complete)");
+
+            // Call success callback
+            onSuccess?.Invoke();
+        }
+        catch (Exception ex)
+        {
+            // Safety Check #3: Fallback to full initialization if quick resume fails
+            LogError($"Quick resume failed: {ex.Message}. Falling back to full initialization.");
+            InitializeForGameplay(onSuccess, onFailure);
+        }
+    }
+
+    /// <summary>
     /// Emergency shutdown - disable everything immediately
     /// </summary>
     public void EmergencyShutdown()

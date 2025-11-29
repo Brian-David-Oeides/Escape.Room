@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
     [Header("Game State")]
     public GameState currentState = GameState.MainMenu;
+    private GameState _previousState = GameState.MainMenu;
 
     [Header("Scene References")]
     public string mainMenuSceneName = "MainMenuScene";
@@ -37,6 +39,56 @@ public class GameManager : MonoSingleton<GameManager>
     private bool isLoading = false;
     private bool isLoadingFromSave = false;
     private SaveData pendingSaveData = null;
+
+    /// <summary>
+    /// Defines valid state transitions for debugging and safety
+    /// </summary>
+    private static readonly Dictionary<GameState, HashSet<GameState>> ValidTransitions = new Dictionary<GameState, HashSet<GameState>>
+{
+    {
+        GameState.MainMenu, new HashSet<GameState>
+        {
+            GameState.Loading  // Can only go to Loading from MainMenu
+        }
+    },
+    {
+        GameState.Loading, new HashSet<GameState>
+        {
+            GameState.MainMenu,   // Load failed or cancelled
+            GameState.Playing     // Load successful
+        }
+    },
+    {
+        GameState.Playing, new HashSet<GameState>
+        {
+            GameState.Paused,     // Player paused
+            GameState.GameOver,   // Timer expired or player died
+            GameState.Escaped,    // Player won
+            GameState.Loading     // Restarting or returning to menu
+        }
+    },
+    {
+        GameState.Paused, new HashSet<GameState>
+        {
+            GameState.Playing,    // Resumed
+            GameState.MainMenu,   // Quit to menu (via Loading)
+            GameState.Loading,    // Restarting
+            GameState.GameOver    // Timer can expire while paused
+        }
+    },
+    {
+        GameState.GameOver, new HashSet<GameState>
+        {
+            GameState.Loading     // Restart or return to menu
+        }
+    },
+    {
+        GameState.Escaped, new HashSet<GameState>
+        {
+            GameState.Loading     // Restart or return to menu
+        }
+    }
+};
 
     protected override void Awake()
     {
@@ -81,6 +133,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             TogglePause();
         }
+
     }
 
     public void SetGameState(GameState newState)
@@ -90,10 +143,18 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (currentState == newState) return;
 
-        GameState previousState = currentState;
+        // Validate state transition
+        if (!IsValidTransition(currentState, newState))
+        {
+            Debug.LogWarning($"[GameManager] ⚠️ UNUSUAL STATE TRANSITION: {currentState} → {newState}");
+            Debug.LogWarning($"[GameManager] This may indicate a bug. Call stack logged above.");
+            // Continue anyway - this is just a warning, not a blocker
+        }
+
+        _previousState = currentState; // Store as field, not local variable
         currentState = newState;
 
-        Debug.Log($"Game State changed from {previousState} to {newState}");
+        Debug.Log($"Game State changed from {_previousState} to {newState}");
 
         // Handle state-specific logic
         switch (newState)
@@ -120,6 +181,28 @@ public class GameManager : MonoSingleton<GameManager>
 
         // Notify listeners
         OnStateChanged?.Invoke(newState);
+    }
+
+    /// <summary>
+    /// Validates if a state transition is logical
+    /// </summary>
+    private bool IsValidTransition(GameState from, GameState to)
+    {
+        // Same state is always valid (though SetGameState should prevent this)
+        if (from == to)
+        {
+            return true;
+        }
+
+        // Check if transition is in the valid transitions map
+        if (ValidTransitions.ContainsKey(from))
+        {
+            return ValidTransitions[from].Contains(to);
+        }
+
+        // If we don't have rules defined, log warning but allow it
+        Debug.LogWarning($"[GameManager] No transition rules defined for {from}");
+        return true;
     }
 
     private IEnumerator DelayedInitialization()
@@ -237,28 +320,57 @@ public class GameManager : MonoSingleton<GameManager>
         // Delay gameplay music slightly to let loading music fade complete
         StartCoroutine(DelayedPlayGameplayMusic());
 
-        // Initialize Locomotion System with validation and retry logic
-        if (LocomotionController.Instance != null)
+        // Check if we're resuming from pause or starting fresh
+        if (_previousState == GameState.Paused)
         {
-            Debug.Log("[GameManager] Initializing Locomotion for gameplay...");
+            // RESUME FROM PAUSE - Just re-enable locomotion (with fallback)
+            if (LocomotionController.Instance != null)
+            {
+                Debug.Log("[GameManager] Resuming from pause - re-enabling locomotion");
 
-            LocomotionController.Instance.InitializeForGameplay(
-                onSuccess: () =>
-                {
-                    Debug.Log("[GameManager] ✓ Locomotion ready - Starting timer");
-                    InitializeGameTimer();
-                },
-                onFailure: () =>
-                {
-                    Debug.LogError("[GameManager] ✗ Locomotion initialization failed!");
-                    // Return to menu on failure
-                    ReturnToMainMenu();
-                }
-            );
+                LocomotionController.Instance.SwitchToGameplayMode(
+                    onSuccess: () =>
+                    {
+                        Debug.Log("[GameManager] ✓ Quick resume successful - Starting timer");
+                        InitializeGameTimer();
+                    },
+                    onFailure: () =>
+                    {
+                        Debug.LogError("[GameManager] ✗ Resume failed (even with fallback)!");
+                        ReturnToMainMenu();
+                    }
+                );
+            }
+            else
+            {
+                Debug.LogError("[GameManager] LocomotionController.Instance is null!");
+            }
         }
         else
         {
-            Debug.LogError("[GameManager] LocomotionController.Instance is null!");
+            // FRESH START - Full initialization with validation
+            if (LocomotionController.Instance != null)
+            {
+                Debug.Log("[GameManager] Starting fresh game - initializing locomotion");
+
+                LocomotionController.Instance.InitializeForGameplay(
+                    onSuccess: () =>
+                    {
+                        Debug.Log("[GameManager] ✓ Locomotion ready - Starting timer");
+                        InitializeGameTimer();
+                    },
+                    onFailure: () =>
+                    {
+                        Debug.LogError("[GameManager] ✗ Locomotion initialization failed!");
+                        // Return to menu on failure
+                        ReturnToMainMenu();
+                    }
+                );
+            }
+            else
+            {
+                Debug.LogError("[GameManager] LocomotionController.Instance is null!");
+            }
         }
     }
 
