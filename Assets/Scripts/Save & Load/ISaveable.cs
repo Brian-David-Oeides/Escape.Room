@@ -152,11 +152,12 @@ public class SaveableMoveable : MonoBehaviour, ISaveable
     public void SaveState(SaveData saveData)
     {
         // Save current position and rotation
-        ObjectStateData objectState = new ObjectStateData(
+        MoveableObjectData objectState = new MoveableObjectData(
             objectID,
             transform.position,
             transform.rotation,
-            gameObject.activeSelf
+            gameObject.activeSelf,
+            "" // customData (optional)
         );
 
         saveData.moveableObjects.Add(objectState);
@@ -165,7 +166,7 @@ public class SaveableMoveable : MonoBehaviour, ISaveable
     public void LoadState(SaveData saveData)
     {
         // Find this object's saved state
-        ObjectStateData savedState = saveData.moveableObjects.Find(obj => obj.objectID == objectID);
+        MoveableObjectData savedState = saveData.moveableObjects.Find(obj => obj.objectID == objectID);
 
         if (savedState != null)
         {

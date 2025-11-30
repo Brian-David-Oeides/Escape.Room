@@ -16,7 +16,6 @@ public class SaveData
 
     // Store timestamp as string for JSON serialization
     public string saveTimestampString;
-
     public DateTime saveTimestamp
     {
         get
@@ -54,8 +53,8 @@ public class SaveData
     // Consumable objects (which ones have been eaten)
     public List<string> consumedObjectIDs = new List<string>();
 
-    // Moveable objects (position/rotation tracking)
-    public List<ObjectStateData> moveableObjects = new List<ObjectStateData>();
+    // Moveable objects (position/rotation/state tracking)
+    public List<MoveableObjectData> moveableObjects = new List<MoveableObjectData>();
 
     // Statistics
     public float totalPlaytime; // Total seconds played
@@ -74,22 +73,34 @@ public class SaveData
 }
 
 /// <summary>
-/// Stores position and rotation data for moveable objects
+/// Stores position, rotation, and custom state data for moveable and toggle objects
+/// ARCHITECTURAL FIX: Unified class for both physical objects and puzzle states
 /// </summary>
 [System.Serializable]
-public class ObjectStateData
+public class MoveableObjectData
 {
     public string objectID; // Unique identifier for the object
     public Vector3 position;
     public Quaternion rotation;
     public bool isActive; // Whether object is active in scene
+    public string customData; // Custom state data (e.g., "ON", "OFF", angles, etc.)
 
-    public ObjectStateData(string id, Vector3 pos, Quaternion rot, bool active)
+    public MoveableObjectData()
+    {
+        objectID = "";
+        position = Vector3.zero;
+        rotation = Quaternion.identity;
+        isActive = true;
+        customData = "";
+    }
+
+    public MoveableObjectData(string id, Vector3 pos, Quaternion rot, bool active, string data = "")
     {
         objectID = id;
         position = pos;
         rotation = rot;
         isActive = active;
+        customData = data;
     }
 }
 
@@ -105,7 +116,6 @@ public class SaveSlotInfo
 
     // Store timestamp as string for JSON serialization
     public string saveTimestampString;
-
     public DateTime saveTimestamp
     {
         get

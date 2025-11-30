@@ -1361,6 +1361,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!114 &193489699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1380,6 +1381,7 @@ MonoBehaviour:
   m_RepeatRate: 0.1
   m_TrackedDeviceDragThresholdMultiplier: 1.4
   m_TrackedScrollDeltaMultiplier: 5
+  m_BypassUIToolkitEvents: 0
   m_ActiveInputMode: 0
   m_MaxTrackedDeviceRaycastDistance: 1000
   m_EnableXRInput: 1
@@ -12130,22 +12132,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30048d38b1acdf49ba8f6ff6b3ad9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lockCode: 010000000200000003000000
-  _onCheck:
+  puzzleID: framelock_library_001
+  isCompleted: 0
+  OnPuzzleCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5337178920131338077}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: SetTrigger
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: OpenDoor
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  OnLoadCompletedState:
+    m_PersistentCalls:
+      m_Calls: []
+  collidersToDisable: []
+  renderersToHide: []
+  showDebugLogs: 1
+  _lockCode: 010000000200000003000000
 --- !u!1 &992131921
 GameObject:
   m_ObjectHideFlags: 0
