@@ -17,6 +17,13 @@ public class SafeDoorController : MonoBehaviour
     [SerializeField] 
     private float _handleAnimDuration = 1.0f;
 
+    [Header("Puzzle Lock")]
+    [SerializeField]
+    [Tooltip("Should door handle be locked until safe is unlocked?")]
+    private bool requireSafeUnlock = true;
+
+    private bool _safeUnlocked = false;
+
     private bool _isOpen = false;
     private bool _isAnimating = false;
 
@@ -25,11 +32,39 @@ public class SafeDoorController : MonoBehaviour
         if (_grabInteractable != null)
         {
             _grabInteractable.selectEntered.AddListener(OnHandleGrabbed);
+
+            // Lock door handle if required
+            if (requireSafeUnlock)
+            {
+                _grabInteractable.enabled = false;
+                Debug.Log("[SafeDoorController] Door handle locked - safe must be unlocked first");
+            }
+        }
+        else
+        {
+            Debug.LogError("[SafeDoorController] Missing XRGrabInteractable reference!");
         }
 
         // states start in disabled state
-        _animator.SetBool(_turnHandleParam, false);
-        _animator.SetBool(_isOpenParam, false);
+        if (_animator != null)
+        {
+            _animator.SetBool(_turnHandleParam, false);
+            _animator.SetBool(_isOpenParam, false);
+        }
+    }
+
+    /// <summary>
+    /// Called via UnityEvent when safe dial is unlocked
+    /// Enables the door handle XRGrabInteractable
+    /// </summary>
+    public void EnableDoorHandle()
+    {
+        if (_grabInteractable != null)
+        {
+            _safeUnlocked = true;
+            _grabInteractable.enabled = true;
+            Debug.Log("[SafeDoorController] Door handle unlocked! Can now be grabbed.");
+        }
     }
 
     private void OnHandleGrabbed(SelectEnterEventArgs args)

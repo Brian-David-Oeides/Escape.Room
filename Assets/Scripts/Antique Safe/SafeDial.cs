@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.Events;
 
 public class SafeDial : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class SafeDial : MonoBehaviour
     public AudioClip dialTickSound;
     public AudioClip correctNumberSound;
     public AudioClip unlockSound;
+
+    [Header("Events")]
+    public UnityEvent OnSafeUnlocked;
 
     [Header("Audio Settings")]
     public float minTickVolume = 0.2f;
@@ -130,12 +134,13 @@ public class SafeDial : MonoBehaviour
         FindObjectOfType<SafeDialUI>()?.OnDialReleased();
     }
 
-   
-
     private void UnlockSafe()
     {
         _isUnlocked = true;
         PlaySound(unlockSound);
+
+        // Fire event for door controller
+        OnSafeUnlocked?.Invoke();
 
         if (doorAnimator != null)
         {
