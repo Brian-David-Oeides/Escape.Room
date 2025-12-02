@@ -67356,7 +67356,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
+      propertyPath: puzzleID
+      value: safedial_library_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
       propertyPath: OnSafeUnlocked.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
@@ -67371,12 +67386,52 @@ PrefabInstance:
       objectReference: {fileID: 837989139}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 837989139}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
       propertyPath: OnSafeUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
       propertyPath: OnSafeUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnableDoorHandle
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 837989139}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EnableDoorHandle
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: EnableDoorHandle
       objectReference: {fileID: 0}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
@@ -67386,7 +67441,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SafeDoorController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SafeDoorController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
       propertyPath: OnSafeUnlocked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnPuzzleCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: OnLoadCompletedState.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4118264281192652545, guid: e4fc7d72046fc164bb2c240ee8745b6e,

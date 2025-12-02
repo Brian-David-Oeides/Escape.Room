@@ -4,13 +4,20 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.Events;
 
-public class SafeDial : MonoBehaviour
+/// <summary>
+/// Safe dial combination lock puzzle with save system integration.
+/// Inherits from PuzzleBase for automatic ISaveable implementation.
+/// Requires correct 3-number sequence to unlock.
+/// </summary>
+/// 
+
+public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead of MonoBehaviour
 {
     #region Variables
 
     [Header("Combination Settings")]
     [Range(0, 99)] public int[] correctCombination = new int[3];
-    public float numberTolerance = 1f; // lowered slightly for better precision
+    public float numberTolerance = 1f;
 
     [Header("References")]
     public Animator doorAnimator;
@@ -21,8 +28,9 @@ public class SafeDial : MonoBehaviour
     public AudioClip correctNumberSound;
     public AudioClip unlockSound;
 
-    [Header("Events")]
-    public UnityEvent OnSafeUnlocked;
+    // CHANGE 2: Remove OnSafeUnlocked UnityEvent (use OnPuzzleCompleted from PuzzleBase)
+    // [Header("Events")]
+    // public UnityEvent OnSafeUnlocked;  ← REMOVED
 
     [Header("Audio Settings")]
     public float minTickVolume = 0.2f;
@@ -30,12 +38,12 @@ public class SafeDial : MonoBehaviour
     public float maxRotationSpeed = 720f;
 
     [HideInInspector]
-    public int currentDialNumber; // unified source for dial number
+    public int currentDialNumber;
 
     private float _previousAngle;
     private int _lastPassedNumber = -1;
     private int _currentCombinationIndex = 0;
-    private bool _isUnlocked = false;
+    private bool _isUnlocked = false;  // Keep for internal logic
 
     private float _correctNumberCooldown = 1.0f;
     private float _correctNumberTimer = 0f;
@@ -52,7 +60,7 @@ public class SafeDial : MonoBehaviour
 
     private void Awake()
     {
-        // fallback if forgot to manually assign XR GRabInteractable
+        // fallback if forgot to manually assign XR GrabInteractable
         if (grabInteractable == null)
         {
             grabInteractable = GetComponent<XRGrabInteractable>();
@@ -65,23 +73,36 @@ public class SafeDial : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"[SafeDial] Missing XRGrabInteractable on {gameObject.name}! Haptics and interaction will not work.");
+            Debug.LogError($"[SafeDial] Missing XRGrabInteractable on {gameObject.name}!");
+        }
+    }
+
+    protected override void Start()  // CHANGE 3: Add override and call base.Start()
+    {
+        base.Start(); // CRITICAL: Loads saved completion state!
+
+        // If already unlocked from save, disable dial interaction
+        if (isCompleted)
+        {
+            _isUnlocked = true;
+            DisableDialInteraction();
         }
     }
 
     private void Update()
     {
-        if (_isUnlocked) return;
+        // CHANGE 4: Use isCompleted from PuzzleBase instead of just _isUnlocked
+        if (isCompleted || _isUnlocked) return;
 
         float currentAngle = transform.localEulerAngles.z;
         float deltaAngle = Mathf.DeltaAngle(_previousAngle, currentAngle);
 
         float rotationSpeed = Mathf.Abs(deltaAngle) / Time.deltaTime;
 
-        // --- calculate the dial number once and store it ---
+        // calculate the dial number once and store it
         float dialValue = Mathf.Repeat(currentAngle, 360f);
         currentDialNumber = Mathf.RoundToInt(dialValue / 3.6f);
-        currentDialNumber = Mathf.Clamp(currentDialNumber, 0, 99); // safe clamp
+        currentDialNumber = Mathf.Clamp(currentDialNumber, 0, 99);
 
         // play tick sound and notify UI when passing a new number
         if (currentDialNumber != _lastPassedNumber)
@@ -118,6 +139,13 @@ public class SafeDial : MonoBehaviour
 
     private void OnGrab(SelectEnterEventArgs args)
     {
+        // CHANGE 5: Prevent grabbing if already completed
+        if (isCompleted)
+        {
+            DebugLog("Safe already unlocked - ignoring dial interaction");
+            return;
+        }
+
         grabInteractable.trackPosition = false;
         grabInteractable.trackRotation = true;
 
@@ -139,9 +167,54 @@ public class SafeDial : MonoBehaviour
         _isUnlocked = true;
         PlaySound(unlockSound);
 
-        // Fire event for door controller
-        OnSafeUnlocked?.Invoke();
+        // CHANGE 6: Call CompletePuzzle() instead of OnSafeUnlocked.Invoke()
+        CompletePuzzle();
 
+        if (doorAnimator != null)
+        {
+            doorAnimator.SetTrigger("OpenDoor");
+        }
+    }
+
+    /// <summary>
+    /// Override CompletePuzzle to disable dial interaction when solved
+    /// </summary>
+    public override void CompletePuzzle()
+    {
+        DebugLog($"Safe unlocked! Combination: [{string.Join(", ", correctCombination)}]");
+
+        // Call base to handle save system and fire OnPuzzleCompleted event
+        base.CompletePuzzle();
+
+        // Disable dial interaction
+        DisableDialInteraction();
+    }
+
+    /// <summary>
+    /// Disable the dial's XRGrabInteractable to prevent re-solving
+    /// </summary>
+    private void DisableDialInteraction()
+    {
+        if (grabInteractable != null)
+        {
+            grabInteractable.enabled = false;
+            DebugLog("Dial interaction disabled - safe is unlocked");
+        }
+    }
+
+    /// <summary>
+    /// Override ApplyCompletedStateVisuals to disable dial when loading completed state
+    /// </summary>
+    protected override void ApplyCompletedStateVisuals()
+    {
+        // Call base to handle colliders/renderers
+        base.ApplyCompletedStateVisuals();
+
+        // Disable dial interaction
+        _isUnlocked = true;
+        DisableDialInteraction();
+
+        // Ensure door animator is in unlocked state
         if (doorAnimator != null)
         {
             doorAnimator.SetTrigger("OpenDoor");
@@ -169,12 +242,11 @@ public class SafeDial : MonoBehaviour
 
     #region Public Getters
 
-    // --- PUBLIC GETTERS for SafeDialUI ---
-    public bool IsUnlocked => _isUnlocked;
+    // PUBLIC GETTERS for SafeDialUI
+    public bool IsUnlocked => _isUnlocked || isCompleted;  // CHANGE 7: Include isCompleted check
     public int CurrentCombinationIndex => _currentCombinationIndex;
     public int[] CorrectCombination => correctCombination;
     public float NumberTolerance => numberTolerance;
 
     #endregion
-
 }
