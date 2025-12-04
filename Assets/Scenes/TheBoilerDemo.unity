@@ -24551,6 +24551,7 @@ GameObject:
   - component: {fileID: 2107088018}
   - component: {fileID: 2107088020}
   - component: {fileID: 2107088019}
+  - component: {fileID: 2107088021}
   m_Layer: 0
   m_Name: Exit Door Handle Collider
   m_TagString: Untagged
@@ -24601,7 +24602,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107088016}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
   m_Name: 
@@ -24797,6 +24798,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2107088021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107088016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5084568eb73868b419440df6d6616294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2109500928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57996,7 +58009,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -58296,6 +58309,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8120ff5cd9bacb47b1ac47746ec89c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  puzzleID: chain_exit_door_001
+  isCompleted: 0
+  OnPuzzleCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2107088021}
+        m_TargetAssemblyTypeName: GrabInteractableEnabler, Assembly-CSharp
+        m_MethodName: EnableGrabbing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnLoadCompletedState:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2107088021}
+        m_TargetAssemblyTypeName: GrabInteractableEnabler, Assembly-CSharp
+        m_MethodName: EnableGrabbing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  collidersToDisable: []
+  renderersToHide: []
+  showDebugLogs: 1
   chainBody: {fileID: 5337178921093224658}
   audioSource: {fileID: 5337178921093224660}
   disableDelay: 2
