@@ -23,6 +23,9 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
     public Animator doorAnimator;
     public AudioSource audioSource;
 
+    [SerializeField] 
+    private MonoBehaviour hoverVisual;  // Reference to SafeDialHoverVisual
+
     [Header("Audio Clips")]
     public AudioClip dialTickSound;
     public AudioClip correctNumberSound;
@@ -36,6 +39,13 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
     public float minTickVolume = 0.2f;
     public float maxTickVolume = 1f;
     public float maxRotationSpeed = 720f;
+
+    [Header("Puzzle Lock")]
+    [SerializeField]
+    [Tooltip("Should dial be locked until both keys are inserted?")]
+    private bool requireKeysInserted = true;
+
+    private bool _keysInserted = false;
 
     [HideInInspector]
     public int currentDialNumber;
@@ -70,6 +80,17 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
         {
             grabInteractable.selectEntered.AddListener(OnGrab);
             grabInteractable.selectExited.AddListener(OnRelease);
+
+            // Lock dial if required
+            if (requireKeysInserted)
+            {
+                grabInteractable.enabled = false;
+                if (hoverVisual != null)
+                {
+                    hoverVisual.enabled = false;
+                }
+                Debug.Log("[SafeDial] Dial locked - keys must be inserted first");
+            }
         }
         else
         {
@@ -86,6 +107,40 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
         {
             _isUnlocked = true;
             DisableDialInteraction();
+        }
+    }
+
+    /// <summary>
+    /// Called via UnityEvent when both bronze keys are inserted
+    /// Enables the dial XRGrabInteractable
+    /// </summary>
+    public void EnableDialInteraction()
+    {
+        if (grabInteractable != null)
+        {
+            _keysInserted = true;
+            grabInteractable.enabled = true;
+
+            if (hoverVisual != null)
+            {
+                hoverVisual.enabled = true;
+            }
+
+            Debug.Log("[SafeDial] Dial unlocked! Keys inserted - can now rotate dial.");
+        }
+    }
+
+    /// <summary>
+    /// Called via UnityEvent when a key is removed (optional - for re-locking)
+    /// Disables the dial if user removes a key
+    /// </summary>
+    public void DisableDialInteraction()
+    {
+        if (requireKeysInserted && grabInteractable != null && !_isUnlocked)
+        {
+            _keysInserted = false;
+            grabInteractable.enabled = false;
+            Debug.Log("[SafeDial] Dial locked! Key removed.");
         }
     }
 
@@ -188,18 +243,6 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
 
         // Disable dial interaction
         DisableDialInteraction();
-    }
-
-    /// <summary>
-    /// Disable the dial's XRGrabInteractable to prevent re-solving
-    /// </summary>
-    private void DisableDialInteraction()
-    {
-        if (grabInteractable != null)
-        {
-            grabInteractable.enabled = false;
-            DebugLog("Dial interaction disabled - safe is unlocked");
-        }
     }
 
     /// <summary>
