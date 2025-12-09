@@ -73,50 +73,49 @@ public class ElectricTorchOnOff : MonoBehaviour
         _flashLightOn = false;
     }
 
-	void NoBatteryLight()
+    void NoBatteryLight()
     {
-		if (_flashLightOn)
-		{
-			GetComponent<Light>().intensity = intensityLight;
-			_emissionMaterialFade.OnEmission();
-		}
-		else
-		{
-			GetComponent<Light>().intensity = 0.0f;
-			_emissionMaterialFade.OffEmission();
-		}
-        
-	}
+        if (_flashLightOn)
+        {
+            GetComponent<Light>().enabled = true;  // Enable light component
+            GetComponent<Light>().intensity = intensityLight;
+            _emissionMaterialFade.OnEmission();
+        }
+        else
+        {
+            GetComponent<Light>().enabled = false;  // Disable light component
+            GetComponent<Light>().intensity = 0.0f;
+            _emissionMaterialFade.OffEmission();
+        }
+    }
 
-	void WithBatteryLight()
+    void WithBatteryLight()
     {
+        if (_flashLightOn)
+        {
+            GetComponent<Light>().enabled = true;  // FIX: Enable light component
+            GetComponent<Light>().intensity = intensityLight;
+            intensityLight -= Time.deltaTime * _lightTime;
+            _emissionMaterialFade.TimeEmission(_lightTime);
 
-		if (_flashLightOn)
-		{
-			GetComponent<Light>().intensity = intensityLight;
-			intensityLight -= Time.deltaTime * _lightTime;
-			_emissionMaterialFade.TimeEmission(_lightTime);
-            
-			if (intensityLight < 0)
+            if (intensityLight < 0)
             {
-				intensityLight = 0;
-			}
-			if (_PowerPickUp == true)
-			{
-				intensityLight = _batteryPower.PowerIntensityLight;
-			}
-		}
-		else
-		{
-			GetComponent<Light>().intensity = 0.0f;
-			_emissionMaterialFade.OffEmission();
-
-			if (_PowerPickUp == true)
-			{
-				intensityLight = _batteryPower.PowerIntensityLight;
-			}
-		}
-
-       
-	}
+                intensityLight = 0;
+            }
+            if (_PowerPickUp == true)
+            {
+                intensityLight = _batteryPower.PowerIntensityLight;
+            }
+        }
+        else
+        {
+            GetComponent<Light>().enabled = false;  // FIX: Disable light component
+            GetComponent<Light>().intensity = 0.0f;
+            _emissionMaterialFade.OffEmission();
+            if (_PowerPickUp == true)
+            {
+                intensityLight = _batteryPower.PowerIntensityLight;
+            }
+        }
+    }
 }

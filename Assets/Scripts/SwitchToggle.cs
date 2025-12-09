@@ -4,9 +4,15 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class SwitchToggle : MonoBehaviour
+public class SwitchToggle : MonoBehaviour, ISaveable
 {
     [SerializeField] private bool _isOn = false;
+
+    [Header("Puzzle Lock")]
+    [SerializeField] private bool startLocked = true;
+    [SerializeField] private string saveID = "switch_main";
+
+    private bool isUnlocked = false;
 
     [Header("Animation")]
     [SerializeField] private Animator _switchAnimator;
@@ -30,6 +36,17 @@ public class SwitchToggle : MonoBehaviour
         if (_interactable != null)
         {
             _interactable.selectEntered.AddListener(OnSelectEntered);
+
+            // NEW: Start locked if configured
+            if (startLocked)
+            {
+                _interactable.enabled = false;
+                Debug.Log("[SwitchToggle] Switch locked - waiting for flashlight beam");
+            }
+            else
+            {
+                isUnlocked = true;
+            }
         }
         else
         {
@@ -48,6 +65,21 @@ public class SwitchToggle : MonoBehaviour
 
         UpdateAnimationState();
     }
+
+    /// <summary>
+    /// Called by FlashLightSwitchActivator when beam hits switch
+    /// Permanently unlocks the switch
+    /// </summary>
+    public void UnlockSwitch()
+    {
+        if (!isUnlocked && _interactable != null)
+        {
+            _interactable.enabled = true;
+            isUnlocked = true;
+            Debug.Log($"[SwitchToggle] Switch {saveID} permanently unlocked!");
+        }
+    }
+
 
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
@@ -116,4 +148,45 @@ public class SwitchToggle : MonoBehaviour
             ToggleState();
         }
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => saveID;
+
+    public void SaveState(SaveData saveData)
+    {
+        // Save unlock state
+        if (isUnlocked && !saveData.completedPuzzleIDs.Contains(saveID))
+        {
+            saveData.completedPuzzleIDs.Add(saveID);
+            Debug.Log($"[SwitchToggle] Saved unlock state for {saveID}");
+        }
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        // Check if switch was unlocked
+        isUnlocked = saveData.completedPuzzleIDs.Contains(saveID);
+
+        if (isUnlocked)
+        {
+            // Restore unlocked state
+            if (_interactable != null)
+            {
+                _interactable.enabled = true;
+            }
+            Debug.Log($"[SwitchToggle] Loaded unlocked state for {saveID}");
+        }
+        else if (startLocked)
+        {
+            // Still locked
+            if (_interactable != null)
+            {
+                _interactable.enabled = false;
+            }
+            Debug.Log($"[SwitchToggle] {saveID} still locked");
+        }
+    }
+
+    #endregion
 }

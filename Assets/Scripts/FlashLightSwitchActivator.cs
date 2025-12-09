@@ -46,19 +46,24 @@ public class FlashLightSwitchActivator : MonoBehaviour
 
     private void EnableSwitchGameObject()
     {
-        if (targetSwitchObject != null && !targetSwitchObject.activeInHierarchy)
+        if (targetSwitchObject != null)
         {
-            targetSwitchObject.SetActive(true);
-            _switchAlreadyActivated = true;
-            Debug.Log("ToggleSwitchOnOff05 GameObject has been enabled!");
-        }
-        else if (targetSwitchObject == null)
-        {
-            Debug.Log("Target Switch GameObject reference is null!");
+            // NEW: Enable the XRSimpleInteractable component via SwitchToggle
+            var switchToggle = targetSwitchObject.GetComponent<SwitchToggle>();
+            if (switchToggle != null)
+            {
+                switchToggle.UnlockSwitch();
+                _switchAlreadyActivated = true;
+                Debug.Log("[FlashLightSwitchActivator] Switch permanently unlocked by flashlight beam!");
+            }
+            else
+            {
+                Debug.LogError("[FlashLightSwitchActivator] SwitchToggle component not found on targetSwitchObject!");
+            }
         }
         else
         {
-            Debug.Log("Target Switch GameObject is already active!");
+            Debug.LogError("[FlashLightSwitchActivator] Target Switch GameObject reference is null!");
         }
     }
 }
