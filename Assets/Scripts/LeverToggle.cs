@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class LeverToggle : MonoBehaviour
+public class LeverToggle : MonoBehaviour, ISaveable
 {
     #region Variables
 
     [SerializeField] private bool _isOn = false;
+
+    [Header("Save System")]
+    [SerializeField] private string leverID = "lever_main";
 
     [Header("Animation")]
     [SerializeField] private Animator _leverAnimator;
@@ -235,4 +238,74 @@ public class LeverToggle : MonoBehaviour
             ToggleState();
         }
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => leverID;
+
+    public void SaveState(SaveData saveData)
+    {
+        // Save the lever state using switchStates dictionary
+        // We'll use a simple approach: save to completedPuzzleIDs if ON
+        if (_isOn)
+        {
+            if (!saveData.completedPuzzleIDs.Contains(leverID))
+            {
+                saveData.completedPuzzleIDs.Add(leverID);
+            }
+        }
+        else
+        {
+            // Remove from list if OFF (allows toggling)
+            saveData.completedPuzzleIDs.Remove(leverID);
+        }
+
+        Debug.Log($"[LeverToggle] Saved state for {leverID}: {(_isOn ? "ON" : "OFF")}");
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        // Check if lever was ON when saved
+        bool wasOn = saveData.completedPuzzleIDs.Contains(leverID);
+
+        // If saved state differs from current, restore it
+        if (wasOn != _isOn)
+        {
+            _isOn = wasOn;
+            RestoreLeverState();
+        }
+
+        Debug.Log($"[LeverToggle] Loaded state for {leverID}: {(_isOn ? "ON" : "OFF")}");
+    }
+
+    /// <summary>
+    /// Restore lever visual/audio state without triggering events
+    /// Called when loading from save
+    /// </summary>
+    private void RestoreLeverState()
+    {
+        // Update animation
+        if (_leverAnimator != null)
+        {
+            if (!_leverAnimator.enabled)
+            {
+                _leverAnimator.enabled = true;
+            }
+            _leverAnimator.SetBool("LeverOn", _isOn);
+        }
+
+        // Restore audio state
+        if (_isOn)
+        {
+            PlayOnSounds();
+        }
+        else
+        {
+            StopAllAudio();
+        }
+
+        Debug.Log($"[LeverToggle] Restored lever state: {(_isOn ? "ON" : "OFF")}");
+    }
+
+    #endregion
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ValveOilDetection : MonoBehaviour
+public class ValveOilDetection : PuzzleBase
 {
     [Header("Socket Rotator Reference")]
     [SerializeField] private SocketRotator _socketRotator;
@@ -10,10 +10,22 @@ public class ValveOilDetection : MonoBehaviour
     [Header("Oil Detection")]
     [SerializeField] private bool _isOiled = false;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start(); // CRITICAL: Loads saved completion state!
+
+        // If already oiled from save, enable socket rotator
+        if (isCompleted)
+        {
+            _isOiled = true;
+            if (_socketRotator != null)
+            {
+                _socketRotator.enabled = true;
+            }
+            DebugLog("Valve already oiled from save - SocketRotator enabled");
+        }
         // Initially disable the socket rotator if not oiled
-        if (_socketRotator != null && !_isOiled)
+        else if (_socketRotator != null && !_isOiled)
         {
             _socketRotator.enabled = false;
         }
@@ -22,10 +34,16 @@ public class ValveOilDetection : MonoBehaviour
     // This method is called when particles collide with this object
     private void OnParticleCollision(GameObject other)
     {
-        // Check if the collision is from the oil spray particles
-        if (other.name == "Oil_Stream" && !_isOiled)
+        // Prevent re-triggering if already completed
+        if (isCompleted || _isOiled)
         {
-            Debug.Log("Valve has been oiled! Socket Rotator enabled.");
+            return;
+        }
+
+        // Check if the collision is from the oil spray particles
+        if (other.name == "Oil_Stream")
+        {
+            DebugLog("Valve has been oiled! Socket Rotator enabled.");
 
             // Mark as oiled (permanent)
             _isOiled = true;
@@ -35,7 +53,39 @@ public class ValveOilDetection : MonoBehaviour
             {
                 _socketRotator.enabled = true;
             }
+
+            // Complete the puzzle (saves state)
+            CompletePuzzle();
         }
+    }
+
+    /// <summary>
+    /// Override CompletePuzzle to log valve oiling completion
+    /// </summary>
+    public override void CompletePuzzle()
+    {
+        DebugLog("Valve oiling puzzle completed!");
+
+        // Call base to handle save system and fire OnPuzzleCompleted event
+        base.CompletePuzzle();
+    }
+
+    /// <summary>
+    /// Override ApplyCompletedStateVisuals to enable SocketRotator when loading
+    /// </summary>
+    protected override void ApplyCompletedStateVisuals()
+    {
+        // Call base to handle colliders/renderers
+        base.ApplyCompletedStateVisuals();
+
+        // Apply oiled state
+        _isOiled = true;
+        if (_socketRotator != null)
+        {
+            _socketRotator.enabled = true;
+        }
+
+        DebugLog("Valve oiled state restored from save");
     }
 
     // Public method to check if valve is oiled (optional for other scripts)

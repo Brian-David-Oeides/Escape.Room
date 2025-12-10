@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlashLightSwitchActivator : MonoBehaviour
+public class FlashLightSwitchActivator : PuzzleBase
 {
     [Header("Raycast Settings")]
     public float detectionRange = 10f;
@@ -16,6 +16,18 @@ public class FlashLightSwitchActivator : MonoBehaviour
     public GameObject targetSwitchObject; // Direct reference to the ToggleSwitchOnOff05 GameObject
 
     private bool _switchAlreadyActivated = false;
+
+    protected override void Start()
+    {
+        base.Start(); // CRITICAL: Loads saved completion state!
+
+        // If already activated from save, mark as complete
+        if (isCompleted)
+        {
+            _switchAlreadyActivated = true;
+            DebugLog("Switch already activated from save - detection disabled");
+        }
+    }
 
     private void Update()
     {
@@ -46,15 +58,25 @@ public class FlashLightSwitchActivator : MonoBehaviour
 
     private void EnableSwitchGameObject()
     {
+        // Prevent re-triggering if already completed
+        if (isCompleted || _switchAlreadyActivated)
+        {
+            return;
+        }
+
         if (targetSwitchObject != null)
         {
-            // NEW: Enable the XRSimpleInteractable component via SwitchToggle
+            // Enable the XRSimpleInteractable component via SwitchToggle
             var switchToggle = targetSwitchObject.GetComponent<SwitchToggle>();
             if (switchToggle != null)
             {
                 switchToggle.UnlockSwitch();
                 _switchAlreadyActivated = true;
-                Debug.Log("[FlashLightSwitchActivator] Switch permanently unlocked by flashlight beam!");
+
+                DebugLog("Switch permanently unlocked by flashlight beam!");
+
+                // Complete the puzzle (saves state)
+                CompletePuzzle();
             }
             else
             {
@@ -65,5 +87,30 @@ public class FlashLightSwitchActivator : MonoBehaviour
         {
             Debug.LogError("[FlashLightSwitchActivator] Target Switch GameObject reference is null!");
         }
+    }
+
+    /// <summary>
+    /// Override CompletePuzzle to log flashlight activation completion
+    /// </summary>
+    public override void CompletePuzzle()
+    {
+        DebugLog("Flashlight switch activation puzzle completed!");
+
+        // Call base to handle save system and fire OnPuzzleCompleted event
+        base.CompletePuzzle();
+    }
+
+    /// <summary>
+    /// Override ApplyCompletedStateVisuals to restore activated state when loading
+    /// </summary>
+    protected override void ApplyCompletedStateVisuals()
+    {
+        // Call base to handle colliders/renderers
+        base.ApplyCompletedStateVisuals();
+
+        // Mark as already activated
+        _switchAlreadyActivated = true;
+
+        DebugLog("Flashlight switch activation state restored from save");
     }
 }

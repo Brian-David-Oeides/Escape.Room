@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class HammerStrikeTrigger : MonoBehaviour
+public class HammerStrikeTrigger : PuzzleBase
 {
     [Tooltip("The Rigidbody (e.g., cabinet door) that should be un-kinematic on hammer impact.")]
     public Rigidbody targetRigidbody;
@@ -16,23 +16,84 @@ public class HammerStrikeTrigger : MonoBehaviour
 
     private bool _hasTriggered = false;
 
+    protected override void Start()
+    {
+        base.Start(); // CRITICAL: Loads saved completion state!
+
+        // If already triggered from save, apply unlocked state immediately
+        if (isCompleted)
+        {
+            _hasTriggered = true;
+            ApplyUnlockedState(skipAnimation: true);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (_hasTriggered) return;
+        // Prevent re-triggering if already completed
+        if (isCompleted || _hasTriggered)
+        {
+            return;
+        }
 
         if (other.CompareTag(hammerTag) && targetRigidbody != null)
         {
-            // step 1: unlock cabinet door
-            targetRigidbody.isKinematic = false;
-
-            // step 2: disable the XR Socket Interactor to release stake
-            if (stakeSocket != null)
-            {
-                stakeSocket.enabled = false;
-            }
+            DebugLog("Hammer struck! Unlocking cabinet door.");
 
             _hasTriggered = true;
+
+            // Apply the unlocked state
+            ApplyUnlockedState(skipAnimation: false);
+
+            // Complete the puzzle (saves state)
+            CompletePuzzle();
         }
+    }
+
+    /// <summary>
+    /// Apply the unlocked state to the cabinet door
+    /// </summary>
+    private void ApplyUnlockedState(bool skipAnimation)
+    {
+        // Step 1: Unlock cabinet door
+        if (targetRigidbody != null)
+        {
+            targetRigidbody.isKinematic = false;
+        }
+
+        // Step 2: Disable the XR Socket Interactor to release stake
+        if (stakeSocket != null)
+        {
+            stakeSocket.enabled = false;
+        }
+
+        DebugLog($"Cabinet door unlocked (skipAnimation: {skipAnimation})");
+    }
+
+    /// <summary>
+    /// Override CompletePuzzle to log hammer strike completion
+    /// </summary>
+    public override void CompletePuzzle()
+    {
+        DebugLog("Hammer strike puzzle completed!");
+
+        // Call base to handle save system and fire OnPuzzleCompleted event
+        base.CompletePuzzle();
+    }
+
+    /// <summary>
+    /// Override ApplyCompletedStateVisuals to apply unlocked state when loading
+    /// </summary>
+    protected override void ApplyCompletedStateVisuals()
+    {
+        // Call base to handle colliders/renderers
+        base.ApplyCompletedStateVisuals();
+
+        // Apply unlocked state
+        _hasTriggered = true;
+        ApplyUnlockedState(skipAnimation: true);
+
+        DebugLog("Cabinet door unlocked state restored from save");
     }
 }
 

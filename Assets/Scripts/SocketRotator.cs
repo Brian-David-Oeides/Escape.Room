@@ -16,7 +16,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class SocketRotator : MonoBehaviour
+public class SocketRotator : MonoBehaviour, ISaveable
 {
     #region Variables
 
@@ -24,6 +24,9 @@ public class SocketRotator : MonoBehaviour
     public XRGrabInteractable wrench;
     public Transform socketPivot;
     public Collider socketTrigger;
+
+    [Header("Save System")]
+    [SerializeField] private string socketID = "socket_valve";
 
     [Header("Rotation Settings")]
     public float maxRotationX = 90f;  
@@ -253,6 +256,110 @@ public class SocketRotator : MonoBehaviour
         float deltaAngle = Mathf.DeltaAngle(lastHandAngle, handAngle);
 
         return deltaAngle;
+    }
+
+    #endregion
+
+    #region ISaveable Implementation
+
+    public string SaveID => socketID;
+
+    public void SaveState(SaveData saveData)
+    {
+        // Save socket state using MoveableObjectData
+        // Format: currentXRotation|eventFired|isSocketed
+        string customData = $"{currentXRotation}|{eventFired}|{isSocketed}";
+
+        MoveableObjectData objectState = new MoveableObjectData(
+            socketID,
+            wrench.transform.position,
+            wrench.transform.rotation,
+            wrench.gameObject.activeSelf,
+            customData
+        );
+
+        saveData.moveableObjects.Add(objectState);
+
+        Debug.Log($"[SocketRotator] Saved state for {socketID}: rotation={currentXRotation:F2}, completed={eventFired}, socketed={isSocketed}");
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        // Find this socket's saved state
+        MoveableObjectData savedState = saveData.moveableObjects.Find(obj => obj.objectID == socketID);
+
+        if (savedState != null && !string.IsNullOrEmpty(savedState.customData))
+        {
+            // Parse the customData string
+            string[] parts = savedState.customData.Split('|');
+
+            if (parts.Length == 3)
+            {
+                float.TryParse(parts[0], out currentXRotation);
+                bool.TryParse(parts[1], out eventFired);
+                bool.TryParse(parts[2], out isSocketed);
+
+                Debug.Log($"[SocketRotator] Loaded state for {socketID}: rotation={currentXRotation:F2}, completed={eventFired}, socketed={isSocketed}");
+
+                // Restore the socket state
+                RestoreSocketState();
+            }
+        }
+        else
+        {
+            Debug.Log($"[SocketRotator] No saved state found for {socketID} - using defaults");
+        }
+    }
+
+    /// <summary>
+    /// Restore socket rotation state when loading from save
+    /// </summary>
+    private void RestoreSocketState()
+    {
+        if (wrench == null || socketPivot == null)
+        {
+            Debug.LogWarning("[SocketRotator] Missing wrench or socket pivot reference!");
+            return;
+        }
+
+        // If wrench was socketed when saved
+        if (isSocketed)
+        {
+            // Position wrench at socket pivot
+            wrench.transform.position = socketPivot.position;
+
+            // Apply the saved rotation
+            wrench.transform.rotation = Quaternion.Euler(
+                socketPivot.rotation.eulerAngles.x + currentXRotation,
+                socketPivot.rotation.eulerAngles.y,
+                socketPivot.rotation.eulerAngles.z);
+
+            // If puzzle was completed (fully turned)
+            if (eventFired)
+            {
+                // Lock wrench at max rotation
+                currentXRotation = maxRotationX;
+
+                wrench.transform.rotation = Quaternion.Euler(
+                    socketPivot.rotation.eulerAngles.x + maxRotationX,
+                    socketPivot.rotation.eulerAngles.y,
+                    socketPivot.rotation.eulerAngles.z);
+
+                // Make wrench kinematic to prevent physics
+                Rigidbody rb = wrench.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = true;
+                }
+
+                // Disable grab interactable so it can't be removed
+                wrench.enabled = false;
+
+                Debug.Log($"[SocketRotator] Wrench locked at max rotation from save");
+            }
+
+            Debug.Log($"[SocketRotator] Wrench restored to socket at {currentXRotation:F2}° rotation");
+        }
     }
 
     #endregion
