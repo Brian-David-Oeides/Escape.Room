@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class SafeDoorController : MonoBehaviour
+public class SafeDoorController : MonoBehaviour, ISaveable
 {
     [SerializeField] 
     private Animator _animator; 
@@ -21,6 +21,9 @@ public class SafeDoorController : MonoBehaviour
     [SerializeField]
     [Tooltip("Should door handle be locked until safe is unlocked?")]
     private bool requireSafeUnlock = true;
+
+    [Header("Save System")]
+    [SerializeField] private string doorID = "safe_door";
 
     private bool _safeUnlocked = false;
 
@@ -92,5 +95,79 @@ public class SafeDoorController : MonoBehaviour
 
         _isAnimating = false;
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => doorID;
+
+    public void SaveState(SaveData saveData)
+    {
+        // Save door state using MoveableObjectData
+        // Format: _safeUnlocked|_isOpen
+        string customData = $"{_safeUnlocked}|{_isOpen}";
+
+        MoveableObjectData objectState = new MoveableObjectData(
+            doorID,
+            transform.position,
+            transform.rotation,
+            gameObject.activeSelf,
+            customData
+        );
+
+        saveData.moveableObjects.Add(objectState);
+
+        Debug.Log($"[SafeDoorController] Saved state for {doorID}: unlocked={_safeUnlocked}, open={_isOpen}");
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        // Find this door's saved state
+        MoveableObjectData savedState = saveData.moveableObjects.Find(obj => obj.objectID == doorID);
+
+        if (savedState != null && !string.IsNullOrEmpty(savedState.customData))
+        {
+            // Parse the customData string
+            string[] parts = savedState.customData.Split('|');
+
+            if (parts.Length == 2)
+            {
+                bool.TryParse(parts[0], out _safeUnlocked);
+                bool.TryParse(parts[1], out _isOpen);
+
+                Debug.Log($"[SafeDoorController] Loaded state for {doorID}: unlocked={_safeUnlocked}, open={_isOpen}");
+
+                // Restore the door state
+                RestoreDoorState();
+            }
+        }
+        else
+        {
+            Debug.Log($"[SafeDoorController] No saved state found for {doorID} - using defaults");
+        }
+    }
+
+    /// <summary>
+    /// Restore door state when loading from save
+    /// </summary>
+    private void RestoreDoorState()
+    {
+        // Restore unlock state
+        if (_safeUnlocked && _grabInteractable != null)
+        {
+            _grabInteractable.enabled = true;
+            Debug.Log($"[SafeDoorController] Door handle restored to unlocked state");
+        }
+
+        // Restore door open/close state
+        if (_animator != null)
+        {
+            _animator.SetBool(_isOpenParam, _isOpen);
+            _animator.SetBool(_turnHandleParam, false);
+
+            Debug.Log($"[SafeDoorController] Door restored to {(_isOpen ? "OPEN" : "CLOSED")} state");
+        }
+    }
+
+    #endregion
 }
 
