@@ -23,7 +23,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
     private bool requireSafeUnlock = true;
 
     [Header("Save System")]
-    [SerializeField] private string doorID = "safe_door";
+    [SerializeField] private string doorID = "";
 
     private bool _safeUnlocked = false;
 
@@ -35,6 +35,13 @@ public class SafeDoorController : MonoBehaviour, ISaveable
         if (_grabInteractable != null)
         {
             _grabInteractable.selectEntered.AddListener(OnHandleGrabbed);
+
+            // Auto-generate unique ID if not set
+            if (string.IsNullOrEmpty(doorID))
+            {
+                doorID = GenerateUniqueID();
+                Debug.Log($"[SafeDoorController] Auto-generated ID: {doorID}");
+            }
 
             // Lock door handle if required
             if (requireSafeUnlock)
@@ -94,6 +101,29 @@ public class SafeDoorController : MonoBehaviour, ISaveable
         _animator.SetBool(_turnHandleParam, false);
 
         _isAnimating = false;
+    }
+
+    /// <summary>
+    /// Generate unique ID based on GameObject hierarchy path
+    /// </summary>
+    private string GenerateUniqueID()
+    {
+        string path = GetHierarchyPath(transform);
+        return $"safedoor_{path}".Replace("/", "_").Replace(" ", "_");
+    }
+
+    /// <summary>
+    /// Get the full hierarchy path of this GameObject
+    /// </summary>
+    private string GetHierarchyPath(Transform t)
+    {
+        string path = t.name;
+        while (t.parent != null)
+        {
+            t = t.parent;
+            path = t.name + "/" + path;
+        }
+        return path;
     }
 
     #region ISaveable Implementation

@@ -9,12 +9,19 @@ public class DoorToggle : MonoBehaviour, ISaveable
     [SerializeField] private string _boolParameterName = "IsOpen";
 
     [Header("Save System")]
-    [SerializeField] private string doorID = "door_main";
+    [SerializeField] private string doorID = "";
 
     private bool _isOpen = false;
 
     void Start()
     {
+        // Auto-generate unique ID if not set
+        if (string.IsNullOrEmpty(doorID))
+        {
+            doorID = GenerateUniqueID();
+            Debug.Log($"[DoorToggle] Auto-generated ID: {doorID}");
+        }
+
         // Get the Animator if not assigned
         if (_doorAnimator == null)
         {
@@ -76,6 +83,29 @@ public class DoorToggle : MonoBehaviour, ISaveable
     {
         Debug.Log("ToggleDoor method called directly");
         OnHandleGrabbed(null);
+    }
+
+    /// <summary>
+    /// Generate unique ID based on GameObject hierarchy path
+    /// </summary>
+    private string GenerateUniqueID()
+    {
+        string path = GetHierarchyPath(transform);
+        return $"door_{path}".Replace("/", "_").Replace(" ", "_");
+    }
+
+    /// <summary>
+    /// Get the full hierarchy path of this GameObject
+    /// </summary>
+    private string GetHierarchyPath(Transform t)
+    {
+        string path = t.name;
+        while (t.parent != null)
+        {
+            t = t.parent;
+            path = t.name + "/" + path;
+        }
+        return path;
     }
 
     #region ISaveable Implementation

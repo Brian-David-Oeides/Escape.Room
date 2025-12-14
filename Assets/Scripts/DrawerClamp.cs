@@ -13,13 +13,20 @@ public class DrawerClamp : MonoBehaviour, ISaveable
     public float maxLocalZ = 0.25f;
 
     [Header("Save System")]
-    [SerializeField] private string drawerID = "drawer_main";
+    [SerializeField] private string drawerID = "";
 
     private Rigidbody rb;
     private Vector3 initialLocalPosition;
 
     void Start()
     {
+        // Auto-generate unique ID if not set
+        if (string.IsNullOrEmpty(drawerID))
+        {
+            drawerID = GenerateUniqueID();
+            Debug.Log($"[DrawerClamp] Auto-generated ID: {drawerID}");
+        }
+
         rb = GetComponent<Rigidbody>();
         initialLocalPosition = transform.localPosition;
     }
@@ -30,6 +37,29 @@ public class DrawerClamp : MonoBehaviour, ISaveable
         float localZ = localPos.z - initialLocalPosition.z;
         float clampedZ = Mathf.Clamp(localZ, minLocalZ, maxLocalZ);
         transform.localPosition = new Vector3(localPos.x, localPos.y, initialLocalPosition.z + clampedZ);
+    }
+
+    /// <summary>
+    /// Generate unique ID based on GameObject hierarchy path
+    /// </summary>
+    private string GenerateUniqueID()
+    {
+        string path = GetHierarchyPath(transform);
+        return $"drawer_{path}".Replace("/", "_").Replace(" ", "_");
+    }
+
+    /// <summary>
+    /// Get the full hierarchy path of this GameObject
+    /// </summary>
+    private string GetHierarchyPath(Transform t)
+    {
+        string path = t.name;
+        while (t.parent != null)
+        {
+            t = t.parent;
+            path = t.name + "/" + path;
+        }
+        return path;
     }
 
     #region ISaveable Implementation

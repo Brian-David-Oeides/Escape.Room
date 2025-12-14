@@ -3722,6 +3722,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcde8b0ceb40a7f479dce60ee8874413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  puzzleID: puzzle_base_001
+  isCompleted: 0
+  OnPuzzleCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadCompletedState:
+    m_PersistentCalls:
+      m_Calls: []
+  collidersToDisable: []
+  renderersToHide: []
+  showDebugLogs: 1
   targetRigidbody: {fileID: 423719841}
   hammerTag: Hammer
   stakeSocket: {fileID: 1495953424}
@@ -33420,6 +33431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  drawerID: 
 --- !u!153 &3083083907722269391
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -36868,6 +36880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  drawerID: 
 --- !u!153 &4416540137911014301
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -38490,6 +38503,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 465004656}
     m_Modifications:
+    - target: {fileID: 670557514605887863, guid: 59d0c82421b5f844d9f0ae5732fa70dc,
+        type: 3}
+      propertyPath: doorID
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1871798324075249748, guid: 59d0c82421b5f844d9f0ae5732fa70dc,
         type: 3}
       propertyPath: m_Size.x
@@ -38539,6 +38557,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4306886555958199866, guid: 59d0c82421b5f844d9f0ae5732fa70dc,
+        type: 3}
+      propertyPath: doorID
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5575570565149674043, guid: 59d0c82421b5f844d9f0ae5732fa70dc,
         type: 3}
@@ -38609,6 +38632,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970140670646552401, guid: 59d0c82421b5f844d9f0ae5732fa70dc,
+        type: 3}
+      propertyPath: doorID
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -60558,6 +60586,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.3
+  drawerID: 
 --- !u!65 &6155795487992002976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -65824,6 +65853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  drawerID: 
 --- !u!153 &8427572759018491901
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -67285,6 +67315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  drawerID: 
 --- !u!153 &8821137225412040037
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -68685,6 +68716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  drawerID: 
 --- !u!153 &9099399619472214364
 ConfigurableJoint:
   m_ObjectHideFlags: 0
