@@ -3157,7 +3157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timerMode: 2
-  _countdownDuration: 10
+  _countdownDuration: 1800
 --- !u!1 &377837782
 GameObject:
   m_ObjectHideFlags: 0

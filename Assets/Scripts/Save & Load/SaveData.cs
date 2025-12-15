@@ -38,10 +38,13 @@ public class SaveData
     public Vector3 playerPosition;
     public Quaternion playerRotation;
 
-    // Timer state
-    public float timeRemaining; // Time left on countdown timer
-    public bool timerEnabled;
-    public float timerDuration; // Total timer duration setting
+    // Timer State (complete fields for proper save/load)
+    public float timerElapsedTime;
+    public float timerRemainingTime;
+    public bool timerIsRunning;
+    public bool timerExpired;
+    public int timerMode;                // 0=Disabled, 1=CountUp, 2=CountDown
+    public float timerCountdownDuration;
 
     // Game state
     public string currentSceneName;

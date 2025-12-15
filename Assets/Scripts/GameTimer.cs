@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameTimer : MonoBehaviour
+public class GameTimer : MonoSingleton<GameTimer>
 {
-    public static GameTimer Instance;
-
     // Timer Mode Enum
     public enum TimerMode
     {
@@ -36,22 +34,16 @@ public class GameTimer : MonoBehaviour
     public bool IsRunning => _isRunning;
     public bool TimerExpired => _timerExpired;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        base.Awake();  // MonoSingleton sets up Instance
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
+    public override void Init()
     {
         InitializeTimer();
+        Debug.Log("[GameTimer] Initialized in Awake phase");
     }
 
     private void Update()
@@ -265,4 +257,52 @@ public class GameTimer : MonoBehaviour
             Debug.Log($"⏰ Set remaining time to: {GetFormattedRemainingTime()}");
         }
     }
+
+    #region Save/Load System
+
+    /// <summary>
+    /// Save timer state to SaveData
+    /// Called by SaveManager during save operation
+    /// </summary>
+    public void SaveState(SaveData data)
+    {
+        data.timerElapsedTime = _elapsedTime;
+        data.timerRemainingTime = _remainingTime;
+        data.timerIsRunning = _isRunning;
+        data.timerExpired = _timerExpired;
+        data.timerMode = (int)_timerMode;
+        data.timerCountdownDuration = _countdownDuration;
+
+        Debug.Log($"[GameTimer] SaveState() called - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}, Expired: {_timerExpired}");
+    }
+
+    /// <summary>
+    /// Load timer state from SaveData
+    /// Called by GameManager after scene load
+    /// Includes validation to prevent save file tampering
+    /// </summary>
+    public void LoadState(SaveData data)
+    {
+        // Validate and restore timer mode
+        _timerMode = (TimerMode)Mathf.Clamp(data.timerMode, 0, 2);
+
+        // Validate and restore countdown duration
+        _countdownDuration = Mathf.Max(0f, data.timerCountdownDuration);
+
+        // Validate and clamp remaining time (prevent tampering)
+        _remainingTime = Mathf.Clamp(data.timerRemainingTime, 0f, _countdownDuration);
+
+        // Validate and restore elapsed time
+        _elapsedTime = Mathf.Max(0f, data.timerElapsedTime);
+
+        // Restore expired state
+        _timerExpired = data.timerExpired;
+
+        // Restore running state (but don't run if expired)
+        _isRunning = data.timerIsRunning && !_timerExpired;
+
+        Debug.Log($"[GameTimer] LoadState() called - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}, Running: {_isRunning}, Expired: {_timerExpired}");
+    }
+
+    #endregion
 }

@@ -405,7 +405,7 @@ public class GameManager : MonoSingleton<GameManager>
             // CRITICAL: Only apply settings if NOT loading from save
             if (!isLoadingFromSave && SettingsManager.Instance != null)
             {
-                SettingsManager.Instance.ApplyTimerSettings();
+                SettingsManager.Instance.ApplyTimerSettings(skipIfRunning: true);
                 Debug.Log("[GameManager] Timer settings applied on gameplay start");
             }
             else if (isLoadingFromSave)
@@ -791,11 +791,11 @@ public class GameManager : MonoSingleton<GameManager>
             Debug.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
         }
 
-        // Restore timer state BEFORE ISaveable objects (in case puzzles depend on timer)
-        if (GameTimer.Instance != null && data.timeRemaining > 0)
+        // Restore GameTimer state BEFORE ISaveable objects (special handling for DontDestroyOnLoad singleton)
+        if (GameTimer.Instance != null)
         {
-            GameTimer.Instance.RestoreTimerState(data.timeRemaining, data.timerDuration, true); // Always restore as running if time remains
-            Debug.Log($"[GameManager] Timer state restored from save: {data.timeRemaining}s remaining");
+            GameTimer.Instance.LoadState(data);
+            Debug.Log($"[GameManager] Timer restored: {data.timerRemainingTime}s remaining, Mode: {(GameTimer.TimerMode)data.timerMode}");
         }
 
         // Restore all ISaveable objects

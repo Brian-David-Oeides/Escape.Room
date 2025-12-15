@@ -188,10 +188,18 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     /// <summary>
     /// Apply timer settings to GameTimer
     /// </summary>
-    public void ApplyTimerSettings()
+    /// <param name="skipIfRunning">If true, skip applying settings if timer is already running (prevents reset on load)</param>
+    public void ApplyTimerSettings(bool skipIfRunning = false)
     {
         if (GameTimer.Instance != null)
         {
+            // CRITICAL FIX: Don't reset timer if it's already running (from save load)
+            if (skipIfRunning && GameTimer.Instance.IsRunning)
+            {
+                Debug.Log("[SettingsManager] Timer already running - skipping settings application to preserve loaded state");
+                return;
+            }
+
             // Convert SettingsData TimerMode enum to GameTimer.TimerMode enum
             GameTimer.TimerMode timerMode = GameTimer.TimerMode.Disabled;
 
