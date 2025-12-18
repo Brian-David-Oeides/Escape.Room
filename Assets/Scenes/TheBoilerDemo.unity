@@ -15135,6 +15135,60 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8607537902919574050}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1026078118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1026078120}
+  - component: {fileID: 1026078119}
+  m_Layer: 0
+  m_Name: ClueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1026078119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026078118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d30dfff13bdf164ba702054595424fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allClues:
+  - clueID: journal_005
+    clueName: Journal Entry #5
+    clueDescription: Look for the journal near the safe
+    relatedPuzzleIDs:
+    - safe_dial
+    isRequired: 1
+  hintsEnabled: 1
+  failedAttemptsBeforeHint: 1
+  showDebugLogs: 1
+--- !u!4 &1026078120
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026078118}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.438797, y: 0.6549073, z: 0.86738}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1033580060
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -69303,3 +69357,4 @@ SceneRoots:
   - {fileID: 1544877779}
   - {fileID: 217767894}
   - {fileID: 6076464266167723971}
+  - {fileID: 1026078120}
