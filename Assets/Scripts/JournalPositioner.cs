@@ -58,6 +58,7 @@ public class JournalPositioner : MonoBehaviour
 
     private AudioSource _audioSource;
     private PageTurnInteractable _pageTurner;
+    private ClueDiscoveryTrigger _clueDiscoveryTrigger;
 
     #endregion
 
@@ -79,6 +80,13 @@ public class JournalPositioner : MonoBehaviour
         if (_pageTurner == null)
         {
             Debug.LogWarning("PageTurnInteractable component not found on " + gameObject.name);
+        }
+
+        // Get reference to ClueDiscoveryTrigger component
+        _clueDiscoveryTrigger = GetComponent<ClueDiscoveryTrigger>();
+        if (_clueDiscoveryTrigger == null)
+        {
+            Debug.LogWarning("ClueDiscoveryTrigger component not found on " + gameObject.name);
         }
 
         // Hide prompt UI initially
@@ -323,6 +331,12 @@ public class JournalPositioner : MonoBehaviour
         DisableJournalCollider();
 
         PlayPickupSound();
+
+        // Trigger clue discovery when journal is viewed
+        if (_clueDiscoveryTrigger != null)
+        {
+            _clueDiscoveryTrigger.OnClueViewed();
+        }
     }
 
     private void StartReturnToOriginal()
