@@ -3723,6 +3723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzleID: puzzle_base_001
+  hintThreshold: 0
   isCompleted: 0
   OnPuzzleCompleted:
     m_PersistentCalls:
@@ -14002,6 +14003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzleID: frame_lock
+  hintThreshold: 1
   isCompleted: 0
   OnPuzzleCompleted:
     m_PersistentCalls:
@@ -48289,6 +48291,11 @@ PrefabInstance:
       propertyPath: OnSwitchOn.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4280712876250947808, guid: e57eeff3304357446b36a16414912ce4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -52705,6 +52712,11 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1894287950}
+    - target: {fileID: 3675353353154773703, guid: ef17984c4a9f4354eab4be502bb4b541,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5078894536664362035, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58417,6 +58429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzleID: chain_exit_door_001
+  hintThreshold: 0
   isCompleted: 0
   OnPuzzleCompleted:
     m_PersistentCalls:
@@ -67561,6 +67574,11 @@ PrefabInstance:
       objectReference: {fileID: 406380123}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
+      propertyPath: hintThreshold
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
       propertyPath: numberTolerance
       value: 2
       objectReference: {fileID: 0}
@@ -69368,6 +69386,7 @@ SceneRoots:
   - {fileID: 1949267799}
   - {fileID: 2060308114}
   - {fileID: 688804006}
+  - {fileID: 1026078120}
   - {fileID: 106263325}
   - {fileID: 180447887}
   - {fileID: 5337178920147391811}
@@ -69383,4 +69402,3 @@ SceneRoots:
   - {fileID: 1544877779}
   - {fileID: 217767894}
   - {fileID: 6076464266167723971}
-  - {fileID: 1026078120}

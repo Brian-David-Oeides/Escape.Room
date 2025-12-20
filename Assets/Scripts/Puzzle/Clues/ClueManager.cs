@@ -173,11 +173,40 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
 
         int attempts = puzzleFailedAttempts[puzzleID];
 
-        if (attempts >= failedAttemptsBeforeHint)
+        // Check if there's a specific threshold for this puzzle
+        int threshold = GetPuzzleHintThreshold(puzzleID);
+
+        if (attempts >= threshold)
         {
             OnHintAvailable?.Invoke(puzzleID);
-            DebugLog($"💡 Hint available for {puzzleID}");
+            DebugLog($"💡 Hint available for {puzzleID} (attempts: {attempts}/{threshold})");
         }
+    }
+
+    /// <summary>
+    /// Get the hint threshold for a specific puzzle
+    /// Checks if puzzle has custom threshold, otherwise uses global default
+    /// </summary>
+    private int GetPuzzleHintThreshold(string puzzleID)
+    {
+        // Try to find the puzzle GameObject by ID
+        PuzzleBase[] allPuzzles = FindObjectsOfType<PuzzleBase>();
+
+        foreach (PuzzleBase puzzle in allPuzzles)
+        {
+            if (puzzle.puzzleID == puzzleID)
+            {
+                // If puzzle has custom threshold (not 0), use it
+                if (puzzle.hintThreshold > 0)
+                {
+                    return puzzle.hintThreshold;
+                }
+                break;
+            }
+        }
+
+        // Fall back to global default
+        return failedAttemptsBeforeHint;
     }
 
     private ClueData GetClueData(string clueID)

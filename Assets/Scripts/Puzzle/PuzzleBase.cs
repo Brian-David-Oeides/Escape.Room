@@ -19,7 +19,12 @@ public abstract class PuzzleBase : MonoBehaviour, ISaveable
 {
     [Header("Save System")]
     [Tooltip("Unique ID for this puzzle - MUST be unique across all puzzles in game")]
-    [SerializeField] protected string puzzleID = "puzzle_base_001";
+    [SerializeField] public string puzzleID = "puzzle_base_001";
+
+    [Header("Hint System")]
+    [Tooltip("Number of failed attempts before hint becomes available (0 = use ClueManager default)")]
+    [Range(0, 10)]
+    public int hintThreshold = 0; // 0 means use global default
 
     [Header("Puzzle State")]
     [Tooltip("Is this puzzle already completed? (set by save system)")]
