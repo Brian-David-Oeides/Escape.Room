@@ -46,6 +46,12 @@ public class SaveData
     public int timerMode;                // 0=Disabled, 1=CountUp, 2=CountDown
     public float timerCountdownDuration;
 
+    [Header("Clue System Data")]
+    public List<string> discoveredClueIDs = new List<string>();
+    public List<string> puzzleFailedAttemptsData = new List<string>(); // Format: "puzzleID:attemptCount"
+    public int totalCluesDiscovered = 0;
+    public int totalHintsUsed = 0;
+
     // Game state
     public string currentSceneName;
     public GameState gameState;

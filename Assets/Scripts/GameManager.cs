@@ -798,6 +798,13 @@ public class GameManager : MonoSingleton<GameManager>
             Debug.Log($"[GameManager] Timer restored: {data.timerRemainingTime}s remaining, Mode: {(GameTimer.TimerMode)data.timerMode}");
         }
 
+        // Restore ClueManager state (special handling for DontDestroyOnLoad singleton)
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.LoadState(data);
+            Debug.Log($"[GameManager] ClueManager restored: {data.discoveredClueIDs.Count} clues discovered");
+        }
+
         // Restore all ISaveable objects
         ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
         foreach (ISaveable saveable in saveableObjects)

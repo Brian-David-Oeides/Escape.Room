@@ -7,7 +7,7 @@ using UnityEngine;
 /// Manages clue discovery, puzzle attempt tracking, and hint system
 /// </summary>
 
-public class ClueManager : MonoSingleton<ClueManager>
+public class ClueManager : MonoSingleton<ClueManager>, ISaveable
 {
     #region Data Structures
 
@@ -191,6 +191,66 @@ public class ClueManager : MonoSingleton<ClueManager>
         {
             Debug.Log($"[ClueManager] {message}");
         }
+    }
+
+    #endregion
+
+    #region Save/Load System
+
+    public string SaveID => "clue_manager";
+
+    public void SaveState(SaveData saveData)
+    {
+        // Save discovered clues
+        saveData.discoveredClueIDs = new List<string>(discoveredClues);
+
+        // Save failed attempts (serialize Dictionary to List)
+        saveData.puzzleFailedAttemptsData.Clear();
+        foreach (var kvp in puzzleFailedAttempts)
+        {
+            saveData.puzzleFailedAttemptsData.Add($"{kvp.Key}:{kvp.Value}");
+        }
+
+        // Statistics
+        saveData.totalCluesDiscovered = discoveredClues.Count;
+
+        DebugLog($"Saved {discoveredClues.Count} discovered clues, {puzzleFailedAttempts.Count} puzzle attempts");
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        // Clear existing data
+        discoveredClues.Clear();
+
+        // Load discovered clues
+        foreach (string clueID in saveData.discoveredClueIDs)
+        {
+            discoveredClues.Add(clueID);
+
+            // Update ClueData
+            ClueData clue = GetClueData(clueID);
+            if (clue != null)
+            {
+                clue.isDiscovered = true;
+            }
+        }
+
+        // Load failed attempts (deserialize List to Dictionary)
+        puzzleFailedAttempts.Clear();
+        foreach (string data in saveData.puzzleFailedAttemptsData)
+        {
+            string[] parts = data.Split(':');
+            if (parts.Length == 2)
+            {
+                string puzzleID = parts[0];
+                if (int.TryParse(parts[1], out int attempts))
+                {
+                    puzzleFailedAttempts[puzzleID] = attempts;
+                }
+            }
+        }
+
+        DebugLog($"Loaded {discoveredClues.Count} discovered clues, {puzzleFailedAttempts.Count} puzzle attempts");
     }
 
     #endregion

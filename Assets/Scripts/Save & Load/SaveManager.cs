@@ -179,6 +179,12 @@ public class SaveManager : MonoSingleton<SaveManager>
             GameTimer.Instance.SaveState(data);
         }
 
+        // Save ClueManager state (special handling for DontDestroyOnLoad singleton)
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.SaveState(data);
+        }
+
         // Save statistics
         if (GameManager.Instance != null)
         {
