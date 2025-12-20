@@ -58,6 +58,11 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
     private float _correctNumberCooldown = 1.0f;
     private float _correctNumberTimer = 0f;
 
+    private float _wrongNumberDetectionTime = 1.5f; // How long player must hold wrong number
+    private float _wrongNumberTimer = 0f;
+    private int _lastCheckedNumber = -1;
+    private bool _wrongNumberDetected = false;
+
     [SerializeField] private XRGrabInteractable grabInteractable;
 
     // event for SafeDialUI
@@ -172,16 +177,54 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
 
         if (_correctNumberTimer <= 0f)
         {
-            if (Mathf.Abs(currentDialNumber - correctCombination[_currentCombinationIndex]) <= numberTolerance)
+            int expectedNumber = correctCombination[_currentCombinationIndex];
+
+            // Check if on correct number
+            if (Mathf.Abs(currentDialNumber - expectedNumber) <= numberTolerance)
             {
                 PlaySound(correctNumberSound);
                 _correctNumberTimer = _correctNumberCooldown;
                 _currentCombinationIndex++;
 
+                // Reset wrong number detection
+                _wrongNumberTimer = 0f;
+                _wrongNumberDetected = false;
+
                 if (_currentCombinationIndex >= correctCombination.Length)
                 {
                     UnlockSafe();
                 }
+            }
+            // Check if player is holding on a CLEARLY wrong number
+            else if (Mathf.Abs(currentDialNumber - expectedNumber) > numberTolerance * 3)
+            {
+                // Player is far from correct number
+                if (currentDialNumber == _lastCheckedNumber)
+                {
+                    // Still on same wrong number - increment timer
+                    _wrongNumberTimer += Time.deltaTime;
+
+                    if (_wrongNumberTimer >= _wrongNumberDetectionTime && !_wrongNumberDetected)
+                    {
+                        // Player held wrong number long enough - count as failed attempt
+                        RegisterFailedAttempt();
+                        _wrongNumberDetected = true;
+                        _wrongNumberTimer = 0f;
+                    }
+                }
+                else
+                {
+                    // Moved to different number - reset timer
+                    _lastCheckedNumber = currentDialNumber;
+                    _wrongNumberTimer = 0f;
+                    _wrongNumberDetected = false;
+                }
+            }
+            else
+            {
+                // Number is close but not quite right (within tolerance * 3) - reset detection
+                _wrongNumberTimer = 0f;
+                _wrongNumberDetected = false;
             }
         }
 
@@ -278,6 +321,15 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
         if (audioSource != null && clip != null)
         {
             audioSource.PlayOneShot(clip);
+        }
+    }
+
+    private void RegisterFailedAttempt()
+    {
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.RegisterFailedAttempt(puzzleID);
+            DebugLog($"Wrong number detected: {currentDialNumber} (expected: {correctCombination[_currentCombinationIndex]})");
         }
     }
 

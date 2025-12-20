@@ -79,14 +79,41 @@ public class FrameLock : PuzzleBase
     {
         if (_enteredCode.Length == _lockCode.Length)
         {
-            for (int i = 0; i < _enteredCode.Length; i++)
+            // Check if all slots are filled (no zeros = default value)
+            bool allSlotsFilled = true;
+            foreach (int code in _enteredCode)
             {
-                if (_enteredCode[i] != _lockCode[i])
-                    return false;
+                if (code == 0)
+                {
+                    allSlotsFilled = false;
+                    break;
+                }
             }
-            return true;
+
+            // Only check correctness if all slots filled
+            if (allSlotsFilled)
+            {
+                // Check if code matches
+                for (int i = 0; i < _enteredCode.Length; i++)
+                {
+                    if (_enteredCode[i] != _lockCode[i])
+                    {
+                        // Wrong code - register failed attempt
+                        RegisterFailedAttempt();
+                        return false;
+                    }
+                }
+
+                // Code is correct!
+                return true;
+            }
+
+            return false;
         }
-        else return false;
+        else
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -247,4 +274,14 @@ public class FrameLock : PuzzleBase
 
         DebugLog("All frames restored and locked in sockets");
     }
+
+    private void RegisterFailedAttempt()
+    {
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.RegisterFailedAttempt(puzzleID);
+            DebugLog($"Wrong frame combination: [{string.Join(", ", _enteredCode)}] (expected: [{string.Join(", ", _lockCode)}])");
+        }
+    }
+
 }
