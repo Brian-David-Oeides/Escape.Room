@@ -43,6 +43,10 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     [Header("Debug")]
     public bool showDebugLogs = true;
 
+    [Header("UI References")]
+    [Tooltip("Dedicated UI for displaying hints (not the clue display UI)")]
+    public HintUIController hintUI;
+
     #endregion
 
     #region Runtime Data
@@ -163,6 +167,50 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         return discoveredClues.Contains(clueID);
     }
 
+    /// <summary>
+    /// Get hint message for a specific puzzle
+    /// Returns different hints based on which clues player has found
+    /// </summary>
+    public string GetHint(string puzzleID)
+    {
+        // Find all clues related to this puzzle
+        List<ClueData> relatedClues = new List<ClueData>();
+
+        foreach (ClueData clue in allClues)
+        {
+            if (clue.relatedPuzzleIDs != null)
+            {
+                foreach (string relatedID in clue.relatedPuzzleIDs)
+                {
+                    if (relatedID == puzzleID)
+                    {
+                        relatedClues.Add(clue);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Find undiscovered clues for this puzzle
+        List<ClueData> undiscoveredClues = relatedClues.FindAll(c => !c.isDiscovered);
+
+        if (undiscoveredClues.Count > 0)
+        {
+            // Player missing clues - hint about where to find them
+            ClueData missingClue = undiscoveredClues[0];
+            return $"💡 Hint: {missingClue.clueDescription}";
+        }
+        else if (relatedClues.Count > 0)
+        {
+            // Player has all clues - give encouragement
+            return $"💡 Hint: You have all the clues for this puzzle. Review what you've found!";
+        }
+        else
+        {
+            // No clues defined for this puzzle - generic hint
+            return $"💡 Hint: Keep exploring and trying different combinations!";
+        }
+    }
     #endregion
 
     #region Private Methods
@@ -180,6 +228,8 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         {
             OnHintAvailable?.Invoke(puzzleID);
             DebugLog($"💡 Hint available for {puzzleID} (attempts: {attempts}/{threshold})");
+
+            DisplayHintMessage(puzzleID);
         }
     }
 
@@ -219,6 +269,25 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         if (showDebugLogs)
         {
             Debug.Log($"[ClueManager] {message}");
+        }
+    }
+
+    /// <summary>
+    /// Display hint message to player using world-space UI
+    /// </summary>
+    private void DisplayHintMessage(string puzzleID)
+    {
+        string hintMessage = GetHint(puzzleID);
+
+        // Use dedicated HintUI reference
+        if (hintUI != null)
+        {
+            hintUI.ShowHint(hintMessage);
+            DebugLog($"Displaying hint: {hintMessage}");
+        }
+        else
+        {
+            Debug.LogError("[ClueManager] HintUI reference not set! Assign it in the Inspector.");
         }
     }
 
