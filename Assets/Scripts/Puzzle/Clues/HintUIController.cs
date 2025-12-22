@@ -39,6 +39,8 @@ public class HintUIController : MonoBehaviour
     private Coroutine displayCoroutine;
     private bool isShowing = false;
 
+    private bool bButtonWasPressed = false; // Track previous frame state
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -63,20 +65,26 @@ public class HintUIController : MonoBehaviour
             UpdatePosition();
         }
 
-        // Check for B button to dismiss
+        // Check for B button to dismiss (keyboard)
         if (isShowing && Input.GetKeyDown(KeyCode.B))
         {
             DismissHint();
         }
 
-        // VR B button (secondary button on right controller)
+        // VR B button (secondary button on right controller) - FIXED VERSION
         if (isShowing && UnityEngine.XR.InputDevices.GetDeviceAtXRNode(UnityEngine.XR.XRNode.RightHand)
             .TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out bool bButtonPressed))
         {
-            if (bButtonPressed)
+            // Only trigger on button DOWN (not held)
+            if (bButtonPressed && !bButtonWasPressed)
             {
                 DismissHint();
             }
+            bButtonWasPressed = bButtonPressed;
+        }
+        else
+        {
+            bButtonWasPressed = false;
         }
     }
 
