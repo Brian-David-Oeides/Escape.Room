@@ -16,6 +16,7 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject saveGameButton;  // save game button
     public GameObject loadGameButton; // load game button
     public GameObject settingsButton; // settings button
+    public GameObject hintsButton; // hints menu button
     public GameObject mainMenuButton;
     public GameObject exitGameButton;
 
@@ -24,6 +25,9 @@ public class PauseMenuManager : MonoBehaviour
 
     [Header("Settings UI")]
     public SettingsMenuUI settingsMenuUI;
+
+    [Header("Hints UI")]
+    public HintsMenuUI hintsMenuUI;
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel;
@@ -87,6 +91,16 @@ public class PauseMenuManager : MonoBehaviour
             }
         }
 
+        // Hide hints menu at start (disable entire canvas to prevent ray blocking)
+        if (hintsMenuUI != null)
+        {
+            Transform canvas = hintsMenuUI.transform.parent;
+            if (canvas != null)
+            {
+                canvas.gameObject.SetActive(false);
+            }
+        }
+
         // Subscribe to GameManager state changes
         if (GameManager.Instance != null)
         {
@@ -138,7 +152,7 @@ public class PauseMenuManager : MonoBehaviour
                     return; // Don't unpause if confirmation dialog is open
                 }
 
-                // If pause menu panel is hidden, that means a sub-panel is showing (save/load/settings)
+                // If pause menu panel is hidden, that means a sub-panel is showing (save/load/settings/hints)
                 if (pauseMenuPanel != null && !pauseMenuPanel.activeSelf)
                 {
                     return; // Don't unpause if we're in a sub-menu
@@ -181,6 +195,15 @@ public class PauseMenuManager : MonoBehaviour
                         canvas.gameObject.SetActive(false);
                     }
                 }
+                // Hide hints when resuming (disable entire canvas)
+                if (hintsMenuUI != null)
+                {
+                    Transform canvas = hintsMenuUI.transform.parent;
+                    if (canvas != null)
+                    {
+                        canvas.gameObject.SetActive(false);
+                    }
+                }
                 break;
             case GameState.Loading:
             case GameState.MainMenu:
@@ -200,7 +223,7 @@ public class PauseMenuManager : MonoBehaviour
         {
             pauseMenuCanvas.SetActive(true);
 
-            // Show main pause menu panel, hide save/load and settings panels
+            // Show main pause menu panel, hide save/load, settings, and hints panels
             if (pauseMenuPanel != null)
             {
                 pauseMenuPanel.SetActive(true);
@@ -214,6 +237,15 @@ public class PauseMenuManager : MonoBehaviour
             if (settingsMenuUI != null)
             {
                 Transform canvas = settingsMenuUI.transform.parent;
+                if (canvas != null)
+                {
+                    canvas.gameObject.SetActive(false);
+                }
+            }
+
+            if (hintsMenuUI != null)
+            {
+                Transform canvas = hintsMenuUI.transform.parent;
                 if (canvas != null)
                 {
                     canvas.gameObject.SetActive(false);
@@ -375,6 +407,46 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
+    // Hints Button (NEW)
+    public void OnHintsButtonClicked()
+    {
+        Debug.Log("Hints button clicked");
+
+        // Hide main pause menu panel first
+        if (pauseMenuPanel != null)
+        {
+            pauseMenuPanel.SetActive(false);
+            Debug.Log("Pause menu panel hidden");
+        }
+
+        // Show hints menu
+        if (hintsMenuUI != null)
+        {
+            // CRITICAL: Enable the entire HintsMenuCanvas (not just HintsPanel)
+            // This allows raycasters to work and prevents invisible ray blocking during gameplay
+            Transform canvas = hintsMenuUI.transform.parent;
+            if (canvas != null)
+            {
+                canvas.gameObject.SetActive(true);
+                Debug.Log("Hints canvas enabled");
+            }
+
+            // Enable the HintsPanel GameObject
+            hintsMenuUI.gameObject.SetActive(true);
+            Debug.Log("Hints panel GameObject enabled");
+
+            // Reposition hints menu in front of player
+            RepositionHintsMenu();
+
+            hintsMenuUI.ShowHints();
+            Debug.Log("Hints menu shown");
+        }
+        else
+        {
+            Debug.LogWarning("HintsMenuUI reference is missing!");
+        }
+    }
+
     private void RepositionSettingsMenu()
     {
         if (settingsMenuUI == null) return;
@@ -411,7 +483,43 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    // back from Save/Load/Settings to Pause Menu
+    private void RepositionHintsMenu()
+    {
+        if (hintsMenuUI == null) return;
+
+        // Get the hints canvas (parent of HintsPanel)
+        Transform hintsCanvas = hintsMenuUI.transform.parent;
+        if (hintsCanvas == null) return;
+
+        // Position in front of player's camera
+        if (PlayerController.Instance?.XROrigin != null)
+        {
+            Camera playerCamera = PlayerController.Instance.XROrigin.GetComponentInChildren<Camera>();
+            if (playerCamera != null)
+            {
+                // Position 0.5 units in front of camera at eye level
+                Vector3 cameraForward = playerCamera.transform.forward;
+                cameraForward.y = 0; // Keep on horizontal plane
+                cameraForward.Normalize();
+
+                Vector3 targetPosition = playerCamera.transform.position + (cameraForward * 0.5f);
+
+                hintsCanvas.position = targetPosition;
+
+                // Make it face the camera
+                Vector3 directionToCamera = playerCamera.transform.position - targetPosition;
+                directionToCamera.y = 0;
+                if (directionToCamera != Vector3.zero)
+                {
+                    hintsCanvas.rotation = Quaternion.LookRotation(-directionToCamera);
+                }
+
+                Debug.Log($"Hints menu repositioned to {targetPosition}");
+            }
+        }
+    }
+
+    // back from Save/Load/Settings/Hints to Pause Menu
     public void OnBackToPauseMenu()
     {
         Debug.Log("Back to pause menu");
@@ -425,6 +533,16 @@ public class PauseMenuManager : MonoBehaviour
         {
             // Disable entire canvas to prevent ray blocking
             Transform canvas = settingsMenuUI.transform.parent;
+            if (canvas != null)
+            {
+                canvas.gameObject.SetActive(false);
+            }
+        }
+
+        if (hintsMenuUI != null)
+        {
+            // Disable entire canvas to prevent ray blocking
+            Transform canvas = hintsMenuUI.transform.parent;
             if (canvas != null)
             {
                 canvas.gameObject.SetActive(false);
