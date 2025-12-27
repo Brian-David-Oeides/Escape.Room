@@ -94,11 +94,7 @@ public class PauseMenuManager : MonoBehaviour
         // Hide hints menu at start (disable entire canvas to prevent ray blocking)
         if (hintsMenuUI != null)
         {
-            Transform canvas = hintsMenuUI.transform.parent;
-            if (canvas != null)
-            {
-                canvas.gameObject.SetActive(false);
-            }
+            hintsMenuUI.gameObject.SetActive(false);
         }
 
         // Subscribe to GameManager state changes
@@ -198,11 +194,7 @@ public class PauseMenuManager : MonoBehaviour
                 // Hide hints when resuming (disable entire canvas)
                 if (hintsMenuUI != null)
                 {
-                    Transform canvas = hintsMenuUI.transform.parent;
-                    if (canvas != null)
-                    {
-                        canvas.gameObject.SetActive(false);
-                    }
+                    hintsMenuUI.gameObject.SetActive(false);
                 }
                 break;
             case GameState.Loading:
@@ -245,11 +237,7 @@ public class PauseMenuManager : MonoBehaviour
 
             if (hintsMenuUI != null)
             {
-                Transform canvas = hintsMenuUI.transform.parent;
-                if (canvas != null)
-                {
-                    canvas.gameObject.SetActive(false);
-                }
+                hintsMenuUI.gameObject.SetActive(false);
             }
         }
 
@@ -422,18 +410,10 @@ public class PauseMenuManager : MonoBehaviour
         // Show hints menu
         if (hintsMenuUI != null)
         {
-            // CRITICAL: Enable the entire HintsMenuCanvas (not just HintsPanel)
-            // This allows raycasters to work and prevents invisible ray blocking during gameplay
-            Transform canvas = hintsMenuUI.transform.parent;
-            if (canvas != null)
-            {
-                canvas.gameObject.SetActive(true);
-                Debug.Log("Hints canvas enabled");
-            }
-
-            // Enable the HintsPanel GameObject
+            // CRITICAL: HintMenuUI GameObject IS the canvas itself
+            // Enable it directly
             hintsMenuUI.gameObject.SetActive(true);
-            Debug.Log("Hints panel GameObject enabled");
+            Debug.Log("Hints canvas enabled");
 
             // Reposition hints menu in front of player
             RepositionHintsMenu();
@@ -487,9 +467,8 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (hintsMenuUI == null) return;
 
-        // Get the hints canvas (parent of HintsPanel)
-        Transform hintsCanvas = hintsMenuUI.transform.parent;
-        if (hintsCanvas == null) return;
+        // HintMenuUI GameObject IS the canvas
+        Transform hintsCanvas = hintsMenuUI.transform;
 
         // Position in front of player's camera
         if (PlayerController.Instance?.XROrigin != null)
@@ -542,11 +521,7 @@ public class PauseMenuManager : MonoBehaviour
         if (hintsMenuUI != null)
         {
             // Disable entire canvas to prevent ray blocking
-            Transform canvas = hintsMenuUI.transform.parent;
-            if (canvas != null)
-            {
-                canvas.gameObject.SetActive(false);
-            }
+            hintsMenuUI.gameObject.SetActive(false);
         }
 
         if (pauseMenuPanel != null)

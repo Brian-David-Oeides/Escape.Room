@@ -155,7 +155,8 @@ public class HintsMenuUI : MonoBehaviour
             {
                 if (clue.isDiscovered)
                 {
-                    discoveredClueNames.Add($"✓ {clue.clueName}");
+                    // Use FOUND: prefix for clear indication
+                    discoveredClueNames.Add($"FOUND: {clue.clueName}");
                 }
             }
 
@@ -254,7 +255,7 @@ public class HintsMenuUI : MonoBehaviour
     /// <summary>
     /// Handle back button click - returns to main pause menu
     /// </summary>
-    private void OnBackButtonClicked()
+    public void OnBackButtonClicked()
     {
         Debug.Log("[HintsMenuUI] Back button clicked");
 
@@ -275,7 +276,7 @@ public class HintsMenuUI : MonoBehaviour
     /// <summary>
     /// Handle manual hint request button click
     /// </summary>
-    private void OnRequestHintClicked()
+    public void OnRequestHintClicked()
     {
         // Safety checks
         if (ClueManager.Instance == null || !ClueManager.Instance.hintsEnabled)
