@@ -32,7 +32,9 @@ public class HintsMenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI hintsRemainingText;
 
     [Header("Hint Request Settings")]
+    [Tooltip("Cooldown time in seconds - overridden by SettingsManager on Start")]
     [SerializeField] private float hintCooldown = 60f; // 60 seconds between manual hint requests
+    [Tooltip("Maximum manual hints per session - overridden by SettingsManager on Start")]
     [SerializeField] private int maxManualHints = 5; // Maximum manual hints per session
 
     #endregion
@@ -61,10 +63,28 @@ public class HintsMenuUI : MonoBehaviour
             requestHintButton.onClick.AddListener(OnRequestHintClicked);
         }
 
+        // Load settings from SettingsManager
+        LoadHintSettings();
+
+        // Subscribe to settings changes
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.OnHintSettingsChanged += OnHintSettingsChanged;
+        }
+
         // Hide panel initially
         if (hintsPanel != null)
         {
             hintsPanel.SetActive(false);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from settings changes
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.OnHintSettingsChanged -= OnHintSettingsChanged;
         }
     }
 
@@ -98,6 +118,10 @@ public class HintsMenuUI : MonoBehaviour
         {
             hintsPanel.SetActive(true);
             RefreshAllDisplays();
+
+            // Audio feedback
+            UIAudioManager.Instance?.PlayMenuOpen();
+
             Debug.Log("[HintsMenuUI] Hints menu shown");
         }
     }
@@ -110,6 +134,10 @@ public class HintsMenuUI : MonoBehaviour
         if (hintsPanel != null)
         {
             hintsPanel.SetActive(false);
+
+            // Audio feedback
+            UIAudioManager.Instance?.PlayMenuClose();
+
             Debug.Log("[HintsMenuUI] Hints menu hidden");
         }
     }
@@ -259,11 +287,8 @@ public class HintsMenuUI : MonoBehaviour
     {
         Debug.Log("[HintsMenuUI] Back button clicked");
 
-        // TODO: Add audio feedback once correct AudioManager method is confirmed
-        // if (AudioManager.Instance != null)
-        // {
-        //     AudioManager.Instance.PlayButtonClick();
-        // }
+        // Audio feedback
+        UIAudioManager.Instance?.PlayCancel();
 
         // Notify PauseMenuManager (it will handle hiding this menu and showing main menu)
         PauseMenuManager pauseManager = FindObjectOfType<PauseMenuManager>();
@@ -282,28 +307,28 @@ public class HintsMenuUI : MonoBehaviour
         if (ClueManager.Instance == null || !ClueManager.Instance.hintsEnabled)
         {
             Debug.LogWarning("[HintsMenuUI] Cannot request hint - ClueManager not available or hints disabled");
+            UIAudioManager.Instance?.PlayError();
             return;
         }
 
         if (isOnCooldown)
         {
             Debug.Log("[HintsMenuUI] Cannot request hint - on cooldown");
+            UIAudioManager.Instance?.PlayError();
             return;
         }
 
         if (hintsRequested >= maxManualHints)
         {
             Debug.Log("[HintsMenuUI] Cannot request hint - max hints reached");
+            UIAudioManager.Instance?.PlayError();
             return;
         }
 
         Debug.Log("[HintsMenuUI] Manual hint requested");
 
-        // TODO: Add audio feedback once correct AudioManager method is confirmed
-        // if (AudioManager.Instance != null)
-        // {
-        //     AudioManager.Instance.PlayButtonClick();
-        // }
+        // Audio feedback - success
+        UIAudioManager.Instance?.PlayConfirm();
 
         // Request hint for a random puzzle (or most recently failed puzzle)
         RequestManualHint();
@@ -393,6 +418,41 @@ public class HintsMenuUI : MonoBehaviour
             ClueManager.Instance.hintUI.ShowHint(genericHint);
             Debug.Log("[HintsMenuUI] Showing generic hint");
         }
+    }
+
+    #endregion
+
+    #region Settings Integration
+
+    /// <summary>
+    /// Load hint settings from SettingsManager
+    /// </summary>
+    private void LoadHintSettings()
+    {
+        if (SettingsManager.Instance != null)
+        {
+            maxManualHints = SettingsManager.Instance.GetMaxManualHints();
+            hintCooldown = SettingsManager.Instance.GetHintCooldown();
+
+            Debug.Log($"[HintsMenuUI] Loaded settings: MaxHints={maxManualHints}, Cooldown={hintCooldown}s");
+        }
+    }
+
+    /// <summary>
+    /// Handle hint settings changes from SettingsManager
+    /// </summary>
+    /// <param name="hintsEnabled">Whether hints are enabled</param>
+    /// <param name="maxHints">Maximum manual hints</param>
+    /// <param name="cooldown">Cooldown in seconds</param>
+    private void OnHintSettingsChanged(bool hintsEnabled, int maxHints, float cooldown)
+    {
+        maxManualHints = maxHints;
+        hintCooldown = cooldown;
+
+        // Refresh displays to reflect new max hints
+        RefreshAllDisplays();
+
+        Debug.Log($"[HintsMenuUI] Settings updated: Enabled={hintsEnabled}, MaxHints={maxHints}, Cooldown={cooldown}s");
     }
 
     #endregion

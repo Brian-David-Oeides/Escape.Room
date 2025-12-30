@@ -57,6 +57,12 @@ public class SettingsData
     public float movementSpeed = 2f;
     public float snapTurnAngle = 45f;
 
+    [Header("Hint System Settings")]
+    public bool hintsEnabled = true;
+    public bool showClueProgress = true;
+    public int maxManualHints = 5;
+    public float hintCooldownSeconds = 60f;
+
     // Constructor with defaults
     public SettingsData()
     {
@@ -80,6 +86,9 @@ public class SettingsData
                 energyDrainRate = 0f; // No energy drain
                 consumableObjectCount = 15; // More candies
                 damageMultiplier = 0.5f; // Half damage
+                // Hint settings for Easy
+                maxManualHints = 5;
+                hintCooldownSeconds = 60f;
                 break;
 
             case DifficultyLevel.Normal:
@@ -90,6 +99,9 @@ public class SettingsData
                 energyDrainRate = 1f; // Normal drain
                 consumableObjectCount = 10; // Normal amount
                 damageMultiplier = 1f; // Normal damage
+                // Hint settings for Normal
+                maxManualHints = 3;
+                hintCooldownSeconds = 120f;
                 break;
 
             case DifficultyLevel.Hard:
@@ -100,6 +112,9 @@ public class SettingsData
                 energyDrainRate = 2f; // Faster drain
                 consumableObjectCount = 5; // Fewer candies
                 damageMultiplier = 2f; // Double damage
+                // Hint settings for Hard
+                maxManualHints = 1;
+                hintCooldownSeconds = 180f;
                 break;
         }
 
@@ -126,6 +141,10 @@ public class SettingsData
         energyDrainRate = Mathf.Clamp(energyDrainRate, 0f, 5f);
         consumableObjectCount = Mathf.Clamp(consumableObjectCount, 1, 20);
         damageMultiplier = Mathf.Clamp(damageMultiplier, 0.1f, 5f); // 0.1x to 5x
+
+        // Validate hint settings
+        maxManualHints = Mathf.Clamp(maxManualHints, 0, 10);
+        hintCooldownSeconds = Mathf.Max(0f, hintCooldownSeconds);
     }
 
     /// <summary>

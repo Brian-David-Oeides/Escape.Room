@@ -17,6 +17,7 @@ public class SettingsMenuUI : MonoBehaviour
     [SerializeField] private GameObject difficultyPanel;
     [SerializeField] private GameObject audioPanel;
     [SerializeField] private GameObject gameplayPanel;
+    [SerializeField] private GameObject hintsPanel;
 
     [Header("Difficulty Settings")]
     [SerializeField] private TMP_Dropdown difficultyDropdown;
@@ -41,6 +42,14 @@ public class SettingsMenuUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI snapTurnAngleText;
     [SerializeField] private Toggle healthEnergyTextToggle;
     [SerializeField] private Toggle hapticsToggle;
+
+    [Header("Hint Settings")]
+    [SerializeField] private Toggle hintsEnabledToggle;
+    [SerializeField] private Toggle showClueProgressToggle;
+    [SerializeField] private Slider maxManualHintsSlider;
+    [SerializeField] private TextMeshProUGUI maxManualHintsText;
+    [SerializeField] private Slider hintCooldownSlider;
+    [SerializeField] private TextMeshProUGUI hintCooldownText;
 
     [Header("Buttons")]
     [SerializeField] private Button applyButton;
@@ -89,6 +98,20 @@ public class SettingsMenuUI : MonoBehaviour
         if (hapticsToggle != null)
             hapticsToggle.onValueChanged.AddListener(OnHapticsToggled);
 
+        // Setup hint toggles
+        if (hintsEnabledToggle != null)
+            hintsEnabledToggle.onValueChanged.AddListener(OnHintsEnabledToggled);
+
+        if (showClueProgressToggle != null)
+            showClueProgressToggle.onValueChanged.AddListener(OnShowClueProgressToggled);
+
+        // Setup hint sliders
+        if (maxManualHintsSlider != null)
+            maxManualHintsSlider.onValueChanged.AddListener(OnMaxManualHintsChanged);
+
+        if (hintCooldownSlider != null)
+            hintCooldownSlider.onValueChanged.AddListener(OnHintCooldownChanged);
+
         // Load current settings
         LoadCurrentSettings();
 
@@ -132,6 +155,7 @@ public class SettingsMenuUI : MonoBehaviour
         if (difficultyPanel != null) difficultyPanel.SetActive(false);
         if (audioPanel != null) audioPanel.SetActive(false);
         if (gameplayPanel != null) gameplayPanel.SetActive(false);
+        if (hintsPanel != null) hintsPanel.SetActive(false);
 
         // Show requested panel
         switch (panelName.ToLower())
@@ -144,6 +168,9 @@ public class SettingsMenuUI : MonoBehaviour
                 break;
             case "gameplay":
                 if (gameplayPanel != null) gameplayPanel.SetActive(true);
+                break;
+            case "hints":
+                if (hintsPanel != null) hintsPanel.SetActive(true);
                 break;
         }
 
@@ -173,6 +200,9 @@ public class SettingsMenuUI : MonoBehaviour
 
         // Load gameplay settings
         LoadGameplaySettings();
+
+        // Load hint settings
+        LoadHintSettings();
 
         DebugLog("Settings loaded from SettingsManager");
     }
@@ -246,6 +276,42 @@ public class SettingsMenuUI : MonoBehaviour
         {
             hapticsToggle.isOn = SettingsManager.Instance.GetHealthEnergyHapticsEnabled();
         }
+    }
+
+    /// <summary>
+    /// Load hint settings from SettingsManager
+    /// </summary>
+    private void LoadHintSettings()
+    {
+        if (SettingsManager.Instance == null) return;
+
+        // Hints enabled toggle
+        if (hintsEnabledToggle != null)
+        {
+            hintsEnabledToggle.isOn = SettingsManager.Instance.GetHintsEnabled();
+        }
+
+        // Show clue progress toggle
+        if (showClueProgressToggle != null)
+        {
+            showClueProgressToggle.isOn = SettingsManager.Instance.GetShowClueProgress();
+        }
+
+        // Max manual hints slider
+        if (maxManualHintsSlider != null)
+        {
+            maxManualHintsSlider.value = SettingsManager.Instance.GetMaxManualHints();
+            UpdateMaxManualHintsText(maxManualHintsSlider.value);
+        }
+
+        // Hint cooldown slider
+        if (hintCooldownSlider != null)
+        {
+            hintCooldownSlider.value = SettingsManager.Instance.GetHintCooldown();
+            UpdateHintCooldownText(hintCooldownSlider.value);
+        }
+
+        DebugLog("Hint settings loaded");
     }
 
     #endregion
@@ -509,6 +575,137 @@ public class SettingsMenuUI : MonoBehaviour
     {
         if (snapTurnAngleText != null)
             snapTurnAngleText.text = $"{value:F0}°";
+    }
+
+    #endregion
+
+    #region Hint Callbacks
+
+    /// <summary>
+    /// Called when hints enabled toggle changes
+    /// </summary>
+    private void OnHintsEnabledToggled(bool isOn)
+    {
+        // Play audio feedback
+        if (UIAudioManager.Instance != null)
+        {
+            UIAudioManager.Instance.PlayButtonClick();
+        }
+
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.SetHintsEnabled(isOn);
+            DebugLog($"Hints enabled: {isOn}");
+        }
+    }
+
+    /// <summary>
+    /// Called when show clue progress toggle changes
+    /// </summary>
+    private void OnShowClueProgressToggled(bool isOn)
+    {
+        if (UIAudioManager.Instance != null)
+        {
+            UIAudioManager.Instance.PlayButtonClick();
+        }
+
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.SetShowClueProgress(isOn);
+            DebugLog($"Show clue progress: {isOn}");
+        }
+    }
+
+    /// <summary>
+    /// Called when max manual hints slider changes
+    /// </summary>
+    private void OnMaxManualHintsChanged(float value)
+    {
+        UpdateMaxManualHintsText(value);
+
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.SetMaxManualHints((int)value);
+        }
+    }
+
+    /// <summary>
+    /// Called when hint cooldown slider changes
+    /// </summary>
+    private void OnHintCooldownChanged(float value)
+    {
+        UpdateHintCooldownText(value);
+
+        if (SettingsManager.Instance != null)
+        {
+            SettingsManager.Instance.SetHintCooldown(value);
+        }
+    }
+
+    /// <summary>
+    /// Increment max manual hints (for VR +/- buttons)
+    /// </summary>
+    public void IncrementMaxManualHints()
+    {
+        if (maxManualHintsSlider != null)
+        {
+            maxManualHintsSlider.value = Mathf.Min(10f, maxManualHintsSlider.value + 1f);
+        }
+    }
+
+    /// <summary>
+    /// Decrement max manual hints (for VR +/- buttons)
+    /// </summary>
+    public void DecrementMaxManualHints()
+    {
+        if (maxManualHintsSlider != null)
+        {
+            maxManualHintsSlider.value = Mathf.Max(0f, maxManualHintsSlider.value - 1f);
+        }
+    }
+
+    /// <summary>
+    /// Increment hint cooldown by 30 seconds (for VR +/- buttons)
+    /// </summary>
+    public void IncrementHintCooldown()
+    {
+        if (hintCooldownSlider != null)
+        {
+            hintCooldownSlider.value = Mathf.Min(600f, hintCooldownSlider.value + 30f);
+        }
+    }
+
+    /// <summary>
+    /// Decrement hint cooldown by 30 seconds (for VR +/- buttons)
+    /// </summary>
+    public void DecrementHintCooldown()
+    {
+        if (hintCooldownSlider != null)
+        {
+            hintCooldownSlider.value = Mathf.Max(0f, hintCooldownSlider.value - 30f);
+        }
+    }
+
+    /// <summary>
+    /// Update max manual hints text display
+    /// </summary>
+    private void UpdateMaxManualHintsText(float value)
+    {
+        if (maxManualHintsText != null)
+            maxManualHintsText.text = $"{(int)value}";
+    }
+
+    /// <summary>
+    /// Update hint cooldown text display (shows as MM:SS)
+    /// </summary>
+    private void UpdateHintCooldownText(float value)
+    {
+        if (hintCooldownText != null)
+        {
+            int minutes = (int)(value / 60f);
+            int seconds = (int)(value % 60f);
+            hintCooldownText.text = $"{minutes}:{seconds:D2}";
+        }
     }
 
     #endregion

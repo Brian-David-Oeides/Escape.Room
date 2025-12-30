@@ -23,6 +23,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     public System.Action<DifficultyLevel> OnDifficultyChanged;
     public System.Action<float, float, float> OnVolumeChanged; // master, sfx, music
     public System.Action<bool, TimerMode, float> OnTimerSettingsChanged; // enabled, mode, duration
+    public System.Action<bool, int, float> OnHintSettingsChanged; // enabled, maxHints, cooldown
 
     private string SettingsFilePath => Path.Combine(Application.persistentDataPath, "GameSettings.json");
 
@@ -124,6 +125,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
         ApplyMovementSettings();
         ApplyDifficultySettings();
         ApplyTimerSettings();
+        ApplyHintSettings();
 
         // Notify listeners
         OnSettingsChanged?.Invoke(currentSettings);
@@ -233,6 +235,26 @@ public class SettingsManager : MonoSingleton<SettingsManager>
         OnTimerSettingsChanged?.Invoke(currentSettings.timerEnabled, currentSettings.timerMode, currentSettings.timerDuration);
     }
 
+    /// <summary>
+    /// Apply hint settings to ClueManager
+    /// </summary>
+    private void ApplyHintSettings()
+    {
+        // Apply to ClueManager
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.hintsEnabled = currentSettings.hintsEnabled;
+            DebugLog("Hint settings applied to ClueManager");
+        }
+
+        // Fire event (HintsMenuUI will listen to this to update max hints and cooldown)
+        OnHintSettingsChanged?.Invoke(
+            currentSettings.hintsEnabled,
+            currentSettings.maxManualHints,
+            currentSettings.hintCooldownSeconds
+        );
+    }
+
     #endregion
 
     #region Individual Setting Getters/Setters
@@ -243,6 +265,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
         currentSettings.ApplyDifficultyPreset(difficulty);
         ApplyDifficultySettings();
         ApplyTimerSettings(); // Timer settings are part of difficulty preset
+        ApplyHintSettings(); // Hint settings are part of difficulty preset
         SaveSettings();
         OnDifficultyChanged?.Invoke(difficulty);
         DebugLog($"Difficulty changed to {difficulty}");
@@ -355,6 +378,43 @@ public class SettingsManager : MonoSingleton<SettingsManager>
 
     public bool GetHealthEnergyTextVisible() => currentSettings.showHealthEnergyText;
     public bool GetHealthEnergyHapticsEnabled() => currentSettings.healthEnergyHapticsEnabled;
+
+    // Hint System Settings
+    public void SetHintsEnabled(bool enabled)
+    {
+        currentSettings.hintsEnabled = enabled;
+        ApplyHintSettings();
+        SaveSettings();
+        DebugLog($"Hints enabled: {enabled}");
+    }
+
+    public void SetShowClueProgress(bool show)
+    {
+        currentSettings.showClueProgress = show;
+        SaveSettings();
+        DebugLog($"Show clue progress: {show}");
+    }
+
+    public void SetMaxManualHints(int maxHints)
+    {
+        currentSettings.maxManualHints = Mathf.Clamp(maxHints, 0, 10);
+        ApplyHintSettings();
+        SaveSettings();
+        DebugLog($"Max manual hints: {maxHints}");
+    }
+
+    public void SetHintCooldown(float cooldownSeconds)
+    {
+        currentSettings.hintCooldownSeconds = Mathf.Max(0f, cooldownSeconds);
+        ApplyHintSettings();
+        SaveSettings();
+        DebugLog($"Hint cooldown: {cooldownSeconds}s");
+    }
+
+    public bool GetHintsEnabled() => currentSettings.hintsEnabled;
+    public bool GetShowClueProgress() => currentSettings.showClueProgress;
+    public int GetMaxManualHints() => currentSettings.maxManualHints;
+    public float GetHintCooldown() => currentSettings.hintCooldownSeconds;
 
     // Difficulty values (read-only from UI, set via difficulty preset)
     public float GetPlayerMaxHealth() => currentSettings.playerMaxHealth;
