@@ -4446,8 +4446,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcde8b0ceb40a7f479dce60ee8874413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puzzleID: puzzle_base_001
-  hintThreshold: 0
+  puzzleID: cabinet_stake
+  hintThreshold: 2
   isCompleted: 0
   OnPuzzleCompleted:
     m_PersistentCalls:
@@ -4461,6 +4461,8 @@ MonoBehaviour:
   targetRigidbody: {fileID: 423719841}
   hammerTag: Hammer
   stakeSocket: {fileID: 1495953424}
+  puzzleID: puzzle_base_001
+  hintThreshold: 0
 --- !u!1 &465004655
 GameObject:
   m_ObjectHideFlags: 0

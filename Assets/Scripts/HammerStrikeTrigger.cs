@@ -48,6 +48,11 @@ public class HammerStrikeTrigger : PuzzleBase
             // Complete the puzzle (saves state)
             CompletePuzzle();
         }
+        else if (IsValidFailedAttempt(other)) // NEW: Track only legitimate failed attempts
+        {
+            ClueManager.Instance?.RegisterFailedAttempt(puzzleID);
+            DebugLog($"Wrong object hit stake: {other.name} (needed hammer)");
+        }
     }
 
     /// <summary>
@@ -94,6 +99,23 @@ public class HammerStrikeTrigger : PuzzleBase
         ApplyUnlockedState(skipAnimation: true);
 
         DebugLog("Cabinet door unlocked state restored from save");
+    }
+
+    /// <summary>
+    /// Check if collision represents a valid failed attempt
+    /// </summary>
+    private bool IsValidFailedAttempt(Collider other)
+    {
+        // Ignore VR interaction colliders
+        if (other.name.Contains("Interactor") ||
+            other.name.Contains("Socket") ||
+            other.CompareTag("Player"))
+        {
+            return false;
+        }
+
+        // Only count objects with Rigidbody (actual physics objects)
+        return other.attachedRigidbody != null;
     }
 }
 
