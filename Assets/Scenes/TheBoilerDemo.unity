@@ -40773,6 +40773,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
+      propertyPath: isCompleted
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
       propertyPath: _socketRotator
       value: 
       objectReference: {fileID: 3760630585606230038}
@@ -75684,6 +75689,7 @@ MonoBehaviour:
   difficultyPanel: {fileID: 5293024104179823819}
   audioPanel: {fileID: 940083022144292512}
   gameplayPanel: {fileID: 1090725808463395359}
+  hintsPanel: {fileID: 0}
   difficultyDropdown: {fileID: 2790297821891260563}
   timerDurationText: {fileID: 1004809711739051176}
   maxHealthText: {fileID: 7054966571825869723}
@@ -75702,6 +75708,12 @@ MonoBehaviour:
   snapTurnAngleText: {fileID: 9221305841123607346}
   healthEnergyTextToggle: {fileID: 5855536165156880502}
   hapticsToggle: {fileID: 5729337852848829605}
+  hintsEnabledToggle: {fileID: 0}
+  showClueProgressToggle: {fileID: 0}
+  maxManualHintsSlider: {fileID: 0}
+  maxManualHintsText: {fileID: 0}
+  hintCooldownSlider: {fileID: 0}
+  hintCooldownText: {fileID: 0}
   applyButton: {fileID: 3747626127698838006}
   resetButton: {fileID: 7651984932234105970}
   backButton: {fileID: 3527955766419860182}

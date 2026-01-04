@@ -28,6 +28,10 @@ public class SocketRotator : MonoBehaviour, ISaveable
     [Header("Save System")]
     [SerializeField] private string socketID = "socket_valve";
 
+    [Header("Hint System")]
+    [SerializeField] private string puzzleID = "wrench_valve";
+    [SerializeField] private int hintThreshold = 1;
+
     [Header("Rotation Settings")]
     public float maxRotationX = 90f;  
     public float rotationSpeed = 75f;
@@ -212,6 +216,11 @@ public class SocketRotator : MonoBehaviour, ISaveable
                 {
                     rb.isKinematic = true;
                 }
+            }
+            else if (currentXRotation > 10f) // NEW: Player tried but didn't complete rotation
+            {
+                ClueManager.Instance?.RegisterFailedAttempt(puzzleID);
+                Debug.Log($"[SocketRotator] Failed attempt registered - rotation was {currentXRotation:F2}° (needed {maxRotationX}°)");
             }
         }
         else
