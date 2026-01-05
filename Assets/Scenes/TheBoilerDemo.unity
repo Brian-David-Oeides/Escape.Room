@@ -4461,8 +4461,6 @@ MonoBehaviour:
   targetRigidbody: {fileID: 423719841}
   hammerTag: Hammer
   stakeSocket: {fileID: 1495953424}
-  puzzleID: puzzle_base_001
-  hintThreshold: 0
 --- !u!1 &465004655
 GameObject:
   m_ObjectHideFlags: 0
@@ -40776,7 +40774,7 @@ PrefabInstance:
     - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: isCompleted
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
@@ -64212,6 +64210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2ab023efa9666d43b4391bf650251d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  puzzleID: chain_cutter
+  hintThreshold: 3
 --- !u!222 &5373797416159707620
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -74871,6 +74871,11 @@ PrefabInstance:
       propertyPath: _tintRenderers.Array.data[0]
       value: 
       objectReference: {fileID: 406380126}
+    - target: {fileID: 4780246975636227215, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: requireSafeUnlock
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7282898815667764557, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
       propertyPath: m_LocalPosition.x

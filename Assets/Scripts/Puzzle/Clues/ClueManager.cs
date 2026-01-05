@@ -119,7 +119,9 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     /// <summary>
     /// Register a failed puzzle attempt
     /// </summary>
-    public void RegisterFailedAttempt(string puzzleID)
+    /// <param name="puzzleID">Unique identifier for the puzzle</param>
+    /// <param name="customThreshold">Optional custom threshold (0 = use puzzle's configured threshold)</param>
+    public void RegisterFailedAttempt(string puzzleID, int customThreshold = 0)
     {
         if (string.IsNullOrEmpty(puzzleID))
         {
@@ -140,7 +142,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         DebugLog($"Failed attempt on {puzzleID}: {attempts} total");
 
         // Check if hint should be offered
-        CheckHintEligibility(puzzleID);
+        CheckHintEligibility(puzzleID, customThreshold);
     }
 
     /// <summary>
@@ -215,14 +217,14 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
 
     #region Private Methods
 
-    private void CheckHintEligibility(string puzzleID)
+    private void CheckHintEligibility(string puzzleID, int customThreshold = 0)
     {
         if (!hintsEnabled) return;
 
         int attempts = puzzleFailedAttempts[puzzleID];
 
-        // Check if there's a specific threshold for this puzzle
-        int threshold = GetPuzzleHintThreshold(puzzleID);
+        // Use custom threshold if provided, otherwise check puzzle's configured threshold
+        int threshold = customThreshold > 0 ? customThreshold : GetPuzzleHintThreshold(puzzleID);
 
         if (attempts >= threshold)
         {
