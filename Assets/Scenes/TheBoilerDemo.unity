@@ -16768,52 +16768,50 @@ MonoBehaviour:
   allClues:
   - clueID: journal_005
     clueName: Journal Entry #5
-    clueDescription: Look for the journal near the safe
-    relatedPuzzleIDs:
-    - safe_dial
+    clueDescription: Incident report warns about water near electrical panel - clean
+      it up before using power switch.
+    relatedPuzzleIDs: []
     isRequired: 1
   - clueID: journal_006
     clueName: Journal Entry #6
     clueDescription: Maintenance log mentions seized valve #3 on west wall - needs
       14" pipe wrench for leverage
-    relatedPuzzleIDs:
-    - valve_wrench
+    relatedPuzzleIDs: []
     isRequired: 1
   - clueID: journal_008
     clueName: Journal Entry #8
-    clueDescription: Shift schedule shows alarm set for specific time - check the
-      old clock
+    clueDescription: Personal journal mentions safe combination using numbers from
+      where Dad's watch stopped.
     relatedPuzzleIDs:
-    - old_clock
-    isRequired: 0
+    - safe_dial
+    isRequired: 1
   - clueID: paper_002
     clueName: Paper Clue #2
-    clueDescription: Torn photograph shows three framed pictures on the wall - notice
-      the arrangement
+    clueDescription: Maintenance log instructs to return the pictures back in their
+      proper place after fixing lights.
     relatedPuzzleIDs:
     - frame_lock
     isRequired: 1
   - clueID: paper_003
     clueName: Paper Clue #3
-    clueDescription: Tool inventory list - bolt cutters in supply closet, hammer
-      under workbench
+    clueDescription: Maintenance note about forcing open seized cabinet with chisel
+      and hammer - chisel left near electrical panel
     relatedPuzzleIDs:
-    - bolt_cutter
-    - hammer_cabinet
-    isRequired: 0
+    - cabinet_stake
+    isRequired: 1
   - clueID: paper_004
     clueName: Paper Clue #4
-    clueDescription: Warning notice - power must be restored before operating certain
-      equipment
+    clueDescription: Maintenance report about seized valve #3 on west wall - needs
+      14" pipe wrench to turn it
     relatedPuzzleIDs:
-    - lever_power
+    - wrench_valve
     isRequired: 1
   - clueID: hidden_note
     clueName: Hidden Note Under Chair
-    clueDescription: Hastily scribbled note - something important hidden in the bottom
-      left drawer
+    clueDescription: Note about checking electrical panel and wall switch with flashlight
+      - mentions connection issues
     relatedPuzzleIDs:
-    - drawers
+    - light_switch
     isRequired: 0
   hintsEnabled: 1
   failedAttemptsBeforeHint: 1
@@ -64212,6 +64210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   puzzleID: chain_cutter
   hintThreshold: 3
+  attemptCooldown: 2
 --- !u!222 &5373797416159707620
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -75832,7 +75831,7 @@ MonoBehaviour:
 
 
       PS. When you get the lights back on, please return
-      the pictures and tools back in their proper place. Thanks, Dave.
+      the 3  pictures and tools back in their proper place. Thanks, Dave.
 
 '
     pageTitle: 
