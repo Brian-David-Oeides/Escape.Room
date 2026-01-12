@@ -14,6 +14,10 @@ public class SwitchToggle : MonoBehaviour, ISaveable
 
     private bool isUnlocked = false;
 
+    [Header("Hint System")]
+    [SerializeField] private string puzzleID = "light_switch";
+    [SerializeField] private int hintThreshold = 2;
+
     [Header("Animation")]
     [SerializeField] private Animator _switchAnimator;
     [SerializeField] private string _animBoolParameterName = "SwitchOn";
@@ -40,7 +44,8 @@ public class SwitchToggle : MonoBehaviour, ISaveable
             // NEW: Start locked if configured
             if (startLocked)
             {
-                _interactable.enabled = false;
+                // Keep interactable enabled to detect failed attempts
+                // Lock state is checked in OnSelectEntered instead
                 Debug.Log("[SwitchToggle] Switch locked - waiting for flashlight beam");
             }
             else
@@ -83,6 +88,15 @@ public class SwitchToggle : MonoBehaviour, ISaveable
 
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
+        // Check if switch is locked
+        if (startLocked && !isUnlocked)
+        {
+            // Player tried to use locked switch - register failed attempt
+            ClueManager.Instance?.RegisterFailedAttempt(puzzleID, hintThreshold);
+            Debug.Log($"[SwitchToggle] Attempted to use locked switch - hint tracking registered");
+            return; // Don't toggle
+        }
+
         ToggleState();
     }
 
