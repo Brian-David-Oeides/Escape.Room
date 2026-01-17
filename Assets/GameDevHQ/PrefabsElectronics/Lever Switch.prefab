@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2938608618164397434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1507145167000113913}
+  m_Layer: 0
+  m_Name: SparkSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1507145167000113913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938608618164397434}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.023}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7953379795396499959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7953379795396920785
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +290,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOn: 0
+  leverID: lever_main
+  puddleHazard: {fileID: 0}
   _leverAnimator: {fileID: 0}
+  _toggleAudioSource: {fileID: 0}
+  _toggleSoundClip: {fileID: 0}
+  _electricShockAudioSource: {fileID: 0}
+  _electricShockClip: {fileID: 0}
+  _powerGeneratorAudioSource: {fileID: 0}
+  _powerGeneratorClip: {fileID: 0}
+  _electricArcAudioSource: {fileID: 0}
+  _electricArcClip: {fileID: 0}
+  _arcMinDelay: 60
+  _arcMaxDelay: 120
   OnLeverUp:
     m_PersistentCalls:
       m_Calls: []
@@ -402,7 +445,8 @@ Transform:
   m_LocalPosition: {x: -0.08127487, y: -0.063442044, z: 0.10438719}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1507145167000113913}
   m_Father: {fileID: 7953379795396499953}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7953379795395729873
@@ -510,7 +554,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOn: 0
+  leverID: lever_main
+  puddleHazard: {fileID: 0}
   _leverAnimator: {fileID: 0}
+  _toggleAudioSource: {fileID: 0}
+  _toggleSoundClip: {fileID: 0}
+  _electricShockAudioSource: {fileID: 0}
+  _electricShockClip: {fileID: 0}
+  _powerGeneratorAudioSource: {fileID: 0}
+  _powerGeneratorClip: {fileID: 0}
+  _electricArcAudioSource: {fileID: 0}
+  _electricArcClip: {fileID: 0}
+  _arcMinDelay: 60
+  _arcMaxDelay: 120
   OnLeverUp:
     m_PersistentCalls:
       m_Calls:

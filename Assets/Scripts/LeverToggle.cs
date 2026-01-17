@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,6 +12,9 @@ public class LeverToggle : MonoBehaviour, ISaveable
 
     [Header("Save System")]
     [SerializeField] private string leverID = "lever_main";
+
+    [Header("Puddle Hazard")]
+    [SerializeField] private PuddleHazard puddleHazard;
 
     [Header("Animation")]
     [SerializeField] private Animator _leverAnimator;
@@ -99,6 +102,14 @@ public class LeverToggle : MonoBehaviour, ISaveable
 
     private void OnSelectEntered(SelectEnterEventArgs args)
     {
+        // Check for puddle hazard BEFORE toggling
+        if (puddleHazard != null && !puddleHazard.CanActivateLever())
+        {
+            puddleHazard.OnDangerousActivationAttempt();
+            Debug.Log("[LeverToggle] ⚠️ Cannot activate - puddle present!");
+            return; // Don't toggle lever
+        }
+
         // Make sure animator is enabled when lever is interacted with
         if (_leverAnimator != null && !_leverAnimator.enabled)
         {
