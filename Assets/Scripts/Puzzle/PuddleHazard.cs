@@ -82,7 +82,10 @@ public class PuddleHazard : MonoBehaviour
             waterDripParticles.Stop();
         }
 
-        Debug.Log("[PuddleHazard] ✓ Puddle removed - lever now safe to activate");
+        Debug.Log("[PuddleHazard] Puddle removed - lever can now be safely used");
+
+        // Disable the entire puddle GameObject (this will stop audio via OnDisable)
+        gameObject.SetActive(false);
     }
 
     private void PlayElectricShockEffects()
