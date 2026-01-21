@@ -21,6 +21,7 @@ public class MopCleaner : MonoBehaviour
     private float cleaningTimer = 0f;
     private PuddleHazard currentPuddle = null;
     private bool hasCleanedThisFrame = false;
+    private Vector3 originalPuddleScale;
 
     private void Start()
     {
@@ -93,7 +94,23 @@ public class MopCleaner : MonoBehaviour
 
         // Update cleaning progress ONCE per frame
         cleaningTimer += Time.deltaTime;
-        Debug.Log($"[MopCleaner] Cleaning progress: {cleaningTimer:F2}/{cleaningDuration}");
+
+        // Calculate shrink percentage (0 to 1)
+        float shrinkProgress = cleaningTimer / cleaningDuration;
+
+        // Gradually scale down the puddle visual
+        if (currentPuddle != null)
+        {
+            GameObject puddleVisual = currentPuddle.transform.Find("PuddleVisual")?.gameObject;
+            if (puddleVisual != null)
+            {
+                // Lerp from original scale to zero
+                Vector3 targetScale = Vector3.zero;
+                puddleVisual.transform.localScale = Vector3.Lerp(originalPuddleScale, targetScale, shrinkProgress);
+            }
+        }
+
+        Debug.Log($"[MopCleaner] Cleaning progress: {cleaningTimer:F2}/{cleaningDuration} - Shrink: {shrinkProgress:F2}");
 
         // Check if cleaning is complete
         if (cleaningTimer >= cleaningDuration)
@@ -122,6 +139,16 @@ public class MopCleaner : MonoBehaviour
     {
         isCleaningInProgress = true;
         cleaningTimer = 0f;
+
+        // Store the original scale when cleaning starts
+        if (currentPuddle != null)
+        {
+            GameObject puddleVisual = currentPuddle.transform.Find("PuddleVisual")?.gameObject;
+            if (puddleVisual != null)
+            {
+                originalPuddleScale = puddleVisual.transform.localScale;
+            }
+        }
 
         // Start water absorb particles
         if (waterAbsorbParticles != null)
