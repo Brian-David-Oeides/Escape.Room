@@ -727,6 +727,12 @@ public class GameManager : MonoSingleton<GameManager>
             PlayerController.Instance.UpdateXROriginReference();
         }
 
+        // Update FootstepAudioManager's XR Origin reference
+        if (FootstepAudioManager.Instance != null)
+        {
+            FootstepAudioManager.Instance.UpdateXROriginReference();
+        }
+
         // Handle scene-specific logic
         if (scene.name == mainMenuSceneName)
         {

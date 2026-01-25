@@ -14,7 +14,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
@@ -70,15 +70,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Vector1_17E53C12: 0.77
+    - Vector1_17E53C12: 0.1
     - Vector1_244B0600: 0.03
     - Vector1_34CF798A: 1.75
     - Vector1_36E8227: 0
     - Vector1_3D886DA1: 0
     - Vector1_46E42935: 0.4
     - Vector1_47683D42: 0.9
-    - Vector1_A0EAD698: 0.5
-    - Vector1_A6A0BC26: 0.025
+    - Vector1_A0EAD698: 0.05
+    - Vector1_A6A0BC26: 0.15
     - Vector1_B9F56378: 0.17
     - Vector1_C360A163: 0
     - Vector1_DF445019: 1.5
