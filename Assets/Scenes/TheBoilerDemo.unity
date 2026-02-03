@@ -5014,6 +5014,7 @@ Transform:
   - {fileID: 1561745338}
   - {fileID: 6773406010166054893}
   - {fileID: 1670862277}
+  - {fileID: 543450653008503634}
   m_Father: {fileID: 5337178920147391811}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &467948742
@@ -7641,6 +7642,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DestroyedPallet02 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482326120125550981, guid: df72a8240afa56346a049c1a3e1c70fd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6482326120125550981, guid: df72a8240afa56346a049c1a3e1c70fd,
         type: 3}
@@ -10958,7 +10964,6 @@ Transform:
   - {fileID: 5337178919711485300}
   - {fileID: 5337178919793025701}
   - {fileID: 5337178919122022144}
-  - {fileID: 543450653008503634}
   m_Father: {fileID: 5337178920147391811}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &907177587
@@ -11023,6 +11028,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipes Straight 1 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21053,6 +21063,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5805982764334558699, guid: cf35fff1250e88647907aa2ac478e65f,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5805982764334558699, guid: cf35fff1250e88647907aa2ac478e65f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5805982764334558699, guid: cf35fff1250e88647907aa2ac478e65f,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -21965,6 +21985,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipes Straight 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
         type: 3}
@@ -23353,6 +23378,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -23645,6 +23675,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipes Straight 1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
         type: 3}
@@ -25101,6 +25136,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -25542,6 +25582,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Industrial Tank 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662489818123444023, guid: a48e518484e54dc44bc51ae085ee9283,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3662489818123469591, guid: a48e518484e54dc44bc51ae085ee9283,
         type: 3}
@@ -27399,6 +27444,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pipes Straight 1 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 6651346098180324661, guid: 30aa250c2fb37c246a84c10cde1b3182,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28958,6 +29008,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipes Turn 2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5805982764334558699, guid: cf35fff1250e88647907aa2ac478e65f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5805982764334592459, guid: cf35fff1250e88647907aa2ac478e65f,
         type: 3}
@@ -30602,6 +30657,16 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1894287950}
+    - target: {fileID: 2774577542780527367, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2822696322055981026, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 3319150521515890915, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
       propertyPath: waterSounds.walkClips.Array.size
@@ -48348,6 +48413,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5581466342836403892, guid: 5f41cd47c2baf984e8cb202ab97c8ed0,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5581466342836403892, guid: 5f41cd47c2baf984e8cb202ab97c8ed0,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -48713,6 +48783,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5337178919078285348}
+  - component: {fileID: 5337178919078285350}
   m_Layer: 3
   m_Name: Floor
   m_TagString: Floor
@@ -48720,6 +48791,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
+--- !u!114 &5337178919078285350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5337178919078285349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 1073743839
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 3478c6e2490f5de46b4efd2d18380a37, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1001 &5337178919092670458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49292,6 +49394,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2714359885432915207, guid: 0d7a848de3b8c0846a027480582ac846,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2714359885432915207, guid: 0d7a848de3b8c0846a027480582ac846,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -49354,6 +49461,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Long_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8873941300466909526, guid: 0d7a848de3b8c0846a027480582ac846,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8873941300466909526, guid: 0d7a848de3b8c0846a027480582ac846,
         type: 3}
@@ -51361,6 +51473,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2740631075556132376, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740631075556132376, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -51433,6 +51550,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Medium_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7084732069752205837, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7084732069752205837, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
         type: 3}
@@ -53023,6 +53145,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -53313,6 +53440,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -53335,6 +53467,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5337178919908424948}
     m_Modifications:
+    - target: {fileID: 2740631075556132376, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 2740631075556132376, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -53399,6 +53536,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Medium_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7084732069752205837, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7084732069752205837, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
         type: 3}
@@ -53577,6 +53719,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireSprinklerPipe_02 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
         type: 3}
@@ -54654,6 +54801,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 943465955996247071, guid: 92463047a30fd344c8e160280383f80c,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 943465955996247071, guid: 92463047a30fd344c8e160280383f80c,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -54721,6 +54873,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541127482341371337, guid: 92463047a30fd344c8e160280383f80c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8541127482341371337, guid: 92463047a30fd344c8e160280383f80c,
         type: 3}
@@ -55101,6 +55258,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1931368725651627186, guid: dba960101799a3149900018b521364e1,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1931368725651627186, guid: dba960101799a3149900018b521364e1,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -55108,6 +55270,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Cross_Joint_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093155780132552369, guid: dba960101799a3149900018b521364e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2093155780132552369, guid: dba960101799a3149900018b521364e1,
         type: 3}
@@ -55568,7 +55735,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5337178919908424948}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Industrials
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55772,6 +55939,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -55961,6 +56133,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2740631075556132376, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740631075556132376, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -56033,6 +56210,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Medium_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7084732069752205837, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7084732069752205837, guid: 0096e0bcb64c4ae4b86eef2a30713d53,
         type: 3}
@@ -56595,8 +56777,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3805964723248646866, guid: 8f3a8707d36503c48a19770e887713d1,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3805964723248646866, guid: 8f3a8707d36503c48a19770e887713d1,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5771536702158975256, guid: 8f3a8707d36503c48a19770e887713d1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5771536702158975256, guid: 8f3a8707d36503c48a19770e887713d1,
         type: 3}
@@ -57009,6 +57201,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1387597602065211452, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1387597602065211452, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -57066,6 +57263,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5142088613305761180, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5142088613305761180, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
         type: 3}
@@ -57527,6 +57729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -57611,6 +57818,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1387597602065211452, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1387597602065211452, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -57668,6 +57880,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5142088613305761180, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5142088613305761180, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
         type: 3}
@@ -58399,6 +58616,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3891846958450404639, guid: 30188240db5124241a808aea150e49eb,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3891846958450404639, guid: 30188240db5124241a808aea150e49eb,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -58646,6 +58868,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2530088592531442726, guid: c1647c7287968434980f3521ecb930e5,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2530088592531442726, guid: c1647c7287968434980f3521ecb930e5,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -58653,6 +58880,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Container_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4948089211879601223, guid: c1647c7287968434980f3521ecb930e5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4948089211879601223, guid: c1647c7287968434980f3521ecb930e5,
         type: 3}
@@ -59709,6 +59941,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -60348,6 +60585,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireSprinklerPipe_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
         type: 3}
@@ -61007,6 +61249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -61096,8 +61343,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4716168986743097513, guid: fc40c15944ce59b46abcf4dfd8027b9f,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4716168986743097513, guid: fc40c15944ce59b46abcf4dfd8027b9f,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7909337699150438197, guid: fc40c15944ce59b46abcf4dfd8027b9f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7909337699150438197, guid: fc40c15944ce59b46abcf4dfd8027b9f,
         type: 3}
@@ -61318,6 +61575,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3337698367328854912, guid: a8a9db669c647074ab3802d71c7ebcb2,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3337698367328854912, guid: a8a9db669c647074ab3802d71c7ebcb2,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -61383,6 +61645,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7891570089552366824, guid: a8a9db669c647074ab3802d71c7ebcb2,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891570089552366824, guid: a8a9db669c647074ab3802d71c7ebcb2,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -61409,6 +61676,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DestroyedPallet02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482326120125550981, guid: df72a8240afa56346a049c1a3e1c70fd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6482326120125550981, guid: df72a8240afa56346a049c1a3e1c70fd,
         type: 3}
@@ -61610,6 +61882,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireSprinklerPipe_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
         type: 3}
@@ -61841,6 +62118,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3159053545586150022, guid: fb0ba9e53b66e9b4eaeefd2964b05512,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3159053545586150022, guid: fb0ba9e53b66e9b4eaeefd2964b05512,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -61848,6 +62130,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Cap_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3855163375653807307, guid: fb0ba9e53b66e9b4eaeefd2964b05512,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3855163375653807307, guid: fb0ba9e53b66e9b4eaeefd2964b05512,
         type: 3}
@@ -62046,6 +62333,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireSprinklerPipe_02 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
         type: 3}
@@ -62677,6 +62969,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 943465955996247071, guid: 92463047a30fd344c8e160280383f80c,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 943465955996247071, guid: 92463047a30fd344c8e160280383f80c,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -62744,6 +63041,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541127482341371337, guid: 92463047a30fd344c8e160280383f80c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8541127482341371337, guid: 92463047a30fd344c8e160280383f80c,
         type: 3}
@@ -63282,6 +63584,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1387597602065211452, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1387597602065211452, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -63339,6 +63646,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5142088613305761180, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5142088613305761180, guid: e06ac2d3c52ef9841a98685f0a92d5e5,
         type: 3}
@@ -63555,6 +63867,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4828233432750318857, guid: 1cd65e34b7d0eb843b1cb523cc3d03d0,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828233432750318857, guid: 1cd65e34b7d0eb843b1cb523cc3d03d0,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -63627,6 +63944,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_90_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7784452813855467797, guid: 1cd65e34b7d0eb843b1cb523cc3d03d0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7784452813855467797, guid: 1cd65e34b7d0eb843b1cb523cc3d03d0,
         type: 3}
@@ -63857,6 +64179,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2714359885432915207, guid: 0d7a848de3b8c0846a027480582ac846,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2714359885432915207, guid: 0d7a848de3b8c0846a027480582ac846,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -63919,6 +64246,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_Long_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8873941300466909526, guid: 0d7a848de3b8c0846a027480582ac846,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8873941300466909526, guid: 0d7a848de3b8c0846a027480582ac846,
         type: 3}
@@ -64213,6 +64545,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076178493810574882, guid: 1991882bf2a9bef49bda3bbf17c116d8,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -64292,6 +64629,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3034623231751012339, guid: f4785e44c7af00c4fb0bb9a32d550d12,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3034623231751012339, guid: f4785e44c7af00c4fb0bb9a32d550d12,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -64354,6 +64696,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_T_Joint_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015416898133410220, guid: f4785e44c7af00c4fb0bb9a32d550d12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7015416898133410220, guid: f4785e44c7af00c4fb0bb9a32d550d12,
         type: 3}
@@ -64843,6 +65190,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 943465955996247071, guid: 92463047a30fd344c8e160280383f80c,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 943465955996247071, guid: 92463047a30fd344c8e160280383f80c,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -64910,6 +65262,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8541127482341371337, guid: 92463047a30fd344c8e160280383f80c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8541127482341371337, guid: 92463047a30fd344c8e160280383f80c,
         type: 3}
@@ -65350,6 +65707,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Long_Pipe
+      objectReference: {fileID: 0}
+    - target: {fileID: 3891846958450404639, guid: 30188240db5124241a808aea150e49eb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3891846958450404639, guid: 30188240db5124241a808aea150e49eb,
         type: 3}
@@ -66066,6 +66428,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005570079816651162, guid: 619c3b41127c5844ba83e43f27f927ce,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -66088,6 +66455,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5337178919908424948}
     m_Modifications:
+    - target: {fileID: 3034623231751012339, guid: f4785e44c7af00c4fb0bb9a32d550d12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 3034623231751012339, guid: f4785e44c7af00c4fb0bb9a32d550d12,
         type: 3}
       propertyPath: m_StaticEditorFlags
@@ -66152,6 +66524,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pipe_T_Joint_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015416898133410220, guid: f4785e44c7af00c4fb0bb9a32d550d12,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7015416898133410220, guid: f4785e44c7af00c4fb0bb9a32d550d12,
         type: 3}
@@ -75135,7 +75512,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 900259604}
+    m_TransformParent: {fileID: 465004656}
     m_Modifications:
     - target: {fileID: 2381915660798506151, guid: 30d32d0bfa8982443b417b14e52e41d9,
         type: 3}
