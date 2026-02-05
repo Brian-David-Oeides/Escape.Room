@@ -17,8 +17,8 @@ public class NavMeshTest : MonoBehaviour
         agent.updatePosition = false;
         agent.updateRotation = false;
 
-        Debug.Log("NavMeshAgent configured for root motion");
-        Debug.Log("Is on NavMesh: " + agent.isOnNavMesh);
+        // Debug.Log("NavMeshAgent configured for root motion");
+        // Debug.Log("Is on NavMesh: " + agent.isOnNavMesh);
     }
 
     void Update()
@@ -33,7 +33,7 @@ public class NavMeshTest : MonoBehaviour
             if (NavMesh.SamplePosition(randomDirection, out hit, 10f, NavMesh.AllAreas))
             {
                 agent.SetDestination(hit.position);
-                Debug.Log("Destination set to: " + hit.position);
+                // Debug.Log("Destination set to: " + hit.position);
             }
         }
 
@@ -44,10 +44,10 @@ public class NavMeshTest : MonoBehaviour
         animator.SetFloat("Speed", speed);
 
         
-        if (speed > 0.1f)
+        /*if (speed > 0.1f)
         {
             Debug.Log("Speed being sent to animator: " + speed);
-        }
+        }*/
 
         // Rotate toward movement direction
         if (agent.desiredVelocity.magnitude > 0.1f)
