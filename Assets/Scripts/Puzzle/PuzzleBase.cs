@@ -74,6 +74,8 @@ public abstract class PuzzleBase : MonoBehaviour, ISaveable
         isCompleted = true;
         DebugLog($"Puzzle {puzzleID} COMPLETED!");
 
+        PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
+
         // Apply visual changes
         ApplyCompletedStateVisuals();
 

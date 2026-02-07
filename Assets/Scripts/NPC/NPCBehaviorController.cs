@@ -98,8 +98,15 @@ public class NPCBehaviorController : MonoBehaviour
 
     void SubscribeToPuzzleEvents()
     {
-        // TODO: Subscribe to PuzzleManager events
-        // We'll implement this in the next step
+        if (PuzzleManager.Instance != null)
+        {
+            PuzzleManager.Instance.OnPuzzleCompleted += OnPuzzleCompleted;
+            Debug.Log("[NPCBehaviorController] Subscribed to PuzzleManager events");
+        }
+        else
+        {
+            Debug.LogWarning("[NPCBehaviorController] PuzzleManager not found!");
+        }
     }
 
     void UpdateBehaviorState()
@@ -178,6 +185,8 @@ public class NPCBehaviorController : MonoBehaviour
             // If too close, move away
             if (distanceToPlayer < observingDistance)
             {
+                agent.speed = loiterMoveSpeed;
+
                 Vector3 awayFromPlayer = transform.position - playerTransform.position;
                 Vector3 targetPos = transform.position + awayFromPlayer.normalized * 3f;
 
@@ -201,6 +210,8 @@ public class NPCBehaviorController : MonoBehaviour
         // Move toward player for dialogue
         if (playerTransform != null)
         {
+            agent.speed = loiterMoveSpeed;
+
             float distance = Vector3.Distance(transform.position, playerTransform.position);
             if (distance > approachDistance)
             {
@@ -264,5 +275,14 @@ public class NPCBehaviorController : MonoBehaviour
     {
         currentPuzzleCount = totalCompleted;
         UpdateBehaviorState();
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from events
+        if (PuzzleManager.Instance != null)
+        {
+            PuzzleManager.Instance.OnPuzzleCompleted -= OnPuzzleCompleted;
+        }
     }
 }
