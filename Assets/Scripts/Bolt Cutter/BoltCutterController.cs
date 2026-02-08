@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit; 
+using UnityEngine.InputSystem;
 
 public class BoltCutterController : MonoBehaviour
 {
@@ -13,9 +15,24 @@ public class BoltCutterController : MonoBehaviour
     public float speed = 90f; // degrees per second
     public float holdClosedDuration = 1f;
 
+    [Header("Input Actions")]
+    [SerializeField] private InputActionReference leftTriggerAction;
+    [SerializeField] private InputActionReference rightTriggerAction;
+
+    private XRGrabInteractable grabInteractable;
+
     private float currentRotation = 0f;
     private bool isCutting = false;
     private bool isResetting = false;
+
+    void Awake()
+    {
+        grabInteractable = GetComponent<XRGrabInteractable>();
+
+        // Subscribe to grab/release events
+        grabInteractable.selectEntered.AddListener(OnGrabbed);
+        grabInteractable.selectExited.AddListener(OnReleased);
+    }
 
     void Update()
     {
@@ -66,6 +83,44 @@ public class BoltCutterController : MonoBehaviour
         isCutting = false;
         isResetting = false;
         BoltCutterCutState.IsCutting = false; // reset the flag
+    }
+
+    void OnGrabbed(SelectEnterEventArgs args)
+    {
+        // Enable trigger input when grabbed
+        if (leftTriggerAction != null && leftTriggerAction.action != null)
+        {
+            leftTriggerAction.action.performed += OnTriggerPressed;
+        }
+
+        if (rightTriggerAction != null && rightTriggerAction.action != null)
+        {
+            rightTriggerAction.action.performed += OnTriggerPressed;
+        }
+
+        Debug.Log("Bolt cutters grabbed - trigger input enabled");
+    }
+
+    void OnReleased(SelectExitEventArgs args)
+    {
+        // Disable trigger input when released
+        if (leftTriggerAction != null && leftTriggerAction.action != null)
+        {
+            leftTriggerAction.action.performed -= OnTriggerPressed;
+        }
+
+        if (rightTriggerAction != null && rightTriggerAction.action != null)
+        {
+            rightTriggerAction.action.performed -= OnTriggerPressed;
+        }
+
+        Debug.Log("Bolt cutters released - trigger input disabled");
+    }
+
+    void OnTriggerPressed(InputAction.CallbackContext context)
+    {
+        Debug.Log("Trigger pressed while holding bolt cutters!");
+        TriggerCut();
     }
 }
 

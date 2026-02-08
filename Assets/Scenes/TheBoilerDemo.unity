@@ -34056,6 +34056,10 @@ MonoBehaviour:
   maxRotation: 14
   speed: 90
   holdClosedDuration: 1
+  leftTriggerAction: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  rightTriggerAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
 --- !u!114 &919132147867355849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80588,7 +80592,7 @@ PrefabInstance:
     - target: {fileID: 4780246975636227215, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
       propertyPath: requireSafeUnlock
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7282898815667764557, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
