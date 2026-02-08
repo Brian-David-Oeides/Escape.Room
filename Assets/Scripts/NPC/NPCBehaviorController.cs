@@ -285,4 +285,22 @@ public class NPCBehaviorController : MonoBehaviour
             PuzzleManager.Instance.OnPuzzleCompleted -= OnPuzzleCompleted;
         }
     }
+
+    void OnDrawGizmos()
+    {
+        // Debug: Draw line to player if detected
+        if (playerTransform != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, playerTransform.position);
+
+            // Draw observing distance sphere
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, observingDistance);
+
+            // Draw approach distance sphere
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, approachDistance);
+        }
+    }
 }
