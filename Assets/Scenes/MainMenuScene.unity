@@ -27328,6 +27328,8 @@ MonoBehaviour:
   maxRotation: 30
   speed: 90
   holdClosedDuration: 1
+  leftTriggerAction: {fileID: 0}
+  rightTriggerAction: {fileID: 0}
 --- !u!114 &919132147867355849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55089,8 +55091,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -55106,7 +55108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8120ff5cd9bacb47b1ac47746ec89c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  puzzleID: puzzle_base_001
+  puzzleID: chain_cutter_01
   hintThreshold: 0
   isCompleted: 0
   OnPuzzleCompleted:
@@ -55118,9 +55120,9 @@ MonoBehaviour:
   collidersToDisable: []
   renderersToHide: []
   showDebugLogs: 1
-  chainBody: {fileID: 0}
+  chainBody: {fileID: 5337178921093224658}
   audioSource: {fileID: 0}
-  disableDelay: 2
+  disableDelay: 0.5
 --- !u!82 &5337178921093224660
 AudioSource:
   m_ObjectHideFlags: 0
@@ -55131,7 +55133,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: bdf49796786ac5e4db124149a49f741e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: efea88141111ec64799d456f56e52710, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

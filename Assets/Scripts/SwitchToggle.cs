@@ -108,6 +108,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
 
         if (_isOn)
         {
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
             OnSwitchOn?.Invoke();
         }
         else
