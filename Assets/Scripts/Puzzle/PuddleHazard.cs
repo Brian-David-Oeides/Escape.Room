@@ -83,7 +83,7 @@ public class PuddleHazard : MonoBehaviour
         }
 
         Debug.Log("[PuddleHazard] Puddle removed - lever can now be safely used");
-
+        PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
         // Disable the entire puddle GameObject (this will stop audio via OnDisable)
         gameObject.SetActive(false);
     }

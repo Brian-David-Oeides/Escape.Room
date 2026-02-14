@@ -131,9 +131,8 @@ public class SocketRotator : MonoBehaviour, ISaveable
         if (currentXRotation >= maxRotationX && !eventFired)
         {
             onFullyTurned.Invoke();
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
             eventFired = true;
-
-            // Set to exact max rotation when event is fired
             currentXRotation = maxRotationX;
         }
     }

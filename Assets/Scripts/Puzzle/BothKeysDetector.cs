@@ -158,6 +158,7 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
         {
             _dialUnlocked = true;  // Permanent unlock
             DebugLog("✓ BOTH KEYS INSERTED - Firing OnBothKeysInserted event! Dial permanently unlocked.");
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
             OnBothKeysInserted?.Invoke();
         }
     }
