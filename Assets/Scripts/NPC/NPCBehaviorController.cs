@@ -15,6 +15,8 @@ public class NPCBehaviorController : MonoBehaviour
         Hunting       // 6+ puzzles
     }
 
+    public BehaviorState CurrentState => currentState;
+
     [Header("Current State")]
     [SerializeField] private BehaviorState currentState = BehaviorState.Dormant;
 
@@ -241,6 +243,7 @@ public class NPCBehaviorController : MonoBehaviour
         if (playerTransform != null)
         {
             agent.isStopped = false;
+            agent.stoppingDistance = 2.0f;
             agent.SetDestination(playerTransform.position);
             agent.speed = huntingSpeed;
         }

@@ -34284,6 +34284,7 @@ GameObject:
   - component: {fileID: 5866666021642897069}
   - component: {fileID: 5866666021642897071}
   - component: {fileID: 5866666021642897072}
+  - component: {fileID: 5866666021642897073}
   m_Layer: 0
   m_Name: Man_15_Unity
   m_TagString: Untagged
@@ -70264,6 +70265,29 @@ MonoBehaviour:
   loiterRadius: 5
   loiterWaitTime: 3
   loiterMoveSpeed: 1.5
+--- !u!114 &5866666021642897073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149425931885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fad6b1beb4e73c4f9e7fb86da34a40e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRange: 2
+  attackCooldown: 4
+  attackDamage: 20
+  counterWindowDelay: 0.4
+  counterWindowDuration: 1.2
+  damageDelay: 1
+  hitsToDefeat: 3
+  leftGripAction: {fileID: -6131295136447488360, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  rightGripAction: {fileID: 187161793506945269, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
 --- !u!1 &5875037490884683847
 GameObject:
   m_ObjectHideFlags: 0

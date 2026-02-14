@@ -1,0 +1,186 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class NPCCombatController : MonoBehaviour
+{
+    [Header("References")]
+    private NPCBehaviorController behaviorController;
+    private Animator animator;
+    private Transform playerTransform;
+
+    [Header("Attack Settings")]
+    [SerializeField] private float attackRange = 2.0f;
+    [SerializeField] private float attackCooldown = 4.0f;
+    [SerializeField] private float attackDamage = 20f;
+
+    [Header("Counter-Attack Window")]
+    [SerializeField] private float counterWindowDelay = 0.4f;
+    [SerializeField] private float counterWindowDuration = 1.2f;
+    [SerializeField] private float damageDelay = 1.0f;
+
+    [Header("Defeat Settings")]
+    [SerializeField] private int hitsToDefeat = 3;
+
+    [Header("Counter-Attack Input")]
+    [SerializeField] private InputActionReference leftGripAction;
+    [SerializeField] private InputActionReference rightGripAction;
+
+    // State tracking
+    private bool isAttacking = false;
+    private bool counterWindowOpen = false;
+    private bool playerCounteredThisAttack = false;
+    private float attackCooldownTimer = 0f;
+    private int currentHitCount = 0;
+    private bool isDefeated = false;
+
+    void Start()
+    {
+        behaviorController = GetComponent<NPCBehaviorController>();
+        animator = GetComponent<Animator>();
+
+        GameObject xrRig = GameObject.Find("XR Origin (XR Rig)");
+        if (xrRig != null)
+            playerTransform = xrRig.transform;
+        else
+            Debug.LogError("[NPCCombatController] Could not find XR Origin (XR Rig)!");
+
+        // Wire counter-attack input
+        if (leftGripAction != null)
+            leftGripAction.action.performed += OnCounterInput;
+        if (rightGripAction != null)
+            rightGripAction.action.performed += OnCounterInput;
+    }
+
+    void Update()
+    {
+        if (isDefeated) return;
+        if (playerTransform == null) return;
+
+        // Only attack during Hunting state
+        if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
+        {
+            isAttacking = false;
+            counterWindowOpen = false;
+            return;
+        }
+
+        // Tick cooldown
+        if (attackCooldownTimer > 0f)
+            attackCooldownTimer -= Time.deltaTime;
+
+        // Attempt attack if in range and ready
+        if (!isAttacking && attackCooldownTimer <= 0f)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            if (distanceToPlayer <= attackRange)
+                StartCoroutine(ExecuteAttack());
+        }
+    }
+
+    IEnumerator ExecuteAttack()
+    {
+        isAttacking = true;
+        playerCounteredThisAttack = false;
+        attackCooldownTimer = attackCooldown;
+
+        // Trigger attack animation
+        animator.SetTrigger("Attack");
+        Debug.Log("[NPCCombatController] Attack triggered");
+
+        // Wait before opening counter window
+        yield return new WaitForSeconds(counterWindowDelay);
+
+        // Open counter-attack window
+        counterWindowOpen = true;
+        Debug.Log("[NPCCombatController] Counter window OPEN");
+
+        // Schedule damage to player after delay
+        // (will be cancelled if player counters successfully)
+        StartCoroutine(ScheduleDamage());
+
+        // Hold window open for duration
+        yield return new WaitForSeconds(counterWindowDuration);
+
+        // Close window
+        counterWindowOpen = false;
+        Debug.Log("[NPCCombatController] Counter window CLOSED");
+
+        // Wait for animation to finish before allowing next attack
+        yield return new WaitForSeconds(1.0f);
+
+        isAttacking = false;
+    }
+
+    IEnumerator ScheduleDamage()
+    {
+        yield return new WaitForSeconds(damageDelay);
+
+        // Only deal damage if player did not counter
+        if (!playerCounteredThisAttack)
+        {
+            HealthEnergyManager.Instance?.TakeDamage(attackDamage);
+            Debug.Log($"[NPCCombatController] Player hit for {attackDamage} damage");
+        }
+    }
+
+    void OnCounterInput(InputAction.CallbackContext context)
+    {
+        if (!counterWindowOpen) return;
+        if (playerCounteredThisAttack) return;
+        if (isDefeated) return;
+
+        playerCounteredThisAttack = true;
+        counterWindowOpen = false;
+
+        RegisterHit();
+    }
+
+    void RegisterHit()
+    {
+        currentHitCount++;
+        Debug.Log($"[NPCCombatController] NPC hit {currentHitCount}/{hitsToDefeat}");
+
+        if (currentHitCount >= hitsToDefeat)
+            StartCoroutine(ExecuteDefeat());
+        else
+            animator.SetTrigger("Hit");
+    }
+
+    IEnumerator ExecuteDefeat()
+    {
+        isDefeated = true;
+        isAttacking = false;
+        counterWindowOpen = false;
+
+        animator.SetTrigger("Hit");
+        Debug.Log("[NPCCombatController] NPC defeated!");
+
+        // Disable input
+        if (leftGripAction != null)
+            leftGripAction.action.performed -= OnCounterInput;
+        if (rightGripAction != null)
+            rightGripAction.action.performed -= OnCounterInput;
+
+        // Wait for fall and get up animations to finish
+        yield return new WaitForSeconds(6.0f);
+
+        // Disable NPC after defeat sequence
+        gameObject.SetActive(false);
+    }
+
+    void OnDestroy()
+    {
+        if (leftGripAction != null)
+            leftGripAction.action.performed -= OnCounterInput;
+        if (rightGripAction != null)
+            rightGripAction.action.performed -= OnCounterInput;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = counterWindowOpen ? Color.green : Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+}
