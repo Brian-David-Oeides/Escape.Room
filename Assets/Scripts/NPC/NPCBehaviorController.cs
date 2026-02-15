@@ -243,7 +243,7 @@ public class NPCBehaviorController : MonoBehaviour
         if (playerTransform != null)
         {
             agent.isStopped = false;
-            agent.stoppingDistance = 2.0f;
+            agent.stoppingDistance = 1.5f;
             agent.SetDestination(playerTransform.position);
             agent.speed = huntingSpeed;
         }

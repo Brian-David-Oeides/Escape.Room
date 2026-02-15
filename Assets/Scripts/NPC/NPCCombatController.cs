@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class NPCCombatController : MonoBehaviour
 {
@@ -23,10 +22,6 @@ public class NPCCombatController : MonoBehaviour
     [Header("Defeat Settings")]
     [SerializeField] private int hitsToDefeat = 3;
 
-    [Header("Counter-Attack Input")]
-    [SerializeField] private InputActionReference leftGripAction;
-    [SerializeField] private InputActionReference rightGripAction;
-
     // State tracking
     private bool isAttacking = false;
     private bool counterWindowOpen = false;
@@ -46,11 +41,6 @@ public class NPCCombatController : MonoBehaviour
         else
             Debug.LogError("[NPCCombatController] Could not find XR Origin (XR Rig)!");
 
-        // Wire counter-attack input
-        if (leftGripAction != null)
-            leftGripAction.action.performed += OnCounterInput;
-        if (rightGripAction != null)
-            rightGripAction.action.performed += OnCounterInput;
     }
 
     void Update()
@@ -125,7 +115,7 @@ public class NPCCombatController : MonoBehaviour
         }
     }
 
-    void OnCounterInput(InputAction.CallbackContext context)
+    public void OnHurtboxHit()
     {
         if (!counterWindowOpen) return;
         if (playerCounteredThisAttack) return;
@@ -157,25 +147,11 @@ public class NPCCombatController : MonoBehaviour
         animator.SetTrigger("Hit");
         Debug.Log("[NPCCombatController] NPC defeated!");
 
-        // Disable input
-        if (leftGripAction != null)
-            leftGripAction.action.performed -= OnCounterInput;
-        if (rightGripAction != null)
-            rightGripAction.action.performed -= OnCounterInput;
-
         // Wait for fall and get up animations to finish
         yield return new WaitForSeconds(6.0f);
 
         // Disable NPC after defeat sequence
         gameObject.SetActive(false);
-    }
-
-    void OnDestroy()
-    {
-        if (leftGripAction != null)
-            leftGripAction.action.performed -= OnCounterInput;
-        if (rightGripAction != null)
-            rightGripAction.action.performed -= OnCounterInput;
     }
 
     void OnDrawGizmos()
