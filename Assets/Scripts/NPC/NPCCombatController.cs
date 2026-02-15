@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NPCCombatController : MonoBehaviour
 {
+    private HandHaptics[] allHandHaptics;
+
     [Header("References")]
     private NPCBehaviorController behaviorController;
     private Animator animator;
@@ -41,6 +43,7 @@ public class NPCCombatController : MonoBehaviour
         else
             Debug.LogError("[NPCCombatController] Could not find XR Origin (XR Rig)!");
 
+        allHandHaptics = FindObjectsByType<HandHaptics>(FindObjectsSortMode.None);
     }
 
     void Update()
@@ -112,6 +115,8 @@ public class NPCCombatController : MonoBehaviour
         {
             HealthEnergyManager.Instance?.TakeDamage(attackDamage);
             Debug.Log($"[NPCCombatController] Player hit for {attackDamage} damage");
+            foreach (HandHaptics h in allHandHaptics)
+                h.TriggerHaptic(0.9f, 0.5f);
         }
     }
 

@@ -21,6 +21,10 @@ public class NPCHurtbox : MonoBehaviour
 
         Debug.Log($"[NPCHurtbox] Hand collision detected with: {other.gameObject.name}");
 
+        // Trigger success haptic on the hitting hand
+        HandHaptics haptics = other.GetComponentInParent<HandHaptics>();
+        haptics?.TriggerSuccessHaptic();
+
         combatController?.OnHurtboxHit();
     }
 }
