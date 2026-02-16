@@ -25,6 +25,8 @@ public class NPCHurtbox : MonoBehaviour
         HandHaptics haptics = other.GetComponentInParent<HandHaptics>();
         haptics?.TriggerSuccessHaptic();
 
+        combatController?.PlayPunchSound();
+
         combatController?.OnHurtboxHit();
     }
 }

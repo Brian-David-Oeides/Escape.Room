@@ -24,6 +24,14 @@ public class NPCCombatController : MonoBehaviour
     [Header("Defeat Settings")]
     [SerializeField] private int hitsToDefeat = 3;
 
+    [Header("Combat Audio")]
+    [SerializeField] private AudioClip attackWhooshSound;
+    [SerializeField] private AudioClip punchImpactSound;
+    [SerializeField] private AudioClip npcPainGruntSound;
+    [SerializeField] private AudioClip playerDamageGruntSound;
+
+    private AudioSource audioSource;
+
     // State tracking
     private bool isAttacking = false;
     private bool counterWindowOpen = false;
@@ -36,6 +44,7 @@ public class NPCCombatController : MonoBehaviour
     {
         behaviorController = GetComponent<NPCBehaviorController>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         GameObject xrRig = GameObject.Find("XR Origin (XR Rig)");
         if (xrRig != null)
@@ -82,6 +91,8 @@ public class NPCCombatController : MonoBehaviour
         animator.SetTrigger("Attack");
         Debug.Log("[NPCCombatController] Attack triggered");
 
+        audioSource?.PlayOneShot(attackWhooshSound);
+
         // Wait before opening counter window
         yield return new WaitForSeconds(counterWindowDelay);
 
@@ -116,7 +127,10 @@ public class NPCCombatController : MonoBehaviour
             HealthEnergyManager.Instance?.TakeDamage(attackDamage);
             Debug.Log($"[NPCCombatController] Player hit for {attackDamage} damage");
             foreach (HandHaptics h in allHandHaptics)
+            {
                 h.TriggerHaptic(0.9f, 0.5f);
+                h.TriggerHapticWithSound(playerDamageGruntSound, 0.9f);
+            }
         }
     }
 
@@ -132,10 +146,22 @@ public class NPCCombatController : MonoBehaviour
         RegisterHit();
     }
 
+    public void PlayPunchSound()
+    {
+        audioSource?.PlayOneShot(punchImpactSound);
+    }
+
+    public void PlayPainSound()
+    {
+        audioSource?.PlayOneShot(npcPainGruntSound);
+    }
+
     void RegisterHit()
     {
         currentHitCount++;
         Debug.Log($"[NPCCombatController] NPC hit {currentHitCount}/{hitsToDefeat}");
+
+        PlayPainSound();
 
         if (currentHitCount >= hitsToDefeat)
             StartCoroutine(ExecuteDefeat());
