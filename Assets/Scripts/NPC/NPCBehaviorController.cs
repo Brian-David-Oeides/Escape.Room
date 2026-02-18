@@ -276,11 +276,14 @@ public class NPCBehaviorController : MonoBehaviour
         Vector3 position = transform.position;
         position += agent.desiredVelocity * Time.deltaTime;
 
-        // Lock Y-axis to NavMesh surface to prevent vertical drift
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))
+        // Only lock Y-axis during normal movement, not during combat animations
+        if (!combatInterrupted)
         {
-            position.y = hit.position.y + groundOffset;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))
+            {
+                position.y = hit.position.y + groundOffset;
+            }
         }
 
         transform.position = position;

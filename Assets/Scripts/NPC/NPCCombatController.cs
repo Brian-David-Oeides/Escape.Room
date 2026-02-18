@@ -189,7 +189,7 @@ public class NPCCombatController : MonoBehaviour
     IEnumerator ResumeAfterStagger()
     {
         // Wait for full Hit → Fall → GetUp sequence to complete
-        yield return new WaitForSeconds(4.5f);
+        yield return new WaitForSeconds(6.0f);
 
         if (agent != null && !isDefeated)
         {
