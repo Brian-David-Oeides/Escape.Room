@@ -1366,7 +1366,7 @@ MonoBehaviour:
   defaultSound: {fileID: 0}
   successSound: {fileID: 0}
   errorSound: {fileID: 0}
-  volume: 0.5
+  volume: 1
   pitchVariation: 0.05
   spatialBlend: 1
 --- !u!114 &2737749742378357819
@@ -4751,7 +4751,7 @@ MonoBehaviour:
   defaultSound: {fileID: 0}
   successSound: {fileID: 0}
   errorSound: {fileID: 0}
-  volume: 0.5
+  volume: 0.517
   pitchVariation: 0.05
   spatialBlend: 1
 --- !u!114 &2021887722465060246

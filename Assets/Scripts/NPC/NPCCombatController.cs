@@ -1,12 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NPCCombatController : MonoBehaviour
 {
     private HandHaptics[] allHandHaptics;
 
     [Header("References")]
+    private NavMeshAgent agent;
     private NPCBehaviorController behaviorController;
     private Animator animator;
     private Transform playerTransform;
@@ -44,6 +46,7 @@ public class NPCCombatController : MonoBehaviour
     {
         behaviorController = GetComponent<NPCBehaviorController>();
         animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
 
         GameObject xrRig = GameObject.Find("XR Origin (XR Rig)");
@@ -89,19 +92,26 @@ public class NPCCombatController : MonoBehaviour
 
         // Trigger attack animation
         animator.SetTrigger("Attack");
-        Debug.Log("[NPCCombatController] Attack triggered");
-
         audioSource?.PlayOneShot(attackWhooshSound);
+        Debug.Log("[NPCCombatController] Attack triggered");
 
         // Wait before opening counter window
         yield return new WaitForSeconds(counterWindowDelay);
+
+        // Check if player is still in range before committing to attack
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        if (distanceToPlayer > attackRange)
+        {
+            Debug.Log("[NPCCombatController] Player escaped range - attack cancelled");
+            isAttacking = false;
+            yield break;
+        }
 
         // Open counter-attack window
         counterWindowOpen = true;
         Debug.Log("[NPCCombatController] Counter window OPEN");
 
         // Schedule damage to player after delay
-        // (will be cancelled if player counters successfully)
         StartCoroutine(ScheduleDamage());
 
         // Hold window open for duration
@@ -163,15 +173,38 @@ public class NPCCombatController : MonoBehaviour
 
         PlayPainSound();
 
+        // Stop agent during stagger
+        if (agent != null)
+            agent.isStopped = true;
+            behaviorController.combatInterrupted = true;
+
         if (currentHitCount >= hitsToDefeat)
             StartCoroutine(ExecuteDefeat());
         else
             animator.SetTrigger("Hit");
+            // Resume agent after stagger animation (approximately 3 seconds)
+            StartCoroutine(ResumeAfterStagger());
+    }
+
+    IEnumerator ResumeAfterStagger()
+    {
+        // Wait for full Hit → Fall → GetUp sequence to complete
+        yield return new WaitForSeconds(4.5f);
+
+        if (agent != null && !isDefeated)
+        {
+            behaviorController.combatInterrupted = false;
+            agent.isStopped = false;
+        }
     }
 
     IEnumerator ExecuteDefeat()
     {
         isDefeated = true;
+
+        if (agent != null)
+            agent.isStopped = true;
+
         isAttacking = false;
         counterWindowOpen = false;
 

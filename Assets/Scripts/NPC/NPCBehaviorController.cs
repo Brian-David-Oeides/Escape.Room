@@ -29,11 +29,14 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float observingDistance = 10f;
     [SerializeField] private float approachDistance = 5f;
     [SerializeField] private float huntingSpeed = 5f;
+    [SerializeField] private float groundOffset = 0f;
 
     [Header("Loitering Settings")]
     [SerializeField] private float loiterRadius = 5f;           // How far to wander
     [SerializeField] private float loiterWaitTime = 3f;         // Time to wait at each point
     [SerializeField] private float loiterMoveSpeed = 1.5f;      // Walking speed while loitering
+
+    [HideInInspector] public bool combatInterrupted = false;
 
     private Vector3 loiterTarget;
     private float loiterWaitTimer = 0f;
@@ -71,24 +74,28 @@ public class NPCBehaviorController : MonoBehaviour
 
     void Update()
     {
-        // Execute current state behavior
-        switch (currentState)
+        // Don't run behaviors if combat has interrupted movement
+        if (!combatInterrupted)
         {
-            case BehaviorState.Dormant:
-                DormantBehavior();
-                break;
-            case BehaviorState.Observing:
-                ObservingBehavior();
-                break;
-            case BehaviorState.Approaching:
-                ApproachingBehavior();
-                break;
-            case BehaviorState.Agitated:
-                AgitatedBehavior();
-                break;
-            case BehaviorState.Hunting:
-                HuntingBehavior();
-                break;
+            // Execute current state behavior
+            switch (currentState)
+            {
+                case BehaviorState.Dormant:
+                    DormantBehavior();
+                    break;
+                case BehaviorState.Observing:
+                    ObservingBehavior();
+                    break;
+                case BehaviorState.Approaching:
+                    ApproachingBehavior();
+                    break;
+                case BehaviorState.Agitated:
+                    AgitatedBehavior();
+                    break;
+                case BehaviorState.Hunting:
+                    HuntingBehavior();
+                    break;
+            }
         }
 
         // Update animator
@@ -266,9 +273,16 @@ public class NPCBehaviorController : MonoBehaviour
 
     void OnAnimatorMove()
     {
-        // Apply movement (same hybrid approach as NavMeshTest)
         Vector3 position = transform.position;
         position += agent.desiredVelocity * Time.deltaTime;
+
+        // Lock Y-axis to NavMesh surface to prevent vertical drift
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))
+        {
+            position.y = hit.position.y + groundOffset;
+        }
+
         transform.position = position;
         agent.nextPosition = position;
     }
