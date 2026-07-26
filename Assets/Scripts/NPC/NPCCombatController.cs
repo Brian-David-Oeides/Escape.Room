@@ -177,6 +177,9 @@ public class NPCCombatController : MonoBehaviour
         if (agent != null)
             agent.isStopped = true;
             behaviorController.combatInterrupted = true;
+        
+            behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
+            StartCoroutine(TransitionToGetUp());
 
         if (currentHitCount >= hitsToDefeat)
             StartCoroutine(ExecuteDefeat());
@@ -188,14 +191,21 @@ public class NPCCombatController : MonoBehaviour
 
     IEnumerator ResumeAfterStagger()
     {
-        // Wait for full Hit → Fall → GetUp sequence to complete
-        yield return new WaitForSeconds(6.0f);
+        yield return new WaitForSeconds(5.5f);
 
         if (agent != null && !isDefeated)
         {
+            behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.None;
             behaviorController.combatInterrupted = false;
             agent.isStopped = false;
         }
+    }
+
+    IEnumerator TransitionToGetUp()
+    {
+        // Wait for Hit + Fall animations (~2.5 seconds)
+        yield return new WaitForSeconds(2.5f);
+        behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.GettingUp;
     }
 
     IEnumerator ExecuteDefeat()

@@ -70357,11 +70357,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aee94ebbbbd3b8a46a8e0db8c415a52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentCombatPhase: 0
   currentState: 0
+  forceHuntingMode: 1
   observingDistance: 10
   approachDistance: 5
   huntingSpeed: 5
   groundOffset: -0.065
+  fallingGroundOffset: -0.74
+  gettingUpGroundOffset: -0.1
+  offsetSmoothTime: 0.8
   loiterRadius: 5
   loiterWaitTime: 3
   loiterMoveSpeed: 1.5

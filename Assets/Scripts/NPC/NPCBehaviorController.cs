@@ -17,8 +17,18 @@ public class NPCBehaviorController : MonoBehaviour
 
     public BehaviorState CurrentState => currentState;
 
+    public enum CombatPhase
+    {
+        None,
+        Falling,
+        GettingUp
+    }
+
+    [HideInInspector] public CombatPhase currentCombatPhase = CombatPhase.None;
+
     [Header("Current State")]
     [SerializeField] private BehaviorState currentState = BehaviorState.Dormant;
+    [SerializeField] private bool forceHuntingMode = false;
 
     [Header("References")]
     private NavMeshAgent agent;
@@ -30,6 +40,12 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float approachDistance = 5f;
     [SerializeField] private float huntingSpeed = 5f;
     [SerializeField] private float groundOffset = 0f;
+    [SerializeField] private float fallingGroundOffset = -0.3f;
+    [SerializeField] private float gettingUpGroundOffset = -0.1f;
+    [SerializeField] private float offsetSmoothTime = 0.5f;
+
+    private float currentOffsetVelocity = 0f;
+    private float smoothedOffset = 0f;
 
     [Header("Loitering Settings")]
     [SerializeField] private float loiterRadius = 5f;           // How far to wander
@@ -120,6 +136,14 @@ public class NPCBehaviorController : MonoBehaviour
 
     void UpdateBehaviorState()
     {
+        // Debug override
+        if (forceHuntingMode)
+        {
+            currentState = BehaviorState.Hunting;
+            Debug.Log($"NPC State FORCED to: {currentState}");
+            return;
+        }
+
         // Determine state based on puzzle count
         if (currentPuzzleCount == 0)
             currentState = BehaviorState.Dormant;
@@ -275,19 +299,25 @@ public class NPCBehaviorController : MonoBehaviour
     {
         Vector3 position = transform.position;
         position += agent.desiredVelocity * Time.deltaTime;
-
-        // Only lock Y-axis during normal movement, not during combat animations
-        if (!combatInterrupted)
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))
         {
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))
-            {
-                position.y = hit.position.y + groundOffset;
-            }
+            float targetOffset = groundOffset;
+            if (currentCombatPhase == CombatPhase.Falling)
+                targetOffset = fallingGroundOffset;
+            else if (currentCombatPhase == CombatPhase.GettingUp)
+                targetOffset = gettingUpGroundOffset;
+            // Smoothly transition to target offset instead of snapping
+            smoothedOffset = Mathf.SmoothDamp(smoothedOffset, targetOffset, ref currentOffsetVelocity, offsetSmoothTime);
+            position.y = hit.position.y + smoothedOffset;
         }
-
         transform.position = position;
         agent.nextPosition = position;
+    }
+
+    public float GetGroundOffset()
+    {
+        return groundOffset;
     }
 
     // Public method to update puzzle count (will be called by PuzzleManager)
