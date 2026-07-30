@@ -70363,11 +70363,11 @@ MonoBehaviour:
   forceHuntingMode: 1
   observingDistance: 10
   approachDistance: 5
-  huntingSpeed: 5
+  huntingSpeed: 4
   groundOffset: -0.065
   fallingGroundOffset: -0.74
-  gettingUpGroundOffset: -0.1
-  fallTransitionDuration: 0.3
+  gettingUpGroundOffset: -0.2
+  fallTransitionDuration: 0.1
   getUpTransitionDuration: 0.4
   loiterRadius: 5
   loiterWaitTime: 3
@@ -70500,7 +70500,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132149425931885}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccff34854f0dedf49b7b5e28c35a48a0, type: 3}
   m_Name: 

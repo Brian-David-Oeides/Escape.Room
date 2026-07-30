@@ -43,6 +43,7 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float fallingGroundOffset = -0.3f;
     [SerializeField] private float gettingUpGroundOffset = -0.1f;
     [SerializeField] private float fallTransitionDuration = 0.3f;
+    [SerializeField] private float fallDelay = 0.70f;
     [SerializeField] private float getUpTransitionDuration = 0.4f;
 
     private float phaseStartTime = 0f;
@@ -315,11 +316,13 @@ public class NPCBehaviorController : MonoBehaviour
 
             float targetOffset = groundOffset;
             float transitionDuration = 0.3f;
+            float elapsed = Time.time - phaseStartTime;
 
             if (currentCombatPhase == CombatPhase.Falling)
             {
                 targetOffset = fallingGroundOffset;
                 transitionDuration = fallTransitionDuration;
+                elapsed = Mathf.Max(0f, elapsed - fallDelay);
             }
             else if (currentCombatPhase == CombatPhase.GettingUp)
             {
@@ -327,7 +330,6 @@ public class NPCBehaviorController : MonoBehaviour
                 transitionDuration = getUpTransitionDuration;
             }
 
-            float elapsed = Time.time - phaseStartTime;
             float t = Mathf.Clamp01(elapsed / transitionDuration);
             smoothedOffset = Mathf.Lerp(phaseStartOffset, targetOffset, t);
 
