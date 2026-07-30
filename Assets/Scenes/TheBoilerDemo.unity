@@ -70398,6 +70398,8 @@ MonoBehaviour:
   npcPainGruntSound: {fileID: 8300000, guid: 93f1ab551f5f3b541afc42579a4e00cf, type: 3}
   playerDamageGruntSound: {fileID: 8300000, guid: 4d8cc91fe57501b47866221ec74a1174,
     type: 3}
+  npcGroundImpactSound: {fileID: 8300000, guid: 51d365dc3fed7b94eae1f5752500c6c7,
+    type: 3}
 --- !u!82 &5866666021642897074
 AudioSource:
   m_ObjectHideFlags: 0

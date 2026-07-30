@@ -31,6 +31,7 @@ public class NPCCombatController : MonoBehaviour
     [SerializeField] private AudioClip punchImpactSound;
     [SerializeField] private AudioClip npcPainGruntSound;
     [SerializeField] private AudioClip playerDamageGruntSound;
+    [SerializeField] private AudioClip npcGroundImpactSound;
 
     private AudioSource audioSource;
 
@@ -179,6 +180,7 @@ public class NPCCombatController : MonoBehaviour
 
         behaviorController.combatInterrupted = true;
         behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
+        StartCoroutine(PlayGroundImpactSound());
         StartCoroutine(TransitionToGetUp());
 
         if (currentHitCount >= hitsToDefeat)
@@ -203,6 +205,11 @@ public class NPCCombatController : MonoBehaviour
             behaviorController.combatInterrupted = false;
             agent.isStopped = false;
         }
+    }
+    IEnumerator PlayGroundImpactSound()
+    {
+        yield return new WaitForSeconds(1.33f);
+        audioSource?.PlayOneShot(npcGroundImpactSound);
     }
 
     IEnumerator TransitionToGetUp()
