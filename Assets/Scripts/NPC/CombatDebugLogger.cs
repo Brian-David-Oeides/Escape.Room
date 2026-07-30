@@ -29,7 +29,7 @@ public class CombatDebugLogger : MonoBehaviour
         if (behaviorController.combatInterrupted || logExtraTime > 0f)
         {
             AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
-            Debug.Log($"[COMBAT DEBUG] Phase: {behaviorController.currentCombatPhase} | Pos: ({transform.position.x:F3}, {transform.position.y:F4}, {transform.position.z:F3}) | BodyPos: ({animator.bodyPosition.x:F3}, {animator.bodyPosition.y:F4}, {animator.bodyPosition.z:F3}) | CombatInterrupted: {behaviorController.combatInterrupted}");
+            Debug.Log($"[COMBAT DEBUG] Phase: {behaviorController.currentCombatPhase} | Pos: ({transform.position.x:F3}, {transform.position.y:F4}, {transform.position.z:F3}) | Rot: {transform.eulerAngles.y:F1} | BodyPos: ({animator.bodyPosition.x:F3}, {animator.bodyPosition.y:F4}, {animator.bodyPosition.z:F3}) | AgentDest: ({agent.destination.x:F3}, {agent.destination.z:F3}) | CombatInterrupted: {behaviorController.combatInterrupted}");
 
             if (!behaviorController.combatInterrupted)
                 logExtraTime -= Time.deltaTime;

@@ -302,7 +302,23 @@ public class NPCBehaviorController : MonoBehaviour
     void OnAnimatorMove()
     {
         Vector3 position = transform.position;
-        position += agent.desiredVelocity * Time.deltaTime;
+
+        bool inCombatPhase = currentCombatPhase == CombatPhase.Falling
+                          || currentCombatPhase == CombatPhase.GettingUp;
+
+        if (inCombatPhase)
+        {
+            // Apply animation's horizontal root motion so the stumble/getup
+            // moves the actual GameObject. Requires loopBlendPositionXZ: 0
+            // in both Shoulder Hit And Fall and Getting Up import settings.
+            Vector3 delta = animator.deltaPosition;
+            position.x += delta.x;
+            position.z += delta.z;
+        }
+        else
+        {
+            position += agent.desiredVelocity * Time.deltaTime;
+        }
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))

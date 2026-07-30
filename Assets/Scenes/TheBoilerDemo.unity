@@ -70367,7 +70367,8 @@ MonoBehaviour:
   groundOffset: -0.065
   fallingGroundOffset: -0.74
   gettingUpGroundOffset: -0.2
-  fallTransitionDuration: 0.1
+  fallTransitionDuration: 0.5
+  fallDelay: 0.8
   getUpTransitionDuration: 0.4
   loiterRadius: 5
   loiterWaitTime: 3
