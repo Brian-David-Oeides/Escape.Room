@@ -42,9 +42,12 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float groundOffset = 0f;
     [SerializeField] private float fallingGroundOffset = -0.3f;
     [SerializeField] private float gettingUpGroundOffset = -0.1f;
-    [SerializeField] private float offsetSmoothTime = 0.5f;
+    [SerializeField] private float fallTransitionDuration = 0.3f;
+    [SerializeField] private float getUpTransitionDuration = 0.4f;
 
-    private float currentOffsetVelocity = 0f;
+    private float phaseStartTime = 0f;
+    private float phaseStartOffset = 0f;
+    private CombatPhase lastPhase = CombatPhase.None;
     private float smoothedOffset = 0f;
 
     [Header("Loitering Settings")]
@@ -299,18 +302,38 @@ public class NPCBehaviorController : MonoBehaviour
     {
         Vector3 position = transform.position;
         position += agent.desiredVelocity * Time.deltaTime;
+
         NavMeshHit hit;
         if (NavMesh.SamplePosition(position, out hit, 2f, NavMesh.AllAreas))
         {
+            if (currentCombatPhase != lastPhase)
+            {
+                phaseStartTime = Time.time;
+                phaseStartOffset = smoothedOffset;
+                lastPhase = currentCombatPhase;
+            }
+
             float targetOffset = groundOffset;
+            float transitionDuration = 0.3f;
+
             if (currentCombatPhase == CombatPhase.Falling)
+            {
                 targetOffset = fallingGroundOffset;
+                transitionDuration = fallTransitionDuration;
+            }
             else if (currentCombatPhase == CombatPhase.GettingUp)
-                targetOffset = gettingUpGroundOffset;
-            // Smoothly transition to target offset instead of snapping
-            smoothedOffset = Mathf.SmoothDamp(smoothedOffset, targetOffset, ref currentOffsetVelocity, offsetSmoothTime);
+            {
+                targetOffset = groundOffset;
+                transitionDuration = getUpTransitionDuration;
+            }
+
+            float elapsed = Time.time - phaseStartTime;
+            float t = Mathf.Clamp01(elapsed / transitionDuration);
+            smoothedOffset = Mathf.Lerp(phaseStartOffset, targetOffset, t);
+
             position.y = hit.position.y + smoothedOffset;
         }
+
         transform.position = position;
         agent.nextPosition = position;
     }

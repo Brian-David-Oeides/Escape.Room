@@ -62,6 +62,7 @@ public class NPCCombatController : MonoBehaviour
     {
         if (isDefeated) return;
         if (playerTransform == null) return;
+        if (behaviorController.combatInterrupted) return;  
 
         // Only attack during Hunting state
         if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
@@ -173,25 +174,28 @@ public class NPCCombatController : MonoBehaviour
 
         PlayPainSound();
 
-        // Stop agent during stagger
         if (agent != null)
             agent.isStopped = true;
-            behaviorController.combatInterrupted = true;
-        
-            behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
-            StartCoroutine(TransitionToGetUp());
+
+        behaviorController.combatInterrupted = true;
+        behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
+        StartCoroutine(TransitionToGetUp());
 
         if (currentHitCount >= hitsToDefeat)
+        {
             StartCoroutine(ExecuteDefeat());
+        }
         else
+        {
             animator.SetTrigger("Hit");
-            // Resume agent after stagger animation (approximately 3 seconds)
             StartCoroutine(ResumeAfterStagger());
+        }
     }
 
     IEnumerator ResumeAfterStagger()
     {
-        yield return new WaitForSeconds(5.5f);
+        // Total Hit -> Fall -> GetUp -> Idle sequence is exactly 5.55s
+        yield return new WaitForSeconds(5.55f);
 
         if (agent != null && !isDefeated)
         {
@@ -203,8 +207,8 @@ public class NPCCombatController : MonoBehaviour
 
     IEnumerator TransitionToGetUp()
     {
-        // Wait for Hit + Fall animations (~2.5 seconds)
-        yield return new WaitForSeconds(2.5f);
+        // Shoulder Hit And Fall plays for exactly 2.85s before Getting Up begins
+        yield return new WaitForSeconds(2.85f);
         behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.GettingUp;
     }
 
