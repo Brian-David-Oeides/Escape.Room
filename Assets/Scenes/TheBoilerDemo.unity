@@ -70387,18 +70387,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 2
-  attackCooldown: 4
+  attackCooldown: 2.5
   attackDamage: 20
   counterWindowDelay: 0.4
   counterWindowDuration: 1.2
   damageDelay: 1
   hitsToDefeat: 3
+  deathTiltAngleX: 7
+  deathTiltAngleZ: 1
+  deathPositionY: 0.08
   attackWhooshSound: {fileID: 8300000, guid: 2d676a1b40f8f4a4bbec5d271bba3bbe, type: 3}
   punchImpactSound: {fileID: 8300000, guid: 4949bf2c86fe34744b2c8734a55c21c1, type: 3}
   npcPainGruntSound: {fileID: 8300000, guid: 93f1ab551f5f3b541afc42579a4e00cf, type: 3}
   playerDamageGruntSound: {fileID: 8300000, guid: 4d8cc91fe57501b47866221ec74a1174,
     type: 3}
   npcGroundImpactSound: {fileID: 8300000, guid: 51d365dc3fed7b94eae1f5752500c6c7,
+    type: 3}
+  npcDeathCrySound: {fileID: 8300000, guid: a06ac1dfb2dcd9441bac1cc4344aba33, type: 3}
+  npcDeathGroundImpactSound: {fileID: 8300000, guid: 9af4eda2a0367a1419291e98c20a9850,
     type: 3}
 --- !u!82 &5866666021642897074
 AudioSource:

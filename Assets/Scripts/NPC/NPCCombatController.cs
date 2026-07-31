@@ -25,6 +25,9 @@ public class NPCCombatController : MonoBehaviour
 
     [Header("Defeat Settings")]
     [SerializeField] private int hitsToDefeat = 3;
+    [SerializeField] private float deathTiltAngleX = 7.5f;
+    [SerializeField] private float deathTiltAngleZ = 1f;
+    [SerializeField] private float deathPositionY = 0.08f;
 
     [Header("Combat Audio")]
     [SerializeField] private AudioClip attackWhooshSound;
@@ -32,6 +35,8 @@ public class NPCCombatController : MonoBehaviour
     [SerializeField] private AudioClip npcPainGruntSound;
     [SerializeField] private AudioClip playerDamageGruntSound;
     [SerializeField] private AudioClip npcGroundImpactSound;
+    [SerializeField] private AudioClip npcDeathCrySound;
+    [SerializeField] private AudioClip npcDeathGroundImpactSound;
 
     private AudioSource audioSource;
 
@@ -179,16 +184,18 @@ public class NPCCombatController : MonoBehaviour
             agent.isStopped = true;
 
         behaviorController.combatInterrupted = true;
-        behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
-        StartCoroutine(PlayGroundImpactSound());
-        StartCoroutine(TransitionToGetUp());
 
         if (currentHitCount >= hitsToDefeat)
         {
+            // Death animation's Y motion is fully baked into pose - 
+            // leave root offset untouched, do not enter Falling/GettingUp phase
             StartCoroutine(ExecuteDefeat());
         }
         else
         {
+            behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
+            StartCoroutine(TransitionToGetUp());
+            StartCoroutine(PlayGroundImpactSound());
             animator.SetTrigger("Hit");
             StartCoroutine(ResumeAfterStagger());
         }
@@ -229,14 +236,35 @@ public class NPCCombatController : MonoBehaviour
         isAttacking = false;
         counterWindowOpen = false;
 
-        animator.SetTrigger("Hit");
+        animator.SetTrigger("Death");
+        audioSource?.PlayOneShot(npcDeathCrySound);
         Debug.Log("[NPCCombatController] NPC defeated!");
 
-        // Wait for fall and get up animations to finish
-        yield return new WaitForSeconds(6.0f);
+        // Wait for the body to hit the floor before playing impact sound
+        yield return new WaitForSeconds(1.8f);
+        audioSource?.PlayOneShot(npcDeathGroundImpactSound);
 
-        // Disable NPC after defeat sequence
-        gameObject.SetActive(false);
+        // NPC remains active and frozen on the Death animation's last frame
+        // No gameObject.SetActive(false) - character stays visible permanently
+
+        // Wait for the animation to fully settle before freezing
+        yield return new WaitForSeconds(1.2f);
+
+        // Disable Animator so it stops overwriting Transform rotation each frame
+        animator.enabled = false;
+
+        // Fully disable the NavMeshAgent - it's permanently retired and was 
+        // silently re-leveling X/Z rotation via updateUpAxis even with isStopped = true
+        if (agent != null)
+            agent.enabled = false;
+
+        // Now apply the final position and rotation correction - it will stick 
+        // since neither Animator nor NavMeshAgent control the Transform anymore
+        Vector3 currentEuler = transform.eulerAngles;
+        transform.rotation = Quaternion.Euler(deathTiltAngleX, currentEuler.y, deathTiltAngleZ);
+
+        Vector3 currentPos = transform.position;
+        transform.position = new Vector3(currentPos.x, deathPositionY, currentPos.z);
     }
 
     void OnDrawGizmos()

@@ -116,13 +116,13 @@ public class NPCBehaviorController : MonoBehaviour
                     HuntingBehavior();
                     break;
             }
+
+            // Handle rotation
+            UpdateRotation();
         }
 
         // Update animator
         UpdateAnimator();
-
-        // Handle rotation
-        UpdateRotation();
     }
 
     void SubscribeToPuzzleEvents()
