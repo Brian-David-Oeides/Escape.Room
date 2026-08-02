@@ -773,54 +773,64 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Debug.Log("[GameManager] Starting save data restoration");
 
-        // Wait for scene to fully initialize
+        // Wait for scene to fully initialize. These have to happen before the try block below:
+        // a yield return cannot appear inside a try block that has a catch clause (only inside
+        // a try-finally), so everything that can throw is restored to sequential code afterward.
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        // Restore player position FIRST (before locomotion initializes)
-        if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+        try
         {
-            PlayerController.Instance.XROrigin.transform.position = data.playerPosition;
-            PlayerController.Instance.XROrigin.transform.rotation = data.playerRotation;
-            Debug.Log($"[GameManager] Player position restored to {data.playerPosition}");
+            // Restore player position FIRST (before locomotion initializes)
+            if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
+            {
+                PlayerController.Instance.XROrigin.transform.position = data.playerPosition;
+                PlayerController.Instance.XROrigin.transform.rotation = data.playerRotation;
+                Debug.Log($"[GameManager] Player position restored to {data.playerPosition}");
+            }
+
+            // Restore health/energy
+            if (HealthEnergyManager.Instance != null)
+            {
+                HealthEnergyManager.Instance.SetHealth(data.currentHealth);
+                HealthEnergyManager.Instance.SetEnergy(data.currentEnergy);
+
+                // CRITICAL: Reinitialize movement tracking after player position is restored
+                HealthEnergyManager.Instance.InitializeMovementTracking();
+
+                Debug.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
+            }
+
+            // Restore GameTimer state BEFORE ISaveable objects (special handling for DontDestroyOnLoad singleton)
+            if (GameTimer.Instance != null)
+            {
+                GameTimer.Instance.LoadState(data);
+                Debug.Log($"[GameManager] Timer restored: {data.timerRemainingTime}s remaining, Mode: {(GameTimer.TimerMode)data.timerMode}");
+            }
+
+            // Restore ClueManager state (special handling for DontDestroyOnLoad singleton)
+            if (ClueManager.Instance != null)
+            {
+                ClueManager.Instance.LoadState(data);
+                Debug.Log($"[GameManager] ClueManager restored: {data.discoveredClueIDs.Count} clues discovered");
+            }
+
+            // Restore all ISaveable objects
+            ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
+            foreach (ISaveable saveable in saveableObjects)
+            {
+                saveable.LoadState(data);
+            }
+
+            Debug.Log("[GameManager] Save data restoration complete");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("[GameManager] Save data could not be fully restored - some progress may be reset. " + e);
         }
 
-        // Restore health/energy
-        if (HealthEnergyManager.Instance != null)
-        {
-            HealthEnergyManager.Instance.SetHealth(data.currentHealth);
-            HealthEnergyManager.Instance.SetEnergy(data.currentEnergy);
-
-            // CRITICAL: Reinitialize movement tracking after player position is restored
-            HealthEnergyManager.Instance.InitializeMovementTracking();
-
-            Debug.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
-        }
-
-        // Restore GameTimer state BEFORE ISaveable objects (special handling for DontDestroyOnLoad singleton)
-        if (GameTimer.Instance != null)
-        {
-            GameTimer.Instance.LoadState(data);
-            Debug.Log($"[GameManager] Timer restored: {data.timerRemainingTime}s remaining, Mode: {(GameTimer.TimerMode)data.timerMode}");
-        }
-
-        // Restore ClueManager state (special handling for DontDestroyOnLoad singleton)
-        if (ClueManager.Instance != null)
-        {
-            ClueManager.Instance.LoadState(data);
-            Debug.Log($"[GameManager] ClueManager restored: {data.discoveredClueIDs.Count} clues discovered");
-        }
-
-        // Restore all ISaveable objects
-        ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
-        foreach (ISaveable saveable in saveableObjects)
-        {
-            saveable.LoadState(data);
-        }
-
-        Debug.Log("[GameManager] Save data restoration complete");
-
-        // NOW trigger Playing state (which initializes locomotion)
+        // Always reach a playable state and clear pending save data, whether restoration above
+        // succeeded or not - the player must never be left stuck on a black/loading screen.
         SetGameState(GameState.Playing);
 
         // DON'T clear flags here - InitializeGameTimer will clear them after checking

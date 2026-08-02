@@ -70360,7 +70360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentCombatPhase: 0
   currentState: 0
-  forceHuntingMode: 1
+  forceHuntingMode: 0
   observingDistance: 10
   approachDistance: 5
   huntingSpeed: 4
@@ -70393,9 +70393,9 @@ MonoBehaviour:
   counterWindowDuration: 1.2
   damageDelay: 1
   hitsToDefeat: 3
-  deathTiltAngleX: 7
+  deathTiltAngleX: 7.5
   deathTiltAngleZ: 1
-  deathPositionY: 0.08
+  deathPositionY: 0.07
   attackWhooshSound: {fileID: 8300000, guid: 2d676a1b40f8f4a4bbec5d271bba3bbe, type: 3}
   punchImpactSound: {fileID: 8300000, guid: 4949bf2c86fe34744b2c8734a55c21c1, type: 3}
   npcPainGruntSound: {fileID: 8300000, guid: 93f1ab551f5f3b541afc42579a4e00cf, type: 3}

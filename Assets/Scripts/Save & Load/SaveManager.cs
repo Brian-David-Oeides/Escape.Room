@@ -278,6 +278,8 @@ public class SaveManager : MonoSingleton<SaveManager>
                 return false;
             }
 
+            NormalizeLoadedSaveData(loadedData);
+
             currentSaveData = loadedData;
             currentSaveSlot = slotNumber;
             currentSaveData.timesLoaded++;
@@ -309,6 +311,29 @@ public class SaveManager : MonoSingleton<SaveManager>
         {
             Debug.LogError($"Failed to load game from slot {slotNumber}: {e.Message}");
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Defends against old-format saves: JsonUtility.FromJson leaves any List<> field
+    /// that's missing from the JSON as null (not an empty list), so any save written
+    /// before saveVersion existed needs its list fields defaulted before use.
+    /// </summary>
+    private void NormalizeLoadedSaveData(SaveData data)
+    {
+        bool wasOldFormat = data.saveVersion < 1;
+
+        if (data.discoveredClueIDs == null) data.discoveredClueIDs = new List<string>();
+        if (data.puzzleFailedAttemptsData == null) data.puzzleFailedAttemptsData = new List<string>();
+        if (data.completedPuzzleIDs == null) data.completedPuzzleIDs = new List<string>();
+        if (data.consumedObjectIDs == null) data.consumedObjectIDs = new List<string>();
+        if (data.moveableObjects == null) data.moveableObjects = new List<MoveableObjectData>();
+
+        if (wasOldFormat)
+        {
+            Debug.LogWarning("[SaveManager] Loaded an old-format save (pre-versioning). " +
+                "Missing fields have been defaulted. Some data (e.g. timer state) may not carry over.");
+            data.saveVersion = 1;
         }
     }
 

@@ -11,6 +11,8 @@ using UnityEngine;
 
 public class SaveData
 {
+    public int saveVersion = 1;
+
     // Save metadata
     public string saveName;
 
