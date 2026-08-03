@@ -447,7 +447,7 @@ public class LocomotionController : MonoBehaviour
                 // User-facing message
                 if (action.name.Contains("Teleport") || action.name.Contains("Move") || action.name.Contains("Turn"))
                 {
-                    Debug.LogError($"[LocomotionController] Cannot initialize: '{action.name}' action not bound. " +
+                    GameLog.LogError($"[LocomotionController] Cannot initialize: '{action.name}' action not bound. " +
                                   "This usually means a VR controller is not detected. " +
                                   "Check controller power/connection.");
                 }
@@ -571,7 +571,7 @@ public class LocomotionController : MonoBehaviour
     {
         if (enableDebugLogs)
         {
-            Debug.Log($"[LocomotionController] {message}");
+            GameLog.Log($"[LocomotionController] {message}");
         }
     }
 
@@ -579,13 +579,13 @@ public class LocomotionController : MonoBehaviour
     {
         if (enableDebugLogs)
         {
-            Debug.LogWarning($"[LocomotionController] {message}");
+            GameLog.LogWarning($"[LocomotionController] {message}");
         }
     }
 
     private void LogError(string message)
     {
-        Debug.LogError($"[LocomotionController] {message}");
+        GameLog.LogError($"[LocomotionController] {message}");
     }
 
     #endregion

@@ -93,12 +93,12 @@ public class GameManager : MonoSingleton<GameManager>
     protected override void Awake()
     {
         base.Awake(); // THIS IS CRITICAL - calls MonoSingleton's Awake first
-        Debug.Log("GameManager Awake called");
+        GameLog.Log("GameManager Awake called");
     }
 
     public override void Init()
     {
-        Debug.Log("GameManager Init called");
+        GameLog.Log("GameManager Init called");
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -138,23 +138,23 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void SetGameState(GameState newState)
     {
-        Debug.Log($"[GameManager] SetGameState called: {currentState} → {newState}");
-        Debug.Log($"[GameManager] Call stack: {System.Environment.StackTrace}");
+        GameLog.Log($"[GameManager] SetGameState called: {currentState} → {newState}");
+        GameLog.Log($"[GameManager] Call stack: {System.Environment.StackTrace}");
 
         if (currentState == newState) return;
 
         // Validate state transition
         if (!IsValidTransition(currentState, newState))
         {
-            Debug.LogWarning($"[GameManager] ⚠️ UNUSUAL STATE TRANSITION: {currentState} → {newState}");
-            Debug.LogWarning($"[GameManager] This may indicate a bug. Call stack logged above.");
+            GameLog.LogWarning($"[GameManager] ⚠️ UNUSUAL STATE TRANSITION: {currentState} → {newState}");
+            GameLog.LogWarning($"[GameManager] This may indicate a bug. Call stack logged above.");
             // Continue anyway - this is just a warning, not a blocker
         }
 
         _previousState = currentState; // Store as field, not local variable
         currentState = newState;
 
-        Debug.Log($"Game State changed from {_previousState} to {newState}");
+        GameLog.Log($"Game State changed from {_previousState} to {newState}");
 
         // Handle state-specific logic
         switch (newState)
@@ -201,13 +201,13 @@ public class GameManager : MonoSingleton<GameManager>
         }
 
         // If we don't have rules defined, log warning but allow it
-        Debug.LogWarning($"[GameManager] No transition rules defined for {from}");
+        GameLog.LogWarning($"[GameManager] No transition rules defined for {from}");
         return true;
     }
 
     private IEnumerator DelayedInitialization()
     {
-        Debug.Log("DelayedInitialization started");
+        GameLog.Log("DelayedInitialization started");
 
         // Wait a couple frames for all Awake/Start calls to complete
         yield return new WaitForEndOfFrame();
@@ -218,14 +218,14 @@ public class GameManager : MonoSingleton<GameManager>
         {
             LocomotionController.Instance.OnLocomotionReady += OnLocomotionReady;
             LocomotionController.Instance.OnLocomotionFailed += OnLocomotionFailed;
-            Debug.Log("[GameManager] ✓ Subscribed to LocomotionController events");
+            GameLog.Log("[GameManager] ✓ Subscribed to LocomotionController events");
         }
         else
         {
-            Debug.LogError("[GameManager] LocomotionController.Instance is still null after delayed init!");
+            GameLog.LogError("[GameManager] LocomotionController.Instance is still null after delayed init!");
         }
 
-        Debug.Log("Proceeding with game initialization");
+        GameLog.Log("Proceeding with game initialization");
 
         // Initialize based on current scene
         if (SceneManager.GetActiveScene().name == mainMenuSceneName)
@@ -326,24 +326,24 @@ public class GameManager : MonoSingleton<GameManager>
             // RESUME FROM PAUSE - Just re-enable locomotion (with fallback)
             if (LocomotionController.Instance != null)
             {
-                Debug.Log("[GameManager] Resuming from pause - re-enabling locomotion");
+                GameLog.Log("[GameManager] Resuming from pause - re-enabling locomotion");
 
                 LocomotionController.Instance.SwitchToGameplayMode(
                     onSuccess: () =>
                     {
-                        Debug.Log("[GameManager] ✓ Quick resume successful - Starting timer");
+                        GameLog.Log("[GameManager] ✓ Quick resume successful - Starting timer");
                         InitializeGameTimer();
                     },
                     onFailure: () =>
                     {
-                        Debug.LogError("[GameManager] ✗ Resume failed (even with fallback)!");
+                        GameLog.LogError("[GameManager] ✗ Resume failed (even with fallback)!");
                         ReturnToMainMenu();
                     }
                 );
             }
             else
             {
-                Debug.LogError("[GameManager] LocomotionController.Instance is null!");
+                GameLog.LogError("[GameManager] LocomotionController.Instance is null!");
             }
         }
         else
@@ -351,17 +351,17 @@ public class GameManager : MonoSingleton<GameManager>
             // FRESH START - Full initialization with validation
             if (LocomotionController.Instance != null)
             {
-                Debug.Log("[GameManager] Starting fresh game - initializing locomotion");
+                GameLog.Log("[GameManager] Starting fresh game - initializing locomotion");
 
                 LocomotionController.Instance.InitializeForGameplay(
                     onSuccess: () =>
                     {
-                        Debug.Log("[GameManager] ✓ Locomotion ready - Starting timer");
+                        GameLog.Log("[GameManager] ✓ Locomotion ready - Starting timer");
                         InitializeGameTimer();
                     },
                     onFailure: () =>
                     {
-                        Debug.LogError("[GameManager] ✗ Locomotion initialization failed!");
+                        GameLog.LogError("[GameManager] ✗ Locomotion initialization failed!");
                         // Return to menu on failure
                         ReturnToMainMenu();
                     }
@@ -369,7 +369,7 @@ public class GameManager : MonoSingleton<GameManager>
             }
             else
             {
-                Debug.LogError("[GameManager] LocomotionController.Instance is null!");
+                GameLog.LogError("[GameManager] LocomotionController.Instance is null!");
             }
         }
     }
@@ -390,34 +390,34 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void InitializeGameTimer()
     {
-        Debug.Log($"[GameManager] InitializeGameTimer called - isLoadingFromSave: {isLoadingFromSave}");
+        GameLog.Log($"[GameManager] InitializeGameTimer called - isLoadingFromSave: {isLoadingFromSave}");
 
         if (GameTimer.Instance != null)
         {
-            Debug.Log("[GameManager] GameTimer.Instance found, subscribing to OnTimerExpired event");
+            GameLog.Log("[GameManager] GameTimer.Instance found, subscribing to OnTimerExpired event");
 
             // Subscribe to timer expired event (only once)
             GameTimer.Instance.OnTimerExpired -= HandleTimerExpired;
             GameTimer.Instance.OnTimerExpired += HandleTimerExpired;
 
-            Debug.Log("[GameManager] Successfully subscribed to OnTimerExpired event");
+            GameLog.Log("[GameManager] Successfully subscribed to OnTimerExpired event");
 
             // CRITICAL: Only apply settings if NOT loading from save
             if (!isLoadingFromSave && SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.ApplyTimerSettings(skipIfRunning: true);
-                Debug.Log("[GameManager] Timer settings applied on gameplay start");
+                GameLog.Log("[GameManager] Timer settings applied on gameplay start");
             }
             else if (isLoadingFromSave)
             {
-                Debug.Log("[GameManager] Skipping timer settings - loading from save (timer already restored)");
+                GameLog.Log("[GameManager] Skipping timer settings - loading from save (timer already restored)");
                 // CRITICAL: Clear the flag NOW (after we've used it)
                 isLoadingFromSave = false;
             }
 
             // Resume the timer
             GameTimer.Instance.ResumeTimer();
-            Debug.Log("[GameManager] Timer resumed");
+            GameLog.Log("[GameManager] Timer resumed");
         }
     }
 
@@ -435,7 +435,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (GameTimer.Instance != null)
         {
             GameTimer.Instance.PauseTimer();
-            Debug.Log("[GameManager] Timer paused");
+            GameLog.Log("[GameManager] Timer paused");
         }
     }
 
@@ -453,11 +453,11 @@ public class GameManager : MonoSingleton<GameManager>
         if (GameTimer.Instance != null)
         {
             GameTimer.Instance.StopTimer();
-            Debug.Log("[GameManager] Timer stopped - Game Over");
+            GameLog.Log("[GameManager] Timer stopped - Game Over");
         }
 
         // TODO: Show Game Over UI
-        Debug.Log("GAME OVER! Timer expired or player died.");
+        GameLog.Log("GAME OVER! Timer expired or player died.");
     }
 
     private void HandleEscapedState()
@@ -476,14 +476,14 @@ public class GameManager : MonoSingleton<GameManager>
             GameTimer.Instance.StopTimer();
 
             string finalTime = GameTimer.Instance.GetFormattedElapsedTime();
-            Debug.Log($"Level completed! Time: {finalTime}");
+            GameLog.Log($"Level completed! Time: {finalTime}");
 
             // TODO: Show Escaped UI with completion time
         }
         else
         {
             float completionTime = Time.time - gameStartTime;
-            Debug.Log($"Level completed in {completionTime:F2} seconds!");
+            GameLog.Log($"Level completed in {completionTime:F2} seconds!");
         }
     }
 
@@ -492,8 +492,8 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void HandleTimerExpired()
     {
-        Debug.Log("[GameManager] ⚠️ HandleTimerExpired() METHOD CALLED ⚠️");
-        Debug.Log("[GameManager] Timer expired event received - triggering Game Over");
+        GameLog.Log("[GameManager] ⚠️ HandleTimerExpired() METHOD CALLED ⚠️");
+        GameLog.Log("[GameManager] Timer expired event received - triggering Game Over");
         GameOver();
     }
 
@@ -502,7 +502,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void OnLocomotionReady()
     {
-        Debug.Log("[GameManager] Locomotion System ready event received");
+        GameLog.Log("[GameManager] Locomotion System ready event received");
     }
 
     /// <summary>
@@ -510,7 +510,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void OnLocomotionFailed()
     {
-        Debug.LogError("[GameManager] Locomotion System failed event received");
+        GameLog.LogError("[GameManager] Locomotion System failed event received");
     }
 
     // Public methods for scene transitions
@@ -537,7 +537,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void ResetGameSystems()
     {
-        Debug.Log("[GameManager] Resetting all game systems for new game");
+        GameLog.Log("[GameManager] Resetting all game systems for new game");
 
         // Reset Health/Energy
         if (HealthEnergyManager.Instance != null)
@@ -549,7 +549,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (GameTimer.Instance != null)
         {
             GameTimer.Instance.ResetTimer();
-            Debug.Log("[GameManager] Timer reset");
+            GameLog.Log("[GameManager] Timer reset");
         }
 
         // CRITICAL: Clear save data AND delete Continue Slot (Slot 0)
@@ -561,7 +561,7 @@ public class GameManager : MonoSingleton<GameManager>
             if (SaveManager.Instance.SaveSlotExists(0))
             {
                 SaveManager.Instance.DeleteSave(0);
-                Debug.Log("[GameManager] Deleted old Continue Slot for new game");
+                GameLog.Log("[GameManager] Deleted old Continue Slot for new game");
             }
         }
 
@@ -577,7 +577,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     public void LoadSavedGame(SaveData saveData)
     {
-        Debug.Log($"[GameManager] Loading saved game from scene: {saveData.currentSceneName}");
+        GameLog.Log($"[GameManager] Loading saved game from scene: {saveData.currentSceneName}");
 
         // Store the save data to restore after scene loads
         pendingSaveData = saveData;
@@ -662,7 +662,7 @@ public class GameManager : MonoSingleton<GameManager>
                 loadingScreenUI.UpdateProgress(loadingProgress);
             }
 
-            Debug.Log($"Loading progress: {loadingProgress * 100}%");
+            GameLog.Log($"Loading progress: {loadingProgress * 100}%");
 
             yield return null;
         }
@@ -704,7 +704,7 @@ public class GameManager : MonoSingleton<GameManager>
             yield return null;
         }
 
-        Debug.Log($"Scene {sceneName} loaded successfully");
+        GameLog.Log($"Scene {sceneName} loaded successfully");
     }
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
@@ -743,7 +743,7 @@ public class GameManager : MonoSingleton<GameManager>
             // Check if we're loading from a save
             if (isLoadingFromSave && pendingSaveData != null)
             {
-                Debug.Log("[GameManager] Restoring save data after scene load");
+                GameLog.Log("[GameManager] Restoring save data after scene load");
                 StartCoroutine(RestoreSaveDataAfterSceneLoad(pendingSaveData));
             }
             else
@@ -771,7 +771,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private IEnumerator RestoreSaveDataAfterSceneLoad(SaveData data)
     {
-        Debug.Log("[GameManager] Starting save data restoration");
+        GameLog.Log("[GameManager] Starting save data restoration");
 
         // Wait for scene to fully initialize. These have to happen before the try block below:
         // a yield return cannot appear inside a try block that has a catch clause (only inside
@@ -786,7 +786,7 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 PlayerController.Instance.XROrigin.transform.position = data.playerPosition;
                 PlayerController.Instance.XROrigin.transform.rotation = data.playerRotation;
-                Debug.Log($"[GameManager] Player position restored to {data.playerPosition}");
+                GameLog.Log($"[GameManager] Player position restored to {data.playerPosition}");
             }
 
             // Restore health/energy
@@ -798,21 +798,21 @@ public class GameManager : MonoSingleton<GameManager>
                 // CRITICAL: Reinitialize movement tracking after player position is restored
                 HealthEnergyManager.Instance.InitializeMovementTracking();
 
-                Debug.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
+                GameLog.Log($"[GameManager] Health/Energy restored: {data.currentHealth}/{data.currentEnergy}");
             }
 
             // Restore GameTimer state BEFORE ISaveable objects (special handling for DontDestroyOnLoad singleton)
             if (GameTimer.Instance != null)
             {
                 GameTimer.Instance.LoadState(data);
-                Debug.Log($"[GameManager] Timer restored: {data.timerRemainingTime}s remaining, Mode: {(GameTimer.TimerMode)data.timerMode}");
+                GameLog.Log($"[GameManager] Timer restored: {data.timerRemainingTime}s remaining, Mode: {(GameTimer.TimerMode)data.timerMode}");
             }
 
             // Restore ClueManager state (special handling for DontDestroyOnLoad singleton)
             if (ClueManager.Instance != null)
             {
                 ClueManager.Instance.LoadState(data);
-                Debug.Log($"[GameManager] ClueManager restored: {data.discoveredClueIDs.Count} clues discovered");
+                GameLog.Log($"[GameManager] ClueManager restored: {data.discoveredClueIDs.Count} clues discovered");
             }
 
             // Restore all ISaveable objects
@@ -822,11 +822,11 @@ public class GameManager : MonoSingleton<GameManager>
                 saveable.LoadState(data);
             }
 
-            Debug.Log("[GameManager] Save data restoration complete");
+            GameLog.Log("[GameManager] Save data restoration complete");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("[GameManager] Save data could not be fully restored - some progress may be reset. " + e);
+            GameLog.LogError("[GameManager] Save data could not be fully restored - some progress may be reset. " + e);
         }
 
         // Always reach a playable state and clear pending save data, whether restoration above
