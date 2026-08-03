@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+#if UNITY_EDITOR
 public class CombatDebugLogger : MonoBehaviour
 {
     private Animator animator;
@@ -36,3 +37,4 @@ public class CombatDebugLogger : MonoBehaviour
         }
     }
 }
+#endif

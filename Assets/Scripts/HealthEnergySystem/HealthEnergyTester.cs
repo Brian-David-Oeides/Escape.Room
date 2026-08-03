@@ -7,6 +7,7 @@ using UnityEngine;
 /// Attach to any GameObject in the scene
 /// </summary>
 
+#if UNITY_EDITOR
 public class HealthEnergyTester : MonoBehaviour
 {
     [Header("Test Settings")]
@@ -102,3 +103,4 @@ public class HealthEnergyTester : MonoBehaviour
         }
     }
 }
+#endif

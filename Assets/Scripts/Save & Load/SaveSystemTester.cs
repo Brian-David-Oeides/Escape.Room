@@ -7,6 +7,7 @@ using UnityEngine;
 /// Attach this to any GameObject in the scene during testing
 /// </summary>
 
+#if UNITY_EDITOR
 public class SaveSystemTester : MonoBehaviour
 {
     [Header("Test Hotkeys")]
@@ -148,3 +149,4 @@ public class SaveSystemTester : MonoBehaviour
         GUI.Label(new Rect(10, 10, 500, 80), controlsText, style);
     }
 }
+#endif
