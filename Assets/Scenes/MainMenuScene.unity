@@ -17162,9 +17162,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
-  maxRetryAttempts: 3
-  retryDelaySeconds: 0.1
-  bindingResolutionFrames: 2
+  maxRetryAttempts: 10
+  retryDelaySeconds: 0.5
+  bindingResolutionFrames: 5
   enableDebugLogs: 1
 --- !u!4 &1331736590
 Transform:

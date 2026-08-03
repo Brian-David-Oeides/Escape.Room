@@ -43,9 +43,9 @@ public class LocomotionController : MonoBehaviour
     [SerializeField] private InputActionAsset inputActionAsset;
 
     [Header("Validation Settings")]
-    [SerializeField] private int maxRetryAttempts = 3;
-    [SerializeField] private float retryDelaySeconds = 0.1f;
-    [SerializeField] private int bindingResolutionFrames = 2;
+    [SerializeField] private int maxRetryAttempts = 10;
+    [SerializeField] private float retryDelaySeconds = 0.5f;
+    [SerializeField] private int bindingResolutionFrames = 5;
 
     [Header("Debug")]
     [SerializeField] private bool enableDebugLogs = true;
