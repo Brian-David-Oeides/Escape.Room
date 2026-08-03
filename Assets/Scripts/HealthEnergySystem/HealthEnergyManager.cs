@@ -107,7 +107,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
         OnHealthChanged?.Invoke(currentHealth);
         OnEnergyChanged?.Invoke(currentEnergy);
 
-        Debug.Log($"[HealthEnergyManager] Reset to starting values: Health {currentHealth}/{maxHealth}, Energy {currentEnergy}/{maxEnergy}");
+        GameLog.Log($"[HealthEnergyManager] Reset to starting values: Health {currentHealth}/{maxHealth}, Energy {currentEnergy}/{maxEnergy}");
     }
 
     private void Start()
@@ -115,7 +115,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
         // Don't reset if we've been initialized from a save
         if (hasBeenInitializedFromSave)
         {
-            Debug.Log("[HealthEnergyManager] Skipping Start() - already initialized from save");
+            GameLog.Log("[HealthEnergyManager] Skipping Start() - already initialized from save");
 
             // Still need to initialize movement tracking
             if (PlayerController.Instance != null && PlayerController.Instance.XROrigin != null)
@@ -140,13 +140,13 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
 
         currentDrainRate = standingDrainRate;
 
-        Debug.Log($"[HealthEnergyManager] HealthEnergyManager initialized");
-        Debug.Log($"[HealthEnergyManager] Starting Health: {currentHealth}/{maxHealth}");
-        Debug.Log($"[HealthEnergyManager] Starting Energy: {currentEnergy}/{maxEnergy}");
-        Debug.Log($"[HealthEnergyManager] Movement-based drain: {(useMovementBasedDrain ? "ENABLED" : "DISABLED")}");
+        GameLog.Log($"[HealthEnergyManager] HealthEnergyManager initialized");
+        GameLog.Log($"[HealthEnergyManager] Starting Health: {currentHealth}/{maxHealth}");
+        GameLog.Log($"[HealthEnergyManager] Starting Energy: {currentEnergy}/{maxEnergy}");
+        GameLog.Log($"[HealthEnergyManager] Movement-based drain: {(useMovementBasedDrain ? "ENABLED" : "DISABLED")}");
         if (useMovementBasedDrain)
         {
-            Debug.Log($"[HealthEnergyManager] Standing drain: {standingDrainRate}/sec, Moving drain: {movingDrainRate}/sec");
+            GameLog.Log($"[HealthEnergyManager] Standing drain: {standingDrainRate}/sec, Moving drain: {movingDrainRate}/sec");
         }
     }
 
@@ -182,7 +182,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
                         {
                             hasTriggeredLowEnergy = true;
                             OnLowEnergy?.Invoke();
-                            Debug.Log("[HealthEnergyManager] ⚠️ LOW ENERGY WARNING!");
+                            GameLog.Log("[HealthEnergyManager] ⚠️ LOW ENERGY WARNING!");
                         }
                     }
                 }
@@ -201,7 +201,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
                         {
                             hasTriggeredLowHealth = true;
                             OnLowHealth?.Invoke();
-                            Debug.Log("[HealthEnergyManager] ⚠️ LOW HEALTH WARNING!");
+                            GameLog.Log("[HealthEnergyManager] ⚠️ LOW HEALTH WARNING!");
                         }
                     }
 
@@ -243,7 +243,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
             // Log when player starts moving (optional, can remove if too spammy)
             if (!wasMoving)
             {
-                Debug.Log($"[HealthEnergyManager] Player moving - drain rate: {movingDrainRate}/sec");
+                GameLog.Log($"[HealthEnergyManager] Player moving - drain rate: {movingDrainRate}/sec");
             }
         }
         else
@@ -253,7 +253,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
             // Log when player stops moving (optional, can remove if too spammy)
             if (wasMoving)
             {
-                Debug.Log($"[HealthEnergyManager] Player standing - drain rate: {standingDrainRate}/sec");
+                GameLog.Log($"[HealthEnergyManager] Player standing - drain rate: {standingDrainRate}/sec");
             }
         }
 
@@ -272,11 +272,11 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
             isPlayerMoving = false;
             currentDrainRate = standingDrainRate;
 
-            Debug.Log($"[HealthEnergyManager] Movement tracking initialized at position: {lastPlayerPosition}");
+            GameLog.Log($"[HealthEnergyManager] Movement tracking initialized at position: {lastPlayerPosition}");
         }
         else
         {
-            Debug.LogWarning("[HealthEnergyManager] Could not initialize movement tracking - XR Origin not found");
+            GameLog.LogWarning("[HealthEnergyManager] Could not initialize movement tracking - XR Origin not found");
         }
     }
 
@@ -291,7 +291,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
         currentEnergy = Mathf.Max(0, currentEnergy);
         OnEnergyChanged?.Invoke(currentEnergy);
 
-        Debug.Log($"[HealthEnergyManager] Teleport cost {teleportEnergyCost} energy! Energy: {currentEnergy:F1}/{maxEnergy}");
+        GameLog.Log($"[HealthEnergyManager] Teleport cost {teleportEnergyCost} energy! Energy: {currentEnergy:F1}/{maxEnergy}");
     }
 
 
@@ -368,7 +368,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
         {
             isDead = false;
             hasTriggeredLowHealth = false;
-            Debug.Log("[HealthEnergyManager] Death state reset - player is alive");
+            GameLog.Log("[HealthEnergyManager] Death state reset - player is alive");
         }
 
         OnHealthChanged?.Invoke(currentHealth);
@@ -602,7 +602,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[HealthEnergyManager] {message}");
+            GameLog.Log($"[HealthEnergyManager] {message}");
         }
     }
 

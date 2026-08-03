@@ -78,7 +78,7 @@ public class NPCBehaviorController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Could not find XR Origin (XR Rig)!");
+            GameLog.LogError("Could not find XR Origin (XR Rig)!");
         }
 
         // Configure for root motion
@@ -130,11 +130,11 @@ public class NPCBehaviorController : MonoBehaviour
         if (PuzzleManager.Instance != null)
         {
             PuzzleManager.Instance.OnPuzzleCompleted += OnPuzzleCompleted;
-            Debug.Log("[NPCBehaviorController] Subscribed to PuzzleManager events");
+            GameLog.Log("[NPCBehaviorController] Subscribed to PuzzleManager events");
         }
         else
         {
-            Debug.LogWarning("[NPCBehaviorController] PuzzleManager not found!");
+            GameLog.LogWarning("[NPCBehaviorController] PuzzleManager not found!");
         }
     }
 
@@ -144,7 +144,7 @@ public class NPCBehaviorController : MonoBehaviour
         if (forceHuntingMode)
         {
             currentState = BehaviorState.Hunting;
-            Debug.Log($"NPC State FORCED to: {currentState}");
+            GameLog.Log($"NPC State FORCED to: {currentState}");
             return;
         }
 
@@ -160,7 +160,7 @@ public class NPCBehaviorController : MonoBehaviour
         else
             currentState = BehaviorState.Hunting;
 
-        Debug.Log($"NPC State changed to: {currentState} (Puzzles: {currentPuzzleCount})");
+        GameLog.Log($"NPC State changed to: {currentState} (Puzzles: {currentPuzzleCount})");
     }
 
     void LoiterBehavior(Vector3 centerPoint, float radius)

@@ -213,7 +213,7 @@ public class ConsumableObject : MonoBehaviour, ISaveable
         }
         else
         {
-            Debug.LogError("HealthEnergyManager not found! Cannot restore health/energy.");
+            GameLog.LogError("HealthEnergyManager not found! Cannot restore health/energy.");
         }
 
         // Visual feedback
@@ -337,7 +337,7 @@ public class ConsumableObject : MonoBehaviour, ISaveable
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[ConsumableObject:{consumableID}] {message}");
+            GameLog.Log($"[ConsumableObject:{consumableID}] {message}");
         }
     }
 

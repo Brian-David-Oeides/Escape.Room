@@ -23,7 +23,7 @@ public class TeleportEnergyCost : MonoBehaviour
 
         if (teleportProvider == null)
         {
-            Debug.LogError("[TeleportEnergyCost] No TeleportationProvider found on this GameObject!");
+            GameLog.LogError("[TeleportEnergyCost] No TeleportationProvider found on this GameObject!");
             return;
         }
 
@@ -55,7 +55,7 @@ public class TeleportEnergyCost : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[TeleportEnergyCost] HealthEnergyManager not found! Energy not drained.");
+            GameLog.LogWarning("[TeleportEnergyCost] HealthEnergyManager not found! Energy not drained.");
         }
     }
 
@@ -63,7 +63,7 @@ public class TeleportEnergyCost : MonoBehaviour
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[TeleportEnergyCost] {message}");
+            GameLog.Log($"[TeleportEnergyCost] {message}");
         }
     }
 }

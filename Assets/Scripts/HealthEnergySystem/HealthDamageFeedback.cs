@@ -95,7 +95,7 @@ public class HealthDamageFeedback : MonoBehaviour
         // Make sure we have an overlay image
         if (damageOverlay == null)
         {
-            Debug.LogError("[HealthDamageFeedback] Damage overlay Image not assigned!");
+            GameLog.LogError("[HealthDamageFeedback] Damage overlay Image not assigned!");
         }
         else
         {
@@ -117,8 +117,8 @@ public class HealthDamageFeedback : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log("[HealthDamageFeedback] System initialized");
-            Debug.Log($"[HealthDamageFeedback] Visual: {visualFXEnabled}, Audio: {audioFXEnabled}, Haptics: {hapticFXEnabled}");
+            GameLog.Log("[HealthDamageFeedback] System initialized");
+            GameLog.Log($"[HealthDamageFeedback] Visual: {visualFXEnabled}, Audio: {audioFXEnabled}, Haptics: {hapticFXEnabled}");
         }
     }
 
@@ -154,7 +154,7 @@ public class HealthDamageFeedback : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[HealthDamageFeedback] Health changed: {newHealth:F1}%");
+            GameLog.Log($"[HealthDamageFeedback] Health changed: {newHealth:F1}%");
         }
     }
 
@@ -317,7 +317,7 @@ public class HealthDamageFeedback : MonoBehaviour
         if (showDebugLogs)
         {
             float healthPercentage = HealthEnergyManager.Instance.GetHealthPercentage();
-            Debug.Log($"[HealthDamageFeedback] Heartbeat at {currentHeartbeatBPM:F0} BPM (Health: {healthPercentage:F1}%)");
+            GameLog.Log($"[HealthDamageFeedback] Heartbeat at {currentHeartbeatBPM:F0} BPM (Health: {healthPercentage:F1}%)");
         }
     }
 
@@ -349,7 +349,7 @@ public class HealthDamageFeedback : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[HealthDamageFeedback] Visual FX {(enabled ? "ENABLED" : "DISABLED")}");
+            GameLog.Log($"[HealthDamageFeedback] Visual FX {(enabled ? "ENABLED" : "DISABLED")}");
         }
     }
 
@@ -367,7 +367,7 @@ public class HealthDamageFeedback : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[HealthDamageFeedback] Audio FX {(enabled ? "ENABLED" : "DISABLED")}");
+            GameLog.Log($"[HealthDamageFeedback] Audio FX {(enabled ? "ENABLED" : "DISABLED")}");
         }
     }
 
@@ -380,7 +380,7 @@ public class HealthDamageFeedback : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"[HealthDamageFeedback] Haptic FX {(enabled ? "ENABLED" : "DISABLED")}");
+            GameLog.Log($"[HealthDamageFeedback] Haptic FX {(enabled ? "ENABLED" : "DISABLED")}");
         }
     }
 

@@ -177,7 +177,7 @@ public abstract class TogglePuzzleBase : MonoBehaviour, ISaveable
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[TogglePuzzleBase:{puzzleID}] {message}");
+            GameLog.Log($"[TogglePuzzleBase:{puzzleID}] {message}");
         }
     }
 
@@ -190,7 +190,7 @@ public abstract class TogglePuzzleBase : MonoBehaviour, ISaveable
     {
         if (string.IsNullOrEmpty(puzzleID) || puzzleID == "toggle_base_001")
         {
-            Debug.LogWarning($"[{gameObject.name}] Toggle Puzzle ID is not set or using default! Set a unique puzzleID in inspector.", this);
+            GameLog.LogWarning($"[{gameObject.name}] Toggle Puzzle ID is not set or using default! Set a unique puzzleID in inspector.", this);
         }
     }
 #endif

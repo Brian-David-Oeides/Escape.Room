@@ -93,7 +93,7 @@ public class ClueDiscoveryTrigger : MonoBehaviour
 
         if (string.IsNullOrEmpty(clueID))
         {
-            Debug.LogError($"[ClueDiscoveryTrigger] Clue ID is empty on {gameObject.name}!");
+            GameLog.LogError($"[ClueDiscoveryTrigger] Clue ID is empty on {gameObject.name}!");
             return;
         }
 
@@ -106,7 +106,7 @@ public class ClueDiscoveryTrigger : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[ClueDiscoveryTrigger] ClueManager.Instance is null!");
+            GameLog.LogError("[ClueDiscoveryTrigger] ClueManager.Instance is null!");
         }
     }
 
@@ -128,7 +128,7 @@ public class ClueDiscoveryTrigger : MonoBehaviour
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[ClueDiscoveryTrigger:{gameObject.name}] {message}");
+            GameLog.Log($"[ClueDiscoveryTrigger:{gameObject.name}] {message}");
         }
     }
 

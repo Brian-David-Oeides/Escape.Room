@@ -59,7 +59,7 @@ public class NPCCombatController : MonoBehaviour
         if (xrRig != null)
             playerTransform = xrRig.transform;
         else
-            Debug.LogError("[NPCCombatController] Could not find XR Origin (XR Rig)!");
+            GameLog.LogError("[NPCCombatController] Could not find XR Origin (XR Rig)!");
 
         allHandHaptics = FindObjectsByType<HandHaptics>(FindObjectsSortMode.None);
     }
@@ -100,7 +100,7 @@ public class NPCCombatController : MonoBehaviour
         // Trigger attack animation
         animator.SetTrigger("Attack");
         audioSource?.PlayOneShot(attackWhooshSound);
-        Debug.Log("[NPCCombatController] Attack triggered");
+        GameLog.Log("[NPCCombatController] Attack triggered");
 
         // Wait before opening counter window
         yield return new WaitForSeconds(counterWindowDelay);
@@ -109,14 +109,14 @@ public class NPCCombatController : MonoBehaviour
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
         if (distanceToPlayer > attackRange)
         {
-            Debug.Log("[NPCCombatController] Player escaped range - attack cancelled");
+            GameLog.Log("[NPCCombatController] Player escaped range - attack cancelled");
             isAttacking = false;
             yield break;
         }
 
         // Open counter-attack window
         counterWindowOpen = true;
-        Debug.Log("[NPCCombatController] Counter window OPEN");
+        GameLog.Log("[NPCCombatController] Counter window OPEN");
 
         // Schedule damage to player after delay
         StartCoroutine(ScheduleDamage());
@@ -126,7 +126,7 @@ public class NPCCombatController : MonoBehaviour
 
         // Close window
         counterWindowOpen = false;
-        Debug.Log("[NPCCombatController] Counter window CLOSED");
+        GameLog.Log("[NPCCombatController] Counter window CLOSED");
 
         // Wait for animation to finish before allowing next attack
         yield return new WaitForSeconds(1.0f);
@@ -142,7 +142,7 @@ public class NPCCombatController : MonoBehaviour
         if (!playerCounteredThisAttack)
         {
             HealthEnergyManager.Instance?.TakeDamage(attackDamage);
-            Debug.Log($"[NPCCombatController] Player hit for {attackDamage} damage");
+            GameLog.Log($"[NPCCombatController] Player hit for {attackDamage} damage");
             foreach (HandHaptics h in allHandHaptics)
             {
                 h.TriggerHaptic(0.9f, 0.5f);
@@ -176,7 +176,7 @@ public class NPCCombatController : MonoBehaviour
     void RegisterHit()
     {
         currentHitCount++;
-        Debug.Log($"[NPCCombatController] NPC hit {currentHitCount}/{hitsToDefeat}");
+        GameLog.Log($"[NPCCombatController] NPC hit {currentHitCount}/{hitsToDefeat}");
 
         PlayPainSound();
 
@@ -238,7 +238,7 @@ public class NPCCombatController : MonoBehaviour
 
         animator.SetTrigger("Death");
         audioSource?.PlayOneShot(npcDeathCrySound);
-        Debug.Log("[NPCCombatController] NPC defeated!");
+        GameLog.Log("[NPCCombatController] NPC defeated!");
 
         // Wait for the body to hit the floor before playing impact sound
         yield return new WaitForSeconds(1.8f);

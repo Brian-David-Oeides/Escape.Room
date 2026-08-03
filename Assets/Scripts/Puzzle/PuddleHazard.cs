@@ -54,7 +54,7 @@ public class PuddleHazard : MonoBehaviour
         if (HealthEnergyManager.Instance != null)
         {
             HealthEnergyManager.Instance.TakeDamage(electricShockDamage);
-            Debug.Log($"[PuddleHazard] ⚡ Electric shock! Applied {electricShockDamage} damage");
+            GameLog.Log($"[PuddleHazard] ⚡ Electric shock! Applied {electricShockDamage} damage");
         }
 
         // Play electric shock effects
@@ -62,7 +62,7 @@ public class PuddleHazard : MonoBehaviour
 
         // Register failed attempt for hint system
         ClueManager.Instance?.RegisterFailedAttempt(puzzleID, hintThreshold);
-        Debug.Log($"[PuddleHazard] Failed attempt registered for hint system");
+        GameLog.Log($"[PuddleHazard] Failed attempt registered for hint system");
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class PuddleHazard : MonoBehaviour
             waterDripParticles.Stop();
         }
 
-        Debug.Log("[PuddleHazard] Puddle removed - lever can now be safely used");
+        GameLog.Log("[PuddleHazard] Puddle removed - lever can now be safely used");
         PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
         // Disable the entire puddle GameObject (this will stop audio via OnDisable)
         gameObject.SetActive(false);

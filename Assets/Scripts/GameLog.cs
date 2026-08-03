@@ -20,4 +20,16 @@ public static class GameLog
     {
         UnityEngine.Debug.LogError(message);
     }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void LogWarning(string message, Object context)
+    {
+        UnityEngine.Debug.LogWarning(message, context);
+    }
+
+    [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+    public static void LogError(string message, Object context)
+    {
+        UnityEngine.Debug.LogError(message, context);
+    }
 }

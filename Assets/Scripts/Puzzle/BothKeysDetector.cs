@@ -65,14 +65,14 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
         // Validate references
         if (lock1Socket == null || lock2Socket == null)
         {
-            Debug.LogError("[BothKeysDetector] Missing socket references! Please assign both Lock 1 and Lock 2 sockets.");
+            GameLog.LogError("[BothKeysDetector] Missing socket references! Please assign both Lock 1 and Lock 2 sockets.");
             enabled = false;
             return;
         }
 
         if (bronzeKey1 == null || bronzeKey2 == null)
         {
-            Debug.LogError("[BothKeysDetector] Missing Bronze Key GameObject references!");
+            GameLog.LogError("[BothKeysDetector] Missing Bronze Key GameObject references!");
             enabled = false;
             return;
         }
@@ -274,7 +274,7 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[BothKeysDetector] {message}");
+            GameLog.Log($"[BothKeysDetector] {message}");
         }
     }
 

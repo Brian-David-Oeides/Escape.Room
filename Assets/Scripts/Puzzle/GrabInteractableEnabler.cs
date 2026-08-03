@@ -18,7 +18,7 @@ public class GrabInteractableEnabler : MonoBehaviour
 
         if (grabInteractable == null)
         {
-            Debug.LogError($"[GrabInteractableEnabler] No XRGrabInteractable found on {gameObject.name}!");
+            GameLog.LogError($"[GrabInteractableEnabler] No XRGrabInteractable found on {gameObject.name}!");
         }
     }
 
@@ -30,7 +30,7 @@ public class GrabInteractableEnabler : MonoBehaviour
         if (grabInteractable != null)
         {
             grabInteractable.enabled = true;
-            Debug.Log($"[GrabInteractableEnabler] Enabled grabbing on {gameObject.name}");
+            GameLog.Log($"[GrabInteractableEnabler] Enabled grabbing on {gameObject.name}");
         }
     }
 
@@ -42,7 +42,7 @@ public class GrabInteractableEnabler : MonoBehaviour
         if (grabInteractable != null)
         {
             grabInteractable.enabled = false;
-            Debug.Log($"[GrabInteractableEnabler] Disabled grabbing on {gameObject.name}");
+            GameLog.Log($"[GrabInteractableEnabler] Disabled grabbing on {gameObject.name}");
         }
     }
 }

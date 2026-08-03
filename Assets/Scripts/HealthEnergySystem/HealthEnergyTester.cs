@@ -29,11 +29,11 @@ public class HealthEnergyTester : MonoBehaviour
     {
         if (HealthEnergyManager.Instance == null)
         {
-            Debug.LogError("❌ HealthEnergyManager not found in scene!");
+            GameLog.LogError("❌ HealthEnergyManager not found in scene!");
         }
         else
         {
-            Debug.Log("✅ HealthEnergyManager found and ready!");
+            GameLog.Log("✅ HealthEnergyManager found and ready!");
         }
     }
 
@@ -54,21 +54,21 @@ public class HealthEnergyTester : MonoBehaviour
         {
             testDamage = false;
             HealthEnergyManager.Instance.TakeDamage(damageAmount);
-            Debug.Log($"🔨 Applied {damageAmount} damage manually");
+            GameLog.Log($"🔨 Applied {damageAmount} damage manually");
         }
 
         if (testRestoreHealth)
         {
             testRestoreHealth = false;
             HealthEnergyManager.Instance.RestoreHealth(healthRestoreAmount);
-            Debug.Log($"💚 Restored {healthRestoreAmount} health manually");
+            GameLog.Log($"💚 Restored {healthRestoreAmount} health manually");
         }
 
         if (testRestoreEnergy)
         {
             testRestoreEnergy = false;
             HealthEnergyManager.Instance.RestoreEnergy(energyRestoreAmount);
-            Debug.Log($"⚡ Restored {energyRestoreAmount} energy manually");
+            GameLog.Log($"⚡ Restored {energyRestoreAmount} energy manually");
         }
     }
 
@@ -84,22 +84,22 @@ public class HealthEnergyTester : MonoBehaviour
         float maxEnergy = manager.GetMaxEnergy();
         float energyPercent = manager.GetEnergyPercentage();
 
-        Debug.Log($"📊 STATUS | Health: {health:F1}/{maxHealth} ({healthPercent:F0}%) | Energy: {energy:F1}/{maxEnergy} ({energyPercent:F0}%)");
+        GameLog.Log($"📊 STATUS | Health: {health:F1}/{maxHealth} ({healthPercent:F0}%) | Energy: {energy:F1}/{maxEnergy} ({energyPercent:F0}%)");
 
         // Warnings
         if (manager.IsLowEnergy())
         {
-            Debug.Log("⚠️ LOW ENERGY!");
+            GameLog.Log("⚠️ LOW ENERGY!");
         }
 
         if (manager.IsLowHealth())
         {
-            Debug.Log("⚠️ LOW HEALTH!");
+            GameLog.Log("⚠️ LOW HEALTH!");
         }
 
         if (manager.IsDead())
         {
-            Debug.Log("💀 DEAD!");
+            GameLog.Log("💀 DEAD!");
         }
     }
 }

@@ -88,7 +88,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     {
         if (string.IsNullOrEmpty(clueID))
         {
-            Debug.LogWarning("[ClueManager] Attempted to discover clue with empty ID");
+            GameLog.LogWarning("[ClueManager] Attempted to discover clue with empty ID");
             return;
         }
 
@@ -112,7 +112,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         }
         else
         {
-            Debug.LogWarning($"[ClueManager] Clue ID '{clueID}' not found in database!");
+            GameLog.LogWarning($"[ClueManager] Clue ID '{clueID}' not found in database!");
         }
     }
 
@@ -125,7 +125,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     {
         if (string.IsNullOrEmpty(puzzleID))
         {
-            Debug.LogWarning("[ClueManager] Attempted to register failed attempt with empty puzzle ID");
+            GameLog.LogWarning("[ClueManager] Attempted to register failed attempt with empty puzzle ID");
             return;
         }
 
@@ -270,7 +270,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[ClueManager] {message}");
+            GameLog.Log($"[ClueManager] {message}");
         }
     }
 
@@ -289,7 +289,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         }
         else
         {
-            Debug.LogError("[ClueManager] HintUI reference not set! Assign it in the Inspector.");
+            GameLog.LogError("[ClueManager] HintUI reference not set! Assign it in the Inspector.");
         }
     }
 
@@ -372,7 +372,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     [ContextMenu("Test: Show Clue Stats")]
     private void TestShowStats()
     {
-        Debug.Log($"Discovered: {GetDiscoveredClueCount()}/{GetTotalClueCount()} clues");
+        GameLog.Log($"Discovered: {GetDiscoveredClueCount()}/{GetTotalClueCount()} clues");
     }
 
     #endregion

@@ -90,7 +90,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[PuzzleManager] {message}");
+            GameLog.Log($"[PuzzleManager] {message}");
         }
     }
 }

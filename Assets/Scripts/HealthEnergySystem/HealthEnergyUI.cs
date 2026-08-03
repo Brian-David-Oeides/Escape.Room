@@ -58,11 +58,11 @@ public class HealthEnergyUI : MonoBehaviour
             UpdateHealthDisplay(HealthEnergyManager.Instance.GetCurrentHealth());
             UpdateEnergyDisplay(HealthEnergyManager.Instance.GetCurrentEnergy());
 
-            Debug.Log("HealthEnergyUI initialized and subscribed to events");
+            GameLog.Log("HealthEnergyUI initialized and subscribed to events");
         }
         else
         {
-            Debug.LogError("HealthEnergyManager not found! UI will not function.");
+            GameLog.LogError("HealthEnergyManager not found! UI will not function.");
         }
 
         // Position HUD
@@ -269,14 +269,14 @@ public class HealthEnergyUI : MonoBehaviour
     {
         if (PlayerController.Instance == null || PlayerController.Instance.XROrigin == null)
         {
-            Debug.LogWarning("Cannot position HUD - PlayerController or XROrigin not found");
+            GameLog.LogWarning("Cannot position HUD - PlayerController or XROrigin not found");
             return;
         }
 
         Camera mainCamera = PlayerController.Instance.XROrigin.GetComponentInChildren<Camera>();
         if (mainCamera == null)
         {
-            Debug.LogWarning("Cannot position HUD - Main Camera not found in XR Origin");
+            GameLog.LogWarning("Cannot position HUD - Main Camera not found in XR Origin");
             return;
         }
 

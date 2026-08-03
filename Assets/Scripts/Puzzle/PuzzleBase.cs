@@ -163,7 +163,7 @@ public abstract class PuzzleBase : MonoBehaviour, ISaveable
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[PuzzleBase:{puzzleID}] {message}");
+            GameLog.Log($"[PuzzleBase:{puzzleID}] {message}");
         }
     }
 
@@ -179,7 +179,7 @@ public abstract class PuzzleBase : MonoBehaviour, ISaveable
     {
         if (string.IsNullOrEmpty(puzzleID) || puzzleID == "puzzle_base_001")
         {
-            Debug.LogWarning($"[{gameObject.name}] Puzzle ID is not set or using default! Set a unique puzzleID in inspector.", this);
+            GameLog.LogWarning($"[{gameObject.name}] Puzzle ID is not set or using default! Set a unique puzzleID in inspector.", this);
         }
     }
 #endif

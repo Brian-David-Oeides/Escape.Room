@@ -122,7 +122,7 @@ public class HintsMenuUI : MonoBehaviour
             // Audio feedback
             UIAudioManager.Instance?.PlayMenuOpen();
 
-            Debug.Log("[HintsMenuUI] Hints menu shown");
+            GameLog.Log("[HintsMenuUI] Hints menu shown");
         }
     }
 
@@ -138,7 +138,7 @@ public class HintsMenuUI : MonoBehaviour
             // Audio feedback
             UIAudioManager.Instance?.PlayMenuClose();
 
-            Debug.Log("[HintsMenuUI] Hints menu hidden");
+            GameLog.Log("[HintsMenuUI] Hints menu hidden");
         }
     }
 
@@ -285,7 +285,7 @@ public class HintsMenuUI : MonoBehaviour
     /// </summary>
     public void OnBackButtonClicked()
     {
-        Debug.Log("[HintsMenuUI] Back button clicked");
+        GameLog.Log("[HintsMenuUI] Back button clicked");
 
         // Audio feedback
         UIAudioManager.Instance?.PlayCancel();
@@ -306,26 +306,26 @@ public class HintsMenuUI : MonoBehaviour
         // Safety checks
         if (ClueManager.Instance == null || !ClueManager.Instance.hintsEnabled)
         {
-            Debug.LogWarning("[HintsMenuUI] Cannot request hint - ClueManager not available or hints disabled");
+            GameLog.LogWarning("[HintsMenuUI] Cannot request hint - ClueManager not available or hints disabled");
             UIAudioManager.Instance?.PlayError();
             return;
         }
 
         if (isOnCooldown)
         {
-            Debug.Log("[HintsMenuUI] Cannot request hint - on cooldown");
+            GameLog.Log("[HintsMenuUI] Cannot request hint - on cooldown");
             UIAudioManager.Instance?.PlayError();
             return;
         }
 
         if (hintsRequested >= maxManualHints)
         {
-            Debug.Log("[HintsMenuUI] Cannot request hint - max hints reached");
+            GameLog.Log("[HintsMenuUI] Cannot request hint - max hints reached");
             UIAudioManager.Instance?.PlayError();
             return;
         }
 
-        Debug.Log("[HintsMenuUI] Manual hint requested");
+        GameLog.Log("[HintsMenuUI] Manual hint requested");
 
         // Audio feedback - success
         UIAudioManager.Instance?.PlayConfirm();
@@ -369,11 +369,11 @@ public class HintsMenuUI : MonoBehaviour
         if (ClueManager.Instance.hintUI != null)
         {
             ClueManager.Instance.hintUI.ShowHint(hintMessage);
-            Debug.Log($"[HintsMenuUI] Showing manual hint for puzzle: {targetPuzzleID}");
+            GameLog.Log($"[HintsMenuUI] Showing manual hint for puzzle: {targetPuzzleID}");
         }
         else
         {
-            Debug.LogError("[HintsMenuUI] HintUI reference not set in ClueManager!");
+            GameLog.LogError("[HintsMenuUI] HintUI reference not set in ClueManager!");
         }
     }
 
@@ -416,7 +416,7 @@ public class HintsMenuUI : MonoBehaviour
         if (ClueManager.Instance != null && ClueManager.Instance.hintUI != null)
         {
             ClueManager.Instance.hintUI.ShowHint(genericHint);
-            Debug.Log("[HintsMenuUI] Showing generic hint");
+            GameLog.Log("[HintsMenuUI] Showing generic hint");
         }
     }
 
@@ -434,7 +434,7 @@ public class HintsMenuUI : MonoBehaviour
             maxManualHints = SettingsManager.Instance.GetMaxManualHints();
             hintCooldown = SettingsManager.Instance.GetHintCooldown();
 
-            Debug.Log($"[HintsMenuUI] Loaded settings: MaxHints={maxManualHints}, Cooldown={hintCooldown}s");
+            GameLog.Log($"[HintsMenuUI] Loaded settings: MaxHints={maxManualHints}, Cooldown={hintCooldown}s");
         }
     }
 
@@ -452,7 +452,7 @@ public class HintsMenuUI : MonoBehaviour
         // Refresh displays to reflect new max hints
         RefreshAllDisplays();
 
-        Debug.Log($"[HintsMenuUI] Settings updated: Enabled={hintsEnabled}, MaxHints={maxHints}, Cooldown={cooldown}s");
+        GameLog.Log($"[HintsMenuUI] Settings updated: Enabled={hintsEnabled}, MaxHints={maxHints}, Cooldown={cooldown}s");
     }
 
     #endregion
@@ -466,7 +466,7 @@ public class HintsMenuUI : MonoBehaviour
         isOnCooldown = false;
         cooldownTimer = 0f;
         RefreshAllDisplays();
-        Debug.Log("[HintsMenuUI] Statistics reset");
+        GameLog.Log("[HintsMenuUI] Statistics reset");
     }
 
     #endregion

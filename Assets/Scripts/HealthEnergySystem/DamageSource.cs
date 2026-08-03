@@ -175,17 +175,17 @@ public class DamageSource : MonoBehaviour
             {
                 if (useVelocityMultiplier && collisionVelocity > 0)
                 {
-                    Debug.Log($"[DamageSource] Applied {finalDamage:F1} damage (Base: {baseDamage}, Velocity: {collisionVelocity:F2} m/s). Cooldown: {damageCooldown}s");
+                    GameLog.Log($"[DamageSource] Applied {finalDamage:F1} damage (Base: {baseDamage}, Velocity: {collisionVelocity:F2} m/s). Cooldown: {damageCooldown}s");
                 }
                 else
                 {
-                    Debug.Log($"[DamageSource] Applied {finalDamage:F1} damage (Base only). Cooldown: {damageCooldown}s");
+                    GameLog.Log($"[DamageSource] Applied {finalDamage:F1} damage (Base only). Cooldown: {damageCooldown}s");
                 }
             }
         }
         else
         {
-            Debug.LogError("[DamageSource] HealthEnergyManager instance not found!");
+            GameLog.LogError("[DamageSource] HealthEnergyManager instance not found!");
         }
 
         // Trigger feedback effects
@@ -219,7 +219,7 @@ public class DamageSource : MonoBehaviour
 
             if (showDebugLogs)
             {
-                Debug.Log($"[DamageSource] Velocity: {collisionVelocity:F2} m/s → Velocity Multiplier: {velocityMultiplier:F2}x");
+                GameLog.Log($"[DamageSource] Velocity: {collisionVelocity:F2} m/s → Velocity Multiplier: {velocityMultiplier:F2}x");
             }
         }
 
@@ -231,7 +231,7 @@ public class DamageSource : MonoBehaviour
 
             if (showDebugLogs)
             {
-                Debug.Log($"[DamageSource] Base: {baseDamage} → After modifiers: {damage:F1} (Difficulty Multiplier: {difficultyMultiplier}x)");
+                GameLog.Log($"[DamageSource] Base: {baseDamage} → After modifiers: {damage:F1} (Difficulty Multiplier: {difficultyMultiplier}x)");
             }
         }
 
@@ -251,7 +251,7 @@ public class DamageSource : MonoBehaviour
 
             if (showDebugLogs)
             {
-                Debug.Log($"[DamageSource] Sent haptic feedback to {controller.name}");
+                GameLog.Log($"[DamageSource] Sent haptic feedback to {controller.name}");
             }
         }
     }
@@ -274,25 +274,25 @@ public class DamageSource : MonoBehaviour
         {
             clipToPlay = damageSound_Mild;
             if (showDebugLogs)
-                Debug.Log($"[DamageSource] Playing MILD damage sound (Health: {healthPercentage:F1}%)");
+                GameLog.Log($"[DamageSource] Playing MILD damage sound (Health: {healthPercentage:F1}%)");
         }
         else if (healthPercentage >= 50f)
         {
             clipToPlay = damageSound_Moderate;
             if (showDebugLogs)
-                Debug.Log($"[DamageSource] Playing MODERATE damage sound (Health: {healthPercentage:F1}%)");
+                GameLog.Log($"[DamageSource] Playing MODERATE damage sound (Health: {healthPercentage:F1}%)");
         }
         else if (healthPercentage >= 25f)
         {
             clipToPlay = damageSound_Serious;
             if (showDebugLogs)
-                Debug.Log($"[DamageSource] Playing SERIOUS damage sound (Health: {healthPercentage:F1}%)");
+                GameLog.Log($"[DamageSource] Playing SERIOUS damage sound (Health: {healthPercentage:F1}%)");
         }
         else
         {
             clipToPlay = damageSound_Critical;
             if (showDebugLogs)
-                Debug.Log($"[DamageSource] Playing CRITICAL damage sound (Health: {healthPercentage:F1}%)");
+                GameLog.Log($"[DamageSource] Playing CRITICAL damage sound (Health: {healthPercentage:F1}%)");
         }
 
         // Play the selected clip if it exists
@@ -302,7 +302,7 @@ public class DamageSource : MonoBehaviour
         }
         else if (showDebugLogs)
         {
-            Debug.LogWarning("[DamageSource] No audio clip assigned for current health tier");
+            GameLog.LogWarning("[DamageSource] No audio clip assigned for current health tier");
         }
     }
 
@@ -317,7 +317,7 @@ public class DamageSource : MonoBehaviour
 
             if (showDebugLogs)
             {
-                Debug.Log("[DamageSource] Spawned damage particles");
+                GameLog.Log("[DamageSource] Spawned damage particles");
             }
         }
     }
