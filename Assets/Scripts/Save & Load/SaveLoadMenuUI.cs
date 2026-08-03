@@ -56,100 +56,100 @@ public class SaveLoadMenuUI : MonoBehaviour
 
     public void ShowSavePanel()
     {
-        Debug.Log("=== ShowSavePanel START ===");
+        GameLog.Log("=== ShowSavePanel START ===");
 
         HideAllPanels();
-        Debug.Log("HideAllPanels completed");
+        GameLog.Log("HideAllPanels completed");
 
         if (savePanel != null)
         {
-            Debug.Log($"savePanel is NOT null. Current active state: {savePanel.activeSelf}");
-            Debug.Log($"Attempting to activate savePanel: {savePanel.name}");
+            GameLog.Log($"savePanel is NOT null. Current active state: {savePanel.activeSelf}");
+            GameLog.Log($"Attempting to activate savePanel: {savePanel.name}");
 
             savePanel.SetActive(true);
 
-            Debug.Log($"savePanel.SetActive(true) called. New active state: {savePanel.activeSelf}");
-            Debug.Log($"savePanel parent: {savePanel.transform.parent?.name}");
-            Debug.Log($"savePanel parent active: {savePanel.transform.parent?.gameObject.activeSelf}");
+            GameLog.Log($"savePanel.SetActive(true) called. New active state: {savePanel.activeSelf}");
+            GameLog.Log($"savePanel parent: {savePanel.transform.parent?.name}");
+            GameLog.Log($"savePanel parent active: {savePanel.transform.parent?.gameObject.activeSelf}");
 
             RefreshSaveSlots();
-            Debug.Log("RefreshSaveSlots completed");
+            GameLog.Log("RefreshSaveSlots completed");
         }
         else
         {
-            Debug.LogError("savePanel is NULL!");
+            GameLog.LogError("savePanel is NULL!");
         }
 
         if (UIAudioManager.Instance != null)
         {
             UIAudioManager.Instance.PlayMenuOpen();
-            Debug.Log("UIAudioManager.PlayMenuOpen called");
+            GameLog.Log("UIAudioManager.PlayMenuOpen called");
         }
 
-        Debug.Log("=== ShowSavePanel END ===");
+        GameLog.Log("=== ShowSavePanel END ===");
     }
 
     public void ShowLoadPanel()
     {
-        Debug.Log("=== ShowLoadPanel START ===");
-        Debug.Log("ShowLoadPanel called");
-        Debug.Log($"loadPanel is null? {loadPanel == null}");
+        GameLog.Log("=== ShowLoadPanel START ===");
+        GameLog.Log("ShowLoadPanel called");
+        GameLog.Log($"loadPanel is null? {loadPanel == null}");
 
         HideAllPanels();
-        Debug.Log("HideAllPanels completed");
+        GameLog.Log("HideAllPanels completed");
 
         if (loadPanel != null)
         {
-            Debug.Log($"LoadPanel name: {loadPanel.name}");
-            Debug.Log($"LoadPanel active before: {loadPanel.activeSelf}");
+            GameLog.Log($"LoadPanel name: {loadPanel.name}");
+            GameLog.Log($"LoadPanel active before: {loadPanel.activeSelf}");
 
-            Debug.Log($"Activating loadPanel: {loadPanel.name}");
+            GameLog.Log($"Activating loadPanel: {loadPanel.name}");
             loadPanel.SetActive(true);
 
-            Debug.Log($"LoadPanel active after SetActive(true): {loadPanel.activeSelf}");
-            Debug.Log($"LoadPanel parent: {loadPanel.transform.parent?.name}");
+            GameLog.Log($"LoadPanel active after SetActive(true): {loadPanel.activeSelf}");
+            GameLog.Log($"LoadPanel parent: {loadPanel.transform.parent?.name}");
 
             RefreshLoadSlots();
-            Debug.Log($"loadPanel.activeSelf: {loadPanel.activeSelf}");
+            GameLog.Log($"loadPanel.activeSelf: {loadPanel.activeSelf}");
         }
         else
         {
-            Debug.LogError("Load Panel reference is NULL in SaveLoadMenuUI!");
+            GameLog.LogError("Load Panel reference is NULL in SaveLoadMenuUI!");
         }
 
         UIAudioManager.Instance?.PlayMenuOpen();
-        Debug.Log("=== ShowLoadPanel END ===");
+        GameLog.Log("=== ShowLoadPanel END ===");
     }
 
     public void HideAllPanels()
     {
-        Debug.Log("HideAllPanels called");
+        GameLog.Log("HideAllPanels called");
 
         if (savePanel != null)
         {
-            Debug.Log("Hiding savePanel");
+            GameLog.Log("Hiding savePanel");
             savePanel.SetActive(false);
         }
 
         if (loadPanel != null)
         {
-            Debug.Log($"Hiding loadPanel (was {loadPanel.activeSelf})");
+            GameLog.Log($"Hiding loadPanel (was {loadPanel.activeSelf})");
             loadPanel.SetActive(false);
         }
 
         if (confirmationPanel != null)
         {
-            Debug.Log("Hiding confirmationPanel");
+            GameLog.Log("Hiding confirmationPanel");
             confirmationPanel.SetActive(false);
         }
 
         if (feedbackPanel != null)
         {
-            Debug.Log("Hiding feedbackPanel");
+            GameLog.Log("Hiding feedbackPanel");
             feedbackPanel.SetActive(false);
         }
 
-        Debug.Log("HideAllPanels finished");
+        GameLog.Log("HideAllPanels finished");
     }
 
     #endregion
@@ -176,7 +176,7 @@ public class SaveLoadMenuUI : MonoBehaviour
 
     private void OnSaveSlotSelected(int slotNumber)
     {
-        Debug.Log($"Save slot {slotNumber} selected");
+        GameLog.Log($"Save slot {slotNumber} selected");
 
         // Check if slot already has data
         bool slotHasData = SaveManager.Instance.SaveSlotExists(slotNumber);
@@ -264,7 +264,7 @@ public class SaveLoadMenuUI : MonoBehaviour
 
     private void OnLoadSlotSelected(int slotNumber)
     {
-        Debug.Log($"Load slot {slotNumber} selected");
+        GameLog.Log($"Load slot {slotNumber} selected");
 
         // Check if slot has data
         bool slotHasData = SaveManager.Instance.SaveSlotExists(slotNumber);
@@ -351,7 +351,7 @@ public class SaveLoadMenuUI : MonoBehaviour
             StartCoroutine(HideFeedbackAfterDelay());
         }
 
-        Debug.Log($"[SaveLoadMenuUI] {message}");
+        GameLog.Log($"[SaveLoadMenuUI] {message}");
     }
 
     private IEnumerator HideFeedbackAfterDelay()

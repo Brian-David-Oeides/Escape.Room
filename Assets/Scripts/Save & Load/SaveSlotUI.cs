@@ -56,7 +56,7 @@ public class SaveSlotUI : MonoBehaviour
     {
         if (SaveManager.Instance == null)
         {
-            Debug.LogWarning("SaveManager not found - cannot refresh slot display");
+            GameLog.LogWarning("SaveManager not found - cannot refresh slot display");
             return;
         }
 

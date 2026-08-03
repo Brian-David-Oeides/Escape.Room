@@ -87,7 +87,7 @@ public class SaveManager : MonoSingleton<SaveManager>
         // Slots 1-3 = Manual save slots
         if (slotNumber < 0 || slotNumber > 3)
         {
-            Debug.LogError($"Invalid save slot number: {slotNumber}. Must be 0-3.");
+            GameLog.LogError($"Invalid save slot number: {slotNumber}. Must be 0-3.");
             return false;
         }
 
@@ -133,7 +133,7 @@ public class SaveManager : MonoSingleton<SaveManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to save game to slot {slotNumber}: {e.Message}");
+            GameLog.LogError($"Failed to save game to slot {slotNumber}: {e.Message}");
             return false;
         }
     }
@@ -251,7 +251,7 @@ public class SaveManager : MonoSingleton<SaveManager>
     {
         if (slotNumber < 0 || slotNumber > 3)
         {
-            Debug.LogError($"Invalid save slot number: {slotNumber}. Must be 0-3.");
+            GameLog.LogError($"Invalid save slot number: {slotNumber}. Must be 0-3.");
             return false;
         }
 
@@ -260,7 +260,7 @@ public class SaveManager : MonoSingleton<SaveManager>
         if (!File.Exists(filePath))
         {
             string slotName = slotNumber == 0 ? "Continue Slot" : $"Slot {slotNumber}";
-            Debug.LogWarning($"No save file found in {slotName}");
+            GameLog.LogWarning($"No save file found in {slotName}");
             return false;
         }
 
@@ -274,7 +274,7 @@ public class SaveManager : MonoSingleton<SaveManager>
 
             if (loadedData == null)
             {
-                Debug.LogError("Failed to deserialize save data");
+                GameLog.LogError("Failed to deserialize save data");
                 return false;
             }
 
@@ -298,7 +298,7 @@ public class SaveManager : MonoSingleton<SaveManager>
             }
             else
             {
-                Debug.LogError("GameManager not found!");
+                GameLog.LogError("GameManager not found!");
                 return false;
             }
 
@@ -309,7 +309,7 @@ public class SaveManager : MonoSingleton<SaveManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to load game from slot {slotNumber}: {e.Message}");
+            GameLog.LogError($"Failed to load game from slot {slotNumber}: {e.Message}");
             return false;
         }
     }
@@ -331,7 +331,7 @@ public class SaveManager : MonoSingleton<SaveManager>
 
         if (wasOldFormat)
         {
-            Debug.LogWarning("[SaveManager] Loaded an old-format save (pre-versioning). " +
+            GameLog.LogWarning("[SaveManager] Loaded an old-format save (pre-versioning). " +
                 "Missing fields have been defaulted. Some data (e.g. timer state) may not carry over.");
             data.saveVersion = 1;
         }
@@ -373,7 +373,7 @@ public class SaveManager : MonoSingleton<SaveManager>
     {
         if (slotNumber < 0 || slotNumber > 3)
         {
-            Debug.LogError($"Invalid save slot number: {slotNumber}");
+            GameLog.LogError($"Invalid save slot number: {slotNumber}");
             return false;
         }
 
@@ -407,7 +407,7 @@ public class SaveManager : MonoSingleton<SaveManager>
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to delete save slot {slotNumber}: {e.Message}");
+                GameLog.LogError($"Failed to delete save slot {slotNumber}: {e.Message}");
                 return false;
             }
         }
@@ -448,7 +448,7 @@ public class SaveManager : MonoSingleton<SaveManager>
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to read save slot {slotNumber} info: {e.Message}");
+                GameLog.LogError($"Failed to read save slot {slotNumber} info: {e.Message}");
             }
         }
 
@@ -481,7 +481,7 @@ public class SaveManager : MonoSingleton<SaveManager>
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[SaveManager] {message}");
+            GameLog.Log($"[SaveManager] {message}");
         }
     }
 

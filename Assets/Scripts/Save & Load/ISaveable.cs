@@ -76,7 +76,7 @@ public class SaveablePuzzle : MonoBehaviour, ISaveable
     {
         // Your puzzle completion logic here
         // Example: disable puzzle, unlock something, play animation, etc.
-        Debug.Log($"Puzzle {puzzleID} is in completed state");
+        GameLog.Log($"Puzzle {puzzleID} is in completed state");
     }
 }
 
@@ -133,7 +133,7 @@ public class SaveableConsumable : MonoBehaviour, ISaveable
         // Hide the object
         gameObject.SetActive(false);
 
-        Debug.Log($"Consumed {consumableID}: +{energyRestoreAmount} energy, +{healthRestoreAmount} health");
+        GameLog.Log($"Consumed {consumableID}: +{energyRestoreAmount} energy, +{healthRestoreAmount} health");
     }
 }
 
@@ -175,7 +175,7 @@ public class SaveableMoveable : MonoBehaviour, ISaveable
             transform.rotation = savedState.rotation;
             gameObject.SetActive(savedState.isActive);
 
-            Debug.Log($"Loaded state for {objectID}");
+            GameLog.Log($"Loaded state for {objectID}");
         }
     }
 }
