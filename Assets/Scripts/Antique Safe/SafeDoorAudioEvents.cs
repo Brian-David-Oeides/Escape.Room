@@ -15,17 +15,17 @@ public class SafeDoorAudioEvents : MonoBehaviour
 
     public void PlayHandleSound()
     {
-        _handleAudioSource.PlayOneShot(_handleTurnSound);
+        _handleAudioSource?.PlayOneShot(_handleTurnSound);
     }
 
     public void PlayOpenSound()
     {
-        _handleAudioSource.PlayOneShot(_doorOpenSound);
+        _handleAudioSource?.PlayOneShot(_doorOpenSound);
     }
 
     public void PlayCloseSound()
     {
-        _handleAudioSource.PlayOneShot(_doorCloseSound);
+        _handleAudioSource?.PlayOneShot(_doorCloseSound);
     }
 }
 
