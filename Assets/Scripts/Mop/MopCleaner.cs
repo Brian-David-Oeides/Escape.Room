@@ -25,20 +25,20 @@ public class MopCleaner : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("=== MOP CLEANER START ===");
+        GameLog.Log("=== MOP CLEANER START ===");
 
         // Setup grab interactable
         grabInteractable = GetComponent<XRGrabInteractable>();
         if (grabInteractable != null)
         {
-            //Debug.Log($"[MopCleaner] ✓ Found XRGrabInteractable");
-            //Debug.Log($"[MopCleaner] Interaction Layer Mask: {grabInteractable.interactionLayers.value}");
-            //Debug.Log($"[MopCleaner] Colliders count: {grabInteractable.colliders.Count}");
+            //GameLog.Log($"[MopCleaner] ✓ Found XRGrabInteractable");
+            //GameLog.Log($"[MopCleaner] Interaction Layer Mask: {grabInteractable.interactionLayers.value}");
+            //GameLog.Log($"[MopCleaner] Colliders count: {grabInteractable.colliders.Count}");
 
             for (int i = 0; i < grabInteractable.colliders.Count; i++)
             {
                 var col = grabInteractable.colliders[i];
-                Debug.Log($"[MopCleaner] Collider {i}: {col.name} | GameObject Layer: {LayerMask.LayerToName(col.gameObject.layer)} | IsTrigger: {col.isTrigger}");
+                GameLog.Log($"[MopCleaner] Collider {i}: {col.name} | GameObject Layer: {LayerMask.LayerToName(col.gameObject.layer)} | IsTrigger: {col.isTrigger}");
             }
 
             grabInteractable.selectEntered.AddListener(OnGrabbed);
@@ -46,24 +46,24 @@ public class MopCleaner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[MopCleaner] ✗ XRGrabInteractable NOT FOUND!");
+            GameLog.LogError("[MopCleaner] ✗ XRGrabInteractable NOT FOUND!");
         }
 
-        Debug.Log($"[MopCleaner] This GameObject Layer: {LayerMask.LayerToName(gameObject.layer)}");
-        Debug.Log("=== MOP CLEANER READY ===");
+        GameLog.Log($"[MopCleaner] This GameObject Layer: {LayerMask.LayerToName(gameObject.layer)}");
+        GameLog.Log("=== MOP CLEANER READY ===");
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
     {
         isGrabbed = true;
-        Debug.Log("[MopCleaner] Mop grabbed");
+        GameLog.Log("[MopCleaner] Mop grabbed");
     }
 
     private void OnReleased(SelectExitEventArgs args)
     {
         isGrabbed = false;
         StopCleaning();
-        Debug.Log("[MopCleaner] Mop released");
+        GameLog.Log("[MopCleaner] Mop released");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -74,7 +74,7 @@ public class MopCleaner : MonoBehaviour
         {
             currentPuddle = puddle;
             StartCleaning();
-            Debug.Log("[MopCleaner] Mop entered puddle - starting cleaning");
+            GameLog.Log("[MopCleaner] Mop entered puddle - starting cleaning");
         }
     }
 
@@ -110,7 +110,7 @@ public class MopCleaner : MonoBehaviour
             }
         }
 
-        Debug.Log($"[MopCleaner] Cleaning progress: {cleaningTimer:F2}/{cleaningDuration} - Shrink: {shrinkProgress:F2}");
+        GameLog.Log($"[MopCleaner] Cleaning progress: {cleaningTimer:F2}/{cleaningDuration} - Shrink: {shrinkProgress:F2}");
 
         // Check if cleaning is complete
         if (cleaningTimer >= cleaningDuration)
@@ -131,7 +131,7 @@ public class MopCleaner : MonoBehaviour
         if (puddle == currentPuddle)
         {
             StopCleaning();
-            Debug.Log("[MopCleaner] Mop left puddle - cleaning stopped");
+            GameLog.Log("[MopCleaner] Mop left puddle - cleaning stopped");
         }
     }
 
@@ -156,7 +156,7 @@ public class MopCleaner : MonoBehaviour
             waterAbsorbParticles.Play();
         }
 
-        Debug.Log("[MopCleaner] Cleaning started");
+        GameLog.Log("[MopCleaner] Cleaning started");
     }
 
     private void StopCleaning()
@@ -177,7 +177,7 @@ public class MopCleaner : MonoBehaviour
         if (currentPuddle != null)
         {
             currentPuddle.RemovePuddle();
-            Debug.Log("[MopCleaner] ✓ Puddle cleaned successfully!");
+            GameLog.Log("[MopCleaner] ✓ Puddle cleaned successfully!");
         }
 
         StopCleaning();

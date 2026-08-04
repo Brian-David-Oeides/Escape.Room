@@ -56,11 +56,11 @@ public class GameTimerUI : MonoBehaviour
             // Check if timer is enabled/active
             UpdateVisibility();
 
-            Debug.Log("GameTimerUI initialized");
+            GameLog.Log("GameTimerUI initialized");
         }
         else
         {
-            Debug.LogWarning("GameTimer not found! UI will not function until gameplay scene loads.");
+            GameLog.LogWarning("GameTimer not found! UI will not function until gameplay scene loads.");
         }
 
         // Position HUD
@@ -109,7 +109,7 @@ public class GameTimerUI : MonoBehaviour
             timerText.outlineWidth = outlineWidth;
             timerText.outlineColor = safeColor; // Start with safe color
 
-            Debug.Log($"Timer text outline initialized - Width: {outlineWidth}, Color: {safeColor}");
+            GameLog.Log($"Timer text outline initialized - Width: {outlineWidth}, Color: {safeColor}");
         }
     }
 
@@ -325,14 +325,14 @@ public class GameTimerUI : MonoBehaviour
     {
         if (PlayerController.Instance == null || PlayerController.Instance.XROrigin == null)
         {
-            Debug.LogWarning("Cannot position Timer HUD - PlayerController or XROrigin not found");
+            GameLog.LogWarning("Cannot position Timer HUD - PlayerController or XROrigin not found");
             return;
         }
 
         Camera mainCamera = PlayerController.Instance.XROrigin.GetComponentInChildren<Camera>();
         if (mainCamera == null)
         {
-            Debug.LogWarning("Cannot position Timer HUD - Main Camera not found in XR Origin");
+            GameLog.LogWarning("Cannot position Timer HUD - Main Camera not found in XR Origin");
             return;
         }
 

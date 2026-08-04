@@ -11,7 +11,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         get
         {
             if (_instance == null)
-                Debug.LogWarning(typeof(T).ToString() + " instance is NULL");
+                GameLog.LogWarning(typeof(T).ToString() + " instance is NULL");
             return _instance;
         }
     }
@@ -25,7 +25,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         }
         else if (_instance != this)
         {
-            Debug.LogWarning($"Duplicate {typeof(T)} detected. Destroying duplicate.");
+            GameLog.LogWarning($"Duplicate {typeof(T)} detected. Destroying duplicate.");
             Destroy(gameObject);
         }
     }

@@ -106,7 +106,7 @@ public class LeverToggle : MonoBehaviour, ISaveable
         if (puddleHazard != null && !puddleHazard.CanActivateLever())
         {
             puddleHazard.OnDangerousActivationAttempt();
-            Debug.Log("[LeverToggle] ⚠️ Cannot activate - puddle present!");
+            GameLog.Log("[LeverToggle] ⚠️ Cannot activate - puddle present!");
             return; // Don't toggle lever
         }
 
@@ -271,7 +271,7 @@ public class LeverToggle : MonoBehaviour, ISaveable
             saveData.completedPuzzleIDs.Remove(leverID);
         }
 
-        Debug.Log($"[LeverToggle] Saved state for {leverID}: {(_isOn ? "ON" : "OFF")}");
+        GameLog.Log($"[LeverToggle] Saved state for {leverID}: {(_isOn ? "ON" : "OFF")}");
     }
 
     public void LoadState(SaveData saveData)
@@ -286,7 +286,7 @@ public class LeverToggle : MonoBehaviour, ISaveable
             RestoreLeverState();
         }
 
-        Debug.Log($"[LeverToggle] Loaded state for {leverID}: {(_isOn ? "ON" : "OFF")}");
+        GameLog.Log($"[LeverToggle] Loaded state for {leverID}: {(_isOn ? "ON" : "OFF")}");
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ public class LeverToggle : MonoBehaviour, ISaveable
             StopAllAudio();
         }
 
-        Debug.Log($"[LeverToggle] Restored lever state: {(_isOn ? "ON" : "OFF")}");
+        GameLog.Log($"[LeverToggle] Restored lever state: {(_isOn ? "ON" : "OFF")}");
     }
 
     #endregion

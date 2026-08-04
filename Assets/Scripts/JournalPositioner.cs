@@ -79,14 +79,14 @@ public class JournalPositioner : MonoBehaviour
         _pageTurner = GetComponent<PageTurnInteractable>();
         if (_pageTurner == null)
         {
-            Debug.LogWarning("PageTurnInteractable component not found on " + gameObject.name);
+            GameLog.LogWarning("PageTurnInteractable component not found on " + gameObject.name);
         }
 
         // Get reference to ClueDiscoveryTrigger component
         _clueDiscoveryTrigger = GetComponent<ClueDiscoveryTrigger>();
         if (_clueDiscoveryTrigger == null)
         {
-            Debug.LogWarning("ClueDiscoveryTrigger component not found on " + gameObject.name);
+            GameLog.LogWarning("ClueDiscoveryTrigger component not found on " + gameObject.name);
         }
 
         // Hide prompt UI initially
@@ -131,7 +131,7 @@ public class JournalPositioner : MonoBehaviour
         {
             if (aButtonPressed && currentState == _JournalState.ShowingPrompt)
             {
-                Debug.Log("A button detected - Moving journal to user");
+                GameLog.Log("A button detected - Moving journal to user");
                 HideViewPrompt();
                 StartMoveToUser();
             }
@@ -142,12 +142,12 @@ public class JournalPositioner : MonoBehaviour
         {
             if (bButtonPressed && currentState == _JournalState.InFrontOfUser)
             {
-                Debug.Log("B button detected - Returning journal to original position");
+                GameLog.Log("B button detected - Returning journal to original position");
                 StartReturnToOriginal();
             }
             else if (bButtonPressed && currentState == _JournalState.ShowingPrompt)
             {
-                Debug.Log("B button detected - Dismissing prompt without viewing");
+                GameLog.Log("B button detected - Dismissing prompt without viewing");
                 HideViewPrompt();
             }
         }
@@ -158,7 +158,7 @@ public class JournalPositioner : MonoBehaviour
         // Only check for gaze when in original position
         if (currentState != _JournalState.AtOriginalPosition)
         {
-            Debug.Log($"Not checking gaze - current state: {currentState}");
+            GameLog.Log($"Not checking gaze - current state: {currentState}");
             return;
         }
 
@@ -169,26 +169,26 @@ public class JournalPositioner : MonoBehaviour
         {
             if (hit.collider.gameObject == this.gameObject)
             {
-                Debug.Log($"Raycast hit journal - isGazing: {_isGazing}, gazeTimer: {_gazeTimer}");
+                GameLog.Log($"Raycast hit journal - isGazing: {_isGazing}, gazeTimer: {_gazeTimer}");
 
                 if (!_isGazing)
                 {
                     _isGazing = true;
                     _gazeTimer = 0f;
-                    Debug.Log("Started gazing at journal");
+                    GameLog.Log("Started gazing at journal");
                 }
 
                 _gazeTimer += Time.deltaTime;
 
                 if (_gazeTimer >= gazeTime && currentState == _JournalState.AtOriginalPosition)
                 {
-                    //Debug.Log("Gaze time reached - calling ShowViewPrompt()");
+                    //GameLog.Log("Gaze time reached - calling ShowViewPrompt()");
                     ShowViewPrompt();
                 }
             }
             else
             {
-                //Debug.Log("Raycast didn't hit anything");
+                //GameLog.Log("Raycast didn't hit anything");
                 HandleGazeExit();
             }
         }
@@ -210,11 +210,11 @@ public class JournalPositioner : MonoBehaviour
 
     private void ShowViewPrompt()
     {
-        //Debug.Log("ShowViewPrompt() called");
+        //GameLog.Log("ShowViewPrompt() called");
         currentState = _JournalState.ShowingPrompt;
         if (viewPromptUI != null)
         {
-            //Debug.Log("Activating viewPromptUI");
+            //GameLog.Log("Activating viewPromptUI");
             viewPromptUI.SetActive(true);
 
             // Update the text to show A to View
@@ -226,9 +226,9 @@ public class JournalPositioner : MonoBehaviour
         }
         else
         {
-            //Debug.LogError("viewPromptUI is null! Make sure you assigned the UI Canvas in the inspector.");
+            //GameLog.LogError("viewPromptUI is null! Make sure you assigned the UI Canvas in the inspector.");
         }
-        //Debug.Log("Showing view prompt - Press A to view journal");
+        //GameLog.Log("Showing view prompt - Press A to view journal");
     }
 
     // show the dismiss prompt when journal is in front of user
@@ -254,7 +254,7 @@ public class JournalPositioner : MonoBehaviour
         {
             viewPromptUI.SetActive(false);
         }
-        Debug.Log("Hiding view prompt");
+        GameLog.Log("Hiding view prompt");
     }
 
     private void HandleMovement()
@@ -287,7 +287,7 @@ public class JournalPositioner : MonoBehaviour
                     }
 
                     ShowDismissPrompt(); // Show B to Dismiss prompt
-                    // Debug.Log("Journal positioned in front of user - Press B to return");
+                    // GameLog.Log("Journal positioned in front of user - Press B to return");
                 }
                 else if (currentState == _JournalState.MovingToOriginal)
                 {
@@ -296,7 +296,7 @@ public class JournalPositioner : MonoBehaviour
                     // Re-enable journal collider for gaze detection
                     EnableJournalCollider();
 
-                    // Debug.Log("Journal returned to original position");
+                    // GameLog.Log("Journal returned to original position");
                 }
             }
         }
@@ -364,7 +364,7 @@ public class JournalPositioner : MonoBehaviour
         if (viewPromptUI != null)
         {
             viewPromptUI.SetActive(false);
-            Debug.Log("UI prompt hidden");
+            GameLog.Log("UI prompt hidden");
         }
     }
 
@@ -374,7 +374,7 @@ public class JournalPositioner : MonoBehaviour
         if (journalCollider != null)
         {
             journalCollider.enabled = false;
-            // Debug.Log("Journal collider disabled - preventing gaze interference");
+            // GameLog.Log("Journal collider disabled - preventing gaze interference");
         }
     }
 
@@ -384,7 +384,7 @@ public class JournalPositioner : MonoBehaviour
         if (journalCollider != null)
         {
             journalCollider.enabled = true;
-            // Debug.Log("Journal collider enabled - gaze detection restored");
+            // GameLog.Log("Journal collider enabled - gaze detection restored");
         }
     }
 

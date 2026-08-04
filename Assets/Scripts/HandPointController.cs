@@ -27,12 +27,12 @@ public class HandPointController : MonoBehaviour
 
         if (directInteractor == null)
         {
-            Debug.LogError($"No XRDirectInteractor found on {gameObject.name}");
+            GameLog.LogError($"No XRDirectInteractor found on {gameObject.name}");
         }
 
         if (rayInteractor == null)
         {
-            Debug.LogError($"No XRRayInteractor found on {gameObject.name}");
+            GameLog.LogError($"No XRRayInteractor found on {gameObject.name}");
         }
 
         StartCoroutine(FindHandAnimatorAfterSpawn());
@@ -56,7 +56,7 @@ public class HandPointController : MonoBehaviour
                 if ((isLeftController && isLeftHand) || (!isLeftController && isRightHand))
                 {
                     handAnimator = anim;
-                    Debug.Log($"Found runtime hand: {anim.gameObject.name} for {gameObject.name}");
+                    GameLog.Log($"Found runtime hand: {anim.gameObject.name} for {gameObject.name}");
                     break;
                 }
             }
@@ -64,7 +64,7 @@ public class HandPointController : MonoBehaviour
 
         if (handAnimator == null)
         {
-            Debug.LogError($"Could not find runtime hand animator for {gameObject.name}");
+            GameLog.LogError($"Could not find runtime hand animator for {gameObject.name}");
         }
     }
 
@@ -112,7 +112,7 @@ public class HandPointController : MonoBehaviour
             // Debug output
             if (triggerPressed || gripPressed)
             {
-                // Debug.Log($"{gameObject.name} - Trigger: {triggerPressed}, Grip: {gripPressed}, Pinch: {isHoveringPinchable && gripPressed}, HoveringPinchable: {isHoveringPinchable}");
+                // GameLog.Log($"{gameObject.name} - Trigger: {triggerPressed}, Grip: {gripPressed}, Pinch: {isHoveringPinchable && gripPressed}, HoveringPinchable: {isHoveringPinchable}");
             }
         }
     }

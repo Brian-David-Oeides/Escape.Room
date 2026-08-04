@@ -118,7 +118,7 @@ public class SettingsData
                 break;
         }
 
-        // Debug.Log($"Applied {level} difficulty preset");
+        // GameLog.Log($"Applied {level} difficulty preset");
     }
 
     /// <summary>

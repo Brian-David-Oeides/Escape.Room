@@ -37,7 +37,7 @@ public class ClockAudioManager : MonoBehaviour
 
         if (timeManager == null)
         {
-            Debug.LogError("ClockAudioManager: No TimeManager found! Please assign one or add a TimeManager to the scene.");
+            GameLog.LogError("ClockAudioManager: No TimeManager found! Please assign one or add a TimeManager to the scene.");
             return;
         }
 
@@ -59,7 +59,7 @@ public class ClockAudioManager : MonoBehaviour
     {
         if (audioSource == null)
         {
-            Debug.LogError("ClockAudioManager: No AudioSource assigned!");
+            GameLog.LogError("ClockAudioManager: No AudioSource assigned!");
             return;
         }
 

@@ -49,7 +49,7 @@ public class GazeInteractable : MonoBehaviour
         // Validate collider
         if (GetComponent<Collider>() == null)
         {
-            Debug.LogWarning("GazeInteractable requires a Collider component on " + gameObject.name);
+            GameLog.LogWarning("GazeInteractable requires a Collider component on " + gameObject.name);
         }
     }
 
@@ -121,7 +121,7 @@ public class GazeInteractable : MonoBehaviour
         PlaySound(gazeStartSound);
         onGazeStarted?.Invoke();
 
-        Debug.Log("Started gazing at " + gameObject.name);
+        GameLog.Log("Started gazing at " + gameObject.name);
     }
 
     private void HandleGazeExit()
@@ -158,7 +158,7 @@ public class GazeInteractable : MonoBehaviour
                 promptText.text = "A to View";
         }
 
-        Debug.Log("Showing view prompt for " + gameObject.name);
+        GameLog.Log("Showing view prompt for " + gameObject.name);
     }
 
     private void HidePrompt()
@@ -202,7 +202,7 @@ public class GazeInteractable : MonoBehaviour
         PlaySound(activateSound);
         onActivated?.Invoke();
 
-        Debug.Log("Activated interaction on " + gameObject.name);
+        GameLog.Log("Activated interaction on " + gameObject.name);
     }
 
     private void DismissPrompt()
@@ -210,7 +210,7 @@ public class GazeInteractable : MonoBehaviour
         HidePrompt();
         onDismissed?.Invoke();
 
-        Debug.Log("Dismissed prompt on " + gameObject.name);
+        GameLog.Log("Dismissed prompt on " + gameObject.name);
     }
 
     #endregion

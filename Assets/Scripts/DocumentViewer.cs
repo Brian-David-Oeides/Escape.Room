@@ -101,7 +101,7 @@ public class DocumentViewer : MonoBehaviour
 
         PlaySound(showSound);
 
-        Debug.Log("Starting to show document");
+        GameLog.Log("Starting to show document");
     }
 
     public void HideDocument()
@@ -113,7 +113,7 @@ public class DocumentViewer : MonoBehaviour
 
         PlaySound(hideSound);
 
-        Debug.Log("Starting to hide document");
+        GameLog.Log("Starting to hide document");
     }
 
     private void PositionInFrontOfHead()
@@ -138,7 +138,7 @@ public class DocumentViewer : MonoBehaviour
             {
                 currentState = ViewerState.Visible;
                 
-                Debug.Log("Document fully shown");
+                GameLog.Log("Document fully shown");
             }
         }
         else if (currentState == ViewerState.FadingOut)
@@ -151,7 +151,7 @@ public class DocumentViewer : MonoBehaviour
                 currentState = ViewerState.Hidden;
                 gameObject.SetActive(false);
                 onDocumentHidden?.Invoke();
-                Debug.Log("Document fully hidden");
+                GameLog.Log("Document fully hidden");
             }
         }
     }

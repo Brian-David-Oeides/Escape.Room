@@ -24,7 +24,7 @@ public class DrawerClamp : MonoBehaviour, ISaveable
         if (string.IsNullOrEmpty(drawerID))
         {
             drawerID = GenerateUniqueID();
-            Debug.Log($"[DrawerClamp] Auto-generated ID: {drawerID}");
+            GameLog.Log($"[DrawerClamp] Auto-generated ID: {drawerID}");
         }
 
         rb = GetComponent<Rigidbody>();
@@ -79,7 +79,7 @@ public class DrawerClamp : MonoBehaviour, ISaveable
 
         saveData.moveableObjects.Add(objectState);
 
-        Debug.Log($"[DrawerClamp] Saved state for {drawerID}: localZ={transform.localPosition.z:F3}");
+        GameLog.Log($"[DrawerClamp] Saved state for {drawerID}: localZ={transform.localPosition.z:F3}");
     }
 
     public void LoadState(SaveData saveData)
@@ -93,11 +93,11 @@ public class DrawerClamp : MonoBehaviour, ISaveable
             transform.position = savedState.position;
             transform.rotation = savedState.rotation;
 
-            Debug.Log($"[DrawerClamp] Loaded state for {drawerID}: localZ={transform.localPosition.z:F3}");
+            GameLog.Log($"[DrawerClamp] Loaded state for {drawerID}: localZ={transform.localPosition.z:F3}");
         }
         else
         {
-            Debug.Log($"[DrawerClamp] No saved state found for {drawerID} - using defaults");
+            GameLog.Log($"[DrawerClamp] No saved state found for {drawerID} - using defaults");
         }
     }
 

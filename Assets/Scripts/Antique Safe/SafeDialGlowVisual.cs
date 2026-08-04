@@ -40,7 +40,7 @@ public class SafeDialGlowVisual : MonoBehaviour
 
         if (grabInteractable == null)
         {
-            Debug.LogError("[SafeDialGlowVisual] Missing XRGrabInteractable! Glow feedback won't work.");
+            GameLog.LogError("[SafeDialGlowVisual] Missing XRGrabInteractable! Glow feedback won't work.");
             enabled = false;
             return;
         }

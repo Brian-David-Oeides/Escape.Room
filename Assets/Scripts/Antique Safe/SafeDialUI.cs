@@ -48,7 +48,7 @@ public class SafeDialUI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("SafeDial reference is missing on SafeDialUI.");
+            GameLog.LogWarning("SafeDial reference is missing on SafeDialUI.");
         }
 
         if (dialNumberText != null)

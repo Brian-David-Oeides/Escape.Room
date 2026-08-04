@@ -65,12 +65,12 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
     protected override void Awake()
     {
         base.Awake(); // THIS IS CRITICAL - calls MonoSingleton's Awake first
-        Debug.Log("[FootstepAudioManager] Awake called");
+        GameLog.Log("[FootstepAudioManager] Awake called");
     }
 
     public override void Init()
     {
-        Debug.Log("[FootstepAudioManager] Init called");
+        GameLog.Log("[FootstepAudioManager] Init called");
 
         DontDestroyOnLoad(gameObject);
 
@@ -88,12 +88,12 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
         waterLayerIndex = LayerMask.NameToLayer("Water");
         defaultLayerIndex = LayerMask.NameToLayer("Default");
 
-        Debug.Log($"[FootstepAudioManager] Layer indices - Water: {waterLayerIndex}, Default: {defaultLayerIndex}");
+        GameLog.Log($"[FootstepAudioManager] Layer indices - Water: {waterLayerIndex}, Default: {defaultLayerIndex}");
 
         // Find XR Origin reference
         UpdateXROriginReference();
 
-        Debug.Log("[FootstepAudioManager] Initialized successfully");
+        GameLog.Log("[FootstepAudioManager] Initialized successfully");
     }
 
     /// <summary>
@@ -110,17 +110,17 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
 
             if (moveProvider != null)
             {
-                Debug.Log("[FootstepAudioManager] ✓ XR Origin reference updated successfully");
+                GameLog.Log("[FootstepAudioManager] ✓ XR Origin reference updated successfully");
                 lastFootstepPosition = xrOrigin.position;
             }
             else
             {
-                Debug.LogError("[FootstepAudioManager] ✗ ActionBasedContinuousMoveProvider not found on XR Origin!");
+                GameLog.LogError("[FootstepAudioManager] ✗ ActionBasedContinuousMoveProvider not found on XR Origin!");
             }
         }
         else
         {
-            Debug.LogWarning("[FootstepAudioManager] ⚠ XR Origin not found in scene - may be in Main Menu");
+            GameLog.LogWarning("[FootstepAudioManager] ⚠ XR Origin not found in scene - may be in Main Menu");
         }
     }
 
@@ -197,7 +197,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
 
             if (enableDebugLogs)
             {
-                Debug.Log($"[FootstepAudioManager] Raycast hit: '{hit.collider.name}' | Layer: {hitLayer} ({LayerMask.LayerToName(hitLayer)}) | Tag: '{hitTag}'");
+                GameLog.Log($"[FootstepAudioManager] Raycast hit: '{hit.collider.name}' | Layer: {hitLayer} ({LayerMask.LayerToName(hitLayer)}) | Tag: '{hitTag}'");
             }
 
             // Check Water layer FIRST (Layer 4)
@@ -206,7 +206,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
                 currentSurface = SurfaceType.Water;
                 if (enableDebugLogs)
                 {
-                    Debug.Log($"[FootstepAudioManager] Surface detected: WATER (layer match: {hitLayer} == {waterLayerIndex})");
+                    GameLog.Log($"[FootstepAudioManager] Surface detected: WATER (layer match: {hitLayer} == {waterLayerIndex})");
                 }
                 return;
             }
@@ -217,7 +217,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
                 currentSurface = SurfaceType.Floor;
                 if (enableDebugLogs)
                 {
-                    Debug.Log($"[FootstepAudioManager] Surface detected: FLOOR (tag match: '{hitTag}')");
+                    GameLog.Log($"[FootstepAudioManager] Surface detected: FLOOR (tag match: '{hitTag}')");
                 }
                 return;
             }
@@ -226,7 +226,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
             currentSurface = SurfaceType.Floor;
             if (enableDebugLogs)
             {
-                Debug.Log($"[FootstepAudioManager] Surface detected: FLOOR (default - untagged surface)");
+                GameLog.Log($"[FootstepAudioManager] Surface detected: FLOOR (default - untagged surface)");
             }
         }
         else
@@ -235,7 +235,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
             currentSurface = SurfaceType.Floor;
             if (enableDebugLogs)
             {
-                Debug.Log($"[FootstepAudioManager] No ground detected in raycast - defaulting to FLOOR");
+                GameLog.Log($"[FootstepAudioManager] No ground detected in raycast - defaulting to FLOOR");
             }
         }
     }
@@ -250,7 +250,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
 
         if (clips == null || clips.Length == 0)
         {
-            Debug.LogWarning($"[FootstepAudioManager] No clips for {currentSurface} - {(isRunning ? "Run" : "Walk")}");
+            GameLog.LogWarning($"[FootstepAudioManager] No clips for {currentSurface} - {(isRunning ? "Run" : "Walk")}");
             return;
         }
 
@@ -269,7 +269,7 @@ public class FootstepAudioManager : MonoSingleton<FootstepAudioManager>
 
         if (enableDebugLogs)
         {
-            Debug.Log($"[FootstepAudioManager] Playing {currentSurface} footstep - {(isRunning ? "Running" : "Walking")} (clip: {clip.name})");
+            GameLog.Log($"[FootstepAudioManager] Playing {currentSurface} footstep - {(isRunning ? "Running" : "Walking")} (clip: {clip.name})");
         }
     }
 

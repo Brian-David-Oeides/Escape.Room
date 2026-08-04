@@ -67,7 +67,7 @@ public class LoadingScreenUI : MonoBehaviour
             }
 
             loadingPanel.SetActive(true);
-            Debug.Log("Loading screen shown");
+            GameLog.Log("Loading screen shown");
         }
     }
 
@@ -76,7 +76,7 @@ public class LoadingScreenUI : MonoBehaviour
         if (loadingPanel != null)
         {
             loadingPanel.SetActive(false);
-            Debug.Log("Loading screen hidden");
+            GameLog.Log("Loading screen hidden");
         }
     }
 

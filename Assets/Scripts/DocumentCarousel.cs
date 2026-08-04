@@ -63,7 +63,7 @@ public class DocumentCarousel : MonoBehaviour
 
         if (pages.Count == 0)
         {
-            Debug.LogWarning("No pages assigned to DocumentCarousel on " + gameObject.name);
+            GameLog.LogWarning("No pages assigned to DocumentCarousel on " + gameObject.name);
         }
     }
 
@@ -107,7 +107,7 @@ public class DocumentCarousel : MonoBehaviour
         UpdatePageContent();
         ShowNavigationHelp();
 
-        Debug.Log("Carousel activated");
+        GameLog.Log("Carousel activated");
     }
 
     public void DeactivateCarousel()
@@ -115,7 +115,7 @@ public class DocumentCarousel : MonoBehaviour
         _isActive = false;
         HideNavigationHelp();
 
-        Debug.Log("Carousel deactivated");
+        GameLog.Log("Carousel deactivated");
     }
 
     #endregion
@@ -142,7 +142,7 @@ public class DocumentCarousel : MonoBehaviour
                 NavigateToPage(_currentPageIndex + 1, true);
                 FlashArrow(rightArrowText);
 
-                Debug.Log("Right trigger pressed - navigating to next page");
+                GameLog.Log("Right trigger pressed - navigating to next page");
             }
 
             _rightTriggerWasPressed = rightTriggerPressed;
@@ -161,7 +161,7 @@ public class DocumentCarousel : MonoBehaviour
                 NavigateToPage(_currentPageIndex - 1, false);
                 FlashArrow(leftArrowText);
 
-                Debug.Log("Left trigger pressed - navigating to previous page");
+                GameLog.Log("Left trigger pressed - navigating to previous page");
             }
 
             _leftTriggerWasPressed = leftTriggerPressed;
@@ -186,7 +186,7 @@ public class DocumentCarousel : MonoBehaviour
         PlaySound(pageFlipSound);
         onPageChanged?.Invoke(_currentPageIndex);
 
-        Debug.Log($"Navigated to page {_currentPageIndex + 1}");
+        GameLog.Log($"Navigated to page {_currentPageIndex + 1}");
     }
 
     #endregion

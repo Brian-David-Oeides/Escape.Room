@@ -20,7 +20,7 @@ public class SafeDialHoverFeedback : MonoBehaviour
         grabInteractable = GetComponent<XRGrabInteractable>();
         if (grabInteractable == null)
         {
-            Debug.LogError("[SafeDialHoverFeedback] Missing XRGrabInteractable component!");
+            GameLog.LogError("[SafeDialHoverFeedback] Missing XRGrabInteractable component!");
         }
 
         if (dialRenderer != null)
@@ -30,7 +30,7 @@ public class SafeDialHoverFeedback : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[SafeDialHoverFeedback] Missing MeshRenderer reference!");
+            GameLog.LogError("[SafeDialHoverFeedback] Missing MeshRenderer reference!");
         }
 
         // Subscribe to events

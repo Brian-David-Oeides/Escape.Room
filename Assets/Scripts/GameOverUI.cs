@@ -77,7 +77,7 @@ public class GameOverUI : MonoBehaviour
         // Start hidden
         Hide();
 
-        Debug.Log("GameOverUI initialized");
+        GameLog.Log("GameOverUI initialized");
     }
 
     private void OnDestroy()
@@ -184,7 +184,7 @@ public class GameOverUI : MonoBehaviour
             canvasGroup.alpha = 1f;
         }
 
-        Debug.Log($"Game Over screen shown - Reason: {reason}");
+        GameLog.Log($"Game Over screen shown - Reason: {reason}");
     }
 
     public void Hide()
@@ -282,7 +282,7 @@ public class GameOverUI : MonoBehaviour
 
     private void OnRetryClicked()
     {
-        Debug.Log("Retry button clicked");
+        GameLog.Log("Retry button clicked");
 
         // TODO: Add button click sound when AudioManager has PlayButtonClickSFX method
         // if (AudioManager.Instance != null)
@@ -302,7 +302,7 @@ public class GameOverUI : MonoBehaviour
 
     private void OnMainMenuClicked()
     {
-        Debug.Log("Main Menu button clicked");
+        GameLog.Log("Main Menu button clicked");
 
         // TODO: Add button click sound when AudioManager has PlayButtonClickSFX method
         // if (AudioManager.Instance != null)
@@ -329,21 +329,21 @@ public class GameOverUI : MonoBehaviour
         // If auto position is disabled, respect Inspector Rect Transform settings
         if (!autoPosition)
         {
-            Debug.Log("GameOverUI using manual positioning from Inspector Rect Transform");
+            GameLog.Log("GameOverUI using manual positioning from Inspector Rect Transform");
             return;
         }
 
         // Auto position mode - calculate position based on camera
         if (PlayerController.Instance == null || PlayerController.Instance.XROrigin == null)
         {
-            Debug.LogWarning("Cannot position Game Over screen - PlayerController or XROrigin not found");
+            GameLog.LogWarning("Cannot position Game Over screen - PlayerController or XROrigin not found");
             return;
         }
 
         Camera mainCamera = PlayerController.Instance.XROrigin.GetComponentInChildren<Camera>();
         if (mainCamera == null)
         {
-            Debug.LogWarning("Cannot position Game Over screen - Main Camera not found in XR Origin");
+            GameLog.LogWarning("Cannot position Game Over screen - Main Camera not found in XR Origin");
             return;
         }
 
@@ -356,7 +356,7 @@ public class GameOverUI : MonoBehaviour
         // Face the camera
         transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
 
-        Debug.Log("GameOverUI auto-positioned in front of camera");
+        GameLog.Log("GameOverUI auto-positioned in front of camera");
     }
 
     private IEnumerator FadeIn()

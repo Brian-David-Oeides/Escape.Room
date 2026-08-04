@@ -27,7 +27,7 @@ public class ScreenFader : MonoBehaviour
 
     private IEnumerator Fade(float from, float to, float duration)
     {
-        Debug.Log($"Starting fade from {from} to {to} over {duration} seconds.");
+        GameLog.Log($"Starting fade from {from} to {to} over {duration} seconds.");
 
         float elapsed = 0f;
         while (elapsed < duration)
@@ -38,6 +38,6 @@ public class ScreenFader : MonoBehaviour
         }
         fadeCanvasGroup.alpha = to;
 
-        Debug.Log($"Finished fade to {to}");
+        GameLog.Log($"Finished fade to {to}");
     }
 }

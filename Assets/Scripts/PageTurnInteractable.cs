@@ -105,7 +105,7 @@ public class PageTurnInteractable : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Right page (R_Page) not assigned!");
+            GameLog.LogWarning("Right page (R_Page) not assigned!");
         }
 
         // Set up left page interaction
@@ -115,20 +115,20 @@ public class PageTurnInteractable : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Left page (L_Page) not assigned!");
+            GameLog.LogWarning("Left page (L_Page) not assigned!");
         }
     }
 
     private void SetupPageInteractable(GameObject pageObject, bool isRightPage)
     {
-        Debug.Log($"Setting up page interactable for: {pageObject.name}");
+        GameLog.Log($"Setting up page interactable for: {pageObject.name}");
 
         // Add XR Simple Interactable if not present
         XRSimpleInteractable interactable = pageObject.GetComponent<XRSimpleInteractable>();
         if (interactable == null)
         {
             interactable = pageObject.AddComponent<XRSimpleInteractable>();
-            // Debug.Log($"Added XR Simple Interactable to {pageObject.name}");
+            // GameLog.Log($"Added XR Simple Interactable to {pageObject.name}");
         }
 
         // Add collider if not present
@@ -137,26 +137,26 @@ public class PageTurnInteractable : MonoBehaviour
         {
             BoxCollider boxCollider = pageObject.AddComponent<BoxCollider>();
             boxCollider.isTrigger = false; // Make it solid for ray interaction
-            // Debug.Log($"Added Box Collider to {pageObject.name}");
+            // GameLog.Log($"Added Box Collider to {pageObject.name}");
         }
 
         // Check layer
-        // Debug.Log($"Page {pageObject.name} is on layer: {LayerMask.LayerToName(pageObject.layer)}");
+        // GameLog.Log($"Page {pageObject.name} is on layer: {LayerMask.LayerToName(pageObject.layer)}");
 
         // Subscribe to interaction events
         interactable.selectEntered.AddListener((args) => OnPageSelected(isRightPage));
 
-        // Debug.Log($"Page interaction setup complete for {(isRightPage ? "right" : "left")} page");
+        // GameLog.Log($"Page interaction setup complete for {(isRightPage ? "right" : "left")} page");
     }
 
     public void OnPageSelected(bool isRightPage)
     {
-        // Debug.Log($"PAGE SELECTED CALLED! Right page: {isRightPage}, Enable page turning: {enablePageTurning}");
+        // GameLog.Log($"PAGE SELECTED CALLED! Right page: {isRightPage}, Enable page turning: {enablePageTurning}");
 
         // Only allow page turning when journal is positioned in front of user
         if (!enablePageTurning || _isFlippingPage)
         {
-            // Debug.Log("Page turning disabled or already flipping");
+            // GameLog.Log("Page turning disabled or already flipping");
             return;
         }
 
@@ -175,7 +175,7 @@ public class PageTurnInteractable : MonoBehaviour
     {
         if (rightPage == null) return;
 
-        // Debug.Log($"FlipRightPage called - Current state: rightPageFlipped = {rightPageFlipped}");
+        // GameLog.Log($"FlipRightPage called - Current state: rightPageFlipped = {rightPageFlipped}");
 
         StartCoroutine(FlipPageCoroutine(rightPage, !_rightPageFlipped));
         _rightPageFlipped = !_rightPageFlipped;
@@ -184,14 +184,14 @@ public class PageTurnInteractable : MonoBehaviour
         UpdatePageColliderStates();
         UpdateTextVisibility();
 
-        // Debug.Log($"Flipping right page - now {(rightPageFlipped ? "flipped" : "unflipped")}");
+        // GameLog.Log($"Flipping right page - now {(rightPageFlipped ? "flipped" : "unflipped")}");
     }
 
     private void FlipLeftPage()
     {
         if (leftPage == null) return;
 
-        // Debug.Log($"FlipLeftPage called - Current state: leftPageFlipped = {leftPageFlipped}");
+        // GameLog.Log($"FlipLeftPage called - Current state: leftPageFlipped = {leftPageFlipped}");
 
         StartCoroutine(FlipPageCoroutine(leftPage, !_leftPageFlipped));
         _leftPageFlipped = !_leftPageFlipped;
@@ -200,14 +200,14 @@ public class PageTurnInteractable : MonoBehaviour
         UpdatePageColliderStates();
         UpdateTextVisibility();
 
-        // Debug.Log($"Flipping left page - now {(leftPageFlipped ? "flipped" : "unflipped")}");
+        // GameLog.Log($"Flipping left page - now {(leftPageFlipped ? "flipped" : "unflipped")}");
     }
 
     private IEnumerator FlipPageCoroutine(Transform page, bool flipForward)
     {
         _isFlippingPage = true;
 
-        Debug.Log($"FlipPageCoroutine started - Page: {page.name}, flipForward: {flipForward}");
+        GameLog.Log($"FlipPageCoroutine started - Page: {page.name}, flipForward: {flipForward}");
 
         // Play page flip sound
         PlayPageFlipSound();
@@ -216,7 +216,7 @@ public class PageTurnInteractable : MonoBehaviour
         Vector3 startRotation = page.localEulerAngles;
         Vector3 targetRotation = startRotation;
 
-        Debug.Log($"Start rotation: {startRotation}");
+        GameLog.Log($"Start rotation: {startRotation}");
 
         // Determine correct rotation direction based on which page and current state
         float rotationAmount;
@@ -225,17 +225,17 @@ public class PageTurnInteractable : MonoBehaviour
         {
             // Right page should only turn towards the left (negative Z rotation)
             rotationAmount = flipForward ? -pageRotationAngle : pageRotationAngle;
-            Debug.Log($"Right page - flipForward: {flipForward}, rotationAmount: {rotationAmount}");
+            GameLog.Log($"Right page - flipForward: {flipForward}, rotationAmount: {rotationAmount}");
         }
         else // left page
         {
             // Left page should only turn towards the right (positive Z rotation)  
             rotationAmount = flipForward ? pageRotationAngle : -pageRotationAngle;
-            Debug.Log($"Left page - flipForward: {flipForward}, rotationAmount: {rotationAmount}");
+            GameLog.Log($"Left page - flipForward: {flipForward}, rotationAmount: {rotationAmount}");
         }
 
         targetRotation.z += rotationAmount;
-        Debug.Log($"Target rotation: {targetRotation}");
+        GameLog.Log($"Target rotation: {targetRotation}");
 
         // Perform smooth rotation
         float elapsedTime = 0f;
@@ -260,7 +260,7 @@ public class PageTurnInteractable : MonoBehaviour
         page.localEulerAngles = targetRotation;
         _isFlippingPage = false;
 
-        Debug.Log($"Page flip completed: {page.name} - isFlippingPage now: {_isFlippingPage}");
+        GameLog.Log($"Page flip completed: {page.name} - isFlippingPage now: {_isFlippingPage}");
     }
 
     private void PlayPageFlipSound()
@@ -285,7 +285,7 @@ public class PageTurnInteractable : MonoBehaviour
                 // Right page collider is enabled if: no pages are flipped, OR right page is already flipped (can turn back)
                 bool enableRightCollider = (!_leftPageFlipped && !_rightPageFlipped) || _rightPageFlipped;
                 rightCollider.enabled = enableRightCollider;
-                // Debug.Log($"Right page collider enabled: {enableRightCollider}");
+                // GameLog.Log($"Right page collider enabled: {enableRightCollider}");
             }
         }
 
@@ -297,7 +297,7 @@ public class PageTurnInteractable : MonoBehaviour
                 // Left page collider is enabled if: no pages are flipped, OR left page is already flipped (can turn back)
                 bool enableLeftCollider = (!_rightPageFlipped && !_leftPageFlipped) || _leftPageFlipped;
                 leftCollider.enabled = enableLeftCollider;
-                // Debug.Log($"Left page collider enabled: {enableLeftCollider}");
+                // GameLog.Log($"Left page collider enabled: {enableLeftCollider}");
             }
         }
     }
@@ -315,7 +315,7 @@ public class PageTurnInteractable : MonoBehaviour
             Collider leftCollider = leftPage.GetComponent<Collider>();
             if (leftCollider != null) leftCollider.enabled = false;
         }
-        //Debug.Log("All page colliders disabled");
+        //GameLog.Log("All page colliders disabled");
     }
 
 
@@ -324,14 +324,14 @@ public class PageTurnInteractable : MonoBehaviour
     {
         enablePageTurning = true;
         UpdatePageColliderStates(); // Enable appropriate colliders
-        Debug.Log("Page turning enabled - journal is positioned for reading");
+        GameLog.Log("Page turning enabled - journal is positioned for reading");
     }
 
     public void DisablePageTurning()
     {
         enablePageTurning = false;
         DisableAllPageColliders(); // Disable all page colliders
-        // Debug.Log("Page turning disabled - journal moved away");
+        // GameLog.Log("Page turning disabled - journal moved away");
     }
 
     // Reset pages to original state
@@ -349,6 +349,6 @@ public class PageTurnInteractable : MonoBehaviour
             _leftPageFlipped = false;
         }
 
-        Debug.Log("Pages reset to original positions");
+        GameLog.Log("Pages reset to original positions");
     }
 }

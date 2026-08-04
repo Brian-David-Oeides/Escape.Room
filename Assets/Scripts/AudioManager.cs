@@ -28,7 +28,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     protected override void Awake()
     {
         base.Awake(); // THIS IS CRITICAL - calls MonoSingleton's Awake first
-        Debug.Log("AudioManager Awake called");
+        GameLog.Log("AudioManager Awake called");
     }
 
     public override void Init()
@@ -38,7 +38,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         DontDestroyOnLoad(gameObject);
         InitializeAudioSource();
         isInitialized = true;
-        Debug.Log("AudioManager initialized");
+        GameLog.Log("AudioManager initialized");
     }
 
     private void InitializeAudioSource()
@@ -48,7 +48,7 @@ public class AudioManager : MonoSingleton<AudioManager>
             musicSource = GetComponent<AudioSource>();
             if (musicSource == null)
             {
-                Debug.LogWarning("No AudioSource found on AudioManager, creating one...");
+                GameLog.LogWarning("No AudioSource found on AudioManager, creating one...");
                 musicSource = gameObject.AddComponent<AudioSource>();
                 musicSource.playOnAwake = false;
                 musicSource.loop = true;
@@ -68,7 +68,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         masterVolume = Mathf.Clamp01(volume);
         UpdateMusicSourceVolume();
-        Debug.Log($"[AudioManager] Master volume set to: {masterVolume}");
+        GameLog.Log($"[AudioManager] Master volume set to: {masterVolume}");
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         sfxVolume = Mathf.Clamp01(volume);
         // TODO: Apply to SFX AudioSource when implemented
-        Debug.Log($"[AudioManager] SFX volume set to: {sfxVolume}");
+        GameLog.Log($"[AudioManager] SFX volume set to: {sfxVolume}");
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         musicVolume = Mathf.Clamp01(volume);
         UpdateMusicSourceVolume();
-        Debug.Log($"[AudioManager] Music volume set to: {musicVolume}");
+        GameLog.Log($"[AudioManager] Music volume set to: {musicVolume}");
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     /// </summary>
     public void PlayMenuMusic(bool fadeIn = false)
     {
-        Debug.Log($"PlayMenuMusic called - fadeIn: {fadeIn}, isInitialized: {isInitialized}, musicSource exists: {musicSource != null}, menuMusic exists: {menuMusic != null}");
+        GameLog.Log($"PlayMenuMusic called - fadeIn: {fadeIn}, isInitialized: {isInitialized}, musicSource exists: {musicSource != null}, menuMusic exists: {menuMusic != null}");
 
         if (fadeIn)
             PlayMusicWithFadeIn(menuMusic, fadeDuration);
@@ -137,7 +137,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     /// </summary>
     public void PlayLoadingMusic(bool fadeIn = true)
     {
-        Debug.Log($"PlayLoadingMusic called - fadeIn: {fadeIn}, loadingMusic exists: {loadingMusic != null}");
+        GameLog.Log($"PlayLoadingMusic called - fadeIn: {fadeIn}, loadingMusic exists: {loadingMusic != null}");
 
         if (fadeIn)
             PlayMusicWithFadeIn(loadingMusic, fadeDuration);
@@ -152,7 +152,7 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         if (duration < 0) duration = fadeDuration;
 
-        Debug.Log($"FadeOutMusic called - duration: {duration}");
+        GameLog.Log($"FadeOutMusic called - duration: {duration}");
 
         if (currentFadeCoroutine != null)
         {
@@ -219,11 +219,11 @@ public class AudioManager : MonoSingleton<AudioManager>
     // Private helper methods
     private void PlayMusic(AudioClip clip)
     {
-        Debug.Log($"PlayMusic called - clip: {clip?.name}, musicSource: {musicSource != null}");
+        GameLog.Log($"PlayMusic called - clip: {clip?.name}, musicSource: {musicSource != null}");
 
         if (musicSource == null || clip == null)
         {
-            Debug.LogWarning($"Cannot play music - AudioSource={musicSource != null}, clip={clip != null}");
+            GameLog.LogWarning($"Cannot play music - AudioSource={musicSource != null}, clip={clip != null}");
             return;
         }
 
@@ -240,13 +240,13 @@ public class AudioManager : MonoSingleton<AudioManager>
             musicSource.loop = true;
             UpdateMusicSourceVolume();
             musicSource.Play();
-            Debug.Log($"Playing music: {clip.name}, isPlaying: {musicSource.isPlaying}");
+            GameLog.Log($"Playing music: {clip.name}, isPlaying: {musicSource.isPlaying}");
         }
         else if (!musicSource.isPlaying)
         {
             UpdateMusicSourceVolume();
             musicSource.Play();
-            Debug.Log($"Resuming music: {clip.name}, isPlaying: {musicSource.isPlaying}");
+            GameLog.Log($"Resuming music: {clip.name}, isPlaying: {musicSource.isPlaying}");
         }
     }
 
@@ -254,11 +254,11 @@ public class AudioManager : MonoSingleton<AudioManager>
     {
         if (musicSource == null || clip == null)
         {
-            Debug.LogWarning("Cannot play music - AudioSource or clip is null");
+            GameLog.LogWarning("Cannot play music - AudioSource or clip is null");
             return;
         }
 
-        Debug.Log($"PlayMusicWithFadeIn called - clip: {clip.name}, duration: {duration}");
+        GameLog.Log($"PlayMusicWithFadeIn called - clip: {clip.name}, duration: {duration}");
 
         // Stop any ongoing fade
         if (currentFadeCoroutine != null)
@@ -282,7 +282,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         float startVolume = musicSource.volume;
         float elapsed = 0f;
 
-        Debug.Log($"Fading out audio over {duration} seconds");
+        GameLog.Log($"Fading out audio over {duration} seconds");
 
         while (elapsed < duration)
         {
@@ -293,7 +293,7 @@ public class AudioManager : MonoSingleton<AudioManager>
 
         musicSource.volume = 0f;
         musicSource.Stop();
-        Debug.Log("Audio fade out complete");
+        GameLog.Log("Audio fade out complete");
 
         currentFadeCoroutine = null;
     }
@@ -315,7 +315,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         float elapsed = 0f;
         float targetVolume = masterVolume * musicVolume;
 
-        Debug.Log($"Fading in audio over {duration} seconds to volume {targetVolume}");
+        GameLog.Log($"Fading in audio over {duration} seconds to volume {targetVolume}");
 
         while (elapsed < duration)
         {
@@ -325,7 +325,7 @@ public class AudioManager : MonoSingleton<AudioManager>
         }
 
         musicSource.volume = targetVolume;
-        Debug.Log("Audio fade in complete");
+        GameLog.Log("Audio fade in complete");
 
         currentFadeCoroutine = null;
     }

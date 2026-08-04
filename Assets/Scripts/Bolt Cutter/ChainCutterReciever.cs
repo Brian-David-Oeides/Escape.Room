@@ -78,7 +78,7 @@ public class ChainCutterReciever : PuzzleBase // CHANGE 1: Inherit from PuzzleBa
         }
         else
         {
-            Debug.LogWarning("[ChainCutterReceiver] Chain Rigidbody not assigned!");
+            GameLog.LogWarning("[ChainCutterReceiver] Chain Rigidbody not assigned!");
         }
     }
 

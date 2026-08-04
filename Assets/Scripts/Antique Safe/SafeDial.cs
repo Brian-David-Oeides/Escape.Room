@@ -94,12 +94,12 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
                 {
                     hoverVisual.enabled = false;
                 }
-                Debug.Log("[SafeDial] Dial locked - keys must be inserted first");
+                GameLog.Log("[SafeDial] Dial locked - keys must be inserted first");
             }
         }
         else
         {
-            Debug.LogError($"[SafeDial] Missing XRGrabInteractable on {gameObject.name}!");
+            GameLog.LogError($"[SafeDial] Missing XRGrabInteractable on {gameObject.name}!");
         }
     }
 
@@ -131,7 +131,7 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
                 hoverVisual.enabled = true;
             }
 
-            Debug.Log("[SafeDial] Dial unlocked! Keys inserted - can now rotate dial.");
+            GameLog.Log("[SafeDial] Dial unlocked! Keys inserted - can now rotate dial.");
         }
     }
 
@@ -145,7 +145,7 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
         {
             _keysInserted = false;
             grabInteractable.enabled = false;
-            Debug.Log("[SafeDial] Dial locked! Key removed.");
+            GameLog.Log("[SafeDial] Dial locked! Key removed.");
         }
     }
 

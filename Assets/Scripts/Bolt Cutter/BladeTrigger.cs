@@ -19,7 +19,7 @@ public class BladeTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log($"BladeTrigger collided with: {other.name}");
+        //GameLog.Log($"BladeTrigger collided with: {other.name}");
 
         ChainCutterReciever receiver = other.GetComponent<ChainCutterReciever>();
 
@@ -27,14 +27,14 @@ public class BladeTrigger : MonoBehaviour
         {
             if (BoltCutterCutState.IsCutting)
             {
-                Debug.Log("Receiver found and IsCutting is true. Calling CutChain()");
+                GameLog.Log("Receiver found and IsCutting is true. Calling CutChain()");
                 receiver.CutChain();
             }
             else if (Time.time - lastAttemptTime >= attemptCooldown) // Cooldown check
             {
                 lastAttemptTime = Time.time;
                 ClueManager.Instance?.RegisterFailedAttempt(puzzleID, hintThreshold);
-                Debug.Log("Chain hit without cutting - bolt cutter blades not activated");
+                GameLog.Log("Chain hit without cutting - bolt cutter blades not activated");
             }
         }
     }

@@ -62,11 +62,11 @@ public class DynamicAttachPoint : MonoBehaviour
             // Initial positioning
             UpdateAttachPointPosition();
 
-            Debug.Log($"Pinch attach point created for {gameObject.name}. Will be used only for pinchable objects.");
+            GameLog.Log($"Pinch attach point created for {gameObject.name}. Will be used only for pinchable objects.");
         }
         else
         {
-            Debug.LogError($"Could not find fingertip bones on {gameObject.name}");
+            GameLog.LogError($"Could not find fingertip bones on {gameObject.name}");
         }
     }
 
@@ -99,7 +99,7 @@ public class DynamicAttachPoint : MonoBehaviour
             if (interactor != null)
             {
                 interactor.attachTransform = pinchAttachPoint;
-                Debug.Log($"Using pinch attach for {interactable.name}");
+                GameLog.Log($"Using pinch attach for {interactable.name}");
             }
         }
         else
@@ -108,7 +108,7 @@ public class DynamicAttachPoint : MonoBehaviour
             if (interactor != null)
             {
                 interactor.attachTransform = defaultAttachPoint;
-                Debug.Log($"Using default attach for {interactable.name}");
+                GameLog.Log($"Using default attach for {interactable.name}");
             }
         }
     }

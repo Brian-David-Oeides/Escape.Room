@@ -95,7 +95,7 @@ public class EscapeUIButtonHandler : MonoBehaviour
     // Public methods called by UI buttons
     public void RestartGame()
     {
-        Debug.Log("RestartGame() called from Escape UI");
+        GameLog.Log("RestartGame() called from Escape UI");
 
         if (GameManager.Instance != null)
         {
@@ -103,13 +103,13 @@ public class EscapeUIButtonHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogError("GameManager instance not found!");
+            GameLog.LogError("GameManager instance not found!");
         }
     }
 
     public void ShowExitConfirmation()
     {
-        Debug.Log("ShowExitConfirmation() called from Escape UI");
+        GameLog.Log("ShowExitConfirmation() called from Escape UI");
 
         if (exitConfirmationPanel != null)
         {
@@ -117,19 +117,19 @@ public class EscapeUIButtonHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("ExitConfirmationPanel is not assigned in EscapeUIButtonHandler!");
+            GameLog.LogWarning("ExitConfirmationPanel is not assigned in EscapeUIButtonHandler!");
         }
     }
 
     public void ConfirmExitToMainMenu()
     {
-        Debug.Log("Exit to main menu confirmed by user");
+        GameLog.Log("Exit to main menu confirmed by user");
         ReturnToMainMenu();
     }
 
     public void CancelExit()
     {
-        Debug.Log("Exit to main menu cancelled by user");
+        GameLog.Log("Exit to main menu cancelled by user");
 
         if (exitConfirmationPanel != null)
         {
@@ -139,7 +139,7 @@ public class EscapeUIButtonHandler : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        Debug.Log("ReturnToMainMenu() called from Escape UI");
+        GameLog.Log("ReturnToMainMenu() called from Escape UI");
 
         if (GameManager.Instance != null)
         {
@@ -147,14 +147,14 @@ public class EscapeUIButtonHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogError("GameManager instance not found!");
+            GameLog.LogError("GameManager instance not found!");
         }
     }
 
     // Call this method when the player successfully escapes
     public void TriggerPlayerEscaped()
     {
-        Debug.Log("Player has escaped! Triggering escaped state.");
+        GameLog.Log("Player has escaped! Triggering escaped state.");
 
         if (GameManager.Instance != null)
         {
@@ -162,7 +162,7 @@ public class EscapeUIButtonHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogError("GameManager instance not found!");
+            GameLog.LogError("GameManager instance not found!");
         }
     }
 }

@@ -28,7 +28,7 @@ public class PuddleAudioHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("[PuddleAudioHandler] No cleaning sound assigned!");
+            GameLog.LogWarning("[PuddleAudioHandler] No cleaning sound assigned!");
         }
     }
 
@@ -43,7 +43,7 @@ public class PuddleAudioHandler : MonoBehaviour
             if (audioSource != null && cleaningSound != null && !audioSource.isPlaying)
             {
                 audioSource.Play();
-                Debug.Log($"[PuddleAudioHandler] ✓ Started cleaning sound (volume: {audioSource.volume}, isPlaying: {audioSource.isPlaying})");
+                GameLog.Log($"[PuddleAudioHandler] ✓ Started cleaning sound (volume: {audioSource.volume}, isPlaying: {audioSource.isPlaying})");
             }
         }
     }
@@ -59,7 +59,7 @@ public class PuddleAudioHandler : MonoBehaviour
             if (audioSource != null && audioSource.isPlaying)
             {
                 audioSource.Stop();
-                Debug.Log("[PuddleAudioHandler] Stopped cleaning sound");
+                GameLog.Log("[PuddleAudioHandler] Stopped cleaning sound");
             }
         }
     }
@@ -70,7 +70,7 @@ public class PuddleAudioHandler : MonoBehaviour
         if (audioSource != null && audioSource.isPlaying)
         {
             audioSource.Stop();
-            Debug.Log("[PuddleAudioHandler] Puddle disabled - stopped audio");
+            GameLog.Log("[PuddleAudioHandler] Puddle disabled - stopped audio");
         }
     }
 }

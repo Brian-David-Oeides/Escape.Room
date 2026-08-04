@@ -98,7 +98,7 @@ public class BoltCutterController : MonoBehaviour
             rightTriggerAction.action.performed += OnTriggerPressed;
         }
 
-        Debug.Log("Bolt cutters grabbed - trigger input enabled");
+        GameLog.Log("Bolt cutters grabbed - trigger input enabled");
     }
 
     void OnReleased(SelectExitEventArgs args)
@@ -114,12 +114,12 @@ public class BoltCutterController : MonoBehaviour
             rightTriggerAction.action.performed -= OnTriggerPressed;
         }
 
-        Debug.Log("Bolt cutters released - trigger input disabled");
+        GameLog.Log("Bolt cutters released - trigger input disabled");
     }
 
     void OnTriggerPressed(InputAction.CallbackContext context)
     {
-        Debug.Log("Trigger pressed while holding bolt cutters!");
+        GameLog.Log("Trigger pressed while holding bolt cutters!");
         TriggerCut();
     }
 }

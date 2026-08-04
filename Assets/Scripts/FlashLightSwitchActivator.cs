@@ -46,11 +46,11 @@ public class FlashLightSwitchActivator : PuzzleBase
 
         if (Physics.Raycast(ray, out hit, detectionRange, detectionLayer))
         {
-            //Debug.Log($"Raycast hit: {hit.collider.name}");
+            //GameLog.Log($"Raycast hit: {hit.collider.name}");
 
             if (hit.collider.CompareTag("Switch") || hit.collider.name.Contains("PlugAndSwitch"))
             {
-                Debug.Log("Switch object detected!");
+                GameLog.Log("Switch object detected!");
                 EnableSwitchGameObject();
             }
         }
@@ -80,12 +80,12 @@ public class FlashLightSwitchActivator : PuzzleBase
             }
             else
             {
-                Debug.LogError("[FlashLightSwitchActivator] SwitchToggle component not found on targetSwitchObject!");
+                GameLog.LogError("[FlashLightSwitchActivator] SwitchToggle component not found on targetSwitchObject!");
             }
         }
         else
         {
-            Debug.LogError("[FlashLightSwitchActivator] Target Switch GameObject reference is null!");
+            GameLog.LogError("[FlashLightSwitchActivator] Target Switch GameObject reference is null!");
         }
     }
 

@@ -46,7 +46,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
             {
                 // Keep interactable enabled to detect failed attempts
                 // Lock state is checked in OnSelectEntered instead
-                Debug.Log("[SwitchToggle] Switch locked - waiting for flashlight beam");
+                GameLog.Log("[SwitchToggle] Switch locked - waiting for flashlight beam");
             }
             else
             {
@@ -55,7 +55,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
         }
         else
         {
-            Debug.LogError("No XRSimpleInteractable found on this GameObject!");
+            GameLog.LogError("No XRSimpleInteractable found on this GameObject!");
         }
 
         if (_switchAnimator == null)
@@ -81,7 +81,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
         {
             _interactable.enabled = true;
             isUnlocked = true;
-            Debug.Log($"[SwitchToggle] Switch {saveID} permanently unlocked!");
+            GameLog.Log($"[SwitchToggle] Switch {saveID} permanently unlocked!");
         }
     }
 
@@ -93,7 +93,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
         {
             // Player tried to use locked switch - register failed attempt
             ClueManager.Instance?.RegisterFailedAttempt(puzzleID, hintThreshold);
-            Debug.Log($"[SwitchToggle] Attempted to use locked switch - hint tracking registered");
+            GameLog.Log($"[SwitchToggle] Attempted to use locked switch - hint tracking registered");
             return; // Don't toggle
         }
 
@@ -137,12 +137,12 @@ public class SwitchToggle : MonoBehaviour, ISaveable
             }
             else
             {
-                Debug.LogWarning($"Missing audio clip for switch {(_isOn ? "ON" : "OFF")} state!");
+                GameLog.LogWarning($"Missing audio clip for switch {(_isOn ? "ON" : "OFF")} state!");
             }
         }
         else
         {
-            Debug.LogWarning("No AudioSource assigned to SwitchToggle!");
+            GameLog.LogWarning("No AudioSource assigned to SwitchToggle!");
         }
     }
 
@@ -174,7 +174,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
         if (isUnlocked && !saveData.completedPuzzleIDs.Contains(saveID))
         {
             saveData.completedPuzzleIDs.Add(saveID);
-            Debug.Log($"[SwitchToggle] Saved unlock state for {saveID}");
+            GameLog.Log($"[SwitchToggle] Saved unlock state for {saveID}");
         }
     }
 
@@ -190,7 +190,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
             {
                 _interactable.enabled = true;
             }
-            Debug.Log($"[SwitchToggle] Loaded unlocked state for {saveID}");
+            GameLog.Log($"[SwitchToggle] Loaded unlocked state for {saveID}");
         }
         else if (startLocked)
         {
@@ -199,7 +199,7 @@ public class SwitchToggle : MonoBehaviour, ISaveable
             {
                 _interactable.enabled = false;
             }
-            Debug.Log($"[SwitchToggle] {saveID} still locked");
+            GameLog.Log($"[SwitchToggle] {saveID} still locked");
         }
     }
 

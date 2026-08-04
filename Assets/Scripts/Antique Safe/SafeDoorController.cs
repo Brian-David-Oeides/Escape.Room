@@ -40,19 +40,19 @@ public class SafeDoorController : MonoBehaviour, ISaveable
             if (string.IsNullOrEmpty(doorID))
             {
                 doorID = GenerateUniqueID();
-                Debug.Log($"[SafeDoorController] Auto-generated ID: {doorID}");
+                GameLog.Log($"[SafeDoorController] Auto-generated ID: {doorID}");
             }
 
             // Lock door handle if required
             if (requireSafeUnlock)
             {
                 _grabInteractable.enabled = false;
-                Debug.Log("[SafeDoorController] Door handle locked - safe must be unlocked first");
+                GameLog.Log("[SafeDoorController] Door handle locked - safe must be unlocked first");
             }
         }
         else
         {
-            Debug.LogError("[SafeDoorController] Missing XRGrabInteractable reference!");
+            GameLog.LogError("[SafeDoorController] Missing XRGrabInteractable reference!");
         }
 
         // states start in disabled state
@@ -73,7 +73,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
         {
             _safeUnlocked = true;
             _grabInteractable.enabled = true;
-            Debug.Log("[SafeDoorController] Door handle unlocked! Can now be grabbed.");
+            GameLog.Log("[SafeDoorController] Door handle unlocked! Can now be grabbed.");
         }
     }
 
@@ -146,7 +146,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
 
         saveData.moveableObjects.Add(objectState);
 
-        Debug.Log($"[SafeDoorController] Saved state for {doorID}: unlocked={_safeUnlocked}, open={_isOpen}");
+        GameLog.Log($"[SafeDoorController] Saved state for {doorID}: unlocked={_safeUnlocked}, open={_isOpen}");
     }
 
     public void LoadState(SaveData saveData)
@@ -164,7 +164,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
                 bool.TryParse(parts[0], out _safeUnlocked);
                 bool.TryParse(parts[1], out _isOpen);
 
-                Debug.Log($"[SafeDoorController] Loaded state for {doorID}: unlocked={_safeUnlocked}, open={_isOpen}");
+                GameLog.Log($"[SafeDoorController] Loaded state for {doorID}: unlocked={_safeUnlocked}, open={_isOpen}");
 
                 // Restore the door state
                 RestoreDoorState();
@@ -172,7 +172,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
         }
         else
         {
-            Debug.Log($"[SafeDoorController] No saved state found for {doorID} - using defaults");
+            GameLog.Log($"[SafeDoorController] No saved state found for {doorID} - using defaults");
         }
     }
 
@@ -185,7 +185,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
         if (_safeUnlocked && _grabInteractable != null)
         {
             _grabInteractable.enabled = true;
-            Debug.Log($"[SafeDoorController] Door handle restored to unlocked state");
+            GameLog.Log($"[SafeDoorController] Door handle restored to unlocked state");
         }
 
         // Restore door open/close state
@@ -194,7 +194,7 @@ public class SafeDoorController : MonoBehaviour, ISaveable
             _animator.SetBool(_isOpenParam, _isOpen);
             _animator.SetBool(_turnHandleParam, false);
 
-            Debug.Log($"[SafeDoorController] Door restored to {(_isOpen ? "OPEN" : "CLOSED")} state");
+            GameLog.Log($"[SafeDoorController] Door restored to {(_isOpen ? "OPEN" : "CLOSED")} state");
         }
     }
 

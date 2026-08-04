@@ -113,7 +113,7 @@ public class MainMenuHandler : MonoBehaviour
                     RotateOriginToFace(mainMenuUI.transform.position);
                 }
 
-                Debug.Log("Player positioned at main menu spawn point");
+                GameLog.Log("Player positioned at main menu spawn point");
             }
         }
 
@@ -185,14 +185,14 @@ public class MainMenuHandler : MonoBehaviour
     // Public methods called by UI buttons
     public void StartNewGame()
     {
-        Debug.Log("StartNewGame() called from UI button");
+        GameLog.Log("StartNewGame() called from UI button");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.StartGame();
         }
         else
         {
-            Debug.LogError("GameManager instance not found!");
+            GameLog.LogError("GameManager instance not found!");
         }
     }
 
@@ -201,25 +201,25 @@ public class MainMenuHandler : MonoBehaviour
     {
         if (SaveManager.Instance == null)
         {
-            Debug.LogError("SaveManager not found!");
+            GameLog.LogError("SaveManager not found!");
             return;
         }
 
         // CRITICAL: Continue always loads from Slot 0 (hidden continue slot)
         if (!SaveManager.Instance.SaveSlotExists(0))
         {
-            Debug.LogWarning("No continue save found!");
+            GameLog.LogWarning("No continue save found!");
             return;
         }
 
-        Debug.Log("[MainMenu] Loading from Continue Slot (Slot 0)");
+        GameLog.Log("[MainMenu] Loading from Continue Slot (Slot 0)");
         SaveManager.Instance.LoadGame(0);
     }
 
     // Load Game (Show Load Panel)
     public void OnLoadGameButtonClicked()
     {
-        Debug.Log("Load Game button clicked");
+        GameLog.Log("Load Game button clicked");
 
         if (saveLoadMenuUI != null)
         {
@@ -227,22 +227,22 @@ public class MainMenuHandler : MonoBehaviour
             if (mainMenuPanel != null)
             {
                 mainMenuPanel.SetActive(false);  // Only hides buttons
-                Debug.Log("Main menu panel hidden");
+                GameLog.Log("Main menu panel hidden");
             }
 
             saveLoadMenuUI.ShowLoadPanel();
-            Debug.Log("ShowLoadPanel called");
+            GameLog.Log("ShowLoadPanel called");
         }
         else
         {
-            Debug.LogWarning("SaveLoadMenuUI reference is missing!");
+            GameLog.LogWarning("SaveLoadMenuUI reference is missing!");
         }
     }
 
     // Settings (Show Settings Menu)
     public void OnSettingsButtonClicked()
     {
-        Debug.Log("Settings button clicked");
+        GameLog.Log("Settings button clicked");
 
         if (settingsMenuUI != null)
         {
@@ -250,22 +250,22 @@ public class MainMenuHandler : MonoBehaviour
             if (mainMenuPanel != null)
             {
                 mainMenuPanel.SetActive(false);  // Only hides buttons
-                Debug.Log("Main menu panel hidden");
+                GameLog.Log("Main menu panel hidden");
             }
 
             settingsMenuUI.ShowSettings();
-            Debug.Log("Settings menu shown");
+            GameLog.Log("Settings menu shown");
         }
         else
         {
-            Debug.LogWarning("SettingsMenuUI reference is missing!");
+            GameLog.LogWarning("SettingsMenuUI reference is missing!");
         }
     }
 
     // Back from Load Panel to Main Menu
     public void OnBackToMainMenu()
     {
-        Debug.Log("Back to main menu");
+        GameLog.Log("Back to main menu");
 
         if (saveLoadMenuUI != null)
         {
@@ -285,7 +285,7 @@ public class MainMenuHandler : MonoBehaviour
 
     public void ShowExitConfirmation()
     {
-        Debug.Log("ShowExitConfirmation() called");
+        GameLog.Log("ShowExitConfirmation() called");
 
         if (exitConfirmationPanel != null)
         {
@@ -293,19 +293,19 @@ public class MainMenuHandler : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("ExitConfirmationPanel is not assigned!");
+            GameLog.LogWarning("ExitConfirmationPanel is not assigned!");
         }
     }
 
     public void ConfirmExit()
     {
-        Debug.Log("Exit confirmed by user");
+        GameLog.Log("Exit confirmed by user");
         ExitGame();
     }
 
     public void CancelExit()
     {
-        Debug.Log("Exit cancelled by user");
+        GameLog.Log("Exit cancelled by user");
 
         if (exitConfirmationPanel != null)
         {
@@ -315,7 +315,7 @@ public class MainMenuHandler : MonoBehaviour
 
     public void ExitGame()
     {
-        Debug.Log("Quitting game...");
+        GameLog.Log("Quitting game...");
         Application.Quit();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -342,7 +342,7 @@ public class MainMenuHandler : MonoBehaviour
             button.interactable = hasContinueData;
         }
 
-        Debug.Log($"Continue button {(hasContinueData ? "enabled" : "disabled")} - Continue Slot exists: {hasContinueData}");
+        GameLog.Log($"Continue button {(hasContinueData ? "enabled" : "disabled")} - Continue Slot exists: {hasContinueData}");
     }
 
     private void RotateOriginToFace(Vector3 targetPosition)

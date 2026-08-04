@@ -17,7 +17,7 @@ public class PlayerController : MonoSingleton<PlayerController>
     protected override void Awake()
     {
         base.Awake(); // THIS IS CRITICAL - calls MonoSingleton's Awake first
-        Debug.Log("PlayerController Awake called");
+        GameLog.Log("PlayerController Awake called");
     }
 
     public override void Init()
@@ -26,7 +26,7 @@ public class PlayerController : MonoSingleton<PlayerController>
 
         DontDestroyOnLoad(gameObject);
         isInitialized = true;
-        Debug.Log("PlayerController initialized");
+        GameLog.Log("PlayerController initialized");
     }
 
     /// <summary>
@@ -40,11 +40,11 @@ public class PlayerController : MonoSingleton<PlayerController>
             if (xrOriginComponent != null)
             {
                 xrOrigin = xrOriginComponent.gameObject;
-                Debug.Log("XR Origin reference updated");
+                GameLog.Log("XR Origin reference updated");
             }
             else
             {
-                Debug.LogWarning("Could not find XR Origin in scene");
+                GameLog.LogWarning("Could not find XR Origin in scene");
             }
         }
     }
@@ -61,16 +61,16 @@ public class PlayerController : MonoSingleton<PlayerController>
             {
                 xrOrigin.transform.position = spawnHandler.startPosition.position;
                 xrOrigin.transform.rotation = spawnHandler.startPosition.rotation;
-                Debug.Log("Player positioned at spawn point");
+                GameLog.Log("Player positioned at spawn point");
             }
             else
             {
-                Debug.LogWarning("PlayerSpawnHandler found but xrOrigin or startPosition is null");
+                GameLog.LogWarning("PlayerSpawnHandler found but xrOrigin or startPosition is null");
             }
         }
         else
         {
-            Debug.LogWarning("PlayerSpawnHandler not found in scene or xrOrigin is null");
+            GameLog.LogWarning("PlayerSpawnHandler not found in scene or xrOrigin is null");
         }
     }
 
@@ -83,7 +83,7 @@ public class PlayerController : MonoSingleton<PlayerController>
     {
         if (xrOrigin == null)
         {
-            Debug.LogWarning("[PlayerController] Cannot set movement speed - XR Origin is null");
+            GameLog.LogWarning("[PlayerController] Cannot set movement speed - XR Origin is null");
             return;
         }
 
@@ -91,11 +91,11 @@ public class PlayerController : MonoSingleton<PlayerController>
         if (continuousMove != null)
         {
             continuousMove.moveSpeed = speed;
-            Debug.Log($"[PlayerController] Movement speed set to: {speed}");
+            GameLog.Log($"[PlayerController] Movement speed set to: {speed}");
         }
         else
         {
-            Debug.LogWarning("[PlayerController] ActionBasedContinuousMoveProvider not found");
+            GameLog.LogWarning("[PlayerController] ActionBasedContinuousMoveProvider not found");
         }
     }
 
@@ -106,7 +106,7 @@ public class PlayerController : MonoSingleton<PlayerController>
     {
         if (xrOrigin == null)
         {
-            Debug.LogWarning("[PlayerController] Cannot set snap turn angle - XR Origin is null");
+            GameLog.LogWarning("[PlayerController] Cannot set snap turn angle - XR Origin is null");
             return;
         }
 
@@ -114,11 +114,11 @@ public class PlayerController : MonoSingleton<PlayerController>
         if (snapTurn != null)
         {
             snapTurn.turnAmount = angle;
-            Debug.Log($"[PlayerController] Snap turn angle set to: {angle}");
+            GameLog.Log($"[PlayerController] Snap turn angle set to: {angle}");
         }
         else
         {
-            Debug.LogWarning("[PlayerController] ActionBasedSnapTurnProvider not found");
+            GameLog.LogWarning("[PlayerController] ActionBasedSnapTurnProvider not found");
         }
     }
 

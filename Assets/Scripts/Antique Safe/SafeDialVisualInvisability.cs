@@ -23,7 +23,7 @@ public class SafeDialVisualInvisability : MonoBehaviour
     {
         if (targetRenderer == null || grabInteractable == null)
         {
-            Debug.LogError("[SafeDialVisual_Invisibility] Missing Target Renderer or Grab Interactable!");
+            GameLog.LogError("[SafeDialVisual_Invisibility] Missing Target Renderer or Grab Interactable!");
             return;
         }
 

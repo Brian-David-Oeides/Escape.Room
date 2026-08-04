@@ -36,7 +36,7 @@ public class SafeDialHaptics : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No XRGrabInteractable found on Safe Dial Haptics GameObject!");
+            GameLog.LogWarning("No XRGrabInteractable found on Safe Dial Haptics GameObject!");
         }
 
         if (safeDial == null)

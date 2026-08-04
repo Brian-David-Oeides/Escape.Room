@@ -267,7 +267,7 @@ public class FrameLock : PuzzleBase
             {
                 if (correctFrame == null)
                 {
-                    Debug.LogWarning($"[FrameLock] Could not find frame with ID {requiredFrameID} in scene!");
+                    GameLog.LogWarning($"[FrameLock] Could not find frame with ID {requiredFrameID} in scene!");
                 }
             }
         }

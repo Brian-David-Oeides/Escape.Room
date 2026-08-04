@@ -43,7 +43,7 @@ public class GameTimer : MonoSingleton<GameTimer>
     public override void Init()
     {
         InitializeTimer();
-        Debug.Log("[GameTimer] Initialized in Awake phase");
+        GameLog.Log("[GameTimer] Initialized in Awake phase");
     }
 
     private void Update()
@@ -83,18 +83,18 @@ public class GameTimer : MonoSingleton<GameTimer>
             _timerExpired = true;
             _isRunning = false;
 
-            Debug.Log("⏰ TIMER EXPIRED! Game Over!");
+            GameLog.Log("⏰ TIMER EXPIRED! Game Over!");
 
             // Debug: Check if event has subscribers
             if (OnTimerExpired != null)
             {
-                Debug.Log($"[GameTimer] OnTimerExpired has subscribers. Invoking event now...");
+                GameLog.Log($"[GameTimer] OnTimerExpired has subscribers. Invoking event now...");
                 OnTimerExpired();
-                Debug.Log($"[GameTimer] OnTimerExpired event invoked successfully");
+                GameLog.Log($"[GameTimer] OnTimerExpired event invoked successfully");
             }
             else
             {
-                Debug.LogWarning("[GameTimer] OnTimerExpired event has NO subscribers! Event not invoked.");
+                GameLog.LogWarning("[GameTimer] OnTimerExpired event has NO subscribers! Event not invoked.");
             }
         }
     }
@@ -109,7 +109,7 @@ public class GameTimer : MonoSingleton<GameTimer>
             _remainingTime = _countdownDuration;
         }
 
-        Debug.Log($"[GameTimer] InitializeTimer() called - Mode: {_timerMode}, Duration: {_countdownDuration}s");
+        GameLog.Log($"[GameTimer] InitializeTimer() called - Mode: {_timerMode}, Duration: {_countdownDuration}s");
     }
 
     // Public Control Methods
@@ -127,13 +127,13 @@ public class GameTimer : MonoSingleton<GameTimer>
     {
         if (_timerMode == TimerMode.Disabled)
         {
-            Debug.LogWarning("Cannot resume timer when mode is Disabled");
+            GameLog.LogWarning("Cannot resume timer when mode is Disabled");
             return;
         }
 
         if (_timerExpired)
         {
-            Debug.LogWarning("Cannot resume timer - timer has expired");
+            GameLog.LogWarning("Cannot resume timer - timer has expired");
             return;
         }
 
@@ -149,7 +149,7 @@ public class GameTimer : MonoSingleton<GameTimer>
     // Configuration Methods (for Settings System integration)
     public void SetTimerMode(TimerMode mode)
     {
-        Debug.Log($"[GameTimer] SetTimerMode() called - changing from {_timerMode} to {mode}");
+        GameLog.Log($"[GameTimer] SetTimerMode() called - changing from {_timerMode} to {mode}");
         _timerMode = mode;
         InitializeTimer();
     }
@@ -159,7 +159,7 @@ public class GameTimer : MonoSingleton<GameTimer>
     /// </summary>
     public void RestoreTimerState(float remainingTime, float duration, bool wasRunning)
     {
-        Debug.Log($"[GameTimer] RestoreTimerState called - Remaining: {remainingTime}s, Duration: {duration}s, Running: {wasRunning}");
+        GameLog.Log($"[GameTimer] RestoreTimerState called - Remaining: {remainingTime}s, Duration: {duration}s, Running: {wasRunning}");
 
         _remainingTime = remainingTime;
         _countdownDuration = duration > 0 ? duration : _countdownDuration; // Use saved duration if valid
@@ -167,7 +167,7 @@ public class GameTimer : MonoSingleton<GameTimer>
         _timerExpired = remainingTime <= 0;
         _isRunning = wasRunning && !_timerExpired; // Don't resume if expired
 
-        Debug.Log($"[GameTimer] Timer state restored - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}");
+        GameLog.Log($"[GameTimer] Timer state restored - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}");
     }
 
     public void SetCountdownDuration(float durationInSeconds)
@@ -244,7 +244,7 @@ public class GameTimer : MonoSingleton<GameTimer>
         {
             _remainingTime += seconds;
             _remainingTime = Mathf.Min(_remainingTime, _countdownDuration);
-            Debug.Log($"⏰ Added {seconds} seconds. Remaining: {GetFormattedRemainingTime()}");
+            GameLog.Log($"⏰ Added {seconds} seconds. Remaining: {GetFormattedRemainingTime()}");
         }
     }
 
@@ -254,7 +254,7 @@ public class GameTimer : MonoSingleton<GameTimer>
         {
             _remainingTime = Mathf.Clamp(seconds, 0f, _countdownDuration);
             _timerExpired = false;
-            Debug.Log($"⏰ Set remaining time to: {GetFormattedRemainingTime()}");
+            GameLog.Log($"⏰ Set remaining time to: {GetFormattedRemainingTime()}");
         }
     }
 
@@ -273,7 +273,7 @@ public class GameTimer : MonoSingleton<GameTimer>
         data.timerMode = (int)_timerMode;
         data.timerCountdownDuration = _countdownDuration;
 
-        Debug.Log($"[GameTimer] SaveState() called - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}, Expired: {_timerExpired}");
+        GameLog.Log($"[GameTimer] SaveState() called - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}, Expired: {_timerExpired}");
     }
 
     /// <summary>
@@ -301,7 +301,7 @@ public class GameTimer : MonoSingleton<GameTimer>
         // Restore running state (but don't run if expired)
         _isRunning = data.timerIsRunning && !_timerExpired;
 
-        Debug.Log($"[GameTimer] LoadState() called - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}, Running: {_isRunning}, Expired: {_timerExpired}");
+        GameLog.Log($"[GameTimer] LoadState() called - Mode: {_timerMode}, Remaining: {GetFormattedRemainingTime()}, Running: {_isRunning}, Expired: {_timerExpired}");
     }
 
     #endregion

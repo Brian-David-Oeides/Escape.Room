@@ -316,7 +316,7 @@ public class PauseMenuManager : MonoBehaviour
     // save Game Button
     public void OnSaveGameButtonClicked()
     {
-        Debug.Log("Save Game button clicked");
+        GameLog.Log("Save Game button clicked");
 
         if (saveLoadMenuUI != null)
         {
@@ -330,14 +330,14 @@ public class PauseMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("SaveLoadMenuUI reference is missing!");
+            GameLog.LogWarning("SaveLoadMenuUI reference is missing!");
         }
     }
 
     // load Game Button
     public void OnLoadGameButtonClicked()
     {
-        Debug.Log("Load Game button clicked");
+        GameLog.Log("Load Game button clicked");
 
         if (saveLoadMenuUI != null)
         {
@@ -351,20 +351,20 @@ public class PauseMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("SaveLoadMenuUI reference is missing!");
+            GameLog.LogWarning("SaveLoadMenuUI reference is missing!");
         }
     }
 
     // Settings Button (NEW)
     public void OnSettingsButtonClicked()
     {
-        Debug.Log("Settings button clicked");
+        GameLog.Log("Settings button clicked");
 
         // Hide main pause menu panel first
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(false);
-            Debug.Log("Pause menu panel hidden");
+            GameLog.Log("Pause menu panel hidden");
         }
 
         // Show settings menu
@@ -376,35 +376,35 @@ public class PauseMenuManager : MonoBehaviour
             if (canvas != null)
             {
                 canvas.gameObject.SetActive(true);
-                Debug.Log("Settings canvas enabled");
+                GameLog.Log("Settings canvas enabled");
             }
 
             // Enable the SettingsPanel GameObject
             settingsMenuUI.gameObject.SetActive(true);
-            Debug.Log("Settings panel GameObject enabled");
+            GameLog.Log("Settings panel GameObject enabled");
 
             // Reposition settings menu in front of player
             RepositionSettingsMenu();
 
             settingsMenuUI.ShowSettings();
-            Debug.Log("Settings menu shown");
+            GameLog.Log("Settings menu shown");
         }
         else
         {
-            Debug.LogWarning("SettingsMenuUI reference is missing!");
+            GameLog.LogWarning("SettingsMenuUI reference is missing!");
         }
     }
 
     // Hints Button (NEW)
     public void OnHintsButtonClicked()
     {
-        Debug.Log("Hints button clicked");
+        GameLog.Log("Hints button clicked");
 
         // Hide main pause menu panel first
         if (pauseMenuPanel != null)
         {
             pauseMenuPanel.SetActive(false);
-            Debug.Log("Pause menu panel hidden");
+            GameLog.Log("Pause menu panel hidden");
         }
 
         // Show hints menu
@@ -413,17 +413,17 @@ public class PauseMenuManager : MonoBehaviour
             // CRITICAL: HintMenuUI GameObject IS the canvas itself
             // Enable it directly
             hintsMenuUI.gameObject.SetActive(true);
-            Debug.Log("Hints canvas enabled");
+            GameLog.Log("Hints canvas enabled");
 
             // Reposition hints menu in front of player
             RepositionHintsMenu();
 
             hintsMenuUI.ShowHints();
-            Debug.Log("Hints menu shown");
+            GameLog.Log("Hints menu shown");
         }
         else
         {
-            Debug.LogWarning("HintsMenuUI reference is missing!");
+            GameLog.LogWarning("HintsMenuUI reference is missing!");
         }
     }
 
@@ -458,7 +458,7 @@ public class PauseMenuManager : MonoBehaviour
                     settingsCanvas.rotation = Quaternion.LookRotation(-directionToCamera);
                 }
 
-                Debug.Log($"Settings menu repositioned to {targetPosition}");
+                GameLog.Log($"Settings menu repositioned to {targetPosition}");
             }
         }
     }
@@ -493,7 +493,7 @@ public class PauseMenuManager : MonoBehaviour
                     hintsCanvas.rotation = Quaternion.LookRotation(-directionToCamera);
                 }
 
-                Debug.Log($"Hints menu repositioned to {targetPosition}");
+                GameLog.Log($"Hints menu repositioned to {targetPosition}");
             }
         }
     }
@@ -501,7 +501,7 @@ public class PauseMenuManager : MonoBehaviour
     // back from Save/Load/Settings/Hints to Pause Menu
     public void OnBackToPauseMenu()
     {
-        Debug.Log("Back to pause menu");
+        GameLog.Log("Back to pause menu");
 
         if (saveLoadMenuUI != null)
         {
@@ -533,14 +533,14 @@ public class PauseMenuManager : MonoBehaviour
     // Modified to show confirmation instead of direct action
     public void OnMainMenuButtonClicked()
     {
-        Debug.Log("Main Menu button clicked - showing confirmation");
+        GameLog.Log("Main Menu button clicked - showing confirmation");
         ShowExitConfirmation(mainMenuConfirmationTextObject, () => ExecuteReturnToMainMenu());
     }
 
     // Modified to show confirmation instead of direct action
     public void OnExitGameButtonClicked()
     {
-        Debug.Log("Exit Game button clicked - showing confirmation");
+        GameLog.Log("Exit Game button clicked - showing confirmation");
         ShowExitConfirmation(exitGameConfirmationTextObject, () => ExecuteExitGame());
     }
 
@@ -569,7 +569,7 @@ public class PauseMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("ExitConfirmationPanel is not assigned in PauseMenuManager!");
+            GameLog.LogWarning("ExitConfirmationPanel is not assigned in PauseMenuManager!");
             // If no confirmation panel, execute action directly
             confirmAction?.Invoke();
         }
@@ -578,7 +578,7 @@ public class PauseMenuManager : MonoBehaviour
     // Called by "Yes" button in confirmation dialog
     public void OnConfirmYes()
     {
-        Debug.Log("Action confirmed by user");
+        GameLog.Log("Action confirmed by user");
         UIAudioManager.Instance?.PlayConfirm();
         HideExitConfirmation();
         _pendingConfirmAction?.Invoke();
@@ -588,7 +588,7 @@ public class PauseMenuManager : MonoBehaviour
     // Called by "Cancel" button in confirmation dialog
     public void OnConfirmCancel()
     {
-        Debug.Log("Action cancelled by user");
+        GameLog.Log("Action cancelled by user");
         UIAudioManager.Instance?.PlayCancel();
         HideExitConfirmation();
         _pendingConfirmAction = null;
@@ -609,23 +609,23 @@ public class PauseMenuManager : MonoBehaviour
     // Actual execution methods (called after confirmation)
     private void ExecuteReturnToMainMenu()
     {
-        Debug.Log("Returning to Main Menu from pause menu");
+        GameLog.Log("Returning to Main Menu from pause menu");
 
         // DEBUG: Check timer state before saving
         if (GameTimer.Instance != null)
         {
-            Debug.Log($"[DEBUG] Timer before save - RemainingTime: {GameTimer.Instance.RemainingTime}, IsRunning: {GameTimer.Instance.IsRunning}, Mode: {GameTimer.Instance.Mode}");
+            GameLog.Log($"[DEBUG] Timer before save - RemainingTime: {GameTimer.Instance.RemainingTime}, IsRunning: {GameTimer.Instance.IsRunning}, Mode: {GameTimer.Instance.Mode}");
         }
 
         // CRITICAL: Save to Continue Slot (Slot 0) before returning to menu
         if (SaveManager.Instance != null)
         {
             bool saveSuccess = SaveManager.Instance.SaveGame(0);
-            Debug.Log($"[PauseMenu] Game saved to Continue Slot before returning to menu: {saveSuccess}");
+            GameLog.Log($"[PauseMenu] Game saved to Continue Slot before returning to menu: {saveSuccess}");
         }
         else
         {
-            Debug.LogError("[PauseMenu] SaveManager not found - cannot save before returning to menu!");
+            GameLog.LogError("[PauseMenu] SaveManager not found - cannot save before returning to menu!");
         }
 
         if (GameManager.Instance != null)
@@ -642,7 +642,7 @@ public class PauseMenuManager : MonoBehaviour
 
     private void ExecuteExitGame()
     {
-        Debug.Log("Exiting game from pause menu");
+        GameLog.Log("Exiting game from pause menu");
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

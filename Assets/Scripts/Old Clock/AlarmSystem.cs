@@ -36,7 +36,7 @@ public class AlarmSystem : MonoBehaviour
 
         if (timeManager == null)
         {
-            Debug.LogError("AlarmSystem: No TimeManager found! Please assign one or add a TimeManager to the scene.");
+            GameLog.LogError("AlarmSystem: No TimeManager found! Please assign one or add a TimeManager to the scene.");
             return;
         }
 
@@ -115,7 +115,7 @@ public class AlarmSystem : MonoBehaviour
         alarmEnabled = enabled;
         alarmTriggered = false;
 
-        Debug.Log($"Alarm set for {hour:D2}:{minute:D2}, Enabled: {enabled}");
+        GameLog.Log($"Alarm set for {hour:D2}:{minute:D2}, Enabled: {enabled}");
     }
 
     public void EnableAlarm(bool enable)

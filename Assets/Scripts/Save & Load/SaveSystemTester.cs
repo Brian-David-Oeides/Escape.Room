@@ -33,21 +33,21 @@ public class SaveSystemTester : MonoBehaviour
         // Verify SaveManager exists
         if (SaveManager.Instance != null)
         {
-            Debug.Log("✅ SaveManager is ready!");
-            Debug.Log($"📋 Test Controls:");
-            Debug.Log($"   {saveKey} = Save to Slot {testSlot}");
-            Debug.Log($"   {loadKey} = Load from Slot {testSlot}");
-            Debug.Log($"   {checkSlotKey} = Check Slot {testSlot} Info");
-            Debug.Log($"   {deleteSlotKey} = Delete Slot {testSlot}");
+            GameLog.Log("✅ SaveManager is ready!");
+            GameLog.Log($"📋 Test Controls:");
+            GameLog.Log($"   {saveKey} = Save to Slot {testSlot}");
+            GameLog.Log($"   {loadKey} = Load from Slot {testSlot}");
+            GameLog.Log($"   {checkSlotKey} = Check Slot {testSlot} Info");
+            GameLog.Log($"   {deleteSlotKey} = Delete Slot {testSlot}");
 
             // Show exact save location
-            Debug.Log($"📁 Save files location: {Application.persistentDataPath}\\Saves\\");
-            Debug.Log($"📁 Save folder path: {Application.persistentDataPath}");
-            Debug.Log($"💡 TIP: Copy the path above, press Win+R, paste it, and press Enter to open the folder!");
+            GameLog.Log($"📁 Save files location: {Application.persistentDataPath}\\Saves\\");
+            GameLog.Log($"📁 Save folder path: {Application.persistentDataPath}");
+            GameLog.Log($"💡 TIP: Copy the path above, press Win+R, paste it, and press Enter to open the folder!");
         }
         else
         {
-            Debug.LogError("❌ SaveManager not found! Make sure SaveManager GameObject exists in the scene.");
+            GameLog.LogError("❌ SaveManager not found! Make sure SaveManager GameObject exists in the scene.");
         }
     }
 
@@ -58,53 +58,53 @@ public class SaveSystemTester : MonoBehaviour
         // SAVE - F1 (or custom key)
         if (Input.GetKeyDown(saveKey))
         {
-            Debug.Log($"💾 Saving game to slot {testSlot}...");
+            GameLog.Log($"💾 Saving game to slot {testSlot}...");
             bool success = SaveManager.Instance.SaveGame(testSlot);
 
             if (success)
             {
-                Debug.Log($"✅ Game saved successfully to slot {testSlot}!");
+                GameLog.Log($"✅ Game saved successfully to slot {testSlot}!");
             }
             else
             {
-                Debug.LogError($"❌ Failed to save to slot {testSlot}");
+                GameLog.LogError($"❌ Failed to save to slot {testSlot}");
             }
         }
 
         // LOAD - F2 (or custom key)
         if (Input.GetKeyDown(loadKey))
         {
-            Debug.Log($"📂 Loading game from slot {testSlot}...");
+            GameLog.Log($"📂 Loading game from slot {testSlot}...");
             bool success = SaveManager.Instance.LoadGame(testSlot);
 
             if (success)
             {
-                Debug.Log($"✅ Game loaded successfully from slot {testSlot}!");
+                GameLog.Log($"✅ Game loaded successfully from slot {testSlot}!");
             }
             else
             {
-                Debug.LogWarning($"⚠️ No save found in slot {testSlot} or load failed");
+                GameLog.LogWarning($"⚠️ No save found in slot {testSlot} or load failed");
             }
         }
 
         // CHECK SLOT INFO - F3 (or custom key)
         if (Input.GetKeyDown(checkSlotKey))
         {
-            Debug.Log($"ℹ️ Checking slot {testSlot} info...");
+            GameLog.Log($"ℹ️ Checking slot {testSlot} info...");
             SaveSlotInfo info = SaveManager.Instance.GetSaveSlotInfo(testSlot);
 
             if (info.hasData)
             {
-                Debug.Log($"📊 Slot {testSlot} Info:");
-                Debug.Log($"   Save Name: {info.saveName}");
-                Debug.Log($"   Timestamp: {info.saveTimestamp}");
-                Debug.Log($"   Playtime: {info.playtime:F1}s ({info.playtime / 60:F1} minutes)");
-                Debug.Log($"   Puzzles Solved: {info.puzzlesSolved}");
-                Debug.Log($"   Scene: {info.sceneName}");
+                GameLog.Log($"📊 Slot {testSlot} Info:");
+                GameLog.Log($"   Save Name: {info.saveName}");
+                GameLog.Log($"   Timestamp: {info.saveTimestamp}");
+                GameLog.Log($"   Playtime: {info.playtime:F1}s ({info.playtime / 60:F1} minutes)");
+                GameLog.Log($"   Puzzles Solved: {info.puzzlesSolved}");
+                GameLog.Log($"   Scene: {info.sceneName}");
             }
             else
             {
-                Debug.Log($"📭 Slot {testSlot} is empty");
+                GameLog.Log($"📭 Slot {testSlot} is empty");
             }
         }
 
@@ -113,21 +113,21 @@ public class SaveSystemTester : MonoBehaviour
         {
             if (SaveManager.Instance.SaveSlotExists(testSlot))
             {
-                Debug.Log($"🗑️ Deleting save slot {testSlot}...");
+                GameLog.Log($"🗑️ Deleting save slot {testSlot}...");
                 bool success = SaveManager.Instance.DeleteSave(testSlot);
 
                 if (success)
                 {
-                    Debug.Log($"✅ Slot {testSlot} deleted successfully");
+                    GameLog.Log($"✅ Slot {testSlot} deleted successfully");
                 }
                 else
                 {
-                    Debug.LogError($"❌ Failed to delete slot {testSlot}");
+                    GameLog.LogError($"❌ Failed to delete slot {testSlot}");
                 }
             }
             else
             {
-                Debug.Log($"⚠️ Slot {testSlot} is already empty");
+                GameLog.Log($"⚠️ Slot {testSlot} is already empty");
             }
         }
     }

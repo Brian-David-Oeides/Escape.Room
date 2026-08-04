@@ -63,7 +63,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to load settings: {e.Message}");
+                GameLog.LogError($"Failed to load settings: {e.Message}");
                 CreateDefaultSettings();
             }
         }
@@ -87,7 +87,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
         }
         catch (Exception e)
         {
-            Debug.LogError($"Failed to save settings: {e.Message}");
+            GameLog.LogError($"Failed to save settings: {e.Message}");
         }
     }
 
@@ -198,7 +198,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
             // CRITICAL FIX: Don't reset timer if it's already running (from save load)
             if (skipIfRunning && GameTimer.Instance.IsRunning)
             {
-                Debug.Log("[SettingsManager] Timer already running - skipping settings application to preserve loaded state");
+                GameLog.Log("[SettingsManager] Timer already running - skipping settings application to preserve loaded state");
                 return;
             }
 
@@ -433,7 +433,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     {
         if (showDebugLogs)
         {
-            Debug.Log($"[SettingsManager] {message}");
+            GameLog.Log($"[SettingsManager] {message}");
         }
     }
 
