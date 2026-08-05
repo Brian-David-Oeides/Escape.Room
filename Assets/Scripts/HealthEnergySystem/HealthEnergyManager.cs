@@ -54,6 +54,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     public System.Action OnPlayerDied;
     public System.Action OnLowHealth;
     public System.Action OnLowEnergy;
+    public event System.Action<bool> OnUITextVisibilityChanged;
 
     // Movement tracking
     private Vector3 lastPlayerPosition;
@@ -524,12 +525,7 @@ public class HealthEnergyManager : MonoSingleton<HealthEnergyManager>
     {
         showHealthEnergyText = visible;
         DebugLog($"UI text visibility: {visible}");
-
-        // TODO: Apply to UI when HealthEnergyUI exists
-        // if (HealthEnergyUI.Instance != null)
-        // {
-        //     HealthEnergyUI.Instance.SetTextVisible(visible);
-        // }
+        OnUITextVisibilityChanged?.Invoke(visible);
     }
 
     /// <summary>

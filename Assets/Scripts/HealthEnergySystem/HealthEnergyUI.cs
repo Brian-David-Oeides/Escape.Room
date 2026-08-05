@@ -53,6 +53,7 @@ public class HealthEnergyUI : MonoBehaviour
             HealthEnergyManager.Instance.OnEnergyChanged += UpdateEnergyDisplay;
             HealthEnergyManager.Instance.OnLowHealth += OnLowHealthWarning;
             HealthEnergyManager.Instance.OnLowEnergy += OnLowEnergyWarning;
+            HealthEnergyManager.Instance.OnUITextVisibilityChanged += SetTextVisible;
 
             // Initial display
             UpdateHealthDisplay(HealthEnergyManager.Instance.GetCurrentHealth());
@@ -117,6 +118,7 @@ public class HealthEnergyUI : MonoBehaviour
             HealthEnergyManager.Instance.OnEnergyChanged -= UpdateEnergyDisplay;
             HealthEnergyManager.Instance.OnLowHealth -= OnLowHealthWarning;
             HealthEnergyManager.Instance.OnLowEnergy -= OnLowEnergyWarning;
+            HealthEnergyManager.Instance.OnUITextVisibilityChanged -= SetTextVisible;
         }
     }
 
@@ -344,6 +346,14 @@ public class HealthEnergyUI : MonoBehaviour
         {
             PositionHUD();
         }
+    }
+
+    public void SetTextVisible(bool visible)
+    {
+        if (healthText != null) healthText.gameObject.SetActive(visible && (showPercentageText || showNumericText));
+        if (energyText != null) energyText.gameObject.SetActive(visible && (showPercentageText || showNumericText));
+        if (healthLabel != null) healthLabel.gameObject.SetActive(visible && showLabels);
+        if (energyLabel != null) energyLabel.gameObject.SetActive(visible && showLabels);
     }
 
     #endregion
