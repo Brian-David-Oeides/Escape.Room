@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using static Unity.Burst.Intrinsics.Arm;
 
 /// <summary>
 /// Consumable object that can be grabbed and consumed to restore health/energy
@@ -17,6 +16,9 @@ public class ConsumableObject : MonoBehaviour, ISaveable
     [Header("Save System")]
     [Tooltip("Unique ID for this consumable - MUST be unique in scene")]
     [SerializeField] private string consumableID = "candy_001";
+
+    [Tooltip("If true, this consumable is always present regardless of difficulty. If false, it may be hidden on harder difficulties.")]
+    [SerializeField] private bool isCore = true;
 
     [Header("Consumable Properties")]
     [SerializeField] private float energyRestoreAmount = 30f;
@@ -57,6 +59,7 @@ public class ConsumableObject : MonoBehaviour, ISaveable
     }
 
     public string SaveID => consumableID;
+    public bool IsCore => isCore;
 
     private void Awake()
     {

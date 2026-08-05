@@ -64,6 +64,11 @@ public class SaveData
     // Consumable objects (which ones have been eaten)
     public List<string> consumedObjectIDs = new List<string>();
 
+    // Tracks which optional (non-core) consumables were deactivated due to
+    // difficulty settings, so reloading a save shows the same set the player
+    // originally experienced rather than re-randomizing
+    public List<string> inactiveOptionalConsumableIDs = new List<string>();
+
     // Moveable objects (position/rotation/state tracking)
     public List<MoveableObjectData> moveableObjects = new List<MoveableObjectData>();
 

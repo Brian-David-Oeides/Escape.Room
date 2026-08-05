@@ -327,6 +327,7 @@ public class SaveManager : MonoSingleton<SaveManager>
         if (data.puzzleFailedAttemptsData == null) data.puzzleFailedAttemptsData = new List<string>();
         if (data.completedPuzzleIDs == null) data.completedPuzzleIDs = new List<string>();
         if (data.consumedObjectIDs == null) data.consumedObjectIDs = new List<string>();
+        if (data.inactiveOptionalConsumableIDs == null) data.inactiveOptionalConsumableIDs = new List<string>();
         if (data.moveableObjects == null) data.moveableObjects = new List<MoveableObjectData>();
 
         if (wasOldFormat)
