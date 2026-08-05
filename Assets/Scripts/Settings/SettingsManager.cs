@@ -178,11 +178,12 @@ public class SettingsManager : MonoSingleton<SettingsManager>
             DebugLog("Health/Energy settings applied");
         }
 
-        // TODO: Apply consumable count when ConsumableManager exists
-        // if (ConsumableManager.Instance != null)
-        // {
-        //     ConsumableManager.Instance.SetConsumableCount(currentSettings.consumableObjectCount);
-        // }
+        // Note: Consumable count is NOT applied here - this method fires on every
+        // app startup (new game AND loaded save) with no way to distinguish them,
+        // which would conflict with ConsumableManager's save-vs-randomize logic.
+        // Consumable count is applied explicitly in GameManager.ResetGameSystems()
+        // for New Game only; Load Game restores state via ConsumableManager's own
+        // ISaveable.LoadState().
 
         DebugLog("Difficulty settings applied");
     }

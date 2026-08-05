@@ -565,11 +565,14 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
 
-        // TODO: Add other system resets when implemented
-        // if (PuzzleManager.Instance != null)
-        // {
-        //     PuzzleManager.Instance.ResetAllPuzzles();
-        // }
+        if (ConsumableManager.Instance != null)
+        {
+            ConsumableManager.Instance.ResetForNewGame();
+            if (SettingsManager.Instance != null)
+            {
+                ConsumableManager.Instance.ApplyDifficultyCount(SettingsManager.Instance.GetConsumableObjectCount());
+            }
+        }
     }
 
     /// <summary>
