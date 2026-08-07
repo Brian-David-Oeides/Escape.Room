@@ -565,14 +565,6 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
 
-        if (ConsumableManager.Instance != null)
-        {
-            ConsumableManager.Instance.ResetForNewGame();
-            if (SettingsManager.Instance != null)
-            {
-                ConsumableManager.Instance.ApplyDifficultyCount(SettingsManager.Instance.GetConsumableObjectCount());
-            }
-        }
     }
 
     /// <summary>
@@ -756,6 +748,17 @@ public class GameManager : MonoSingleton<GameManager>
                 {
                     // Position player at spawn point
                     PlayerController.Instance.PositionAtSpawnPoint();
+                }
+
+                // Apply difficulty-based consumable scaling now that the gameplay
+                // scene (and ConsumableManager within it) has fully loaded
+                if (ConsumableManager.Instance != null)
+                {
+                    ConsumableManager.Instance.ResetForNewGame();
+                    if (SettingsManager.Instance != null)
+                    {
+                        ConsumableManager.Instance.ApplyDifficultyCount(SettingsManager.Instance.GetConsumableObjectCount());
+                    }
                 }
 
                 SetGameState(GameState.Playing);
