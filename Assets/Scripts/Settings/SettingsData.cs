@@ -81,9 +81,9 @@ public class SettingsData
             case DifficultyLevel.Easy:
                 timerEnabled = true;
                 timerMode = TimerMode.CountDown;
-                timerDuration = 1800f; // 30 minutes (more forgiving)
+                timerDuration = 14400f; // 240 minutes (more forgiving)
                 playerMaxHealth = 150f;
-                energyDrainRate = 0f; // No energy drain
+                energyDrainRate = 0.00139f; // Slow drain - full session lasts full timer duration if unfed
                 consumableObjectCount = 15; // More candies
                 damageMultiplier = 0.5f; // Half damage
                 // Hint settings for Easy
@@ -94,9 +94,9 @@ public class SettingsData
             case DifficultyLevel.Normal:
                 timerEnabled = true;
                 timerMode = TimerMode.CountDown;
-                timerDuration = 900f; // 15 minutes
+                timerDuration = 7200f; // 120 minutes
                 playerMaxHealth = 100f;
-                energyDrainRate = 1f; // Normal drain
+                energyDrainRate = 0.00278f; // Normal drain
                 consumableObjectCount = 10; // Normal amount
                 damageMultiplier = 1f; // Normal damage
                 // Hint settings for Normal
@@ -107,9 +107,9 @@ public class SettingsData
             case DifficultyLevel.Hard:
                 timerEnabled = true;
                 timerMode = TimerMode.CountDown;
-                timerDuration = 600f; // 10 minutes (challenging)
+                timerDuration = 3600f; // 60 minutes (challenging)
                 playerMaxHealth = 75f;
-                energyDrainRate = 2f; // Faster drain
+                energyDrainRate = 0.00556f; // Faster drain
                 consumableObjectCount = 5; // Fewer candies
                 damageMultiplier = 2f; // Double damage
                 // Hint settings for Hard
