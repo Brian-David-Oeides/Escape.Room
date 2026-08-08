@@ -405,7 +405,7 @@ public class GameManager : MonoSingleton<GameManager>
             // CRITICAL: Only apply settings if NOT loading from save
             if (!isLoadingFromSave && SettingsManager.Instance != null)
             {
-                SettingsManager.Instance.ApplyTimerSettings(skipIfRunning: true);
+                SettingsManager.Instance.ApplyTimerSettings(skipIfRunning: isLoadingFromSave);
                 GameLog.Log("[GameManager] Timer settings applied on gameplay start");
             }
             else if (isLoadingFromSave)
