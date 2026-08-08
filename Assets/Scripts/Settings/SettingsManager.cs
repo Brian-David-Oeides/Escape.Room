@@ -165,7 +165,7 @@ public class SettingsManager : MonoSingleton<SettingsManager>
     /// <summary>
     /// Apply difficulty settings to game systems
     /// </summary>
-    private void ApplyDifficultySettings()
+    public void ApplyDifficultySettings()
     {
         // Apply to HealthEnergyManager
         if (HealthEnergyManager.Instance != null)

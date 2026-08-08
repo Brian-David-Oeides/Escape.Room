@@ -58,6 +58,7 @@ public class HealthEnergyUI : MonoBehaviour
             // Initial display
             UpdateHealthDisplay(HealthEnergyManager.Instance.GetCurrentHealth());
             UpdateEnergyDisplay(HealthEnergyManager.Instance.GetCurrentEnergy());
+            SetTextVisible(HealthEnergyManager.Instance.GetUITextVisible());
 
             GameLog.Log("HealthEnergyUI initialized and subscribed to events");
         }

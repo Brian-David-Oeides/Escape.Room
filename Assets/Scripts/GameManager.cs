@@ -402,6 +402,12 @@ public class GameManager : MonoSingleton<GameManager>
 
             GameLog.Log("[GameManager] Successfully subscribed to OnTimerExpired event");
 
+            if (SettingsManager.Instance != null)
+            {
+                SettingsManager.Instance.ApplyDifficultySettings();
+                GameLog.Log("[GameManager] HealthEnergyManager difficulty settings re-synced after gameplay scene load");
+            }
+
             // CRITICAL: Only apply settings if NOT loading from save
             if (!isLoadingFromSave && SettingsManager.Instance != null)
             {
