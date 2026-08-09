@@ -462,7 +462,6 @@ public class GameManager : MonoSingleton<GameManager>
             GameLog.Log("[GameManager] Timer stopped - Game Over");
         }
 
-        // TODO: Show Game Over UI
         GameLog.Log("GAME OVER! Timer expired or player died.");
     }
 
