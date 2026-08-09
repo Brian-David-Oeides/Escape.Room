@@ -3571,87 +3571,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1508286591}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &455838761
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 455838762}
-  - component: {fileID: 455838763}
-  - component: {fileID: 455838765}
-  m_Layer: 0
-  m_Name: HammerSocket
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &455838762
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455838761}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0664, y: 0.0001, z: 0}
-  m_LocalScale: {x: 0.05927003, y: 0.05927003, z: 0.05927003}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 543450652026185845}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &455838763
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455838761}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &455838765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 455838761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcde8b0ceb40a7f479dce60ee8874413, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  puzzleID: puzzle_base_001
-  hintThreshold: 0
-  isCompleted: 0
-  OnPuzzleCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoadCompletedState:
-    m_PersistentCalls:
-      m_Calls: []
-  collidersToDisable: []
-  renderersToHide: []
-  showDebugLogs: 1
-  targetRigidbody: {fileID: 423719841}
-  hammerTag: Hammer
-  stakeSocket: {fileID: 1495953424}
 --- !u!1 &465004655
 GameObject:
   m_ObjectHideFlags: 0
@@ -18417,18 +18336,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1480068501}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1495953424 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8906765096641856594, guid: 95a82343fb2a76a47aad1c28e530f643,
-    type: 3}
-  m_PrefabInstance: {fileID: 1101538139}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60523e0647cc6ab43acc73cb266a32a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1497532219
 GameObject:
   m_ObjectHideFlags: 0
@@ -26325,7 +26232,6 @@ Transform:
   m_LocalScale: {x: 1.5029196, y: 1.5029196, z: 1.5029196}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 455838762}
   - {fileID: 804345970}
   m_Father: {fileID: 603914746}
   m_LocalEulerAnglesHint: {x: 90, y: -180, z: 0}
