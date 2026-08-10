@@ -65,19 +65,23 @@ public class OilSprayController : MonoBehaviour
         }
     }
 
+    // Determine which hand's trigger action to use, based on the grabbing interactor's transform name
+    // (matches the existing name-based hand-detection pattern used in DynamicAttachPoint.cs)
+    private InputActionReference GetTriggerActionForInteractor(Transform interactorTransform)
+    {
+        bool isLeftHand = interactorTransform != null && interactorTransform.name.ToLower().Contains("left");
+        return isLeftHand ? leftTriggerAction : rightTriggerAction;
+    }
+
     private void OnGrabbed(SelectEnterEventArgs args)
     {
         isGrabbed = true;
 
-        // Enable actions ONLY when grabbed
-        if (leftTriggerAction != null)
+        // Enable ONLY the action for the hand that grabbed this
+        InputActionReference triggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
+        if (triggerAction != null)
         {
-            leftTriggerAction.action.Enable();
-        }
-
-        if (rightTriggerAction != null)
-        {
-            rightTriggerAction.action.Enable();
+            triggerAction.action.Enable();
         }
     }
 
@@ -85,15 +89,11 @@ public class OilSprayController : MonoBehaviour
     {
         isGrabbed = false;
 
-        // Disable actions when released
-        if (leftTriggerAction != null)
+        // Disable ONLY the action for the hand that released this
+        InputActionReference triggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
+        if (triggerAction != null)
         {
-            leftTriggerAction.action.Disable();
-        }
-
-        if (rightTriggerAction != null)
-        {
-            rightTriggerAction.action.Disable();
+            triggerAction.action.Disable();
         }
 
         // Stop particle system when object is released

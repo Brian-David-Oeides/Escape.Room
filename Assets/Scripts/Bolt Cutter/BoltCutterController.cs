@@ -85,36 +85,38 @@ public class BoltCutterController : MonoBehaviour
         BoltCutterCutState.IsCutting = false; // reset the flag
     }
 
+    // Determine which hand's trigger action to use, based on the grabbing interactor's transform name
+    // (matches the existing name-based hand-detection pattern used in DynamicAttachPoint.cs)
+    private InputActionReference GetTriggerActionForInteractor(Transform interactorTransform)
+    {
+        bool isLeftHand = interactorTransform != null && interactorTransform.name.ToLower().Contains("left");
+        return isLeftHand ? leftTriggerAction : rightTriggerAction;
+    }
+
     void OnGrabbed(SelectEnterEventArgs args)
     {
-        // Enable trigger input when grabbed
-        if (leftTriggerAction != null && leftTriggerAction.action != null)
+        // Enable and subscribe only the trigger action for the hand that grabbed this
+        InputActionReference triggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
+        if (triggerAction != null && triggerAction.action != null)
         {
-            leftTriggerAction.action.performed += OnTriggerPressed;
+            triggerAction.action.Enable();
+            triggerAction.action.performed += OnTriggerPressed;
         }
 
-        if (rightTriggerAction != null && rightTriggerAction.action != null)
-        {
-            rightTriggerAction.action.performed += OnTriggerPressed;
-        }
-
-        GameLog.Log("Bolt cutters grabbed - trigger input enabled");
+        GameLog.Log($"Bolt cutters grabbed by {args.interactorObject.transform.name} - trigger input enabled");
     }
 
     void OnReleased(SelectExitEventArgs args)
     {
-        // Disable trigger input when released
-        if (leftTriggerAction != null && leftTriggerAction.action != null)
+        // Disable and unsubscribe only the trigger action for the hand that released this
+        InputActionReference triggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
+        if (triggerAction != null && triggerAction.action != null)
         {
-            leftTriggerAction.action.performed -= OnTriggerPressed;
+            triggerAction.action.performed -= OnTriggerPressed;
+            triggerAction.action.Disable();
         }
 
-        if (rightTriggerAction != null && rightTriggerAction.action != null)
-        {
-            rightTriggerAction.action.performed -= OnTriggerPressed;
-        }
-
-        GameLog.Log("Bolt cutters released - trigger input disabled");
+        GameLog.Log($"Bolt cutters released by {args.interactorObject.transform.name} - trigger input disabled");
     }
 
     void OnTriggerPressed(InputAction.CallbackContext context)
