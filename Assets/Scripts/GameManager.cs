@@ -32,6 +32,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     // Events for state changes
     public System.Action<GameState> OnStateChanged;
+    public System.Action<string> OnLevelCompleted; // Fired with formatted completion time when player escapes
 
     // Game data
     private float gameStartTime;
@@ -483,7 +484,7 @@ public class GameManager : MonoSingleton<GameManager>
             string finalTime = GameTimer.Instance.GetFormattedElapsedTime();
             GameLog.Log($"Level completed! Time: {finalTime}");
 
-            // TODO: Show Escaped UI with completion time
+            OnLevelCompleted?.Invoke(finalTime);
         }
         else
         {

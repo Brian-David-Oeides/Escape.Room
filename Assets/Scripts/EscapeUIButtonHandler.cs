@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,9 +9,12 @@ public class EscapeUIButtonHandler : MonoBehaviour
     [Header("UI References")]
     public GameObject escapedUI;
     public Transform mainMenuPosition;
+    [SerializeField] private TextMeshProUGUI completionTimeText; // "UI Time Text" on the Escaped UI Canvas
 
     [Header("Exit Confirmation")]
     public GameObject exitConfirmationPanel; // Reference to the ExitConfirmationPanel
+
+    private string _lastCompletionTime = "";
 
     private void Start()
     {
@@ -24,6 +28,7 @@ public class EscapeUIButtonHandler : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnStateChanged += OnGameStateChanged;
+            GameManager.Instance.OnLevelCompleted += OnLevelCompleted;
         }
 
         // Hide escaped UI initially
@@ -39,7 +44,13 @@ public class EscapeUIButtonHandler : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnStateChanged -= OnGameStateChanged;
+            GameManager.Instance.OnLevelCompleted -= OnLevelCompleted;
         }
+    }
+
+    private void OnLevelCompleted(string formattedTime)
+    {
+        _lastCompletionTime = formattedTime;
     }
 
     private void OnGameStateChanged(GameState newState)
@@ -65,6 +76,11 @@ public class EscapeUIButtonHandler : MonoBehaviour
             escapedUI.SetActive(true);
             // Position player for UI interaction if needed
             PositionPlayerForUI();
+        }
+
+        if (completionTimeText != null)
+        {
+            completionTimeText.text = $"Completion Time: {_lastCompletionTime}";
         }
     }
 

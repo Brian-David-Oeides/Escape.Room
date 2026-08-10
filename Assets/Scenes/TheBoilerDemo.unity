@@ -25333,6 +25333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   escapedUI: {fileID: 280561503}
   mainMenuPosition: {fileID: 1536420689}
+  completionTimeText: {fileID: 1871987606}
   exitConfirmationPanel: {fileID: 2005582164}
 --- !u!4 &1581577115
 Transform:
