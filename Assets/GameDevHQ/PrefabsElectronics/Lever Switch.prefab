@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOn: 0
-  leverID: lever_main
+  leverID: lever_main_01
   puddleHazard: {fileID: 0}
   _leverAnimator: {fileID: 0}
   _toggleAudioSource: {fileID: 0}
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOn: 0
-  leverID: lever_main
+  leverID: lever_main_02
   puddleHazard: {fileID: 0}
   _leverAnimator: {fileID: 0}
   _toggleAudioSource: {fileID: 0}
