@@ -6,7 +6,7 @@ using UnityEngine;
 /// Centralized manager for tracking puzzle completions and firing events
 /// </summary>
 /// 
-public class PuzzleManager : MonoSingleton<PuzzleManager>
+public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
 {
     [Header("Puzzle Tracking")]
     [SerializeField] private int totalPuzzlesCompleted = 0;
@@ -85,6 +85,25 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>
     }
 
     public int GetTotalPuzzlesCompleted() => totalPuzzlesCompleted;
+
+    #region ISaveable Implementation
+
+    public string SaveID => "puzzle_manager";
+
+    public void SaveState(SaveData saveData)
+    {
+        // No-op: totalPuzzlesCompleted is fully derivable from
+        // saveData.completedPuzzleIDs.Count, already gathered by each
+        // individual puzzle script's own SaveState. Intentionally not
+        // duplicating that data here to avoid the two counts drifting apart.
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        RestorePuzzleCount(saveData.completedPuzzleIDs.Count, saveData.completedPuzzleIDs);
+    }
+
+    #endregion
 
     private void DebugLog(string message)
     {

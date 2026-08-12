@@ -140,6 +140,7 @@ public class LeverToggle : MonoBehaviour, ISaveable
         // Trigger appropriate events
         if (_isOn)
         {
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(leverID);
             PlayOnSounds();
             OnLeverUp?.Invoke();
         }

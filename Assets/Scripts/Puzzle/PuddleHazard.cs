@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PuddleHazard : MonoBehaviour
+public class PuddleHazard : MonoBehaviour, ISaveable
 {
     [Header("Puddle State")]
     [SerializeField] private bool isPuddlePresent = true;
@@ -26,6 +26,8 @@ public class PuddleHazard : MonoBehaviour
     [SerializeField] private float warningDisplayTime = 3f;
 
     private AudioSource audioSource;
+    private Collider hazardCollider;
+    private PuddleAudioHandler puddleAudioHandler;
 
     private void Start()
     {
@@ -35,6 +37,9 @@ public class PuddleHazard : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.spatialBlend = 1f; // 3D audio
         }
+
+        hazardCollider = GetComponent<Collider>();
+        puddleAudioHandler = GetComponent<PuddleAudioHandler>();
     }
 
     /// <summary>
@@ -71,7 +76,20 @@ public class PuddleHazard : MonoBehaviour
     public void RemovePuddle()
     {
         isPuddlePresent = false;
+        ApplyRemovedVisuals();
 
+        GameLog.Log("[PuddleHazard] Puddle removed - lever can now be safely used");
+        PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
+    }
+
+    /// <summary>
+    /// ARCHITECTURAL FIX: Does NOT use SetActive(false) to avoid save bug (same
+    /// pattern as PuzzleBase.ApplyCompletedStateVisuals) - disables the visual/
+    /// interactive components instead, keeping this GameObject active and
+    /// discoverable by FindObjectsOfType for the save system.
+    /// </summary>
+    private void ApplyRemovedVisuals()
+    {
         if (puddleVisual != null)
         {
             puddleVisual.SetActive(false);
@@ -82,10 +100,20 @@ public class PuddleHazard : MonoBehaviour
             waterDripParticles.Stop();
         }
 
-        GameLog.Log("[PuddleHazard] Puddle removed - lever can now be safely used");
-        PuzzleManager.Instance?.RegisterPuzzleCompletion(puzzleID);
-        // Disable the entire puddle GameObject (this will stop audio via OnDisable)
-        gameObject.SetActive(false);
+        if (hazardCollider != null)
+        {
+            hazardCollider.enabled = false;
+        }
+
+        if (puddleAudioHandler != null)
+        {
+            puddleAudioHandler.enabled = false; // fires its OnDisable, stopping any in-progress cleaning-loop audio
+        }
+
+        if (audioSource != null)
+        {
+            audioSource.enabled = false;
+        }
     }
 
     private void PlayElectricShockEffects()
@@ -114,4 +142,27 @@ public class PuddleHazard : MonoBehaviour
     {
         return isPuddlePresent;
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => puzzleID;
+
+    public void SaveState(SaveData saveData)
+    {
+        if (!isPuddlePresent && !saveData.completedPuzzleIDs.Contains(puzzleID))
+        {
+            saveData.completedPuzzleIDs.Add(puzzleID);
+        }
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        if (saveData.completedPuzzleIDs.Contains(puzzleID))
+        {
+            isPuddlePresent = false;
+            ApplyRemovedVisuals();
+        }
+    }
+
+    #endregion
 }

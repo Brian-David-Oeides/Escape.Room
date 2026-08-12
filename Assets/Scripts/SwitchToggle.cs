@@ -176,6 +176,15 @@ public class SwitchToggle : MonoBehaviour, ISaveable
             saveData.completedPuzzleIDs.Add(saveID);
             GameLog.Log($"[SwitchToggle] Saved unlock state for {saveID}");
         }
+
+        // Also save under puzzleID - this is the ID RegisterPuzzleCompletion()
+        // actually used (see ToggleState()), so PuzzleManager's restored count
+        // needs it in the list too, separately from saveID's own restoration above.
+        if (isUnlocked && !saveData.completedPuzzleIDs.Contains(puzzleID))
+        {
+            saveData.completedPuzzleIDs.Add(puzzleID);
+            GameLog.Log($"[SwitchToggle] Saved puzzle completion for {puzzleID}");
+        }
     }
 
     public void LoadState(SaveData saveData)

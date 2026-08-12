@@ -17,6 +17,7 @@ public class DrawerClamp : MonoBehaviour, ISaveable
 
     private Rigidbody rb;
     private Vector3 initialLocalPosition;
+    private bool hasReachedFullyOpen = false;
 
     void Start()
     {
@@ -37,6 +38,12 @@ public class DrawerClamp : MonoBehaviour, ISaveable
         float localZ = localPos.z - initialLocalPosition.z;
         float clampedZ = Mathf.Clamp(localZ, minLocalZ, maxLocalZ);
         transform.localPosition = new Vector3(localPos.x, localPos.y, initialLocalPosition.z + clampedZ);
+
+        if (!hasReachedFullyOpen && clampedZ >= maxLocalZ)
+        {
+            hasReachedFullyOpen = true;
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(drawerID);
+        }
     }
 
     /// <summary>
@@ -78,6 +85,12 @@ public class DrawerClamp : MonoBehaviour, ISaveable
         );
 
         saveData.moveableObjects.Add(objectState);
+
+        // Save puzzle completion state so PuzzleManager's restored count includes it
+        if (hasReachedFullyOpen && !saveData.completedPuzzleIDs.Contains(drawerID))
+        {
+            saveData.completedPuzzleIDs.Add(drawerID);
+        }
 
         GameLog.Log($"[DrawerClamp] Saved state for {drawerID}: localZ={transform.localPosition.z:F3}");
     }
