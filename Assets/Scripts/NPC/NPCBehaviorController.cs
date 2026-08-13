@@ -57,6 +57,8 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float loiterMoveSpeed = 1.5f;      // Walking speed while loitering
 
     [HideInInspector] public bool combatInterrupted = false;
+    [HideInInspector] public bool isPermanentlyDefeated = false;
+    public void SetDefeated(bool defeated) { isPermanentlyDefeated = defeated; }
 
     private Vector3 loiterTarget;
     private float loiterWaitTimer = 0f;
@@ -95,7 +97,7 @@ public class NPCBehaviorController : MonoBehaviour
     void Update()
     {
         // Don't run behaviors if combat has interrupted movement
-        if (!combatInterrupted)
+        if (!combatInterrupted && !isPermanentlyDefeated)
         {
             // Execute current state behavior
             switch (currentState)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCCombatController : MonoBehaviour
+public class NPCCombatController : MonoBehaviour, ISaveable
 {
     private HandHaptics[] allHandHaptics;
 
@@ -229,6 +229,7 @@ public class NPCCombatController : MonoBehaviour
     IEnumerator ExecuteDefeat()
     {
         isDefeated = true;
+        behaviorController.SetDefeated(true);
 
         if (agent != null)
             agent.isStopped = true;
@@ -272,4 +273,44 @@ public class NPCCombatController : MonoBehaviour
         Gizmos.color = counterWindowOpen ? Color.green : Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => "npc_combat_defeat";
+
+    public void SaveState(SaveData saveData)
+    {
+        if (isDefeated)
+        {
+            MoveableObjectData objectState = new MoveableObjectData(
+                SaveID, transform.position, transform.rotation, true, "");
+            saveData.moveableObjects.Add(objectState);
+        }
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        MoveableObjectData savedState = saveData.moveableObjects.Find(obj => obj.objectID == SaveID);
+        if (savedState != null)
+        {
+            isDefeated = true;
+
+            if (animator != null)
+            {
+                animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                animator.Play("Death", 0, 1f);
+                animator.Update(0f);
+                animator.enabled = false;
+            }
+
+            if (agent != null) agent.enabled = false;
+            transform.position = savedState.position;
+            transform.rotation = savedState.rotation;
+
+            if (behaviorController != null)
+                behaviorController.SetDefeated(true);
+        }
+    }
+
+    #endregion
 }
