@@ -9,10 +9,10 @@ public class NPCBehaviorController : MonoBehaviour
     public enum BehaviorState
     {
         Dormant,      // 0 puzzles
-        Observing,    // 1-2 puzzles
-        Approaching,  // 2-3 puzzles
-        Agitated,     // 4-5 puzzles
-        Hunting       // 6+ puzzles
+        Observing,    // 1-5 puzzles
+        Approaching,  // 6-11 puzzles
+        Agitated,     // 12-20 puzzles
+        Hunting       // 21+ puzzles
     }
 
     public BehaviorState CurrentState => currentState;
@@ -153,11 +153,11 @@ public class NPCBehaviorController : MonoBehaviour
         // Determine state based on puzzle count
         if (currentPuzzleCount == 0)
             currentState = BehaviorState.Dormant;
-        else if (currentPuzzleCount <= 2)
-            currentState = BehaviorState.Observing;
-        else if (currentPuzzleCount <= 3)
-            currentState = BehaviorState.Approaching;
         else if (currentPuzzleCount <= 5)
+            currentState = BehaviorState.Observing;
+        else if (currentPuzzleCount <= 11)
+            currentState = BehaviorState.Approaching;
+        else if (currentPuzzleCount <= 20)
             currentState = BehaviorState.Agitated;
         else
             currentState = BehaviorState.Hunting;
