@@ -44581,6 +44581,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
+      propertyPath: puzzleID
+      value: valve_oil_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
       propertyPath: isCompleted
       value: 0
       objectReference: {fileID: 0}
@@ -70781,6 +70786,7 @@ MonoBehaviour:
   loiterWaitTime: 3
   loiterMoveSpeed: 1.5
   combatInterrupted: 0
+  isPermanentlyDefeated: 0
 --- !u!114 &5866666021642897073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77273,6 +77279,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8629880831751326271, guid: 8288969a8a759694b8f99b63101541d1,
+        type: 3}
+      propertyPath: puzzleID
+      value: flashlight_001
       objectReference: {fileID: 0}
     - target: {fileID: 8629880831751326271, guid: 8288969a8a759694b8f99b63101541d1,
         type: 3}

@@ -767,6 +767,13 @@ public class GameManager : MonoSingleton<GameManager>
                     }
                 }
 
+                // Reset puzzle tracking for new game (DontDestroyOnLoad singleton
+                // otherwise carries stale totalPuzzlesCompleted across New Game)
+                if (PuzzleManager.Instance != null)
+                {
+                    PuzzleManager.Instance.ResetPuzzles();
+                }
+
                 SetGameState(GameState.Playing);
             }
         }

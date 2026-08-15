@@ -80,6 +80,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOn: 0
+  startLocked: 1
+  saveID: switch_02
+  puzzleID: light_switch_01
+  hintThreshold: 2
   _switchAnimator: {fileID: 3199172591940140635}
   _animBoolParameterName: SwitchOn
   _audioSource: {fileID: 3852556695115214645}
@@ -438,6 +442,12 @@ MonoBehaviour:
   hapticOnRelease: 0
   gentleHoverFeedback: 1
   successPokePattern: 1
+  hoverDuration: 0.02
+  hoverIntensity: 0.1
+  pokeDuration: 0.025
+  pokeIntensity: 0.8
+  releaseDuration: 0.015
+  releaseIntensity: 0.15
   debugMode: 1
 --- !u!1 &7105916872250665645
 GameObject:

@@ -455,6 +455,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOn: 0
+  startLocked: 1
+  saveID: switch_04
+  puzzleID: light_switch_02
+  hintThreshold: 2
   _switchAnimator: {fileID: 5564480879593970143}
   _animBoolParameterName: SwitchOn
   _audioSource: {fileID: 8686266717393714949}

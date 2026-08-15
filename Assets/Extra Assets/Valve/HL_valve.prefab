@@ -174,6 +174,9 @@ MonoBehaviour:
   wrench: {fileID: 0}
   socketPivot: {fileID: 6435959351004528540}
   socketTrigger: {fileID: 8250348407032806876}
+  socketID: socket_valve
+  puzzleID: wrench_valve
+  hintThreshold: 1
   maxRotationX: 90
   rotationSpeed: 90
   onFullyTurned:
@@ -332,8 +335,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632e4c25479e4454893b16efa4e45be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  socketRotator: {fileID: 1531748615371211700}
-  isOiled: 0
+  puzzleID: valve_oil_001
+  hintThreshold: 0
+  isCompleted: 0
+  OnPuzzleCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadCompletedState:
+    m_PersistentCalls:
+      m_Calls: []
+  collidersToDisable: []
+  renderersToHide: []
+  showDebugLogs: 1
+  _socketRotator: {fileID: 0}
+  _isOiled: 0
 --- !u!1 &7841248003728799217
 GameObject:
   m_ObjectHideFlags: 0

@@ -1215,6 +1215,8 @@ MonoBehaviour:
   _turnHandleParam: TurnHandle
   _isOpenParam: IsOpen
   _handleAnimDuration: 1
+  requireSafeUnlock: 1
+  doorID: 
 --- !u!1 &7505553318262232956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,13 +1689,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 921cbd59fb3608b409f7cac1fb0e18ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverColor: {r: 0.16078432, g: 0, b: 0.84313726, a: 0.3}
-  selectColor: {r: 1, g: 0.5, b: 0, a: 0.6}
-  baseColor: {r: 0, g: 0, b: 0, a: 0}
-  fadeSpeed: 5
-  tintRenderers:
-  - {fileID: 5266762981720767481}
-  interactable: {fileID: 3047571369576238009}
+  _hoverColor: {r: 0, g: 0.8, b: 1, a: 1}
+  _selectColor: {r: 0, g: 0.9, b: 1, a: 1}
+  _baseColor: {r: 0, g: 0, b: 0, a: 0}
+  _fadeSpeed: 5
+  _tintRenderers: []
+  _interactable: {fileID: 0}
 --- !u!1 &8440318046726105645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2199,15 +2200,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff09fa57092394e4d8c164307557eb5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  puzzleID: safe_dial_001
+  hintThreshold: 0
+  isCompleted: 0
+  OnPuzzleCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadCompletedState:
+    m_PersistentCalls:
+      m_Calls: []
+  collidersToDisable: []
+  renderersToHide: []
+  showDebugLogs: 1
   correctCombination: 140000005f0000000c000000
   numberTolerance: 0
   doorAnimator: {fileID: 3242641403244634694}
   audioSource: {fileID: 6499384662880994761}
+  hoverVisual: {fileID: 0}
   dialTickSound: {fileID: 8300000, guid: 7bb0a08fa8cb9284abd4fea2bf05b81b, type: 3}
   correctNumberSound: {fileID: 8300000, guid: ae4cbdfe105433c429a824538725317d, type: 3}
   unlockSound: {fileID: 8300000, guid: 0f27d90edbb095a42ac39b6ec4c29158, type: 3}
   minTickVolume: 0.2
   maxTickVolume: 1
   maxRotationSpeed: 60
+  requireKeysInserted: 1
   currentDialNumber: 0
   grabInteractable: {fileID: 8029701953265742283}
