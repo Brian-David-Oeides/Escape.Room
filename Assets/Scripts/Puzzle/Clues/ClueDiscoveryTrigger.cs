@@ -116,9 +116,7 @@ public class ClueDiscoveryTrigger : MonoBehaviour
         DocumentCarousel carousel = GetComponentInChildren<DocumentCarousel>();
         if (carousel != null)
         {
-            // DocumentCarousel doesn't expose page count directly
-            // We'll need to add a public getter or estimate
-            return 3; // Default estimate for now
+            return carousel.GetTotalPages();
         }
 
         return 1; // Single page clue

@@ -52,7 +52,6 @@ public class DocumentViewer : MonoBehaviour
 
         _originalPosition = transform.position;
         _canvasGroup.alpha = 0f;
-        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -93,7 +92,8 @@ public class DocumentViewer : MonoBehaviour
 
         // Activate the document content BEFORE starting fade
         // text appears immediately when fade begins
-        gameObject.SetActive(true);
+        _canvasGroup.interactable = true;
+        _canvasGroup.blocksRaycasts = true;
         onDocumentShown?.Invoke(); // Trigger carousel activation first
 
         currentState = ViewerState.FadingIn;
@@ -149,7 +149,8 @@ public class DocumentViewer : MonoBehaviour
             if (_canvasGroup.alpha <= 0f)
             {
                 currentState = ViewerState.Hidden;
-                gameObject.SetActive(false);
+                _canvasGroup.interactable = false;
+                _canvasGroup.blocksRaycasts = false;
                 onDocumentHidden?.Invoke();
                 GameLog.Log("Document fully hidden");
             }

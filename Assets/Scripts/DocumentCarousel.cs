@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class DocumentCarousel : MonoBehaviour
+public class DocumentCarousel : MonoBehaviour, ISaveable
 {
     [System.Serializable]
     public class DocumentPage
@@ -39,6 +39,9 @@ public class DocumentCarousel : MonoBehaviour
     [Header("Events")]
     public UnityEvent<int> onPageChanged;
 
+    [Header("Save System")]
+    [SerializeField] private string carouselID = "";
+
     #region Private Variables
 
     private int _currentPageIndex = 0;
@@ -49,6 +52,8 @@ public class DocumentCarousel : MonoBehaviour
     private bool _slidingRight = true;
     private AudioSource _audioSource;
     private bool _isActive = false;
+    private HashSet<int> viewedPages = new HashSet<int>();
+    private bool hasCompletedAllPages = false;
 
     #endregion
 
@@ -56,6 +61,13 @@ public class DocumentCarousel : MonoBehaviour
 
     private void Awake()
     {
+        // Auto-generate unique ID if not set
+        if (string.IsNullOrEmpty(carouselID))
+        {
+            carouselID = GenerateUniqueID();
+            GameLog.Log($"[DocumentCarousel] Auto-generated ID: {carouselID}");
+        }
+
         SetupAudioSource();
 
         if (navigationHelpUI != null)
@@ -106,6 +118,7 @@ public class DocumentCarousel : MonoBehaviour
 
         UpdatePageContent();
         ShowNavigationHelp();
+        RegisterPageViewed(_currentPageIndex);
 
         GameLog.Log("Carousel activated");
     }
@@ -185,6 +198,7 @@ public class DocumentCarousel : MonoBehaviour
 
         PlaySound(pageFlipSound);
         onPageChanged?.Invoke(_currentPageIndex);
+        RegisterPageViewed(_currentPageIndex);
 
         GameLog.Log($"Navigated to page {_currentPageIndex + 1}");
     }
@@ -372,6 +386,68 @@ public class DocumentCarousel : MonoBehaviour
     public bool IsActive()
     {
         return _isActive;
+    }
+
+    #endregion
+
+    #region Puzzle Completion
+
+    private void RegisterPageViewed(int pageIndex)
+    {
+        if (hasCompletedAllPages) return;
+
+        viewedPages.Add(pageIndex);
+
+        if (viewedPages.Count >= GetTotalPages())
+        {
+            hasCompletedAllPages = true;
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(carouselID);
+        }
+    }
+
+    /// <summary>
+    /// Generate unique ID based on GameObject hierarchy path
+    /// </summary>
+    private string GenerateUniqueID()
+    {
+        string path = GetHierarchyPath(transform);
+        return $"carousel_{path}".Replace("/", "_").Replace(" ", "_");
+    }
+
+    /// <summary>
+    /// Get the full hierarchy path of this GameObject
+    /// </summary>
+    private string GetHierarchyPath(Transform t)
+    {
+        string path = t.name;
+        while (t.parent != null)
+        {
+            t = t.parent;
+            path = t.name + "/" + path;
+        }
+        return path;
+    }
+
+    #endregion
+
+    #region ISaveable Implementation
+
+    public string SaveID => carouselID;
+
+    public void SaveState(SaveData saveData)
+    {
+        if (hasCompletedAllPages && !saveData.completedPuzzleIDs.Contains(carouselID))
+        {
+            saveData.completedPuzzleIDs.Add(carouselID);
+        }
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        if (saveData.completedPuzzleIDs.Contains(carouselID))
+        {
+            hasCompletedAllPages = true;
+        }
     }
 
     #endregion
