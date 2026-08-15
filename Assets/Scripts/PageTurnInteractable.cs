@@ -6,8 +6,11 @@ using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
-public class PageTurnInteractable : MonoBehaviour
+public class PageTurnInteractable : MonoBehaviour, ISaveable
 {
+    [Header("Save System")]
+    [SerializeField] private string journalID = "";
+
     [Header("Page References")]
     public Transform rightPage; // R_Page child object
     public Transform leftPage;  // L_Page child object
@@ -37,6 +40,9 @@ public class PageTurnInteractable : MonoBehaviour
     private bool _rightPageFlipped = false;
     private bool _leftPageFlipped = false;
     private bool _isFlippingPage = false;
+    private bool hasCompletedAllPages = false;
+    private bool _rightPageEverFlipped = false;
+    private bool _leftPageEverFlipped = false;
 
     private void Awake()
     {
@@ -48,6 +54,36 @@ public class PageTurnInteractable : MonoBehaviour
 
         // Initialize collider states (all disabled until page turning is enabled)
         DisableAllPageColliders();
+
+        // Auto-generate unique ID if not set
+        if (string.IsNullOrEmpty(journalID))
+        {
+            journalID = GenerateUniqueID();
+            GameLog.Log($"[PageTurnInteractable] Auto-generated ID: {journalID}");
+        }
+    }
+
+    /// <summary>
+    /// Generate unique ID based on GameObject hierarchy path
+    /// </summary>
+    private string GenerateUniqueID()
+    {
+        string path = GetHierarchyPath(transform);
+        return $"journal_{path}".Replace("/", "_").Replace(" ", "_");
+    }
+
+    /// <summary>
+    /// Get the full hierarchy path of this GameObject
+    /// </summary>
+    private string GetHierarchyPath(Transform t)
+    {
+        string path = t.name;
+        while (t.parent != null)
+        {
+            t = t.parent;
+            path = t.name + "/" + path;
+        }
+        return path;
     }
 
     private void UpdateTextVisibility()
@@ -179,6 +215,13 @@ public class PageTurnInteractable : MonoBehaviour
 
         StartCoroutine(FlipPageCoroutine(rightPage, !_rightPageFlipped));
         _rightPageFlipped = !_rightPageFlipped;
+        _rightPageEverFlipped = true;
+
+        if (_rightPageEverFlipped && _leftPageEverFlipped && !hasCompletedAllPages)
+        {
+            hasCompletedAllPages = true;
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(journalID);
+        }
 
         // Update collider states after changing page state
         UpdatePageColliderStates();
@@ -195,6 +238,13 @@ public class PageTurnInteractable : MonoBehaviour
 
         StartCoroutine(FlipPageCoroutine(leftPage, !_leftPageFlipped));
         _leftPageFlipped = !_leftPageFlipped;
+        _leftPageEverFlipped = true;
+
+        if (_rightPageEverFlipped && _leftPageEverFlipped && !hasCompletedAllPages)
+        {
+            hasCompletedAllPages = true;
+            PuzzleManager.Instance?.RegisterPuzzleCompletion(journalID);
+        }
 
         // Update collider states after changing page state
         UpdatePageColliderStates();
@@ -351,4 +401,28 @@ public class PageTurnInteractable : MonoBehaviour
 
         GameLog.Log("Pages reset to original positions");
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => journalID;
+
+    public void SaveState(SaveData saveData)
+    {
+        if (hasCompletedAllPages && !saveData.completedPuzzleIDs.Contains(journalID))
+        {
+            saveData.completedPuzzleIDs.Add(journalID);
+        }
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        if (saveData.completedPuzzleIDs.Contains(journalID))
+        {
+            hasCompletedAllPages = true;
+            _rightPageFlipped = true;
+            _leftPageFlipped = true;
+        }
+    }
+
+    #endregion
 }
