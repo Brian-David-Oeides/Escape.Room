@@ -17,6 +17,9 @@ public class NPCBehaviorController : MonoBehaviour
 
     public BehaviorState CurrentState => currentState;
 
+    public event System.Action<BehaviorState, BehaviorState> OnStateChanged;
+    public event System.Action OnPuzzleSolvedSameState;
+
     public enum CombatPhase
     {
         None,
@@ -142,11 +145,15 @@ public class NPCBehaviorController : MonoBehaviour
 
     void UpdateBehaviorState()
     {
+        BehaviorState previousState = currentState;
+
         // Debug override
         if (forceHuntingMode)
         {
             currentState = BehaviorState.Hunting;
             GameLog.Log($"NPC State FORCED to: {currentState}");
+            if (previousState != currentState)
+                OnStateChanged?.Invoke(previousState, currentState);
             return;
         }
 
@@ -163,6 +170,11 @@ public class NPCBehaviorController : MonoBehaviour
             currentState = BehaviorState.Hunting;
 
         GameLog.Log($"NPC State changed to: {currentState} (Puzzles: {currentPuzzleCount})");
+
+        if (previousState != currentState)
+            OnStateChanged?.Invoke(previousState, currentState);
+        else
+            OnPuzzleSolvedSameState?.Invoke();
     }
 
     void LoiterBehavior(Vector3 centerPoint, float radius)
