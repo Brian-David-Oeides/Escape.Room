@@ -8938,6 +8938,7 @@ MonoBehaviour:
   onPageChanged:
     m_PersistentCalls:
       m_Calls: []
+  carouselID: 
 --- !u!114 &805654217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21998,6 +21999,7 @@ MonoBehaviour:
   onPageChanged:
     m_PersistentCalls:
       m_Calls: []
+  carouselID: 
 --- !u!114 &1265656718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34789,6 +34791,8 @@ GameObject:
   - component: {fileID: 5866666021642897073}
   - component: {fileID: 5866666021642897074}
   - component: {fileID: 5866666021642897075}
+  - component: {fileID: 5866666021642897077}
+  - component: {fileID: 5866666021642897076}
   m_Layer: 0
   m_Name: Man_15_Unity
   m_TagString: Untagged
@@ -38135,6 +38139,7 @@ MonoBehaviour:
   onPageChanged:
     m_PersistentCalls:
       m_Calls: []
+  carouselID: 
 --- !u!114 &1854977193408763720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39471,6 +39476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d2959d9e29dfd4eadfce532dbf3d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  journalID: 
   rightPage: {fileID: 7147232492871562781}
   leftPage: {fileID: 135861432200041059}
   pageRotationAngle: 180
@@ -70927,6 +70933,151 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccff34854f0dedf49b7b5e28c35a48a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5866666021642897076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149425931885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4407e6c67d5fc41a2fd5c87f3e3f46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  voiceAudioSource: {fileID: 5866666021642897077}
+  dormantLines:
+  - {fileID: 8300000, guid: 8f22c2efd1ea8e249a0a2559ea3648a0, type: 3}
+  - {fileID: 8300000, guid: 8201573912473024c9ef986616b0d93d, type: 3}
+  - {fileID: 8300000, guid: f5ad56ebef8f4c74e98b57a0c04ae653, type: 3}
+  - {fileID: 8300000, guid: 18a90e3f6f781294e93d14148fd1f255, type: 3}
+  - {fileID: 8300000, guid: dafead875bc074b49a9d9632e7be9b8a, type: 3}
+  observingLines:
+  - {fileID: 8300000, guid: 47ed404e431cbd0469928afbb2c87d71, type: 3}
+  - {fileID: 8300000, guid: cf91e7603593174458dd551f4ab125ff, type: 3}
+  - {fileID: 8300000, guid: 83f2ac5c927465c46b314214b22bec36, type: 3}
+  - {fileID: 8300000, guid: 5a7379bc23463034cb30fc2f74119d87, type: 3}
+  approachingLines:
+  - {fileID: 8300000, guid: 29c872799e29c15469c705acda5b570f, type: 3}
+  - {fileID: 8300000, guid: b71af9f13fe845247bb6c10f37b4df32, type: 3}
+  - {fileID: 8300000, guid: 5533d6ed26ff8ca4497a7f3aef6cc248, type: 3}
+  - {fileID: 8300000, guid: 41d5cfff918d44540a9725c45c61f5ef, type: 3}
+  agitatedLines:
+  - {fileID: 8300000, guid: d58a1bb6f26a539429bdb8fda25f559c, type: 3}
+  - {fileID: 8300000, guid: c5516dae401f13d40b20f81509ccc84c, type: 3}
+  - {fileID: 8300000, guid: f3835b0568c32dd4ebb3d2395b9b4447, type: 3}
+  - {fileID: 8300000, guid: c198268e6f586bf439dd4e7dac17f6bd, type: 3}
+  - {fileID: 8300000, guid: a44bbdd8e6911294fa8d81b11f8888a3, type: 3}
+  huntingLines:
+  - {fileID: 8300000, guid: 706d0d8d1fd775046b094b264e43772e, type: 3}
+  - {fileID: 8300000, guid: 8cfc64668c8285f46a29660cdad1c12f, type: 3}
+  - {fileID: 8300000, guid: b073f0ae67130fa4e80c8ca483e03aba, type: 3}
+  - {fileID: 8300000, guid: f55958724afc1c24ab00d01a96d692bc, type: 3}
+  huntingChaseLoopClip: {fileID: 8300000, guid: 0ac4a729485dd664f80d996d7e4814e7,
+    type: 3}
+  huntingAttackClip: {fileID: 8300000, guid: 6790969bed37d7d4f984f2c19b89fa70, type: 3}
+  chaseLoopInterval: 12
+  sabotageLines:
+  - {fileID: 8300000, guid: f9578b66a120bc246974d6ea610299df, type: 3}
+  - {fileID: 8300000, guid: 1fd6174611d18d9458712fa33025fb20, type: 3}
+  - {fileID: 8300000, guid: 3e444317c9486714c858b6bc05233f45, type: 3}
+  showDebugLogs: 1
+--- !u!82 &5866666021642897077
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149425931885}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 15
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5875037490884683847
 GameObject:
   m_ObjectHideFlags: 0
@@ -76045,6 +76196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d2959d9e29dfd4eadfce532dbf3d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  journalID: 
   rightPage: {fileID: 755018578659854888}
   leftPage: {fileID: 1045679292922616854}
   pageRotationAngle: 180
@@ -76884,6 +77036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d2959d9e29dfd4eadfce532dbf3d12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  journalID: 
   rightPage: {fileID: 5004826991263162770}
   leftPage: {fileID: 768427658710679159}
   pageRotationAngle: 180
@@ -82324,6 +82477,7 @@ MonoBehaviour:
   onPageChanged:
     m_PersistentCalls:
       m_Calls: []
+  carouselID: 
 --- !u!114 &9015569740538557773
 MonoBehaviour:
   m_ObjectHideFlags: 0
