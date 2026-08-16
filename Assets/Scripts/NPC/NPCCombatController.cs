@@ -10,6 +10,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     [Header("References")]
     private NavMeshAgent agent;
     private NPCBehaviorController behaviorController;
+    private NPCVoiceLineController voiceController;
     private Animator animator;
     private Transform playerTransform;
 
@@ -51,6 +52,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     void Start()
     {
         behaviorController = GetComponent<NPCBehaviorController>();
+        voiceController = GetComponent<NPCVoiceLineController>();
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
@@ -100,6 +102,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
         // Trigger attack animation
         animator.SetTrigger("Attack");
         audioSource?.PlayOneShot(attackWhooshSound);
+        voiceController?.PlayHuntingAttackLine();
         GameLog.Log("[NPCCombatController] Attack triggered");
 
         // Wait before opening counter window
