@@ -86,8 +86,11 @@ public class NPCVoiceLineController : MonoBehaviour
 
             if (chaseLoopTimer <= 0f)
             {
-                voiceAudioSource?.PlayOneShot(huntingChaseLoopClip);
-                DebugLog("Playing hunting chase loop line");
+                if (voiceAudioSource != null && !voiceAudioSource.isPlaying)
+                {
+                    voiceAudioSource.PlayOneShot(huntingChaseLoopClip);
+                    DebugLog("Playing hunting chase loop line");
+                }
                 chaseLoopTimer = chaseLoopInterval;
             }
         }
@@ -157,18 +160,24 @@ public class NPCVoiceLineController : MonoBehaviour
 
     public void PlayHuntingAttackLine()
     {
-        voiceAudioSource?.PlayOneShot(huntingAttackClip);
+        if (behaviorController.isPermanentlyDefeated) return;
+        if (voiceAudioSource == null || voiceAudioSource.isPlaying) return;
+
+        voiceAudioSource.PlayOneShot(huntingAttackClip);
         DebugLog("Playing hunting attack line");
     }
 
     public void PlaySabotageLine()
     {
+        if (behaviorController.isPermanentlyDefeated) return;
         PlayNextInSequence(sabotageLines, ref sabotageIndex);
     }
 
     void PlayNextInSequence(AudioClip[] clips, ref int index)
     {
+        if (behaviorController.isPermanentlyDefeated) return;
         if (clips == null || clips.Length == 0) return;
+        if (voiceAudioSource != null && voiceAudioSource.isPlaying) return;
 
         voiceAudioSource?.PlayOneShot(clips[index]);
         DebugLog($"Playing line {index + 1}/{clips.Length}: {clips[index].name}");
