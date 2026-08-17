@@ -233,6 +233,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     {
         isDefeated = true;
         behaviorController.SetDefeated(true);
+        voiceController?.StopCurrentLine();
 
         if (agent != null)
             agent.isStopped = true;

@@ -173,6 +173,12 @@ public class NPCVoiceLineController : MonoBehaviour
         PlayNextInSequence(sabotageLines, ref sabotageIndex);
     }
 
+    public void StopCurrentLine()
+    {
+        voiceAudioSource?.Stop();
+        DebugLog("Voice line stopped - death cry taking priority");
+    }
+
     void PlayNextInSequence(AudioClip[] clips, ref int index)
     {
         if (behaviorController.isPermanentlyDefeated) return;
