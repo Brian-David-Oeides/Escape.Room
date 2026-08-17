@@ -877,4 +877,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         return isLoading;
     }
+
+    public bool IsLoadingFromSave()
+    {
+        return isLoadingFromSave;
+    }
 }

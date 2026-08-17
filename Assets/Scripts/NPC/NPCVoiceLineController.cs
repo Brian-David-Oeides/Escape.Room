@@ -21,6 +21,10 @@ public class NPCVoiceLineController : MonoBehaviour
     [SerializeField] private AudioClip huntingAttackClip;
     [SerializeField] private float chaseLoopInterval = 12f;
 
+    [Header("Dormant Reassurance Loop")]
+    [SerializeField] private float dormantLineInterval = 35f;
+    private float dormantLineTimer = 0f;
+
     [Header("Sabotage Lines")]
     [SerializeField] private AudioClip[] sabotageLines;
 
@@ -43,6 +47,20 @@ public class NPCVoiceLineController : MonoBehaviour
 
         behaviorController.OnStateChanged += HandleStateChanged;
         behaviorController.OnPuzzleSolvedSameState += HandlePuzzleSolvedSameState;
+
+        // OnStateChanged can never fire into Dormant (it's the starting state and
+        // states only escalate forward), so the first-contact line needs an explicit
+        // kickoff here. Gate on GameManager's loading flag rather than CurrentState:
+        // save data restoration is deferred by two WaitForEndOfFrame yields in
+        // GameManager.RestoreSaveDataAfterSceneLoad, which runs well after this Start()
+        // - so CurrentState would still read Dormant here even on a loaded game that
+        // already progressed past it.
+        bool loadingFromSave = GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave();
+        if (!loadingFromSave)
+        {
+            PlayNextInSequence(dormantLines, ref dormantIndex);
+        }
+        dormantLineTimer = dormantLineInterval;
     }
 
     void OnDestroy()
@@ -73,10 +91,27 @@ public class NPCVoiceLineController : MonoBehaviour
                 chaseLoopTimer = chaseLoopInterval;
             }
         }
+
+        if (behaviorController.CurrentState == NPCBehaviorController.BehaviorState.Dormant)
+        {
+            dormantLineTimer -= Time.deltaTime;
+
+            if (dormantLineTimer <= 0f)
+            {
+                PlayNextInSequence(dormantLines, ref dormantIndex);
+                dormantLineTimer = dormantLineInterval;
+            }
+        }
     }
 
     void HandleStateChanged(NPCBehaviorController.BehaviorState previous, NPCBehaviorController.BehaviorState current)
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave())
+        {
+            DebugLog($"Skipping voice line for restored state {current} (loading from save)");
+            return;
+        }
+
         switch (current)
         {
             case NPCBehaviorController.BehaviorState.Dormant:
