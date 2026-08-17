@@ -111,6 +111,7 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
     {
         _lock1HasKey = true;
         DebugLog($"Lock 1: Key inserted ({args.interactableObject.transform.name})");
+        PuzzleManager.Instance?.RegisterPuzzleCompletion("bronzeKey_lock1_001");
         CheckBothKeys();
     }
 
@@ -131,6 +132,7 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
     {
         _lock2HasKey = true;
         DebugLog($"Lock 2: Key inserted ({args.interactableObject.transform.name})");
+        PuzzleManager.Instance?.RegisterPuzzleCompletion("bronzeKey_lock2_001");
         CheckBothKeys();
     }
 

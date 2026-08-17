@@ -32,6 +32,7 @@ public class FrameLock : PuzzleBase
         if (id != null)
         {
             _enteredCode[0] = id.GetID();
+            PuzzleManager.Instance?.RegisterPuzzleCompletion("frame_socket0_001");
             if (CheckCode())
                 CompletePuzzle();
         }
@@ -51,6 +52,7 @@ public class FrameLock : PuzzleBase
         if (id != null)
         {
             _enteredCode[1] = id.GetID();
+            PuzzleManager.Instance?.RegisterPuzzleCompletion("frame_socket1_001");
             if (CheckCode())
                 CompletePuzzle();
         }
@@ -70,6 +72,7 @@ public class FrameLock : PuzzleBase
         if (id != null)
         {
             _enteredCode[2] = id.GetID();
+            PuzzleManager.Instance?.RegisterPuzzleCompletion("frame_socket2_001");
             if (CheckCode())
                 CompletePuzzle();
         }
