@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NPCVoiceLineController : MonoBehaviour
 {
+    public event System.Action OnLineStarted;
+
     [Header("References")]
     [SerializeField] private AudioSource voiceAudioSource;
     private NPCBehaviorController behaviorController;
@@ -184,6 +186,11 @@ public class NPCVoiceLineController : MonoBehaviour
         if (behaviorController.isPermanentlyDefeated) return;
         if (clips == null || clips.Length == 0) return;
         if (voiceAudioSource != null && voiceAudioSource.isPlaying) return;
+
+        if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
+        {
+            OnLineStarted?.Invoke();
+        }
 
         voiceAudioSource?.PlayOneShot(clips[index]);
         DebugLog($"Playing line {index + 1}/{clips.Length}: {clips[index].name}");

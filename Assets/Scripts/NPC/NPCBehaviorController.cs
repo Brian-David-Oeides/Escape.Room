@@ -37,6 +37,7 @@ public class NPCBehaviorController : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
     private Transform playerTransform;
+    private NPCVoiceLineController npcVoiceLineController;
 
     [Header("Behavior Settings")]
     [SerializeField] private float observingDistance = 10f;
@@ -59,9 +60,14 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float loiterWaitTime = 3f;         // Time to wait at each point
     [SerializeField] private float loiterMoveSpeed = 1.5f;      // Walking speed while loitering
 
+    [Header("Talking")]
+    [SerializeField] private float talkingDuration = 3.8f; // matches Talking clip length (113 frames @ 30fps ~= 3.767s) + small buffer
+
     [HideInInspector] public bool combatInterrupted = false;
     [HideInInspector] public bool isPermanentlyDefeated = false;
     public void SetDefeated(bool defeated) { isPermanentlyDefeated = defeated; }
+
+    private bool isTalking = false;
 
     private Vector3 loiterTarget;
     private float loiterWaitTimer = 0f;
@@ -93,6 +99,13 @@ public class NPCBehaviorController : MonoBehaviour
         // Subscribe to puzzle events
         SubscribeToPuzzleEvents();
 
+        // Subscribe to voice line events
+        npcVoiceLineController = GetComponent<NPCVoiceLineController>();
+        if (npcVoiceLineController != null)
+        {
+            npcVoiceLineController.OnLineStarted += HandleLineStarted;
+        }
+
         // Initialize state
         UpdateBehaviorState();
     }
@@ -100,7 +113,7 @@ public class NPCBehaviorController : MonoBehaviour
     void Update()
     {
         // Don't run behaviors if combat has interrupted movement
-        if (!combatInterrupted && !isPermanentlyDefeated)
+        if (!combatInterrupted && !isPermanentlyDefeated && !isTalking)
         {
             // Execute current state behavior
             switch (currentState)
@@ -124,6 +137,10 @@ public class NPCBehaviorController : MonoBehaviour
 
             // Handle rotation
             UpdateRotation();
+        }
+        else if (isTalking)
+        {
+            FacePlayer();
         }
 
         // Update animator
@@ -313,6 +330,38 @@ public class NPCBehaviorController : MonoBehaviour
         }
     }
 
+    void FacePlayer()
+    {
+        if (playerTransform == null) return;
+
+        Vector3 direction = playerTransform.position - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
+    }
+
+    void HandleLineStarted()
+    {
+        if (isPermanentlyDefeated || combatInterrupted) return;
+
+        isTalking = true;
+        if (agent != null) agent.isStopped = true;
+        animator.SetTrigger("Talk");
+        StartCoroutine(EndTalkingAfterDuration());
+    }
+
+    IEnumerator EndTalkingAfterDuration()
+    {
+        yield return new WaitForSeconds(talkingDuration);
+        isTalking = false;
+        if (agent != null && !combatInterrupted && !isPermanentlyDefeated)
+            agent.isStopped = false;
+    }
+
     void OnAnimatorMove()
     {
         Vector3 position = transform.position;
@@ -388,6 +437,11 @@ public class NPCBehaviorController : MonoBehaviour
         if (PuzzleManager.Instance != null)
         {
             PuzzleManager.Instance.OnPuzzleCompleted -= OnPuzzleCompleted;
+        }
+
+        if (npcVoiceLineController != null)
+        {
+            npcVoiceLineController.OnLineStarted -= HandleLineStarted;
         }
     }
 
