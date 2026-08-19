@@ -62,6 +62,7 @@ public class NPCBehaviorController : MonoBehaviour
 
     [Header("Talking")]
     [SerializeField] private float talkingDuration = 3.8f; // matches Talking clip length (113 frames @ 30fps ~= 3.767s) + small buffer
+    [SerializeField] private float yellingDuration = 7.6f;
 
     [HideInInspector] public bool combatInterrupted = false;
     [HideInInspector] public bool isPermanentlyDefeated = false;
@@ -350,13 +351,22 @@ public class NPCBehaviorController : MonoBehaviour
 
         isTalking = true;
         if (agent != null) agent.isStopped = true;
-        animator.SetTrigger("Talk");
-        StartCoroutine(EndTalkingAfterDuration());
+
+        if (currentState == BehaviorState.Agitated)
+        {
+            animator.SetTrigger("Talk2");
+            StartCoroutine(EndTalkingAfterDuration(yellingDuration));
+        }
+        else
+        {
+            animator.SetTrigger("Talk");
+            StartCoroutine(EndTalkingAfterDuration(talkingDuration));
+        }
     }
 
-    IEnumerator EndTalkingAfterDuration()
+    IEnumerator EndTalkingAfterDuration(float duration)
     {
-        yield return new WaitForSeconds(talkingDuration);
+        yield return new WaitForSeconds(duration);
         isTalking = false;
         if (agent != null && !combatInterrupted && !isPermanentlyDefeated)
             agent.isStopped = false;
