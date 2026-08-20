@@ -74,7 +74,6 @@ public class SaveData
 
     // Statistics
     public float totalPlaytime; // Total seconds played
-    public int puzzlesSolvedCount;
     public int deathCount;
     public int timesSaved;
     public int timesLoaded;
