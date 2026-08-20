@@ -31285,11 +31285,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2822696322055981026, guid: 3d4bb80b8fe5430428429f1f00a13d00,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 3319150521515890915, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
       propertyPath: waterSounds.walkClips.Array.size
