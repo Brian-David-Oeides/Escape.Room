@@ -68806,7 +68806,7 @@ MonoBehaviour:
   showDebugLogs: 1
   chainBody: {fileID: 5337178921093224658}
   audioSource: {fileID: 5337178921093224660}
-  disableDelay: 2
+  disableDelay: 0.5
 --- !u!82 &5337178921093224660
 AudioSource:
   m_ObjectHideFlags: 0
