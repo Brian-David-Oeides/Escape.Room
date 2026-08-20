@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages clue discovery, puzzle attempt tracking, and hint system
@@ -75,6 +76,22 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     public override void Init()
     {
         DebugLog("ClueManager initialized");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // hintUI is scene-local and not DontDestroyOnLoad, so the reference
+        // goes stale after a scene reload - reacquire it here
+        if (hintUI == null)
+        {
+            hintUI = FindObjectOfType<HintUIController>();
+        }
     }
 
     #endregion
