@@ -444,7 +444,7 @@ public class SaveManager : MonoSingleton<SaveManager>
                 info.saveName = data.saveName;
                 info.saveTimestamp = data.saveTimestamp;
                 info.playtime = data.totalPlaytime;
-                info.puzzlesSolved = data.puzzlesSolvedCount;
+                info.puzzlesSolved = data.completedPuzzleIDs.Count;
                 info.sceneName = data.currentSceneName;
             }
             catch (Exception e)
