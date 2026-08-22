@@ -164,6 +164,13 @@ public class SwitchToggle : MonoBehaviour, ISaveable
         }
     }
 
+    public void Sabotage()
+    {
+        TurnOff();
+        isUnlocked = false;
+        PuzzleManager.Instance?.UnregisterPuzzleCompletion(puzzleID);
+    }
+
     #region ISaveable Implementation
 
     public string SaveID => saveID;

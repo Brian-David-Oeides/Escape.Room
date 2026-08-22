@@ -1,7 +1,7 @@
 /*
  * SocketRotator.cs
  * 
- * Copyright © 2025 Brian David 
+ * Copyright Â© 2025 Brian David
  * All Rights Reserved
  *
  * A Unity script for VR interactions that allows a wrench or tool to be 
@@ -219,7 +219,7 @@ public class SocketRotator : MonoBehaviour, ISaveable
             else if (currentXRotation > 10f) // NEW: Player tried but didn't complete rotation
             {
                 ClueManager.Instance?.RegisterFailedAttempt(puzzleID);
-                Debug.Log($"[SocketRotator] Failed attempt registered - rotation was {currentXRotation:F2}° (needed {maxRotationX}°)");
+                Debug.Log($"[SocketRotator] Failed attempt registered - rotation was {currentXRotation:F2}Â° (needed {maxRotationX}Â°)");
             }
         }
         else
@@ -232,6 +232,33 @@ public class SocketRotator : MonoBehaviour, ISaveable
             eventFired = false;
             currentXRotation = 0f;
         }
+    }
+
+    public void Sabotage()
+    {
+        currentXRotation = 0f;
+        eventFired = false;
+
+        if (wrench != null && socketPivot != null)
+        {
+            // Reset wrench visual transform back to the socket's un-turned base rotation
+            wrench.transform.position = socketPivot.position;
+            wrench.transform.rotation = Quaternion.Euler(
+                socketPivot.rotation.eulerAngles.x,
+                socketPivot.rotation.eulerAngles.y,
+                socketPivot.rotation.eulerAngles.z);
+
+            // Un-lock physics and interaction so the wrench can be grabbed and turned again
+            Rigidbody rb = wrench.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = false;
+            }
+
+            wrench.enabled = true;
+        }
+
+        PuzzleManager.Instance?.UnregisterPuzzleCompletion(puzzleID);
     }
 
     // enforce locking from outside scripts
@@ -366,7 +393,7 @@ public class SocketRotator : MonoBehaviour, ISaveable
                 Debug.Log($"[SocketRotator] Wrench locked at max rotation from save");
             }
 
-            Debug.Log($"[SocketRotator] Wrench restored to socket at {currentXRotation:F2}° rotation");
+            Debug.Log($"[SocketRotator] Wrench restored to socket at {currentXRotation:F2}Â° rotation");
         }
     }
 

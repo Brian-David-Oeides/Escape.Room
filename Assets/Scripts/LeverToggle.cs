@@ -251,6 +251,12 @@ public class LeverToggle : MonoBehaviour, ISaveable
         }
     }
 
+    public void Sabotage()
+    {
+        SetState(false);
+        PuzzleManager.Instance?.UnregisterPuzzleCompletion(leverID);
+    }
+
     #region ISaveable Implementation
 
     public string SaveID => leverID;
