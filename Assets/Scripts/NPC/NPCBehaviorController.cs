@@ -61,8 +61,8 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float loiterMoveSpeed = 1.5f;      // Walking speed while loitering
 
     [Header("Talking")]
-    [SerializeField] private float talkingDuration = 3.8f; // matches Talking clip length (113 frames @ 30fps ~= 3.767s) + small buffer
-    [SerializeField] private float yellingDuration = 7.6f;
+    [SerializeField] private float talkingMinimumDuration = 3.8f; // floor for Talk animation; actual duration is Mathf.Max(this, clip length)
+    [SerializeField] private float yellingMinimumDuration = 7.6f; // floor for Talk2 animation; actual duration is Mathf.Max(this, clip length)
 
     [HideInInspector] public bool combatInterrupted = false;
     [HideInInspector] public bool isPermanentlyDefeated = false;
@@ -345,7 +345,7 @@ public class NPCBehaviorController : MonoBehaviour
         }
     }
 
-    void HandleLineStarted()
+    void HandleLineStarted(float clipLength)
     {
         if (isPermanentlyDefeated || combatInterrupted) return;
 
@@ -355,12 +355,12 @@ public class NPCBehaviorController : MonoBehaviour
         if (currentState == BehaviorState.Agitated)
         {
             animator.SetTrigger("Talk2");
-            StartCoroutine(EndTalkingAfterDuration(yellingDuration));
+            StartCoroutine(EndTalkingAfterDuration(Mathf.Max(yellingMinimumDuration, clipLength)));
         }
         else
         {
             animator.SetTrigger("Talk");
-            StartCoroutine(EndTalkingAfterDuration(talkingDuration));
+            StartCoroutine(EndTalkingAfterDuration(Mathf.Max(talkingMinimumDuration, clipLength)));
         }
     }
 
@@ -368,6 +368,7 @@ public class NPCBehaviorController : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         isTalking = false;
+        animator.SetTrigger("StopTalk");
         if (agent != null && !combatInterrupted && !isPermanentlyDefeated)
             agent.isStopped = false;
     }

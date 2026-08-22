@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPCVoiceLineController : MonoBehaviour
 {
-    public event System.Action OnLineStarted;
+    public event System.Action<float> OnLineStarted;
 
     [Header("References")]
     [SerializeField] private AudioSource voiceAudioSource;
@@ -189,7 +189,7 @@ public class NPCVoiceLineController : MonoBehaviour
 
         if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
         {
-            OnLineStarted?.Invoke();
+            OnLineStarted?.Invoke(clips[index].length);
         }
 
         voiceAudioSource?.PlayOneShot(clips[index]);
