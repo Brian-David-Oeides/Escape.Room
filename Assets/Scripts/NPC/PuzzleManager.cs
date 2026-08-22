@@ -16,6 +16,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
 
     // Events
     public System.Action<int> OnPuzzleCompleted; // Fires with total count
+    public event System.Action OnPuzzlesReset;
 
     // Track which puzzles have been completed this session
     private HashSet<string> completedPuzzlesThisSession = new HashSet<string>();
@@ -52,6 +53,21 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted);
     }
 
+    public void UnregisterPuzzleCompletion(string puzzleID)
+    {
+        if (completedPuzzlesThisSession.Contains(puzzleID))
+        {
+            completedPuzzlesThisSession.Remove(puzzleID);
+            totalPuzzlesCompleted--;
+            DebugLog($"Puzzle UN-completed (sabotaged): {puzzleID} (Total: {totalPuzzlesCompleted})");
+            OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted);
+        }
+        else
+        {
+            DebugLog($"Cannot unregister {puzzleID} - was not registered as completed");
+        }
+    }
+
     /// <summary>
     /// Called when loading a save to restore puzzle count
     /// </summary>
@@ -82,6 +98,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
 
         // Fire event with 0 count
         OnPuzzleCompleted?.Invoke(0);
+        OnPuzzlesReset?.Invoke();
     }
 
     public int GetTotalPuzzlesCompleted() => totalPuzzlesCompleted;

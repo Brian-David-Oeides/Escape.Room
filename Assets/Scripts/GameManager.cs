@@ -358,6 +358,24 @@ public class GameManager : MonoSingleton<GameManager>
                     onSuccess: () =>
                     {
                         GameLog.Log("[GameManager] ✓ Locomotion ready - Starting timer");
+
+                        if (!isLoadingFromSave)
+                        {
+                            if (ConsumableManager.Instance != null)
+                            {
+                                ConsumableManager.Instance.ResetForNewGame();
+                                if (SettingsManager.Instance != null)
+                                {
+                                    ConsumableManager.Instance.ApplyDifficultyCount(SettingsManager.Instance.GetConsumableObjectCount());
+                                }
+                            }
+
+                            if (PuzzleManager.Instance != null)
+                            {
+                                PuzzleManager.Instance.ResetPuzzles();
+                            }
+                        }
+
                         InitializeGameTimer();
                     },
                     onFailure: () =>
@@ -754,24 +772,6 @@ public class GameManager : MonoSingleton<GameManager>
                 {
                     // Position player at spawn point
                     PlayerController.Instance.PositionAtSpawnPoint();
-                }
-
-                // Apply difficulty-based consumable scaling now that the gameplay
-                // scene (and ConsumableManager within it) has fully loaded
-                if (ConsumableManager.Instance != null)
-                {
-                    ConsumableManager.Instance.ResetForNewGame();
-                    if (SettingsManager.Instance != null)
-                    {
-                        ConsumableManager.Instance.ApplyDifficultyCount(SettingsManager.Instance.GetConsumableObjectCount());
-                    }
-                }
-
-                // Reset puzzle tracking for new game (DontDestroyOnLoad singleton
-                // otherwise carries stale totalPuzzlesCompleted across New Game)
-                if (PuzzleManager.Instance != null)
-                {
-                    PuzzleManager.Instance.ResetPuzzles();
                 }
 
                 SetGameState(GameState.Playing);

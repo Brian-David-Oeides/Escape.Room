@@ -32,6 +32,7 @@ public class NPCBehaviorController : MonoBehaviour
     [Header("Current State")]
     [SerializeField] private BehaviorState currentState = BehaviorState.Dormant;
     [SerializeField] private bool forceHuntingMode = false;
+    private BehaviorState highestStateReached = BehaviorState.Dormant;
 
     [Header("References")]
     private NavMeshAgent agent;
@@ -153,12 +154,21 @@ public class NPCBehaviorController : MonoBehaviour
         if (PuzzleManager.Instance != null)
         {
             PuzzleManager.Instance.OnPuzzleCompleted += OnPuzzleCompleted;
+            PuzzleManager.Instance.OnPuzzlesReset += HandlePuzzlesReset;
             GameLog.Log("[NPCBehaviorController] Subscribed to PuzzleManager events");
         }
         else
         {
             GameLog.LogWarning("[NPCBehaviorController] PuzzleManager not found!");
         }
+    }
+
+    void HandlePuzzlesReset()
+    {
+        currentPuzzleCount = 0;
+        currentState = BehaviorState.Dormant;
+        highestStateReached = BehaviorState.Dormant;
+        GameLog.Log("NPC State reset to Dormant (puzzles reset)");
     }
 
     void UpdateBehaviorState()
@@ -175,17 +185,33 @@ public class NPCBehaviorController : MonoBehaviour
             return;
         }
 
-        // Determine state based on puzzle count
+        // Determine candidate state based on puzzle count
+        BehaviorState candidateState;
         if (currentPuzzleCount == 0)
-            currentState = BehaviorState.Dormant;
+            candidateState = BehaviorState.Dormant;
         else if (currentPuzzleCount <= 5)
-            currentState = BehaviorState.Observing;
+            candidateState = BehaviorState.Observing;
         else if (currentPuzzleCount <= 11)
-            currentState = BehaviorState.Approaching;
+            candidateState = BehaviorState.Approaching;
         else if (currentPuzzleCount <= 20)
-            currentState = BehaviorState.Agitated;
+            candidateState = BehaviorState.Agitated;
         else
-            currentState = BehaviorState.Hunting;
+            candidateState = BehaviorState.Hunting;
+
+        if (GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave())
+        {
+            currentState = candidateState;
+            highestStateReached = candidateState;
+        }
+        else if (candidateState >= highestStateReached)
+        {
+            currentState = candidateState;
+            highestStateReached = candidateState;
+        }
+        else
+        {
+            currentState = highestStateReached;
+        }
 
         GameLog.Log($"NPC State changed to: {currentState} (Puzzles: {currentPuzzleCount})");
 
@@ -448,6 +474,7 @@ public class NPCBehaviorController : MonoBehaviour
         if (PuzzleManager.Instance != null)
         {
             PuzzleManager.Instance.OnPuzzleCompleted -= OnPuzzleCompleted;
+            PuzzleManager.Instance.OnPuzzlesReset -= HandlePuzzlesReset;
         }
 
         if (npcVoiceLineController != null)
