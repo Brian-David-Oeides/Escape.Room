@@ -177,7 +177,6 @@ public class SwitchToggle : MonoBehaviour, ISaveable, ISabotageable
     public void Sabotage()
     {
         TurnOff();
-        isUnlocked = false;
         PuzzleManager.Instance?.UnregisterPuzzleCompletion(puzzleID);
     }
 

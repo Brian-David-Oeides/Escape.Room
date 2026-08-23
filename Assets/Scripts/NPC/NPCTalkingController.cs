@@ -17,6 +17,8 @@ public class NPCTalkingController : MonoBehaviour
 
     public bool IsTalking { get; private set; }
 
+    private Coroutine currentTalkingCoroutine;
+
     void Start()
     {
         behaviorController = GetComponent<NPCBehaviorController>();
@@ -71,9 +73,17 @@ public class NPCTalkingController : MonoBehaviour
 
     void HandleLineStarted(float clipLength)
     {
+        GameLog.Log($"[NPCTalkingController] HandleLineStarted called - currentTalkingCoroutine null? {currentTalkingCoroutine == null}, IsTalking before: {IsTalking}");
+
         if (behaviorController.isPermanentlyDefeated || behaviorController.combatInterrupted) return;
 
+        if (currentTalkingCoroutine != null)
+        {
+            StopCoroutine(currentTalkingCoroutine);
+        }
+
         IsTalking = true;
+        GameLog.Log($"[NPCTalkingController] IsTalking set to true");
         if (agent != null) agent.isStopped = true;
 
         if (behaviorController.CurrentState == NPCBehaviorController.BehaviorState.Agitated)
@@ -85,7 +95,7 @@ public class NPCTalkingController : MonoBehaviour
             animator.SetTrigger("Talk");
         }
 
-        StartCoroutine(EndTalkingAfterDuration(
+        currentTalkingCoroutine = StartCoroutine(EndTalkingAfterDuration(
             behaviorController.CurrentState == NPCBehaviorController.BehaviorState.Agitated
                 ? Mathf.Max(yellingMinimumDuration, clipLength)
                 : Mathf.Max(talkingMinimumDuration, clipLength)));
@@ -93,18 +103,23 @@ public class NPCTalkingController : MonoBehaviour
 
     void HandleLineInterrupted()
     {
+        GameLog.Log($"[NPCTalkingController] HandleLineInterrupted called");
         StopAllCoroutines();
+        currentTalkingCoroutine = null;
         EndTalking();
     }
 
     IEnumerator EndTalkingAfterDuration(float duration)
     {
         yield return new WaitForSeconds(duration);
+        GameLog.Log($"[NPCTalkingController] EndTalkingAfterDuration completed after {duration}s wait");
+        currentTalkingCoroutine = null;
         EndTalking();
     }
 
     void EndTalking()
     {
+        GameLog.Log($"[NPCTalkingController] EndTalking called - was IsTalking: {IsTalking}");
         IsTalking = false;
         animator.SetTrigger("StopTalk");
         if (agent != null && !behaviorController.combatInterrupted && !behaviorController.isPermanentlyDefeated)

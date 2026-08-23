@@ -23,7 +23,6 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
     private HashSet<string> completedPuzzlesThisSession = new HashSet<string>();
 
     // Sabotage orchestrator tracking
-    private Dictionary<string, NPCBehaviorController.BehaviorState> puzzleSolvedInState = new Dictionary<string, NPCBehaviorController.BehaviorState>();
     private Dictionary<string, ISabotageable> sabotageableRegistry = new Dictionary<string, ISabotageable>();
     private HashSet<string> sabotagedOnceIDs = new HashSet<string>();
 
@@ -52,7 +51,6 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
 
         completedPuzzlesThisSession.Add(puzzleID);
         totalPuzzlesCompleted++;
-        puzzleSolvedInState[puzzleID] = NPCBehaviorController.Instance != null ? NPCBehaviorController.Instance.CurrentState : NPCBehaviorController.BehaviorState.Dormant;
 
         DebugLog($"Puzzle completed: {puzzleID} (Total: {totalPuzzlesCompleted})");
 
@@ -85,13 +83,13 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         sabotageableRegistry.Remove(puzzleID);
     }
 
-    public List<string> GetEligibleSabotageIDs(NPCBehaviorController.BehaviorState solvedInState)
+    public List<string> GetEligibleSabotageIDs()
     {
         List<string> eligible = new List<string>();
-        foreach (var kvp in puzzleSolvedInState)
+        foreach (string puzzleID in sabotageableRegistry.Keys)
         {
-            if (kvp.Value == solvedInState && sabotageableRegistry.ContainsKey(kvp.Key) && !sabotagedOnceIDs.Contains(kvp.Key))
-                eligible.Add(kvp.Key);
+            if (completedPuzzlesThisSession.Contains(puzzleID) && !sabotagedOnceIDs.Contains(puzzleID))
+                eligible.Add(puzzleID);
         }
         return eligible;
     }
@@ -132,7 +130,6 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
     {
         totalPuzzlesCompleted = 0;
         completedPuzzlesThisSession.Clear();
-        puzzleSolvedInState.Clear();
         sabotagedOnceIDs.Clear();
         DebugLog("Puzzles reset for new game");
 

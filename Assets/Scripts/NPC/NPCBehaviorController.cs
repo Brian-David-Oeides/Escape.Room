@@ -39,6 +39,7 @@ public class NPCBehaviorController : MonoBehaviour
     private Animator animator;
     private Transform playerTransform;
     private NPCTalkingController talkingController;
+    private NPCVoiceLineController npcVoiceLineController;
 
     [Header("Behavior Settings")]
     [SerializeField] private float observingDistance = 10f;
@@ -103,6 +104,7 @@ public class NPCBehaviorController : MonoBehaviour
         SubscribeToPuzzleEvents();
 
         talkingController = GetComponent<NPCTalkingController>();
+        npcVoiceLineController = GetComponent<NPCVoiceLineController>();
 
         // Initialize state
         UpdateBehaviorState();
@@ -222,6 +224,70 @@ public class NPCBehaviorController : MonoBehaviour
             OnStateChanged?.Invoke(previousState, currentState);
         else
             OnPuzzleSolvedSameState?.Invoke();
+
+        bool isLoadingFromSave = GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave();
+        if (!isLoadingFromSave)
+        {
+            if (previousState == BehaviorState.Observing && currentState == BehaviorState.Approaching)
+            {
+                ExecuteSabotageIfEligible(1);
+            }
+            else if (previousState == BehaviorState.Approaching && currentState == BehaviorState.Agitated)
+            {
+                ExecuteSabotageIfEligible(2);
+            }
+        }
+    }
+
+    void ExecuteSabotageIfEligible(int countToSabotage)
+    {
+        if (PuzzleManager.Instance == null) return;
+
+        List<string> eligible = PuzzleManager.Instance.GetEligibleSabotageIDs();
+        if (eligible.Count == 0)
+        {
+            GameLog.Log($"[NPCBehaviorController] No eligible puzzles to sabotage - skipping");
+            return;
+        }
+
+        int actualCount = Mathf.Min(countToSabotage, eligible.Count);
+        List<string> selected = new List<string>();
+
+        for (int i = 0; i < actualCount; i++)
+        {
+            int randomIndex = Random.Range(0, eligible.Count);
+            selected.Add(eligible[randomIndex]);
+            eligible.RemoveAt(randomIndex);
+        }
+
+        if (selected.Count > 0)
+        {
+            StartCoroutine(ExecuteSabotageBatch(selected));
+        }
+    }
+
+    IEnumerator ExecuteSabotageBatch(List<string> selected)
+    {
+        foreach (string puzzleID in selected)
+        {
+            yield return ExecuteSinglePuzzleSabotage(puzzleID);
+        }
+    }
+
+    IEnumerator ExecuteSinglePuzzleSabotage(string puzzleID)
+    {
+        ISabotageable sabotageable = PuzzleManager.Instance?.GetSabotageable(puzzleID);
+        if (sabotageable == null) yield break;
+
+        sabotageable.Sabotage();
+        PuzzleManager.Instance.MarkSabotaged(puzzleID);
+        GameLog.Log($"[NPCBehaviorController] Sabotaged puzzle: {puzzleID}");
+
+        yield return new WaitForSeconds(5f);
+
+        npcVoiceLineController?.PlaySabotageLine(sabotageable.VoiceLineCategory);
+
+        yield return new WaitForSeconds(10f);
     }
 
     void LoiterBehavior(Vector3 centerPoint, float radius)
