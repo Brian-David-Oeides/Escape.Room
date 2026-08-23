@@ -5,6 +5,7 @@ using UnityEngine;
 public class NPCVoiceLineController : MonoBehaviour
 {
     public event System.Action<float> OnLineStarted;
+    public event System.Action OnLineInterrupted;
 
     [Header("References")]
     [SerializeField] private AudioSource voiceAudioSource;
@@ -175,10 +176,11 @@ public class NPCVoiceLineController : MonoBehaviour
         PlayNextInSequence(sabotageLines, ref sabotageIndex);
     }
 
-    public void StopCurrentLine()
+    public void StopCurrentLine(string reason = "priority interrupt")
     {
         voiceAudioSource?.Stop();
-        DebugLog("Voice line stopped - death cry taking priority");
+        DebugLog($"Voice line stopped - {reason}");
+        OnLineInterrupted?.Invoke();
     }
 
     void PlayNextInSequence(AudioClip[] clips, ref int index)

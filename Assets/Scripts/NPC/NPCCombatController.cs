@@ -233,7 +233,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     {
         isDefeated = true;
         behaviorController.SetDefeated(true);
-        voiceController?.StopCurrentLine();
+        voiceController?.StopCurrentLine("death cry taking priority");
 
         if (agent != null)
             agent.isStopped = true;
