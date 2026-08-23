@@ -28,8 +28,15 @@ public class NPCVoiceLineController : MonoBehaviour
     [SerializeField] private float dormantLineInterval = 35f;
     private float dormantLineTimer = 0f;
 
+    [System.Serializable]
+    public struct SabotageLineEntry
+    {
+        public SabotageLineCategory category;
+        public AudioClip clip;
+    }
+
     [Header("Sabotage Lines")]
-    [SerializeField] private AudioClip[] sabotageLines;
+    [SerializeField] private List<SabotageLineEntry> sabotageLineEntries = new List<SabotageLineEntry>();
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
@@ -39,7 +46,6 @@ public class NPCVoiceLineController : MonoBehaviour
     private int approachingIndex = 0;
     private int agitatedIndex = 0;
     private int huntingIndex = 0;
-    private int sabotageIndex = 0;
 
     private float chaseLoopTimer = 0f;
 
@@ -118,22 +124,24 @@ public class NPCVoiceLineController : MonoBehaviour
             return;
         }
 
+        StopCurrentLine("new state entry taking priority");
+
         switch (current)
         {
             case NPCBehaviorController.BehaviorState.Dormant:
                 // No incoming line needed when returning to Dormant - shouldn't normally happen mid-game
                 break;
             case NPCBehaviorController.BehaviorState.Observing:
-                PlayNextInSequence(observingLines, ref observingIndex);
+                PlayNextInSequence(observingLines, ref observingIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Approaching:
-                PlayNextInSequence(approachingLines, ref approachingIndex);
+                PlayNextInSequence(approachingLines, ref approachingIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Agitated:
-                PlayNextInSequence(agitatedLines, ref agitatedIndex);
+                PlayNextInSequence(agitatedLines, ref agitatedIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Hunting:
-                PlayNextInSequence(huntingLines, ref huntingIndex);
+                PlayNextInSequence(huntingLines, ref huntingIndex, forcePlay: true);
                 chaseLoopTimer = chaseLoopInterval;
                 break;
         }
@@ -170,24 +178,52 @@ public class NPCVoiceLineController : MonoBehaviour
         DebugLog("Playing hunting attack line");
     }
 
-    public void PlaySabotageLine()
+    public void PlaySabotageLine(SabotageLineCategory category)
     {
         if (behaviorController.isPermanentlyDefeated) return;
-        PlayNextInSequence(sabotageLines, ref sabotageIndex);
+
+        AudioClip clip = GetSabotageClipForCategory(category);
+        if (clip == null)
+        {
+            DebugLog($"No sabotage clip assigned for category: {category}");
+            return;
+        }
+
+        StopCurrentLine("sabotage line taking priority");
+        if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
+        {
+            OnLineStarted?.Invoke(clip.length);
+        }
+        voiceAudioSource?.PlayOneShot(clip);
+        DebugLog($"Playing sabotage line for category: {category}");
+    }
+
+    private AudioClip GetSabotageClipForCategory(SabotageLineCategory category)
+    {
+        foreach (var entry in sabotageLineEntries)
+        {
+            if (entry.category == category) return entry.clip;
+        }
+        return null;
     }
 
     public void StopCurrentLine(string reason = "priority interrupt")
     {
+        bool wasPlaying = voiceAudioSource != null && voiceAudioSource.isPlaying;
         voiceAudioSource?.Stop();
-        DebugLog($"Voice line stopped - {reason}");
-        OnLineInterrupted?.Invoke();
+
+        if (wasPlaying)
+        {
+            DebugLog($"Voice line stopped - {reason}");
+            OnLineInterrupted?.Invoke();
+        }
     }
 
-    void PlayNextInSequence(AudioClip[] clips, ref int index)
+    void PlayNextInSequence(AudioClip[] clips, ref int index, bool forcePlay = false)
     {
         if (behaviorController.isPermanentlyDefeated) return;
         if (clips == null || clips.Length == 0) return;
-        if (voiceAudioSource != null && voiceAudioSource.isPlaying) return;
+        if (!forcePlay && voiceAudioSource != null && voiceAudioSource.isPlaying) return;
 
         if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
         {

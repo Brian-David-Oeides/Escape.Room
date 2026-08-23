@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class LeverToggle : MonoBehaviour, ISaveable
+public class LeverToggle : MonoBehaviour, ISaveable, ISabotageable
 {
     #region Variables
 
@@ -61,7 +61,12 @@ public class LeverToggle : MonoBehaviour, ISaveable
 
         // Setup audio sources if not assigned
         SetupAudioSources();
+
+        PuzzleManager.Instance?.RegisterSabotageable(PuzzleID, this);
     }
+
+    public string PuzzleID => leverID;
+    public SabotageLineCategory VoiceLineCategory => SabotageLineCategory.Lever;
 
     private void SetupAudioSources()
     {
@@ -238,6 +243,8 @@ public class LeverToggle : MonoBehaviour, ISaveable
         {
             StopCoroutine(_electricArcCoroutine);
         }
+
+        PuzzleManager.Instance?.UnregisterSabotageable(PuzzleID);
     }
 
     // Public methods for external control if needed

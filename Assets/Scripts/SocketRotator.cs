@@ -16,7 +16,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class SocketRotator : MonoBehaviour, ISaveable
+public class SocketRotator : MonoBehaviour, ISaveable, ISabotageable
 {
     #region Variables
 
@@ -63,6 +63,16 @@ public class SocketRotator : MonoBehaviour, ISaveable
         {
             socketInteractor.selectEntered.AddListener(OnSocketed);
         }
+
+        PuzzleManager.Instance?.RegisterSabotageable(PuzzleID, this);
+    }
+
+    public string PuzzleID => puzzleID;
+    public SabotageLineCategory VoiceLineCategory => SabotageLineCategory.Valve;
+
+    private void OnDestroy()
+    {
+        PuzzleManager.Instance?.UnregisterSabotageable(PuzzleID);
     }
 
     private void OnEnable()

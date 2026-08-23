@@ -22,6 +22,11 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
     // Track which puzzles have been completed this session
     private HashSet<string> completedPuzzlesThisSession = new HashSet<string>();
 
+    // Sabotage orchestrator tracking
+    private Dictionary<string, NPCBehaviorController.BehaviorState> puzzleSolvedInState = new Dictionary<string, NPCBehaviorController.BehaviorState>();
+    private Dictionary<string, ISabotageable> sabotageableRegistry = new Dictionary<string, ISabotageable>();
+    private HashSet<string> sabotagedOnceIDs = new HashSet<string>();
+
     protected override void Awake()
     {
         base.Awake();
@@ -47,6 +52,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
 
         completedPuzzlesThisSession.Add(puzzleID);
         totalPuzzlesCompleted++;
+        puzzleSolvedInState[puzzleID] = NPCBehaviorController.Instance != null ? NPCBehaviorController.Instance.CurrentState : NPCBehaviorController.BehaviorState.Dormant;
 
         DebugLog($"Puzzle completed: {puzzleID} (Total: {totalPuzzlesCompleted})");
 
@@ -67,6 +73,37 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         {
             DebugLog($"Cannot unregister {puzzleID} - was not registered as completed");
         }
+    }
+
+    public void RegisterSabotageable(string puzzleID, ISabotageable sabotageable)
+    {
+        sabotageableRegistry[puzzleID] = sabotageable;
+    }
+
+    public void UnregisterSabotageable(string puzzleID)
+    {
+        sabotageableRegistry.Remove(puzzleID);
+    }
+
+    public List<string> GetEligibleSabotageIDs(NPCBehaviorController.BehaviorState solvedInState)
+    {
+        List<string> eligible = new List<string>();
+        foreach (var kvp in puzzleSolvedInState)
+        {
+            if (kvp.Value == solvedInState && sabotageableRegistry.ContainsKey(kvp.Key) && !sabotagedOnceIDs.Contains(kvp.Key))
+                eligible.Add(kvp.Key);
+        }
+        return eligible;
+    }
+
+    public void MarkSabotaged(string puzzleID)
+    {
+        sabotagedOnceIDs.Add(puzzleID);
+    }
+
+    public ISabotageable GetSabotageable(string puzzleID)
+    {
+        return sabotageableRegistry.ContainsKey(puzzleID) ? sabotageableRegistry[puzzleID] : null;
     }
 
     /// <summary>
@@ -95,6 +132,8 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
     {
         totalPuzzlesCompleted = 0;
         completedPuzzlesThisSession.Clear();
+        puzzleSolvedInState.Clear();
+        sabotagedOnceIDs.Clear();
         DebugLog("Puzzles reset for new game");
 
         // Fire event with 0 count

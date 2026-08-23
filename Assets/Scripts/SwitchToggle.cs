@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class SwitchToggle : MonoBehaviour, ISaveable
+public class SwitchToggle : MonoBehaviour, ISaveable, ISabotageable
 {
     [SerializeField] private bool _isOn = false;
 
@@ -69,6 +69,16 @@ public class SwitchToggle : MonoBehaviour, ISaveable
         }
 
         UpdateAnimationState();
+
+        PuzzleManager.Instance?.RegisterSabotageable(PuzzleID, this);
+    }
+
+    public string PuzzleID => puzzleID;
+    public SabotageLineCategory VoiceLineCategory => SabotageLineCategory.Switch;
+
+    private void OnDestroy()
+    {
+        PuzzleManager.Instance?.UnregisterSabotageable(PuzzleID);
     }
 
     /// <summary>

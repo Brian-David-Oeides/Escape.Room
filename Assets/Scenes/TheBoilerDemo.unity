@@ -71085,10 +71085,13 @@ MonoBehaviour:
   huntingAttackClip: {fileID: 8300000, guid: 6790969bed37d7d4f984f2c19b89fa70, type: 3}
   chaseLoopInterval: 12
   dormantLineInterval: 35
-  sabotageLines:
-  - {fileID: 8300000, guid: f9578b66a120bc246974d6ea610299df, type: 3}
-  - {fileID: 8300000, guid: 1fd6174611d18d9458712fa33025fb20, type: 3}
-  - {fileID: 8300000, guid: 3e444317c9486714c858b6bc05233f45, type: 3}
+  sabotageLineEntries:
+  - category: 0
+    clip: {fileID: 8300000, guid: f9578b66a120bc246974d6ea610299df, type: 3}
+  - category: 1
+    clip: {fileID: 8300000, guid: 1fd6174611d18d9458712fa33025fb20, type: 3}
+  - category: 2
+    clip: {fileID: 8300000, guid: 3e444317c9486714c858b6bc05233f45, type: 3}
   showDebugLogs: 1
 --- !u!82 &5866666021642897077
 AudioSource:

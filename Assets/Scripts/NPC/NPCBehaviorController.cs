@@ -71,6 +71,13 @@ public class NPCBehaviorController : MonoBehaviour
 
     private int currentPuzzleCount = 0;
 
+    public static NPCBehaviorController Instance { get; private set; }
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         // Get components
@@ -424,6 +431,11 @@ public class NPCBehaviorController : MonoBehaviour
 
     void OnDestroy()
     {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+
         // Unsubscribe from events
         if (PuzzleManager.Instance != null)
         {
