@@ -141,6 +141,7 @@ public class NPCBehaviorController : MonoBehaviour
         if (PuzzleManager.Instance != null)
         {
             PuzzleManager.Instance.OnPuzzleCompleted += OnPuzzleCompleted;
+            PuzzleManager.Instance.OnPuzzleUnregistered += OnPuzzleUnregisteredHandler;
             PuzzleManager.Instance.OnPuzzlesReset += HandlePuzzlesReset;
             GameLog.Log("[NPCBehaviorController] Subscribed to PuzzleManager events");
         }
@@ -148,6 +149,12 @@ public class NPCBehaviorController : MonoBehaviour
         {
             GameLog.LogWarning("[NPCBehaviorController] PuzzleManager not found!");
         }
+    }
+
+    void OnPuzzleUnregisteredHandler(int totalCompleted)
+    {
+        currentPuzzleCount = totalCompleted;
+        UpdateBehaviorState(fireEvents: false);
     }
 
     void HandlePuzzlesReset()
@@ -158,7 +165,7 @@ public class NPCBehaviorController : MonoBehaviour
         GameLog.Log("NPC State reset to Dormant (puzzles reset)");
     }
 
-    void UpdateBehaviorState()
+    void UpdateBehaviorState(bool fireEvents = true)
     {
         BehaviorState previousState = currentState;
 
@@ -167,7 +174,7 @@ public class NPCBehaviorController : MonoBehaviour
         {
             currentState = BehaviorState.Hunting;
             GameLog.Log($"NPC State FORCED to: {currentState}");
-            if (previousState != currentState)
+            if (fireEvents && previousState != currentState)
                 OnStateChanged?.Invoke(previousState, currentState);
             return;
         }
@@ -201,6 +208,8 @@ public class NPCBehaviorController : MonoBehaviour
         }
 
         GameLog.Log($"NPC State changed to: {currentState} (Puzzles: {currentPuzzleCount})");
+
+        if (!fireEvents) return;
 
         if (previousState != currentState)
             OnStateChanged?.Invoke(previousState, currentState);
@@ -419,6 +428,7 @@ public class NPCBehaviorController : MonoBehaviour
         if (PuzzleManager.Instance != null)
         {
             PuzzleManager.Instance.OnPuzzleCompleted -= OnPuzzleCompleted;
+            PuzzleManager.Instance.OnPuzzleUnregistered -= OnPuzzleUnregisteredHandler;
             PuzzleManager.Instance.OnPuzzlesReset -= HandlePuzzlesReset;
         }
     }

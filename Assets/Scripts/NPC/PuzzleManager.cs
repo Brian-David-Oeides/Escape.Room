@@ -16,6 +16,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
 
     // Events
     public System.Action<int> OnPuzzleCompleted; // Fires with total count
+    public event System.Action<int> OnPuzzleUnregistered; // Fires with total count - sabotage-driven decrements only
     public event System.Action OnPuzzlesReset;
 
     // Track which puzzles have been completed this session
@@ -60,7 +61,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
             completedPuzzlesThisSession.Remove(puzzleID);
             totalPuzzlesCompleted--;
             DebugLog($"Puzzle UN-completed (sabotaged): {puzzleID} (Total: {totalPuzzlesCompleted})");
-            OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted);
+            OnPuzzleUnregistered?.Invoke(totalPuzzlesCompleted);
         }
         else
         {
