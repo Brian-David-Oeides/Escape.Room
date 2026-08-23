@@ -38,7 +38,7 @@ public class NPCBehaviorController : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
     private Transform playerTransform;
-    private NPCVoiceLineController npcVoiceLineController;
+    private NPCTalkingController talkingController;
 
     [Header("Behavior Settings")]
     [SerializeField] private float observingDistance = 10f;
@@ -61,15 +61,9 @@ public class NPCBehaviorController : MonoBehaviour
     [SerializeField] private float loiterWaitTime = 3f;         // Time to wait at each point
     [SerializeField] private float loiterMoveSpeed = 1.5f;      // Walking speed while loitering
 
-    [Header("Talking")]
-    [SerializeField] private float talkingMinimumDuration = 3.8f; // floor for Talk animation; actual duration is Mathf.Max(this, clip length)
-    [SerializeField] private float yellingMinimumDuration = 7.6f; // floor for Talk2 animation; actual duration is Mathf.Max(this, clip length)
-
     [HideInInspector] public bool combatInterrupted = false;
     [HideInInspector] public bool isPermanentlyDefeated = false;
     public void SetDefeated(bool defeated) { isPermanentlyDefeated = defeated; }
-
-    private bool isTalking = false;
 
     private Vector3 loiterTarget;
     private float loiterWaitTimer = 0f;
@@ -101,12 +95,7 @@ public class NPCBehaviorController : MonoBehaviour
         // Subscribe to puzzle events
         SubscribeToPuzzleEvents();
 
-        // Subscribe to voice line events
-        npcVoiceLineController = GetComponent<NPCVoiceLineController>();
-        if (npcVoiceLineController != null)
-        {
-            npcVoiceLineController.OnLineStarted += HandleLineStarted;
-        }
+        talkingController = GetComponent<NPCTalkingController>();
 
         // Initialize state
         UpdateBehaviorState();
@@ -114,6 +103,8 @@ public class NPCBehaviorController : MonoBehaviour
 
     void Update()
     {
+        bool isTalking = talkingController != null && talkingController.IsTalking;
+
         // Don't run behaviors if combat has interrupted movement
         if (!combatInterrupted && !isPermanentlyDefeated && !isTalking)
         {
@@ -139,10 +130,6 @@ public class NPCBehaviorController : MonoBehaviour
 
             // Handle rotation
             UpdateRotation();
-        }
-        else if (isTalking)
-        {
-            FacePlayer();
         }
 
         // Update animator
@@ -357,48 +344,6 @@ public class NPCBehaviorController : MonoBehaviour
         }
     }
 
-    void FacePlayer()
-    {
-        if (playerTransform == null) return;
-
-        Vector3 direction = playerTransform.position - transform.position;
-        direction.y = 0f;
-
-        if (direction.sqrMagnitude > 0.01f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-        }
-    }
-
-    void HandleLineStarted(float clipLength)
-    {
-        if (isPermanentlyDefeated || combatInterrupted) return;
-
-        isTalking = true;
-        if (agent != null) agent.isStopped = true;
-
-        if (currentState == BehaviorState.Agitated)
-        {
-            animator.SetTrigger("Talk2");
-            StartCoroutine(EndTalkingAfterDuration(Mathf.Max(yellingMinimumDuration, clipLength)));
-        }
-        else
-        {
-            animator.SetTrigger("Talk");
-            StartCoroutine(EndTalkingAfterDuration(Mathf.Max(talkingMinimumDuration, clipLength)));
-        }
-    }
-
-    IEnumerator EndTalkingAfterDuration(float duration)
-    {
-        yield return new WaitForSeconds(duration);
-        isTalking = false;
-        animator.SetTrigger("StopTalk");
-        if (agent != null && !combatInterrupted && !isPermanentlyDefeated)
-            agent.isStopped = false;
-    }
-
     void OnAnimatorMove()
     {
         Vector3 position = transform.position;
@@ -475,11 +420,6 @@ public class NPCBehaviorController : MonoBehaviour
         {
             PuzzleManager.Instance.OnPuzzleCompleted -= OnPuzzleCompleted;
             PuzzleManager.Instance.OnPuzzlesReset -= HandlePuzzlesReset;
-        }
-
-        if (npcVoiceLineController != null)
-        {
-            npcVoiceLineController.OnLineStarted -= HandleLineStarted;
         }
     }
 
