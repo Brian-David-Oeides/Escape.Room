@@ -15,7 +15,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
     [SerializeField] private bool showDebugLogs = true;
 
     // Events
-    public System.Action<int> OnPuzzleCompleted; // Fires with total count
+    public System.Action<int, string> OnPuzzleCompleted; // Fires with total count and the completed puzzle's ID
     public event System.Action<int> OnPuzzleUnregistered; // Fires with total count - sabotage-driven decrements only
     public event System.Action OnPuzzlesReset;
 
@@ -55,7 +55,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         DebugLog($"Puzzle completed: {puzzleID} (Total: {totalPuzzlesCompleted})");
 
         // Fire event for NPC behavior, UI, etc.
-        OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted);
+        OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted, puzzleID);
     }
 
     public void UnregisterPuzzleCompletion(string puzzleID)
@@ -120,7 +120,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         DebugLog($"Restored puzzle count: {totalPuzzlesCompleted}");
 
         // Fire event so NPC updates state
-        OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted);
+        OnPuzzleCompleted?.Invoke(totalPuzzlesCompleted, null);
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         DebugLog("Puzzles reset for new game");
 
         // Fire event with 0 count
-        OnPuzzleCompleted?.Invoke(0);
+        OnPuzzleCompleted?.Invoke(0, null);
         OnPuzzlesReset?.Invoke();
     }
 
