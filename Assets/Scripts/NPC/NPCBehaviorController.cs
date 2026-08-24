@@ -71,6 +71,8 @@ public class NPCBehaviorController : MonoBehaviour
     private bool isWaitingAtLoiterPoint = false;
 
     private int currentPuzzleCount = 0;
+    private int pendingApproachingSabotageCount = 0;
+    private int pendingAgitatedSabotageCount = 0;
 
     public static NPCBehaviorController Instance { get; private set; }
 
@@ -171,6 +173,8 @@ public class NPCBehaviorController : MonoBehaviour
         currentPuzzleCount = 0;
         currentState = BehaviorState.Dormant;
         highestStateReached = BehaviorState.Dormant;
+        pendingApproachingSabotageCount = 0;
+        pendingAgitatedSabotageCount = 0;
         GameLog.Log("NPC State reset to Dormant (puzzles reset)");
     }
 
@@ -220,34 +224,57 @@ public class NPCBehaviorController : MonoBehaviour
 
         if (!fireEvents) return;
 
+        bool isLoadingFromSave = GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave();
+
         if (previousState != currentState)
+        {
             OnStateChanged?.Invoke(previousState, currentState);
+            pendingApproachingSabotageCount = 0;
+            pendingAgitatedSabotageCount = 0;
+        }
         else
+        {
             OnPuzzleSolvedSameState?.Invoke();
 
-        bool isLoadingFromSave = GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave();
+            if (!isLoadingFromSave)
+            {
+                if (currentState == BehaviorState.Approaching && pendingApproachingSabotageCount > 0)
+                {
+                    int sabotaged = ExecuteSabotageIfEligible(pendingApproachingSabotageCount);
+                    pendingApproachingSabotageCount -= sabotaged;
+                }
+                else if (currentState == BehaviorState.Agitated && pendingAgitatedSabotageCount > 0)
+                {
+                    int sabotaged = ExecuteSabotageIfEligible(pendingAgitatedSabotageCount);
+                    pendingAgitatedSabotageCount -= sabotaged;
+                }
+            }
+        }
+
         if (!isLoadingFromSave)
         {
             if (previousState == BehaviorState.Observing && currentState == BehaviorState.Approaching)
             {
-                ExecuteSabotageIfEligible(1);
+                int sabotaged = ExecuteSabotageIfEligible(1);
+                pendingApproachingSabotageCount = 1 - sabotaged;
             }
             else if (previousState == BehaviorState.Approaching && currentState == BehaviorState.Agitated)
             {
-                ExecuteSabotageIfEligible(2);
+                int sabotaged = ExecuteSabotageIfEligible(3);
+                pendingAgitatedSabotageCount = 3 - sabotaged;
             }
         }
     }
 
-    void ExecuteSabotageIfEligible(int countToSabotage)
+    int ExecuteSabotageIfEligible(int countToSabotage)
     {
-        if (PuzzleManager.Instance == null) return;
+        if (PuzzleManager.Instance == null) return 0;
 
         List<string> eligible = PuzzleManager.Instance.GetEligibleSabotageIDs();
         if (eligible.Count == 0)
         {
             GameLog.Log($"[NPCBehaviorController] No eligible puzzles to sabotage - skipping");
-            return;
+            return 0;
         }
 
         int actualCount = Mathf.Min(countToSabotage, eligible.Count);
@@ -264,6 +291,8 @@ public class NPCBehaviorController : MonoBehaviour
         {
             StartCoroutine(ExecuteSabotageBatch(selected));
         }
+
+        return actualCount;
     }
 
     IEnumerator ExecuteSabotageBatch(List<string> selected)
