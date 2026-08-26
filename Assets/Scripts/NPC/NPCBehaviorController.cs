@@ -109,7 +109,7 @@ public class NPCBehaviorController : MonoBehaviour
         npcVoiceLineController = GetComponent<NPCVoiceLineController>();
 
         // Initialize state
-        UpdateBehaviorState();
+        UpdateBehaviorState(fireEvents: false);
     }
 
     void Update()
@@ -175,6 +175,7 @@ public class NPCBehaviorController : MonoBehaviour
         highestStateReached = BehaviorState.Dormant;
         pendingApproachingSabotageCount = 0;
         pendingAgitatedSabotageCount = 0;
+        talkingController?.ForceStopTalking("puzzles reset");
         GameLog.Log("NPC State reset to Dormant (puzzles reset)");
     }
 
@@ -260,8 +261,8 @@ public class NPCBehaviorController : MonoBehaviour
             }
             else if (previousState == BehaviorState.Approaching && currentState == BehaviorState.Agitated)
             {
-                int sabotaged = ExecuteSabotageIfEligible(3, justCompletedPuzzleID);
-                pendingAgitatedSabotageCount = 3 - sabotaged;
+                int sabotaged = ExecuteSabotageIfEligible(1, justCompletedPuzzleID);
+                pendingAgitatedSabotageCount = 1 - sabotaged;
             }
         }
     }
@@ -472,7 +473,7 @@ public class NPCBehaviorController : MonoBehaviour
             position.x += delta.x;
             position.z += delta.z;
         }
-        else
+        else if (!agent.isStopped)
         {
             position += agent.desiredVelocity * Time.deltaTime;
         }

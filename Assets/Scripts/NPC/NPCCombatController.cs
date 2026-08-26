@@ -11,6 +11,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     private NavMeshAgent agent;
     private NPCBehaviorController behaviorController;
     private NPCVoiceLineController voiceController;
+    private NPCTalkingController talkingController;
     private Animator animator;
     private Transform playerTransform;
 
@@ -53,6 +54,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     {
         behaviorController = GetComponent<NPCBehaviorController>();
         voiceController = GetComponent<NPCVoiceLineController>();
+        talkingController = GetComponent<NPCTalkingController>();
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
@@ -98,6 +100,8 @@ public class NPCCombatController : MonoBehaviour, ISaveable
         isAttacking = true;
         playerCounteredThisAttack = false;
         attackCooldownTimer = attackCooldown;
+
+        talkingController?.ForceStopTalking("attack triggered");
 
         // Trigger attack animation
         animator.SetTrigger("Attack");
@@ -199,6 +203,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
             behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.Falling;
             StartCoroutine(TransitionToGetUp());
             StartCoroutine(PlayGroundImpactSound());
+            talkingController?.ForceStopTalking("combat hit");
             animator.SetTrigger("Hit");
             StartCoroutine(ResumeAfterStagger());
         }
@@ -233,7 +238,7 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     {
         isDefeated = true;
         behaviorController.SetDefeated(true);
-        voiceController?.StopCurrentLine("death cry taking priority");
+        talkingController?.ForceStopTalking("death cry taking priority");
 
         if (agent != null)
             agent.isStopped = true;

@@ -124,7 +124,7 @@ public class NPCVoiceLineController : MonoBehaviour
             return;
         }
 
-        StopCurrentLine("new state entry taking priority");
+        StopCurrentLine("new state entry taking priority", notifyInterrupted: false);
 
         switch (current)
         {
@@ -149,22 +149,24 @@ public class NPCVoiceLineController : MonoBehaviour
 
     void HandlePuzzleSolvedSameState()
     {
+        StopCurrentLine("new line taking priority", notifyInterrupted: false);
+
         switch (behaviorController.CurrentState)
         {
             case NPCBehaviorController.BehaviorState.Dormant:
-                PlayNextInSequence(dormantLines, ref dormantIndex);
+                PlayNextInSequence(dormantLines, ref dormantIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Observing:
-                PlayNextInSequence(observingLines, ref observingIndex);
+                PlayNextInSequence(observingLines, ref observingIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Approaching:
-                PlayNextInSequence(approachingLines, ref approachingIndex);
+                PlayNextInSequence(approachingLines, ref approachingIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Agitated:
-                PlayNextInSequence(agitatedLines, ref agitatedIndex);
+                PlayNextInSequence(agitatedLines, ref agitatedIndex, forcePlay: true);
                 break;
             case NPCBehaviorController.BehaviorState.Hunting:
-                PlayNextInSequence(huntingLines, ref huntingIndex);
+                PlayNextInSequence(huntingLines, ref huntingIndex, forcePlay: true);
                 break;
         }
     }
@@ -189,7 +191,7 @@ public class NPCVoiceLineController : MonoBehaviour
             return;
         }
 
-        StopCurrentLine("sabotage line taking priority");
+        StopCurrentLine("sabotage line taking priority", notifyInterrupted: false);
         if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
         {
             OnLineStarted?.Invoke(clip.length);
@@ -207,12 +209,12 @@ public class NPCVoiceLineController : MonoBehaviour
         return null;
     }
 
-    public void StopCurrentLine(string reason = "priority interrupt")
+    public void StopCurrentLine(string reason = "priority interrupt", bool notifyInterrupted = true)
     {
         bool wasPlaying = voiceAudioSource != null && voiceAudioSource.isPlaying;
         voiceAudioSource?.Stop();
 
-        if (wasPlaying)
+        if (wasPlaying && notifyInterrupted)
         {
             DebugLog($"Voice line stopped - {reason}");
             OnLineInterrupted?.Invoke();

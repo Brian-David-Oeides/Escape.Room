@@ -133,8 +133,6 @@ public class PuzzleManager : MonoSingleton<PuzzleManager>, ISaveable
         sabotagedOnceIDs.Clear();
         DebugLog("Puzzles reset for new game");
 
-        // Fire event with 0 count
-        OnPuzzleCompleted?.Invoke(0, null);
         OnPuzzlesReset?.Invoke();
     }
 
