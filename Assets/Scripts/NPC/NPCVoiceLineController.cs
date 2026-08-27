@@ -57,19 +57,15 @@ public class NPCVoiceLineController : MonoBehaviour
         behaviorController.OnStateChanged += HandleStateChanged;
         behaviorController.OnPuzzleSolvedSameState += HandlePuzzleSolvedSameState;
 
-        // OnStateChanged can never fire into Dormant (it's the starting state and
-        // states only escalate forward), so the first-contact line needs an explicit
-        // kickoff here. Gate on GameManager's loading flag rather than CurrentState:
-        // save data restoration is deferred by two WaitForEndOfFrame yields in
-        // GameManager.RestoreSaveDataAfterSceneLoad, which runs well after this Start()
-        // - so CurrentState would still read Dormant here even on a loaded game that
-        // already progressed past it.
-        bool loadingFromSave = GameManager.Instance != null && GameManager.Instance.IsLoadingFromSave();
-        if (!loadingFromSave)
-        {
-            PlayNextInSequence(dormantLines, ref dormantIndex);
-        }
         dormantLineTimer = dormantLineInterval;
+    }
+
+    // Called by NPCBehaviorController.HandlePuzzlesReset() once the New Game
+    // reset sequence (ForceStopTalking, state reset) has already run, so the
+    // kickoff line isn't racing GameManager's deferred locomotion-ready callback.
+    public void PlayDormantKickoff()
+    {
+        PlayNextInSequence(dormantLines, ref dormantIndex);
     }
 
     void OnDestroy()

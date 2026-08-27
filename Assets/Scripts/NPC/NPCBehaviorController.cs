@@ -176,6 +176,7 @@ public class NPCBehaviorController : MonoBehaviour
         pendingApproachingSabotageCount = 0;
         pendingAgitatedSabotageCount = 0;
         talkingController?.ForceStopTalking("puzzles reset");
+        npcVoiceLineController?.PlayDormantKickoff();
         GameLog.Log("NPC State reset to Dormant (puzzles reset)");
     }
 
