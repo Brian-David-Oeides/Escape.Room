@@ -37,6 +37,7 @@ public class NPCVoiceLineController : MonoBehaviour
 
     [Header("Sabotage Lines")]
     [SerializeField] private List<SabotageLineEntry> sabotageLineEntries = new List<SabotageLineEntry>();
+    [SerializeField] private float maxSabotageQueueWaitSeconds = 25f;
 
     [Header("Debug")]
     [SerializeField] private bool showDebugLogs = true;
@@ -48,6 +49,14 @@ public class NPCVoiceLineController : MonoBehaviour
     private int huntingIndex = 0;
 
     private float chaseLoopTimer = 0f;
+
+    private struct PendingSabotageLine
+    {
+        public SabotageLineCategory category;
+        public float timeEnqueued;
+    }
+
+    private readonly Queue<PendingSabotageLine> pendingSabotageLines = new Queue<PendingSabotageLine>();
 
     void Start()
     {
@@ -109,6 +118,21 @@ public class NPCVoiceLineController : MonoBehaviour
                 PlayNextInSequence(dormantLines, ref dormantIndex);
                 dormantLineTimer = dormantLineInterval;
             }
+        }
+
+        while (pendingSabotageLines.Count > 0 && (voiceAudioSource == null || !voiceAudioSource.isPlaying))
+        {
+            PendingSabotageLine next = pendingSabotageLines.Dequeue();
+            float waitTime = Time.time - next.timeEnqueued;
+
+            if (waitTime > maxSabotageQueueWaitSeconds)
+            {
+                DebugLog($"Dropping stale queued sabotage line ({next.category}) - waited {waitTime:F1}s");
+                continue;
+            }
+
+            PlaySabotageClipNow(next.category);
+            break;
         }
     }
 
@@ -180,6 +204,18 @@ public class NPCVoiceLineController : MonoBehaviour
     {
         if (behaviorController.isPermanentlyDefeated) return;
 
+        if (voiceAudioSource != null && voiceAudioSource.isPlaying)
+        {
+            pendingSabotageLines.Enqueue(new PendingSabotageLine { category = category, timeEnqueued = Time.time });
+            DebugLog($"Sabotage line queued (voice line in progress): {category}");
+            return;
+        }
+
+        PlaySabotageClipNow(category);
+    }
+
+    private void PlaySabotageClipNow(SabotageLineCategory category)
+    {
         AudioClip clip = GetSabotageClipForCategory(category);
         if (clip == null)
         {
@@ -187,13 +223,19 @@ public class NPCVoiceLineController : MonoBehaviour
             return;
         }
 
-        StopCurrentLine("sabotage line taking priority", notifyInterrupted: false);
         if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
         {
             OnLineStarted?.Invoke(clip.length);
         }
         voiceAudioSource?.PlayOneShot(clip);
         DebugLog($"Playing sabotage line for category: {category}");
+    }
+
+    // Called by NPCCombatController.ExecuteDefeat() so a sabotage line that hasn't
+    // played yet doesn't fire on an already-defeated NPC.
+    public void ClearPendingSabotageLines()
+    {
+        pendingSabotageLines.Clear();
     }
 
     private AudioClip GetSabotageClipForCategory(SabotageLineCategory category)
