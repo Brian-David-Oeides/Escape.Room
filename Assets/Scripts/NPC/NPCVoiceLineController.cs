@@ -144,23 +144,22 @@ public class NPCVoiceLineController : MonoBehaviour
             return;
         }
 
-        StopCurrentLine("new state entry taking priority", notifyInterrupted: false);
-
         switch (current)
         {
             case NPCBehaviorController.BehaviorState.Dormant:
                 // No incoming line needed when returning to Dormant - shouldn't normally happen mid-game
                 break;
             case NPCBehaviorController.BehaviorState.Observing:
-                PlayNextInSequence(observingLines, ref observingIndex, forcePlay: true);
+                PlayNextInSequence(observingLines, ref observingIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Approaching:
-                PlayNextInSequence(approachingLines, ref approachingIndex, forcePlay: true);
+                PlayNextInSequence(approachingLines, ref approachingIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Agitated:
-                PlayNextInSequence(agitatedLines, ref agitatedIndex, forcePlay: true);
+                PlayNextInSequence(agitatedLines, ref agitatedIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Hunting:
+                StopCurrentLine("new state entry taking priority", notifyInterrupted: false);
                 PlayNextInSequence(huntingLines, ref huntingIndex, forcePlay: true);
                 chaseLoopTimer = chaseLoopInterval;
                 break;
@@ -169,23 +168,22 @@ public class NPCVoiceLineController : MonoBehaviour
 
     void HandlePuzzleSolvedSameState()
     {
-        StopCurrentLine("new line taking priority", notifyInterrupted: false);
-
         switch (behaviorController.CurrentState)
         {
             case NPCBehaviorController.BehaviorState.Dormant:
-                PlayNextInSequence(dormantLines, ref dormantIndex, forcePlay: true);
+                PlayNextInSequence(dormantLines, ref dormantIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Observing:
-                PlayNextInSequence(observingLines, ref observingIndex, forcePlay: true);
+                PlayNextInSequence(observingLines, ref observingIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Approaching:
-                PlayNextInSequence(approachingLines, ref approachingIndex, forcePlay: true);
+                PlayNextInSequence(approachingLines, ref approachingIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Agitated:
-                PlayNextInSequence(agitatedLines, ref agitatedIndex, forcePlay: true);
+                PlayNextInSequence(agitatedLines, ref agitatedIndex);
                 break;
             case NPCBehaviorController.BehaviorState.Hunting:
+                StopCurrentLine("new line taking priority", notifyInterrupted: false);
                 PlayNextInSequence(huntingLines, ref huntingIndex, forcePlay: true);
                 break;
         }
@@ -263,6 +261,13 @@ public class NPCVoiceLineController : MonoBehaviour
     {
         if (behaviorController.isPermanentlyDefeated) return;
         if (clips == null || clips.Length == 0) return;
+
+        // With forcePlay left false (state/puzzle-completion lines outside Hunting no
+        // longer pass forcePlay: true), this is what makes those lines DROP - not
+        // queue - when a voice line is already playing. The index is deliberately
+        // NOT advanced on this early return: these arrays are rotation pools, not
+        // one-to-one narrative beats tied to a specific trigger, so the skipped clip
+        // simply remains "next up" and may play from a later, unrelated trigger.
         if (!forcePlay && voiceAudioSource != null && voiceAudioSource.isPlaying) return;
 
         if (behaviorController.CurrentState != NPCBehaviorController.BehaviorState.Hunting)
