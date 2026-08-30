@@ -30952,7 +30952,7 @@ Transform:
   m_GameObject: {fileID: 36523145904254139}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.46174863, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -6.29, y: 0.011, z: -6.138}
+  m_LocalPosition: {x: -7.384, y: 0.011, z: -4.896}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -71004,6 +71004,10 @@ MonoBehaviour:
     type: 3}
   npcDeathCrySound: {fileID: 8300000, guid: a06ac1dfb2dcd9441bac1cc4344aba33, type: 3}
   npcDeathGroundImpactSound: {fileID: 8300000, guid: 9af4eda2a0367a1419291e98c20a9850,
+    type: 3}
+  npcGettingUpGrowlSoundA: {fileID: 8300000, guid: eade7c8458d2d7d4fab2994abaafd0a6,
+    type: 3}
+  npcGettingUpGrowlSoundB: {fileID: 8300000, guid: 18f36c5a7fb68564e806b3ccf2a9241d,
     type: 3}
 --- !u!82 &5866666021642897074
 AudioSource:

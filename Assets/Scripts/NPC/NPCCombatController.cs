@@ -39,6 +39,8 @@ public class NPCCombatController : MonoBehaviour, ISaveable
     [SerializeField] private AudioClip npcGroundImpactSound;
     [SerializeField] private AudioClip npcDeathCrySound;
     [SerializeField] private AudioClip npcDeathGroundImpactSound;
+    [SerializeField] private AudioClip npcGettingUpGrowlSoundA;
+    [SerializeField] private AudioClip npcGettingUpGrowlSoundB;
 
     private AudioSource audioSource;
 
@@ -232,6 +234,28 @@ public class NPCCombatController : MonoBehaviour, ISaveable
         // Shoulder Hit And Fall plays for exactly 2.85s before Getting Up begins
         yield return new WaitForSeconds(2.85f);
         behaviorController.currentCombatPhase = NPCBehaviorController.CombatPhase.GettingUp;
+        PlayRandomGettingUpGrowl();
+    }
+
+    void PlayRandomGettingUpGrowl()
+    {
+        AudioClip clip;
+        if (npcGettingUpGrowlSoundA != null && npcGettingUpGrowlSoundB != null)
+        {
+            clip = Random.Range(0, 2) == 0 ? npcGettingUpGrowlSoundA : npcGettingUpGrowlSoundB;
+        }
+        else if (npcGettingUpGrowlSoundA != null || npcGettingUpGrowlSoundB != null)
+        {
+            clip = npcGettingUpGrowlSoundA != null ? npcGettingUpGrowlSoundA : npcGettingUpGrowlSoundB;
+            GameLog.LogWarning("[NPCCombatController] Only one Getting Up growl clip is assigned - playing the assigned clip");
+        }
+        else
+        {
+            GameLog.LogWarning("[NPCCombatController] Both Getting Up growl clips are missing - skipping playback");
+            return;
+        }
+
+        audioSource?.PlayOneShot(clip);
     }
 
     IEnumerator ExecuteDefeat()
