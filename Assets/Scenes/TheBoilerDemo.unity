@@ -30722,6 +30722,7 @@ GameObject:
   - component: {fileID: 2137140512}
   - component: {fileID: 2137140511}
   - component: {fileID: 2137140513}
+  - component: {fileID: 2137140514}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -30736,7 +30737,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137140510}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
@@ -30830,6 +30831,20 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!114 &2137140514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137140510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbb33d04cc826194aa1b16fc841f128b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceDirectionalLightOn: 0
+  directionalLight: {fileID: 0}
 --- !u!4 &2880141222259012 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1873603296282948700, guid: 7fc3585d31b023b498156ab0d157e997,
