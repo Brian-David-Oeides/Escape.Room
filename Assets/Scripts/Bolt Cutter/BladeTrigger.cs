@@ -17,11 +17,13 @@ public class BladeTrigger : MonoBehaviour
 
     private float lastAttemptTime = -999f;
 
+    private readonly Dictionary<Collider, ChainCutterReciever> _receiverCache = new Dictionary<Collider, ChainCutterReciever>();
+
     private void OnTriggerEnter(Collider other)
     {
         //GameLog.Log($"BladeTrigger collided with: {other.name}");
 
-        ChainCutterReciever receiver = other.GetComponent<ChainCutterReciever>();
+        ChainCutterReciever receiver = GetCachedReceiver(other);
 
         if (receiver != null)
         {
@@ -37,5 +39,33 @@ public class BladeTrigger : MonoBehaviour
                 GameLog.Log("Chain hit without cutting - bolt cutter blades not activated");
             }
         }
+    }
+
+    // Handles the case where the blade is already resting against the chain
+    // before the trigger is squeezed - OnTriggerEnter already fired (as a
+    // failed attempt) before IsCutting became true, so no further Enter event
+    // occurs once cutting starts. This picks up the cut while blades stay closed.
+    private void OnTriggerStay(Collider other)
+    {
+        if (!BoltCutterCutState.IsCutting) return;
+
+        ChainCutterReciever receiver = GetCachedReceiver(other);
+        receiver?.CutChain();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _receiverCache.Remove(other);
+    }
+
+    private ChainCutterReciever GetCachedReceiver(Collider other)
+    {
+        if (!_receiverCache.TryGetValue(other, out ChainCutterReciever receiver))
+        {
+            receiver = other.GetComponent<ChainCutterReciever>();
+            _receiverCache[other] = receiver;
+        }
+
+        return receiver;
     }
 }
