@@ -1340,8 +1340,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
@@ -2837,8 +2837,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
@@ -5436,8 +5436,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
@@ -10354,8 +10354,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
@@ -19675,6 +19675,16 @@ PrefabInstance:
       propertyPath: m_KeepSelectedTargetValid
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8906765096641856594, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_InteractableHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+    - target: {fileID: 8906765096641856594, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_InteractableCantHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8412160136295658402, guid: 95a82343fb2a76a47aad1c28e530f643, type: 3}
@@ -20796,8 +20806,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
@@ -21292,8 +21302,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
@@ -31471,12 +31481,52 @@ PrefabInstance:
     - target: {fileID: 7758811632631030240, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
+      value:
       objectReference: {fileID: 3001713506404312693}
+    - target: {fileID: 1567884175715853337, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+    - target: {fileID: 1567884175715853337, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableCantHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
+    - target: {fileID: 7272335345753031243, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+    - target: {fileID: 7272335345753031243, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableCantHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
+    - target: {fileID: 7713864175485444639, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+    - target: {fileID: 7713864175485444639, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableCantHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
+    - target: {fileID: 7758811632631030240, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+    - target: {fileID: 7758811632631030240, guid: 3d4bb80b8fe5430428429f1f00a13d00,
+        type: 3}
+      propertyPath: m_InteractableCantHoverMeshMaterial
+      value:
+      objectReference: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
     - target: {fileID: 8172640649397377070, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
       propertyPath: m_InteractionManager
-      value: 
+      value:
       objectReference: {fileID: 1894287950}
     - target: {fileID: 8760972028363560271, guid: 3d4bb80b8fe5430428429f1f00a13d00,
         type: 3}
@@ -50715,8 +50765,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ShowInteractableHoverMeshes: 1
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_InteractableHoverMeshMaterial: {fileID: 2100000, guid: 9b7baa46c0904fa7a3feb36f0ade3922, type: 2}
+  m_InteractableCantHoverMeshMaterial: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
