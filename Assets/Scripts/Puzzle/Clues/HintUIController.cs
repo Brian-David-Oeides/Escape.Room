@@ -12,13 +12,6 @@ using UnityEngine;
 
 public class HintUIController : MonoBehaviour
 {
-    [Header("Positioning")]
-    [Tooltip("Distance in front of camera to display hint")]
-    public float distanceFromCamera = 1.5f;
-
-    [Tooltip("Vertical offset from camera forward (positive = up)")]
-    public float verticalOffset = -0.2f;
-
     [Header("Display Settings")]
     [Tooltip("How long hint stays visible before auto-hiding (seconds)")]
     public float displayDuration = 5f;
@@ -35,7 +28,6 @@ public class HintUIController : MonoBehaviour
 
     private CanvasGroup canvasGroup;
     private AudioSource audioSource;
-    private Transform cameraTransform;
     private Coroutine displayCoroutine;
     private bool isShowing = false;
 
@@ -52,19 +44,8 @@ public class HintUIController : MonoBehaviour
         // Don't disable GameObject - just keep it invisible with alpha = 0
     }
 
-    private void Start()
-    {
-        cameraTransform = Camera.main.transform;
-    }
-
     private void Update()
     {
-        // Follow camera position when showing
-        if (isShowing && cameraTransform != null)
-        {
-            UpdatePosition();
-        }
-
         // Check for B button to dismiss (keyboard)
         if (isShowing && Input.GetKeyDown(KeyCode.B))
         {
@@ -115,9 +96,6 @@ public class HintUIController : MonoBehaviour
 
     private IEnumerator DisplayHintSequence()
     {
-        // Position in front of camera
-        UpdatePosition();
-
         // Play appear sound
         if (hintAppearSound != null && audioSource != null)
         {
@@ -190,26 +168,5 @@ public class HintUIController : MonoBehaviour
         canvasGroup.alpha = 0f;
         isShowing = false;
         gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// Update position to stay in front of camera
-    /// </summary>
-    private void UpdatePosition()
-    {
-        if (cameraTransform == null) return;
-
-        Vector3 forward = cameraTransform.forward;
-        Vector3 up = cameraTransform.up;
-
-        // Position in front and slightly down
-        Vector3 targetPosition = cameraTransform.position
-            + forward * distanceFromCamera
-            + up * verticalOffset;
-
-        transform.position = targetPosition;
-
-        // Face the camera
-        transform.rotation = Quaternion.LookRotation(transform.position - cameraTransform.position);
     }
 }

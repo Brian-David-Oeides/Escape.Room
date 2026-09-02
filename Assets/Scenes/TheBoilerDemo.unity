@@ -36700,7 +36700,7 @@ PrefabInstance:
     - target: {fileID: 584452056349047977, guid: 078c863a7d67a234e8f48bbd6a045367,
         type: 3}
       propertyPath: m_PlaneDistance
-      value: 1.5
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 2465042130395697629, guid: 078c863a7d67a234e8f48bbd6a045367,
         type: 3}
