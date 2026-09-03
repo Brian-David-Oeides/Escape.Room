@@ -83174,6 +83174,11 @@ PrefabInstance:
       propertyPath: drawerTransform
       value:
       objectReference: {fileID: 970575384329860325}
+    - target: {fileID: 3640247139562152927, guid: 0bb544b206ae3594b917fcf6c2e51fd6,
+        type: 3}
+      propertyPath: drawerFloorCollider
+      value:
+      objectReference: {fileID: 6155795487992002976}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

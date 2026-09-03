@@ -302,7 +302,8 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   drawerTransform: {fileID: 0}
-  localRestOffset: {x: -0.0004091, y: -0.0822623, z: -0.2105946}
+  drawerFloorCollider: {fileID: 0}
+  localRestOffset: {x: -0.0004091, y: -0.0797623, z: -0.2105946}
   resting: 1
 --- !u!1 &5805132589602076189
 GameObject:
