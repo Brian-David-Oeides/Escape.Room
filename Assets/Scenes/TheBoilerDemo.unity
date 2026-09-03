@@ -83169,6 +83169,11 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3640247139562152927, guid: 0bb544b206ae3594b917fcf6c2e51fd6,
+        type: 3}
+      propertyPath: drawerTransform
+      value:
+      objectReference: {fileID: 970575384329860325}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
