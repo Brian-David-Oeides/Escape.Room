@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
 
@@ -12,12 +13,19 @@ public class DrawerClamp : MonoBehaviour, ISaveable
     [Tooltip("Maximum Z distance (fully open) relative to start")]
     public float maxLocalZ = 0.25f;
 
+    [Tooltip("Fraction of maxLocalZ that counts as a genuine open attempt (not just incidental jostle)")]
+    [SerializeField] private float openAttemptFraction = 0.15f;
+
     [Header("Save System")]
     [SerializeField] private string drawerID = "";
+
+    [Header("Events")]
+    public UnityEvent onDrawerOpened;
 
     private Rigidbody rb;
     private Vector3 initialLocalPosition;
     private bool hasReachedFullyOpen = false;
+    private bool hasBeenOpened = false;
 
     void Start()
     {
@@ -38,6 +46,12 @@ public class DrawerClamp : MonoBehaviour, ISaveable
         float localZ = localPos.z - initialLocalPosition.z;
         float clampedZ = Mathf.Clamp(localZ, minLocalZ, maxLocalZ);
         transform.localPosition = new Vector3(localPos.x, localPos.y, initialLocalPosition.z + clampedZ);
+
+        if (!hasBeenOpened && clampedZ >= maxLocalZ * openAttemptFraction)
+        {
+            hasBeenOpened = true;
+            onDrawerOpened?.Invoke();
+        }
 
         if (!hasReachedFullyOpen && clampedZ >= maxLocalZ)
         {

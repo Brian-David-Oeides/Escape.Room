@@ -18386,7 +18386,8 @@ MonoBehaviour:
     clueName: Journal Entry #6
     clueDescription: Maintenance log mentions seized valve #3 on west wall - needs
       14" pipe wrench for leverage
-    relatedPuzzleIDs: []
+    relatedPuzzleIDs:
+    - drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
     isRequired: 1
   - clueID: journal_008
     clueName: Journal Entry #8
@@ -39966,6 +39967,7 @@ GameObject:
   - component: {fileID: 3083083907722269392}
   - component: {fileID: 3083083907722269391}
   - component: {fileID: 3083083907722269390}
+  - component: {fileID: 5777390224569321922}
   m_Layer: 0
   m_Name: drawer_r_top_01
   m_TagString: Untagged
@@ -41968,7 +41970,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5777390224569321922}
+        m_TargetAssemblyTypeName: DrawerKeySearchHint, Assembly-CSharp
+        m_MethodName: OnWrongDrawerOpened
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!153 &3083083907722269391
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -45291,6 +45309,7 @@ GameObject:
   - component: {fileID: 8427572759018491902}
   - component: {fileID: 8427572759018491901}
   - component: {fileID: 8427572759018491900}
+  - component: {fileID: 1872011534559724058}
   m_Layer: 0
   m_Name: drawer_l_bottom_01
   m_TagString: Untagged
@@ -46059,6 +46078,7 @@ GameObject:
   - component: {fileID: 4416540137911014302}
   - component: {fileID: 4416540137911014301}
   - component: {fileID: 4416540137911014300}
+  - component: {fileID: 6767023648553096005}
   m_Layer: 0
   m_Name: drawer_l_midde_01
   m_TagString: Untagged
@@ -46080,7 +46100,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6767023648553096005}
+        m_TargetAssemblyTypeName: DrawerKeySearchHint, Assembly-CSharp
+        m_MethodName: OnWrongDrawerOpened
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!153 &4416540137911014301
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -79834,7 +79870,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1872011534559724058}
+        m_TargetAssemblyTypeName: DrawerKeySearchHint, Assembly-CSharp
+        m_MethodName: OnWrongDrawerOpened
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!153 &8427572759018491901
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -81580,6 +81632,7 @@ GameObject:
   - component: {fileID: 8821137225412040038}
   - component: {fileID: 8821137225412040037}
   - component: {fileID: 8821137225412040036}
+  - component: {fileID: 4517458974326089734}
   m_Layer: 0
   m_Name: drawer_r_bottom_01
   m_TagString: Untagged
@@ -81601,7 +81654,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4517458974326089734}
+        m_TargetAssemblyTypeName: DrawerKeySearchHint, Assembly-CSharp
+        m_MethodName: OnWrongDrawerOpened
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!153 &8821137225412040037
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -83441,6 +83510,7 @@ GameObject:
   - component: {fileID: 9099399619472214365}
   - component: {fileID: 9099399619472214364}
   - component: {fileID: 9099399619472214363}
+  - component: {fileID: 5986071672783685512}
   m_Layer: 0
   m_Name: drawer_r_midde_01
   m_TagString: Untagged
@@ -83462,7 +83532,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5986071672783685512}
+        m_TargetAssemblyTypeName: DrawerKeySearchHint, Assembly-CSharp
+        m_MethodName: OnWrongDrawerOpened
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!153 &9099399619472214364
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -84181,3 +84267,78 @@ SceneRoots:
   - {fileID: 413929068}
   - {fileID: 1388972833}
   - {fileID: 5006512736429556707}
+--- !u!114 &5777390224569321922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2541413001905160069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
+--- !u!114 &1872011534559724058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973306334047387940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
+--- !u!114 &6767023648553096005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416540137911014299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
+--- !u!114 &4517458974326089734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821137225412040035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
+--- !u!114 &5986071672783685512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099399619472214362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
