@@ -120,6 +120,17 @@ public class DrawerClamp : MonoBehaviour, ISaveable
             transform.position = savedState.position;
             transform.rotation = savedState.rotation;
 
+            // Re-derive the one-shot flags from the restored position instead of leaving
+            // them at their fresh false defaults - otherwise a drawer that was already
+            // open before saving looks like a brand-new "just opened" event on the very
+            // next FixedUpdate, spuriously re-firing onDrawerOpened with no interaction.
+            // Deliberately does NOT invoke onDrawerOpened or RegisterPuzzleCompletion here -
+            // those are for live gameplay events, not restoring already-known state.
+            float restoredLocalZ = transform.localPosition.z - initialLocalPosition.z;
+            float restoredClampedZ = Mathf.Clamp(restoredLocalZ, minLocalZ, maxLocalZ);
+            hasBeenOpened = restoredClampedZ >= maxLocalZ * openAttemptFraction;
+            hasReachedFullyOpen = restoredClampedZ >= maxLocalZ;
+
             GameLog.Log($"[DrawerClamp] Loaded state for {drawerID}: localZ={transform.localPosition.z:F3}");
         }
         else

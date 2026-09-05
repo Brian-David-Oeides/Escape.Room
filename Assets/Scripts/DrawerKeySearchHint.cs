@@ -11,10 +11,23 @@ public class DrawerKeySearchHint : MonoBehaviour
     [Tooltip("Number of wrong-drawer opens before the hint becomes available")]
     [SerializeField] private int hintThreshold = 2;
 
+    private BronzeKeyDrawerFollow keyFollow;
+
+    private void Awake()
+    {
+        if (bronzeKey != null)
+            keyFollow = bronzeKey.GetComponent<BronzeKeyDrawerFollow>();
+    }
+
     // Called by this drawer's own DrawerClamp.onDrawerOpened event
     public void OnWrongDrawerOpened()
     {
-        if (bronzeKey != null && bronzeKey.activeInHierarchy)
+        // activeInHierarchy: has frame_lock been solved (key revealed) yet?
+        // !HasBeenPickedUp: has the player NOT already found the key (whether
+        // still carrying it or having since socketed it elsewhere)?
+        // Both must hold - neither alone is sufficient.
+        if (bronzeKey != null && bronzeKey.activeInHierarchy
+            && keyFollow != null && !keyFollow.HasBeenPickedUp)
         {
             ClueManager.Instance?.RegisterFailedAttempt(targetPuzzleID, hintThreshold);
         }

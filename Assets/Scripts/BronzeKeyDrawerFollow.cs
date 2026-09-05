@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Rigidbody))]
-public class BronzeKeyDrawerFollow : MonoBehaviour
+public class BronzeKeyDrawerFollow : MonoBehaviour, ISaveable
 {
     [Tooltip("The drawer's Transform this key rests on top of - followed via script, never Transform-parented (nested Rigidbodies break the drawer's ConfigurableJoint/gravity behavior)")]
     [SerializeField] private Transform drawerTransform;
@@ -15,6 +15,15 @@ public class BronzeKeyDrawerFollow : MonoBehaviour
 
     [Tooltip("While true, the key is moved every FixedUpdate to follow the drawer instead of behaving as a free Rigidbody")]
     [SerializeField] private bool resting = true;
+
+    [Header("Save System")]
+    [SerializeField] private string saveID = "bronze_key_lock1_pickup_state";
+
+    /// <summary>
+    /// True once the player has grabbed this key at least once - persists across
+    /// save/load and is never cleared, even if the key is later socketed/disabled.
+    /// </summary>
+    public bool HasBeenPickedUp { get; private set; }
 
     private Rigidbody rb;
     private XRGrabInteractable grabInteractable;
@@ -72,6 +81,7 @@ public class BronzeKeyDrawerFollow : MonoBehaviour
         // Stop following the drawer immediately so this doesn't fight
         // XRGrabInteractable's own MovePosition/MoveRotation calls while held.
         resting = false;
+        HasBeenPickedUp = true;
     }
 
     private void OnReleased(SelectExitEventArgs args)
@@ -82,4 +92,42 @@ public class BronzeKeyDrawerFollow : MonoBehaviour
         // physics object instead of freezing in place.
         rb.isKinematic = false;
     }
+
+    #region ISaveable Implementation
+
+    public string SaveID => saveID;
+
+    public void SaveState(SaveData saveData)
+    {
+        // Only HasBeenPickedUp is persisted here (via customData) - position/rotation
+        // restoration for this key is a separate, already-backlogged gap, not part of this fix.
+        MoveableObjectData objectState = new MoveableObjectData(
+            saveID,
+            transform.position,
+            transform.rotation,
+            gameObject.activeSelf,
+            HasBeenPickedUp ? "PICKED_UP" : ""
+        );
+
+        saveData.moveableObjects.Add(objectState);
+
+        GameLog.Log($"[BronzeKeyDrawerFollow] Saved state for {saveID}: HasBeenPickedUp={HasBeenPickedUp}");
+    }
+
+    public void LoadState(SaveData saveData)
+    {
+        MoveableObjectData savedState = saveData.moveableObjects.Find(obj => obj.objectID == saveID);
+
+        if (savedState != null)
+        {
+            HasBeenPickedUp = savedState.customData == "PICKED_UP";
+            GameLog.Log($"[BronzeKeyDrawerFollow] Loaded state for {saveID}: HasBeenPickedUp={HasBeenPickedUp}");
+        }
+        else
+        {
+            GameLog.Log($"[BronzeKeyDrawerFollow] No saved state found for {saveID} - using defaults");
+        }
+    }
+
+    #endregion
 }

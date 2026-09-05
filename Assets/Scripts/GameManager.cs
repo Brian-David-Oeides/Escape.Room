@@ -834,8 +834,9 @@ public class GameManager : MonoSingleton<GameManager>
                 GameLog.Log($"[GameManager] ClueManager restored: {data.discoveredClueIDs.Count} clues discovered");
             }
 
-            // Restore all ISaveable objects
-            ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>().OfType<ISaveable>().ToArray();
+            // Restore all ISaveable objects (includeInactive: true - some, like the
+            // Bronze Key, start inactive and would otherwise be silently skipped here)
+            ISaveable[] saveableObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<ISaveable>().ToArray();
             foreach (ISaveable saveable in saveableObjects)
             {
                 saveable.LoadState(data);
