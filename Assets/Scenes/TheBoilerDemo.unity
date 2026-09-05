@@ -18384,8 +18384,8 @@ MonoBehaviour:
     isRequired: 1
   - clueID: journal_006
     clueName: Journal Entry #6
-    clueDescription: Maintenance log mentions seized valve #3 on west wall - needs
-      14" pipe wrench for leverage
+    clueDescription: "Not this drawer. The key to your escape is hidden in one of
+      the others \u2014 keep searching."
     relatedPuzzleIDs:
     - drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
     isRequired: 1
@@ -38408,6 +38408,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3647967670194481386}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1872011534559724058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3973306334047387940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
 --- !u!224 &1889136865197167538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46625,6 +46640,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4517458974326089734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821137225412040035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
 --- !u!4 &4543933995658832351
 Transform:
   m_ObjectHideFlags: 0
@@ -70853,6 +70883,21 @@ Transform:
   - {fileID: 8559225954501553594}
   m_Father: {fileID: 6865972900423785587}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5777390224569321922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2541413001905160069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
 --- !u!1 &5787181139464375864
 GameObject:
   m_ObjectHideFlags: 0
@@ -71823,6 +71868,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5986071672783685512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9099399619472214362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
 --- !u!224 &5993613274008819213
 RectTransform:
   m_ObjectHideFlags: 0
@@ -72370,7 +72430,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.3
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &6155795487992002976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -73934,6 +73998,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6767023648553096005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416540137911014299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bronzeKey: {fileID: 892909880}
+  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
+  hintThreshold: 2
 --- !u!33 &6773406010163187661
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -84267,78 +84346,3 @@ SceneRoots:
   - {fileID: 413929068}
   - {fileID: 1388972833}
   - {fileID: 5006512736429556707}
---- !u!114 &5777390224569321922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2541413001905160069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bronzeKey: {fileID: 892909880}
-  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
-  hintThreshold: 2
---- !u!114 &1872011534559724058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3973306334047387940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bronzeKey: {fileID: 892909880}
-  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
-  hintThreshold: 2
---- !u!114 &6767023648553096005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416540137911014299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bronzeKey: {fileID: 892909880}
-  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
-  hintThreshold: 2
---- !u!114 &4517458974326089734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8821137225412040035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bronzeKey: {fileID: 892909880}
-  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
-  hintThreshold: 2
---- !u!114 &5986071672783685512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9099399619472214362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb515c0c7e543d08f93230bdd114af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bronzeKey: {fileID: 892909880}
-  targetPuzzleID: drawer_BoilerRoom1_***STATIC***_Interiors2_Bookshelf_drawer_l_top_01
-  hintThreshold: 2
