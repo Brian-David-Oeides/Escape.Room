@@ -590,8 +590,8 @@ HingeJoint:
   m_GameObject: {fileID: 7111411749164029173}
   m_ConnectedBody: {fileID: 3082727470244927312}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_Axis: {x: 0, y: 1, z: 0}
+  m_Anchor: {x: 0, y: 0, z: 0.02}
+  m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0.28471816, y: 0.03858331, z: 0.2407999}
   serializedVersion: 2
@@ -609,8 +609,8 @@ HingeJoint:
   m_ExtendedLimits: 0
   m_UseAcceleration: 0
   m_Limits:
-    min: -90.190186
-    max: 95
+    min: -180
+    max: -90
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0

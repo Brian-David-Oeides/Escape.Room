@@ -4919,6 +4919,8 @@ MonoBehaviour:
   renderersToHide: []
   showDebugLogs: 1
   targetRigidbody: {fileID: 423719841}
+  targetHinge: {fileID: 879312334230317999}
+  openTorqueImpulse: 8
   hammerTag: Hammer
   stakeSocket: {fileID: 1495953424}
 --- !u!1 &457151654
@@ -19416,8 +19418,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
         type: 3}
+      propertyPath: m_Axis.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_Anchor.z
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
       propertyPath: m_UseMotor
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_Limits.max
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_Limits.min
+      value: -180
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0.28519845
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.03858334
+      objectReference: {fileID: 0}
+    - target: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: 0.26079416
       objectReference: {fileID: 0}
     - target: {fileID: 1098446113530065623, guid: 95a82343fb2a76a47aad1c28e530f643,
         type: 3}
@@ -30760,7 +30797,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137140510}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
@@ -34547,6 +34584,12 @@ MonoBehaviour:
           m_StringArgument: difficulty
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!59 &879312334230317999 stripped
+HingeJoint:
+  m_CorrespondingSourceObject: {fileID: 879312334230317202, guid: 95a82343fb2a76a47aad1c28e530f643,
+    type: 3}
+  m_PrefabInstance: {fileID: 1101538139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &886387036335205981
 MonoBehaviour:
   m_ObjectHideFlags: 0

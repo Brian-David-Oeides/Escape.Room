@@ -8,6 +8,12 @@ public class HammerStrikeTrigger : PuzzleBase
     [Tooltip("The Rigidbody (e.g., cabinet door) that should be un-kinematic on hammer impact.")]
     public Rigidbody targetRigidbody;
 
+    [Tooltip("HingeJoint on targetRigidbody. Used to kick the door open along its actual hinge axis once unlocked, since gravity alone only produces a weak swing on this geometry.")]
+    public HingeJoint targetHinge;
+
+    [Tooltip("Torque impulse applied along the hinge axis (opening direction) on unlock, to make the door swing open decisively instead of creeping.")]
+    public float openTorqueImpulse = 8f;
+
     [Tooltip("Tag of the hammer object.")]
     public string hammerTag = "Hammer";
 
@@ -64,6 +70,16 @@ public class HammerStrikeTrigger : PuzzleBase
         if (targetRigidbody != null)
         {
             targetRigidbody.isKinematic = false;
+
+            // Gravity alone only produces a weak swing on this hinge geometry.
+            // Kick it open along the hinge's own axis (opposite the axis direction,
+            // matching the negative-angle side the Limits now open toward) so it
+            // swings open decisively rather than creeping.
+            if (targetHinge != null)
+            {
+                Vector3 worldHingeAxis = targetHinge.transform.TransformDirection(targetHinge.axis).normalized;
+                targetRigidbody.AddTorque(-worldHingeAxis * openTorqueImpulse, ForceMode.Impulse);
+            }
         }
 
         // Step 2: Disable the XR Socket Interactor to release stake
