@@ -62,6 +62,7 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
     private float _wrongNumberTimer = 0f;
     private int _lastCheckedNumber = -1;
     private bool _wrongNumberDetected = false;
+    private bool _hasBeenGrabbed = false; // Gates wrong-number detection - an untouched dial should never accumulate a "wrong attempt"
 
     [SerializeField] private XRGrabInteractable grabInteractable;
 
@@ -196,7 +197,10 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
                 }
             }
             // Check if player is holding on a CLEARLY wrong number
-            else if (Mathf.Abs(currentDialNumber - expectedNumber) > numberTolerance * 3)
+            // Gated on _hasBeenGrabbed: an untouched dial resting at its default/restored
+            // rotation must never accumulate wrong-number dwell time on its own - only
+            // genuine player-held rotation should count toward a failed attempt.
+            else if (_hasBeenGrabbed && Mathf.Abs(currentDialNumber - expectedNumber) > numberTolerance * 3)
             {
                 // Player is far from correct number
                 if (currentDialNumber == _lastCheckedNumber)
@@ -243,6 +247,8 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
             DebugLog("Safe already unlocked - ignoring dial interaction");
             return;
         }
+
+        _hasBeenGrabbed = true;
 
         grabInteractable.trackPosition = false;
         grabInteractable.trackRotation = true;
