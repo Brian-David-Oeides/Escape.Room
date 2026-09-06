@@ -10,6 +10,7 @@ TagManager:
   - Stopper
   - Socketable
   - Switch
+  - Stake
   layers:
   - Default
   - TransparentFX

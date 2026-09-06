@@ -14,6 +14,9 @@ public class HammerStrikeTrigger : PuzzleBase
     [Tooltip("Torque impulse applied along the hinge axis (opening direction) on unlock, to make the door swing open decisively instead of creeping.")]
     public float openTorqueImpulse = 8f;
 
+    [SerializeField] private AudioSource hammerAudioSource;
+    [SerializeField] private AudioClip stakeHitClip;
+
     [Tooltip("Tag of the hammer object.")]
     public string hammerTag = "Hammer";
 
@@ -79,6 +82,11 @@ public class HammerStrikeTrigger : PuzzleBase
             {
                 Vector3 worldHingeAxis = targetHinge.transform.TransformDirection(targetHinge.axis).normalized;
                 targetRigidbody.AddTorque(-worldHingeAxis * openTorqueImpulse, ForceMode.Impulse);
+            }
+
+            if (hammerAudioSource != null && stakeHitClip != null)
+            {
+                hammerAudioSource.PlayOneShot(stakeHitClip);
             }
         }
 

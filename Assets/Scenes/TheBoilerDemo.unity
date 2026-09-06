@@ -4921,6 +4921,8 @@ MonoBehaviour:
   targetRigidbody: {fileID: 423719841}
   targetHinge: {fileID: 879312334230317999}
   openTorqueImpulse: 8
+  hammerAudioSource: {fileID: 187258448301}
+  stakeHitClip: {fileID: 8300000, guid: 567bb90aefc2db442b0e72af7cc71a1c, type: 3}
   hammerTag: Hammer
   stakeSocket: {fileID: 1495953424}
 --- !u!1 &457151654
@@ -27995,6 +27997,8 @@ GameObject:
   - component: {fileID: 1872584480}
   - component: {fileID: 1872584482}
   - component: {fileID: 1872584481}
+  - component: {fileID: 187258448301}
+  - component: {fileID: 187258448302}
   m_Layer: 0
   m_Name: hammer head
   m_TagString: Hammer
@@ -30905,6 +30909,115 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceDirectionalLightOn: 0
   directionalLight: {fileID: 0}
+--- !u!82 &187258448301
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872584479}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &187258448302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872584479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44711c1f3731486fb33496cd400b9c39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thudClip: {fileID: 8300000, guid: a6645e9a4f729dd479b05c5ad2605d8a, type: 3}
 --- !u!4 &2880141222259012 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1873603296282948700, guid: 7fc3585d31b023b498156ab0d157e997,
@@ -34720,7 +34833,7 @@ GameObject:
   - component: {fileID: 3469287838090438613}
   m_Layer: 0
   m_Name: Stake
-  m_TagString: Untagged
+  m_TagString: Stake
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
