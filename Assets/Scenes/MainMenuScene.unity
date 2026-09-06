@@ -28063,7 +28063,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!153 &3083083907722269391
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -30436,7 +30440,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!153 &4416540137911014301
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -52843,7 +52851,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.3
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6177409271373530003
 GameObject:
   m_ObjectHideFlags: 0
@@ -57472,7 +57484,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!153 &8427572759018491901
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -58849,7 +58865,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!153 &8821137225412040037
 ConfigurableJoint:
   m_ObjectHideFlags: 0
@@ -59720,7 +59740,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLocalZ: 0
   maxLocalZ: 0.25
+  openAttemptFraction: 0.15
   drawerID: 
+  onDrawerOpened:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!153 &9099399619472214364
 ConfigurableJoint:
   m_ObjectHideFlags: 0
