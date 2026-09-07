@@ -45,7 +45,8 @@ public class HammerStrikeTrigger : PuzzleBase
             return;
         }
 
-        if (other.CompareTag(hammerTag) && targetRigidbody != null)
+        if (other.CompareTag(hammerTag) && targetRigidbody != null
+            && stakeSocket != null && stakeSocket.hasSelection)
         {
             DebugLog("Hammer struck! Unlocking cabinet door.");
 
@@ -130,6 +131,14 @@ public class HammerStrikeTrigger : PuzzleBase
     /// </summary>
     private bool IsValidFailedAttempt(Collider other)
     {
+        // Only count attempts made while the stake is actually socketed -
+        // a stray hit on the loose, unsocketed stake shouldn't consume
+        // hint-tracking attempts.
+        if (stakeSocket == null || !stakeSocket.hasSelection)
+        {
+            return false;
+        }
+
         // Ignore VR interaction colliders
         if (other.name.Contains("Interactor") ||
             other.name.Contains("Socket") ||

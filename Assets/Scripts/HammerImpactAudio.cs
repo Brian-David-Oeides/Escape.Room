@@ -9,12 +9,11 @@ public class HammerImpactAudio : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        GameLog.Log($"HammerImpactAudio: Awake, audioSource found: {audioSource != null}");
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        GameLog.Log($"HammerImpactAudio: collided with {collision.collider.name} (tag: {collision.collider.tag})");
+        GameLog.Log($"HammerImpactAudio: OnCollisionEnter fired on {gameObject.name}, hit {collision.collider.name} (tag: {collision.collider.tag})");
 
         if (collision.collider.CompareTag("Stake"))
         {
@@ -22,7 +21,7 @@ public class HammerImpactAudio : MonoBehaviour
             return; // Let HammerStrikeTrigger own this hit.
         }
 
-        GameLog.Log($"HammerImpactAudio: playing thud, clip assigned: {thudClip != null}, audioSource null: {audioSource == null}");
+        GameLog.Log($"HammerImpactAudio: about to PlayOneShot - audioSource.enabled: {audioSource.enabled}, audioSource.mute: {audioSource.mute}, thudClip null: {thudClip == null}");
         audioSource.PlayOneShot(thudClip);
     }
 }
