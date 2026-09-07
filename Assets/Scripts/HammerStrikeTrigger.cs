@@ -45,6 +45,11 @@ public class HammerStrikeTrigger : PuzzleBase
             return;
         }
 
+        if (other.CompareTag(hammerTag))
+        {
+            PlayStakeHitSound();
+        }
+
         if (other.CompareTag(hammerTag) && targetRigidbody != null
             && stakeSocket != null && stakeSocket.hasSelection)
         {
@@ -66,6 +71,19 @@ public class HammerStrikeTrigger : PuzzleBase
     }
 
     /// <summary>
+    /// Play the stake-hit sound. Fires on every hammer-stake contact while the
+    /// puzzle is still unsolved, regardless of whether the stake is socketed -
+    /// separate from (and does not gate) puzzle completion.
+    /// </summary>
+    private void PlayStakeHitSound()
+    {
+        if (hammerAudioSource != null && stakeHitClip != null)
+        {
+            hammerAudioSource.PlayOneShot(stakeHitClip);
+        }
+    }
+
+    /// <summary>
     /// Apply the unlocked state to the cabinet door
     /// </summary>
     private void ApplyUnlockedState(bool skipAnimation)
@@ -83,11 +101,6 @@ public class HammerStrikeTrigger : PuzzleBase
             {
                 Vector3 worldHingeAxis = targetHinge.transform.TransformDirection(targetHinge.axis).normalized;
                 targetRigidbody.AddTorque(-worldHingeAxis * openTorqueImpulse, ForceMode.Impulse);
-            }
-
-            if (hammerAudioSource != null && stakeHitClip != null)
-            {
-                hammerAudioSource.PlayOneShot(stakeHitClip);
             }
         }
 
