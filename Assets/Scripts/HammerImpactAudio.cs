@@ -13,15 +13,14 @@ public class HammerImpactAudio : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        GameLog.Log($"HammerImpactAudio: OnCollisionEnter fired on {gameObject.name}, hit {collision.collider.name} (tag: {collision.collider.tag})");
+        GameLog.Log($"HammerImpactAudio ({gameObject.name}): hit {collision.collider.name} (tag: {collision.collider.tag})");
 
         if (collision.collider.CompareTag("Stake"))
         {
-            GameLog.Log("HammerImpactAudio: tagged Stake, suppressing thud");
             return; // Let HammerStrikeTrigger own this hit.
         }
 
-        GameLog.Log($"HammerImpactAudio: about to PlayOneShot - audioSource.enabled: {audioSource.enabled}, audioSource.mute: {audioSource.mute}, thudClip null: {thudClip == null}");
+        GameLog.Log($"HammerImpactAudio ({gameObject.name}): audioSource null={audioSource == null}, thudClip null={thudClip == null}");
         audioSource.PlayOneShot(thudClip);
     }
 }
