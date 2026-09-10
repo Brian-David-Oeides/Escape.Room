@@ -5054,8 +5054,6 @@ Transform:
   - {fileID: 5337178919952445178}
   - {fileID: 6205659299573092222}
   - {fileID: 1904170897}
-  - {fileID: 1823161289}
-  - {fileID: 603914746}
   - {fileID: 3324364586873898952}
   - {fileID: 2340006510692797824}
   - {fileID: 3760630585606230037}
@@ -6685,13 +6683,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603914745}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7090786, z: 0, w: 0.70512944}
-  m_LocalPosition: {x: -0.0074, y: 0.4261, z: 0}
+  m_LocalRotation: {x: -0.000000059608716, y: -0.15857485, z: 0.0000002771767, w: -0.98734695}
+  m_LocalPosition: {x: -1.0870028, y: -0.18799965, z: 7.828337}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 543450652026185845}
-  m_Father: {fileID: 465004656}
+  m_Father: {fileID: 579034555317396452}
   m_LocalEulerAnglesHint: {x: 0, y: 90.32, z: 0}
 --- !u!1 &615536192
 GameObject:
@@ -27601,13 +27599,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823161288}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.0000001545082, y: 0.5882908, z: 0.00000023771271, w: -0.8086495}
+  m_LocalPosition: {x: 9.493408, y: -0.6790055, z: 4.412948}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 543450652505272856}
-  m_Father: {fileID: 465004656}
+  m_Father: {fileID: 579034555317396452}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1823853814
 GameObject:
@@ -31155,6 +31153,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9ebb00b933b45daaed3d027b15d74d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &741852963100001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 741852963100002}
+  - component: {fileID: 741852963100003}
+  m_Layer: 0
+  m_Name: InteriorFloor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &741852963100002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741852963100001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0.032}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 579034555317396452}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &741852963100003
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741852963100001}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.15, y: 0.05, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &2880141222259012 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1873603296282948700, guid: 7fc3585d31b023b498156ab0d157e997,
@@ -33345,7 +33396,7 @@ Transform:
   m_GameObject: {fileID: 919132147481703119}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: -5.516, y: 0.4043, z: -7.481}
+  m_LocalPosition: {x: 3.63, y: 0.4043, z: -7.06}
   m_LocalScale: {x: 1.5029196, y: 1.5029196, z: 1.5029196}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33595,6 +33646,9 @@ Transform:
   - {fileID: 579034555317396448}
   - {fileID: 986784754}
   - {fileID: 579034555317396456}
+  - {fileID: 741852963100002}
+  - {fileID: 1823161289}
+  - {fileID: 603914746}
   m_Father: {fileID: 5337178919848287887}
   m_LocalEulerAnglesHint: {x: 0, y: 72.072, z: 0}
 --- !u!4 &579034555317396454
