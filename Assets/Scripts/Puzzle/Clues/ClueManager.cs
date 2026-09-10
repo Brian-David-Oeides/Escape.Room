@@ -217,17 +217,17 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         {
             // Player missing clues - hint about where to find them
             ClueData missingClue = undiscoveredClues[0];
-            return $"💡 Hint: {missingClue.clueDescription}";
+            return $"Hint: {missingClue.clueDescription}";
         }
         else if (relatedClues.Count > 0)
         {
             // Player has all clues - give encouragement
-            return $"💡 Hint: You have all the clues for this puzzle. Review what you've found!";
+            return $"Hint: You have all the clues for this puzzle. Review what you've found!";
         }
         else
         {
             // No clues defined for this puzzle - generic hint
-            return $"💡 Hint: Keep exploring and trying different combinations!";
+            return $"Hint: Keep exploring and trying different combinations!";
         }
     }
     #endregion

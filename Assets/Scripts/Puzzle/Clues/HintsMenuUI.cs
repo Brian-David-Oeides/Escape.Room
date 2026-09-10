@@ -411,7 +411,7 @@ public class HintsMenuUI : MonoBehaviour
     /// </summary>
     private void ShowGenericHint()
     {
-        string genericHint = "💡 Hint: Explore the room thoroughly to find clues. Check journals, papers, and look under objects!";
+        string genericHint = "Hint: Explore the room thoroughly to find clues. Check journals, papers, and look under objects!";
 
         if (ClueManager.Instance != null && ClueManager.Instance.hintUI != null)
         {

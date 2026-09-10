@@ -26675,7 +26675,7 @@ MonoBehaviour:
   electricShockSound: {fileID: 8300000, guid: f545ddf765114c4448022b162e72aa0b, type: 3}
   sparkParticlesPrefab: {fileID: 5145589153971864459}
   puzzleID: breaker_panel
-  hintThreshold: 2
+  hintThreshold: 1
   warningDisplayTime: 3
 --- !u!4 &1670862277
 Transform:
