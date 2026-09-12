@@ -18424,10 +18424,10 @@ MonoBehaviour:
     isRequired: 1
   - clueID: hidden_note
     clueName: Hidden Note Under Chair
-    clueDescription: Note about checking electrical panel and wall switch with flashlight
-      - mentions connection issues
+    clueDescription: "The wall switch won't work until the electrical panel connection
+      is fixed \u2014 check it with your flashlight."
     relatedPuzzleIDs:
-    - light_switch
+    - light_switch_03
     isRequired: 1
   - clueID: paper_005
     clueName: Paper Clue #5
