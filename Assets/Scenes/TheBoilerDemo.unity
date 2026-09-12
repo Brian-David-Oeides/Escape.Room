@@ -18396,8 +18396,8 @@ MonoBehaviour:
     isRequired: 1
   - clueID: journal_008
     clueName: Journal Entry #8
-    clueDescription: Personal journal mentions safe combination using numbers from
-      where Dad's watch stopped.
+    clueDescription: Journal mentions safe combination using numbers from where Dad's
+      watch stopped.
     relatedPuzzleIDs:
     - safe_dial
     isRequired: 1

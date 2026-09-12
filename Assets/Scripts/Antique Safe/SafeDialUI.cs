@@ -45,6 +45,7 @@ public class SafeDialUI : MonoBehaviour
         if (safeDial != null)
         {
             safeDial.OnDialNumberChanged += UpdateDialDisplay;
+            safeDial.OnCorrectNumberConfirmed += OnCorrectNumberConfirmed;
         }
         else
         {
@@ -75,6 +76,7 @@ public class SafeDialUI : MonoBehaviour
         if (safeDial != null)
         {
             safeDial.OnDialNumberChanged -= UpdateDialDisplay;
+            safeDial.OnCorrectNumberConfirmed -= OnCorrectNumberConfirmed;
         }
     }
 
@@ -87,17 +89,14 @@ public class SafeDialUI : MonoBehaviour
         if (dialNumberText != null)
         {
             dialNumberText.text = number.ToString("D2"); // 2 digits
-
-            // check if player is close to correct number
-            if (!safeDial.IsUnlocked && safeDial.CurrentCombinationIndex < safeDial.CorrectCombination.Length)
-            {
-                int targetNumber = safeDial.CorrectCombination[safeDial.CurrentCombinationIndex];
-                if (Mathf.Abs(number - targetNumber) <= safeDial.NumberTolerance)
-                {
-                    TriggerHighlight();
-                }
-            }
         }
+    }
+
+    // Fires only once SafeDial has confirmed the dwell-held correct digit - not on mere
+    // proximity - so the visual can't "solve" the dial ahead of the actual puzzle state.
+    private void OnCorrectNumberConfirmed(int number)
+    {
+        TriggerHighlight();
     }
 
     private void TriggerHighlight()

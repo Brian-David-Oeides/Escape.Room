@@ -64,11 +64,22 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
     private bool _wrongNumberDetected = false;
     private bool _hasBeenGrabbed = false; // Gates wrong-number detection - an untouched dial should never accumulate a "wrong attempt"
 
+    // Mirrors the wrong-number dwell requirement above, so a fast pass-through can't
+    // instantly confirm a correct digit - the player must hold it just as deliberately.
+    private float _correctNumberDetectionTime = 1.5f;
+    private float _correctDwellTimer = 0f;
+    private int _lastCheckedCorrectNumber = -1;
+    private bool _correctNumberDetected = false;
+
     [SerializeField] private XRGrabInteractable grabInteractable;
 
     // event for SafeDialUI
     public delegate void DialNumberChanged(int currentNumber);
     public event DialNumberChanged OnDialNumberChanged;
+
+    // Fired only when a digit's dwell requirement is satisfied and the combination index
+    // actually advances - UI/feedback should key off this, not raw proximity.
+    public event DialNumberChanged OnCorrectNumberConfirmed;
 
     #endregion
 
@@ -180,20 +191,40 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
         {
             int expectedNumber = correctCombination[_currentCombinationIndex];
 
-            // Check if on correct number
+            // Check if on correct number - requires the same sustained dwell as a wrong guess,
+            // so briefly spinning past the right number can't confirm it.
             if (Mathf.Abs(currentDialNumber - expectedNumber) <= numberTolerance)
             {
-                PlaySound(correctNumberSound);
-                _correctNumberTimer = _correctNumberCooldown;
-                _currentCombinationIndex++;
-
-                // Reset wrong number detection
-                _wrongNumberTimer = 0f;
-                _wrongNumberDetected = false;
-
-                if (_currentCombinationIndex >= correctCombination.Length)
+                if (currentDialNumber == _lastCheckedCorrectNumber)
                 {
-                    UnlockSafe();
+                    // Still on same correct number - increment dwell timer
+                    _correctDwellTimer += Time.deltaTime;
+
+                    if (_correctDwellTimer >= _correctNumberDetectionTime && !_correctNumberDetected)
+                    {
+                        // Player held the correct number long enough - confirm it
+                        PlaySound(correctNumberSound);
+                        _correctNumberTimer = _correctNumberCooldown;
+                        _currentCombinationIndex++;
+                        _correctNumberDetected = true;
+                        OnCorrectNumberConfirmed?.Invoke(currentDialNumber);
+
+                        // Reset wrong number detection
+                        _wrongNumberTimer = 0f;
+                        _wrongNumberDetected = false;
+
+                        if (_currentCombinationIndex >= correctCombination.Length)
+                        {
+                            UnlockSafe();
+                        }
+                    }
+                }
+                else
+                {
+                    // Moved to a different number within tolerance - reset dwell timer
+                    _lastCheckedCorrectNumber = currentDialNumber;
+                    _correctDwellTimer = 0f;
+                    _correctNumberDetected = false;
                 }
             }
             // Check if player is holding on a CLEARLY wrong number
@@ -202,6 +233,11 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
             // genuine player-held rotation should count toward a failed attempt.
             else if (_hasBeenGrabbed && Mathf.Abs(currentDialNumber - expectedNumber) > numberTolerance * 3)
             {
+                // Left the correct-number window - reset correct-number dwell tracking
+                _lastCheckedCorrectNumber = -1;
+                _correctDwellTimer = 0f;
+                _correctNumberDetected = false;
+
                 // Player is far from correct number
                 if (currentDialNumber == _lastCheckedNumber)
                 {
@@ -227,6 +263,9 @@ public class SafeDial : PuzzleBase // CHANGE 1: Inherit from PuzzleBase instead 
             else
             {
                 // Number is close but not quite right (within tolerance * 3) - reset detection
+                _lastCheckedCorrectNumber = -1;
+                _correctDwellTimer = 0f;
+                _correctNumberDetected = false;
                 _wrongNumberTimer = 0f;
                 _wrongNumberDetected = false;
             }
