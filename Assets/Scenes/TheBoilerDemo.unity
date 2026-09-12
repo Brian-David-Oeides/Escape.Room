@@ -18431,8 +18431,9 @@ MonoBehaviour:
     isRequired: 1
   - clueID: paper_005
     clueName: Paper Clue #5
-    clueDescription: Equipment inventory update - bolt cutters stored in safe after
-      theft incidents
+    clueDescription: "Equipment inventory note: the bolt cutters need their handles
+      squeezed firmly to cut through anything \u2014 just touching the blade to something
+      won't work."
     relatedPuzzleIDs:
     - chain_cutter
     isRequired: 1
@@ -82487,7 +82488,7 @@ PrefabInstance:
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
       propertyPath: hintThreshold
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
