@@ -82496,6 +82496,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
         type: 3}
+      propertyPath: correctCombination.Array.data[0]
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: correctCombination.Array.data[1]
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
+      propertyPath: correctCombination.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 361033979506120002, guid: e4fc7d72046fc164bb2c240ee8745b6e,
+        type: 3}
       propertyPath: OnSafeUnlocked.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
