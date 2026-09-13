@@ -227,7 +227,7 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         else
         {
             // No clues defined for this puzzle - generic hint
-            return $"Hint: Keep exploring and trying different combinations!";
+            return $"Hint: Explore the room thoroughly to find clues. Check journals, papers, and look in and under objects!";
         }
     }
     #endregion
