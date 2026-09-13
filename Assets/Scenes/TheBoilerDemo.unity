@@ -20092,6 +20092,74 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3448150166748466797}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1138910871
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.982
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.753
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: e852e81daf758433eb84466ce7b6e65e,
+        type: 3}
+      propertyPath: m_Name
+      value: ExitSign02
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e852e81daf758433eb84466ce7b6e65e, type: 3}
 --- !u!1001 &1142223177
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30804,7 +30872,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137140510}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
@@ -76595,6 +76663,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7460042719541472558 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7421185598413107225, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+    type: 3}
+  m_PrefabInstance: {fileID: 3760630585606230036}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632e4c25479e4454893b16efa4e45be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7474657268384684075
 GameObject:
   m_ObjectHideFlags: 0
@@ -83205,6 +83285,36 @@ MonoBehaviour:
     type: 3}
   rightTriggerAction: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
+  OnSprayAttemptStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7460042719541472558}
+        m_TargetAssemblyTypeName: ValveOilDetection, Assembly-CSharp
+        m_MethodName: OnSprayAttemptStarted
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnSprayAttemptEnded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7460042719541472558}
+        m_TargetAssemblyTypeName: ValveOilDetection, Assembly-CSharp
+        m_MethodName: OnSprayAttemptEnded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &8861621739793048144
 AudioSource:
   m_ObjectHideFlags: 0
@@ -84883,3 +84993,4 @@ SceneRoots:
   - {fileID: 413929068}
   - {fileID: 1388972833}
   - {fileID: 5006512736429556707}
+  - {fileID: 1138910871}

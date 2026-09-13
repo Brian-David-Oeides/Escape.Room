@@ -10,6 +10,97 @@ public class ValveOilDetection : PuzzleBase
     [Header("Oil Detection")]
     [SerializeField] private bool _isOiled = false;
 
+    [Header("Miss Detection")]
+    [Tooltip("Deliberate approximation: doesn't cover the full 5-10s particle lifetime, only enough to catch an aimed spray landing quickly.")]
+    [SerializeField] private float _missCheckDelay = 2.5f;
+
+    private bool _hasHitDuringThisAttempt = false;
+    private int _missCount = 0;
+
+    private MissCheckRunner _missCheckRunner;
+    private Coroutine _pendingMissCheck;
+
+    // Dedicated coroutine host, separate from this component, so the delayed
+    // miss-check keeps running even if this component/GameObject is disabled mid-check.
+    private class MissCheckRunner : MonoBehaviour { }
+
+    private MissCheckRunner GetMissCheckRunner()
+    {
+        if (_missCheckRunner == null)
+        {
+            GameObject runnerObject = new GameObject("ValveOilDetection_MissCheckRunner");
+            runnerObject.transform.SetParent(transform, false);
+            _missCheckRunner = runnerObject.AddComponent<MissCheckRunner>();
+        }
+
+        return _missCheckRunner;
+    }
+
+    /// <summary>
+    /// Wired to OilSprayController.OnSprayAttemptStarted in the scene.
+    /// </summary>
+    public void OnSprayAttemptStarted()
+    {
+        GameLog.Log("[ValveOilDetection] TEMP-LOG: OnSprayAttemptStarted received"); // TODO: remove after miss-detection debugging
+
+        _hasHitDuringThisAttempt = false;
+
+        // A new attempt superseding a still-pending check from a rapid prior
+        // attempt - cancel it so only one check is ever meaningfully active.
+        if (_pendingMissCheck != null)
+        {
+            GetMissCheckRunner().StopCoroutine(_pendingMissCheck);
+            _pendingMissCheck = null;
+        }
+    }
+
+    /// <summary>
+    /// Wired to OilSprayController.OnSprayAttemptEnded in the scene.
+    /// </summary>
+    public void OnSprayAttemptEnded()
+    {
+        GameLog.Log($"[ValveOilDetection] TEMP-LOG: OnSprayAttemptEnded received (isCompleted={isCompleted})"); // TODO: remove after miss-detection debugging
+
+        if (isCompleted)
+        {
+            return;
+        }
+
+        MissCheckRunner runner = GetMissCheckRunner();
+
+        if (_pendingMissCheck != null)
+        {
+            runner.StopCoroutine(_pendingMissCheck);
+        }
+
+        _pendingMissCheck = runner.StartCoroutine(CheckForMissAfterDelay());
+    }
+
+    private IEnumerator CheckForMissAfterDelay()
+    {
+        GameLog.Log("[ValveOilDetection] TEMP-LOG: CheckForMissAfterDelay coroutine started, waiting"); // TODO: remove after miss-detection debugging
+
+        yield return new WaitForSeconds(_missCheckDelay);
+
+        _pendingMissCheck = null;
+
+        GameLog.Log($"[ValveOilDetection] TEMP-LOG: CheckForMissAfterDelay resolved (isCompleted={isCompleted}, hasHit={_hasHitDuringThisAttempt})"); // TODO: remove after miss-detection debugging
+
+        if (isCompleted || _hasHitDuringThisAttempt)
+        {
+            yield break;
+        }
+
+        _missCount++;
+        DebugLog($"Oil spray missed valve ({_missCount} consecutive miss(es))");
+
+        if (_missCount >= 2)
+        {
+            GameLog.Log($"[ValveOilDetection] TEMP-LOG: calling RegisterFailedAttempt(puzzleID={puzzleID}, hintThreshold={hintThreshold})"); // TODO: remove after miss-detection debugging
+            ClueManager.Instance?.RegisterFailedAttempt(puzzleID, hintThreshold);
+        }
+    }
+
     protected override void Start()
     {
         base.Start(); // CRITICAL: Loads saved completion state!
@@ -44,6 +135,9 @@ public class ValveOilDetection : PuzzleBase
         if (other.name == "Oil_Stream")
         {
             DebugLog("Valve has been oiled! Socket Rotator enabled.");
+
+            // Mark this attempt as a hit (used by the miss-detection check)
+            _hasHitDuringThisAttempt = true;
 
             // Mark as oiled (permanent)
             _isOiled = true;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -15,6 +16,13 @@ public class OilSprayController : MonoBehaviour
     [Header("Input Actions")]
     [SerializeField] private InputActionReference leftTriggerAction;
     [SerializeField] private InputActionReference rightTriggerAction;
+
+    [Header("Attempt Events")]
+    [Tooltip("Fired when a spray attempt starts (trigger pressed while grabbed).")]
+    public UnityEvent OnSprayAttemptStarted;
+
+    [Tooltip("Fired when a spray attempt actually stops emitting (trigger released or tool dropped mid-spray).")]
+    public UnityEvent OnSprayAttemptEnded;
 
     private XRGrabInteractable grabInteractable;
     private bool isGrabbed = false;
@@ -97,12 +105,7 @@ public class OilSprayController : MonoBehaviour
         }
 
         // Stop particle system when object is released
-        if (oilParticleSystem != null && oilParticleSystem.isPlaying)
-            oilParticleSystem.Stop();
-
-        // Stop spray sound effect when object is released
-        if (sprayAudioSource != null && sprayAudioSource.isPlaying)
-            sprayAudioSource.Stop();
+        StopSpray();
     }
 
     private void OnTriggerPressed(InputAction.CallbackContext context)
@@ -117,21 +120,39 @@ public class OilSprayController : MonoBehaviour
             {
                 sprayAudioSource.Play();
             }
+
+            OnSprayAttemptStarted?.Invoke();
+            GameLog.Log("[OilSprayController] TEMP-LOG: OnSprayAttemptStarted invoked"); // TODO: remove after miss-detection debugging
         }
     }
 
     private void OnTriggerReleased(InputAction.CallbackContext context)
     {
         // Stop spraying when trigger is released
-        if (oilParticleSystem != null && oilParticleSystem.isPlaying)
+        StopSpray();
+    }
+
+    // Shared stop path for both "trigger released" and "tool dropped" - only fires
+    // OnSprayAttemptEnded once per actual stop, since wasPlaying guards against a
+    // second call (e.g. dropping the tool right after releasing the trigger) re-firing it.
+    private void StopSpray()
+    {
+        bool wasPlaying = oilParticleSystem != null && oilParticleSystem.isPlaying;
+
+        if (wasPlaying)
         {
             oilParticleSystem.Stop();
         }
 
-        // Stop spray sound effect
         if (sprayAudioSource != null && sprayAudioSource.isPlaying)
         {
             sprayAudioSource.Stop();
+        }
+
+        if (wasPlaying)
+        {
+            OnSprayAttemptEnded?.Invoke();
+            GameLog.Log("[OilSprayController] TEMP-LOG: OnSprayAttemptEnded invoked"); // TODO: remove after miss-detection debugging
         }
     }
 
