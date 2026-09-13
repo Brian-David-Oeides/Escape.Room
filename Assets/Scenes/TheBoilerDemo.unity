@@ -19590,6 +19590,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cabinet
       objectReference: {fileID: 0}
+    - target: {fileID: 6480879497276133043, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.029
+      objectReference: {fileID: 0}
     - target: {fileID: 6939943343930965991, guid: 95a82343fb2a76a47aad1c28e530f643,
         type: 3}
       propertyPath: m_IsTrigger
@@ -19735,7 +19740,8 @@ PrefabInstance:
       propertyPath: m_InteractableCantHoverMeshMaterial
       value: 
       objectReference: {fileID: 2100000, guid: c903ad25c4fd4dccb36af5f959510f17, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6799723886480285681, guid: 95a82343fb2a76a47aad1c28e530f643, type: 3}
     m_RemovedGameObjects:
     - {fileID: 8412160136295658402, guid: 95a82343fb2a76a47aad1c28e530f643, type: 3}
     - {fileID: 476892696178964909, guid: 95a82343fb2a76a47aad1c28e530f643, type: 3}
@@ -30872,7 +30878,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137140510}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
