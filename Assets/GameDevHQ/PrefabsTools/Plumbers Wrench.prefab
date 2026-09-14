@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 9149837940804576540}
   - component: {fileID: 7171900995667433561}
   - component: {fileID: 2583979668211074611}
+  - component: {fileID: 4830794388165769377}
   - component: {fileID: 1002865306034147579}
   m_Layer: 0
   m_Name: Plumbers Wrench
@@ -352,6 +353,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0628638, y: 0.030026078, z: 0.4152592}
   m_Center: {x: -0.010043386, y: 0.00041884184, z: 0.16511464}
+--- !u!114 &4830794388165769377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8044708863819055707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e10618600948e58f3beb520c565b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cabinetBaseTransform: {fileID: 0}
+  cabinetFloorCollider: {fileID: 0}
+  cabinetSideCollider: {fileID: 0}
+  localRestPosition: {x: 0.2286, y: 0.065, z: 0}
+  localRestEulerAngles: {x: 0, y: -90, z: 15}
+  resting: 1
 --- !u!114 &1002865306034147579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +380,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8044708863819055707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 403ccc37dbe052b489295fc47495e0ad, type: 3}
+  m_Script: {fileID: 11500000, guid: d5e10618600948e58f3beb520c565b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cabinetBaseTransform: {fileID: 0}
+  cabinetFloorCollider: {fileID: 0}
+  cabinetSideCollider: {fileID: 0}
+  localRestPosition: {x: 0.2286, y: 0.065, z: 0}
+  localRestEulerAngles: {x: 0, y: -90, z: 15}
+  resting: 1
