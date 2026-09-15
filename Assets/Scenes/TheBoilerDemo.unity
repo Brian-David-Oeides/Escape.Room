@@ -64035,8 +64035,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6568345952508676583, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
+      propertyPath: pokeInteractable
+      value: 
+      objectReference: {fileID: 5337178920344736519}
+    - target: {fileID: 6568345952508676583, guid: ef17984c4a9f4354eab4be502bb4b541,
+        type: 3}
       propertyPath: gentleHoverFeedback
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7353808878341718861, guid: ef17984c4a9f4354eab4be502bb4b541,
+        type: 3}
+      propertyPath: m_PokeConfiguration.m_ConstantValue.m_PokeDirection
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8079601170158181920, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
@@ -64054,6 +64064,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5337178920344736517}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5337178920344736519 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3077158101119590871, guid: ef17984c4a9f4354eab4be502bb4b541,
+    type: 3}
+  m_PrefabInstance: {fileID: 5337178920344736517}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5337178920344736520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5337178920344736520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3675353353154773703, guid: ef17984c4a9f4354eab4be502bb4b541,

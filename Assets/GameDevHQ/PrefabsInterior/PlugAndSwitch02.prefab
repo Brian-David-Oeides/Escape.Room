@@ -436,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f910e520c3c48d49be3327fc01ddbde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pokeInteractable: {fileID: 0}
+  pokeInteractable: {fileID: 3077158101119590871}
   hapticOnHover: 0
   hapticOnPoke: 1
   hapticOnRelease: 0
