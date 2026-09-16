@@ -420,7 +420,7 @@ MonoBehaviour:
     m_UseConstant: 1
     m_ConstantValue:
       m_PokeDirection: 6
-      m_InteractionDepthOffset: 0.02
+      m_InteractionDepthOffset: 0.003
       m_EnablePokeAngleThreshold: 1
       m_PokeAngleThreshold: 45
     m_Variable: {fileID: 0}

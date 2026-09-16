@@ -64046,7 +64046,7 @@ PrefabInstance:
     - target: {fileID: 7353808878341718861, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
       propertyPath: m_PokeConfiguration.m_ConstantValue.m_PokeDirection
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8079601170158181920, guid: ef17984c4a9f4354eab4be502bb4b541,
         type: 3}
