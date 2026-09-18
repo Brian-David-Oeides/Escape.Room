@@ -72,6 +72,12 @@ public class HintsMenuUI : MonoBehaviour
             SettingsManager.Instance.OnHintSettingsChanged += OnHintSettingsChanged;
         }
 
+        // Subscribe to puzzle completions - refresh the manual-hint budget per puzzle solved
+        if (PuzzleManager.Instance != null)
+        {
+            PuzzleManager.Instance.OnPuzzleCompleted += OnAnyPuzzleCompleted;
+        }
+
         // Hide panel initially
         if (hintsPanel != null)
         {
@@ -86,6 +92,26 @@ public class HintsMenuUI : MonoBehaviour
         {
             SettingsManager.Instance.OnHintSettingsChanged -= OnHintSettingsChanged;
         }
+
+        // Unsubscribe from puzzle completions
+        if (PuzzleManager.Instance != null)
+        {
+            PuzzleManager.Instance.OnPuzzleCompleted -= OnAnyPuzzleCompleted;
+        }
+    }
+
+    /// <summary>
+    /// Refresh the manual-hint budget whenever a puzzle is genuinely solved.
+    /// puzzleID is null when this fires from a save-load restore rather than a live completion,
+    /// so we ignore that case rather than treating a loaded save as a fresh solve.
+    /// </summary>
+    private void OnAnyPuzzleCompleted(int totalCompleted, string puzzleID)
+    {
+        if (string.IsNullOrEmpty(puzzleID)) return;
+
+        hintsRequested = 0;
+        GameLog.Log($"[HintsMenuUI] Puzzle '{puzzleID}' completed - manual hint count reset");
+        RefreshAllDisplays();
     }
 
     private void Update()
@@ -378,28 +404,30 @@ public class HintsMenuUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Find the puzzle that needs help most (highest failed attempts)
+    /// Find the puzzle that needs help most (highest failed attempts, excluding completed puzzles)
     /// </summary>
     private string FindPuzzleNeedingHelp()
     {
-        // Access ClueManager's internal data via reflection or public methods
-        // For now, we'll use a simple approach - check all puzzles in scene
+        if (ClueManager.Instance == null) return null;
+
         PuzzleBase[] allPuzzles = FindObjectsOfType<PuzzleBase>();
 
         string bestPuzzleID = null;
+        int bestFailedAttempts = 0;
 
         foreach (PuzzleBase puzzle in allPuzzles)
         {
-            // Check if puzzle is NOT solved (note: property might be 'solved' not 'IsSolved')
-            // We'll use a simple check - if puzzleID exists and puzzle object is active
-            if (!string.IsNullOrEmpty(puzzle.puzzleID))
+            if (string.IsNullOrEmpty(puzzle.puzzleID))
+                continue;
+
+            if (puzzle.IsCompleted)
+                continue; // never target an already-solved puzzle, even with a stale attempt count
+
+            int attempts = ClueManager.Instance.GetFailedAttemptCount(puzzle.puzzleID);
+            if (attempts > 0 && attempts > bestFailedAttempts)
             {
-                // Return first valid unsolved puzzle
-                // In future, we could track attempt counts to be smarter
-                if (bestPuzzleID == null)
-                {
-                    bestPuzzleID = puzzle.puzzleID;
-                }
+                bestFailedAttempts = attempts;
+                bestPuzzleID = puzzle.puzzleID;
             }
         }
 

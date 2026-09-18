@@ -49,6 +49,8 @@ public abstract class PuzzleBase : MonoBehaviour, ISaveable
 
     public string SaveID => puzzleID;
 
+    public bool IsCompleted => isCompleted;
+
     protected virtual void Start()
     {
         // If already completed from save, apply completed state immediately

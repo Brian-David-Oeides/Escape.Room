@@ -190,6 +190,11 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     }
 
     /// <summary>
+    /// Get the number of failed attempts recorded for a specific puzzle
+    /// </summary>
+    public int GetFailedAttemptCount(string puzzleID) => puzzleFailedAttempts.TryGetValue(puzzleID, out int c) ? c : 0;
+
+    /// <summary>
     /// Get hint message for a specific puzzle
     /// Returns different hints based on which clues player has found
     /// </summary>
