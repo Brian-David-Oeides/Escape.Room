@@ -140,8 +140,6 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
     /// <param name="customThreshold">Optional custom threshold (0 = use puzzle's configured threshold)</param>
     public void RegisterFailedAttempt(string puzzleID, int customThreshold = 0)
     {
-        GameLog.Log($"[ClueManager] TEMP-LOG: RegisterFailedAttempt received puzzleID='{puzzleID}', customThreshold={customThreshold}, hintsEnabled={hintsEnabled}"); // TODO: remove after hint-chain debugging
-
         if (string.IsNullOrEmpty(puzzleID))
         {
             GameLog.LogWarning("[ClueManager] Attempted to register failed attempt with empty puzzle ID");
@@ -161,7 +159,6 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
         DebugLog($"Failed attempt on {puzzleID}: {attempts} total");
 
         // Check if hint should be offered
-        GameLog.Log($"[ClueManager] TEMP-LOG: about to call CheckHintEligibility(puzzleID='{puzzleID}', customThreshold={customThreshold})"); // TODO: remove after hint-chain debugging
         CheckHintEligibility(puzzleID, customThreshold);
     }
 
@@ -244,16 +241,12 @@ public class ClueManager : MonoSingleton<ClueManager>, ISaveable
 
     private void CheckHintEligibility(string puzzleID, int customThreshold = 0)
     {
-        GameLog.Log($"[ClueManager] TEMP-LOG: CheckHintEligibility entered for puzzleID='{puzzleID}', customThreshold={customThreshold}, hintsEnabled={hintsEnabled}"); // TODO: remove after hint-chain debugging
-
         if (!hintsEnabled) return;
 
         int attempts = puzzleFailedAttempts[puzzleID];
 
         // Use custom threshold if provided, otherwise check puzzle's configured threshold
         int threshold = customThreshold > 0 ? customThreshold : GetPuzzleHintThreshold(puzzleID);
-
-        GameLog.Log($"[ClueManager] TEMP-LOG: puzzleID='{puzzleID}' attempts={attempts} threshold={threshold} (attempts>=threshold: {attempts >= threshold})"); // TODO: remove after hint-chain debugging
 
         if (attempts >= threshold)
         {
