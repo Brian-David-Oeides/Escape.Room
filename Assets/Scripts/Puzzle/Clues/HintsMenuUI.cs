@@ -41,9 +41,15 @@ public class HintsMenuUI : MonoBehaviour
 
     #region Private Variables
 
-    private float cooldownTimer = 0f;
-    private bool isOnCooldown = false;
+    // Absolute Time.unscaledTime at which the cooldown ends. Using an absolute timestamp
+    // (rather than decrementing a per-frame counter in Update()) means the remaining time
+    // is always correct even if this GameObject was deactivated (e.g. by PauseMenuManager)
+    // for part of the wait - Update() doesn't run while inactive, but Time.unscaledTime does.
+    private float cooldownEndsAtTime = -1f;
     private int hintsRequested = 0;
+
+    private bool IsOnCooldown => Time.unscaledTime < cooldownEndsAtTime;
+    private float RemainingCooldownSeconds => Mathf.Max(0f, cooldownEndsAtTime - Time.unscaledTime);
 
     #endregion
 
@@ -114,21 +120,22 @@ public class HintsMenuUI : MonoBehaviour
         RefreshAllDisplays();
     }
 
+    /// <summary>
+    /// Re-sync all displays whenever this GameObject (re)activates, since PauseMenuManager
+    /// toggles it via SetActive() rather than just hiding a child panel - Update() doesn't run
+    /// while inactive, so the cooldown/max-hints state must be recomputed fresh here rather
+    /// than assumed to already be correct from before deactivation.
+    /// </summary>
+    private void OnEnable()
+    {
+        RefreshAllDisplays();
+    }
+
     private void Update()
     {
-        // Update cooldown timer
-        if (isOnCooldown)
-        {
-            cooldownTimer -= Time.unscaledDeltaTime; // Use unscaled time since game is paused
-
-            if (cooldownTimer <= 0f)
-            {
-                isOnCooldown = false;
-                cooldownTimer = 0f;
-            }
-
-            UpdateCooldownDisplay();
-        }
+        // Cooldown correctness no longer depends on this running every frame (it's computed
+        // from an absolute timestamp), but keep the on-screen countdown live while visible.
+        UpdateCooldownDisplay();
     }
 
     #endregion
@@ -179,7 +186,7 @@ public class HintsMenuUI : MonoBehaviour
     {
         RefreshClueProgress();
         RefreshClueList();
-        RefreshHintButton();
+        UpdateCooldownDisplay(); // also refreshes the hint button internally
         RefreshStatistics();
     }
 
@@ -235,22 +242,30 @@ public class HintsMenuUI : MonoBehaviour
         // Check if player has reached max hints
         bool maxHintsReached = hintsRequested >= maxManualHints;
 
+        // Check cooldown from the absolute end time, not a per-frame counter
+        bool onCooldown = IsOnCooldown;
+
         // Check if ClueManager is available
         bool clueManagerAvailable = ClueManager.Instance != null && ClueManager.Instance.hintsEnabled;
 
         // Button is enabled only if: not on cooldown, hasn't reached max, and system available
-        requestHintButton.interactable = !isOnCooldown && !maxHintsReached && clueManagerAvailable;
+        requestHintButton.interactable = !onCooldown && !maxHintsReached && clueManagerAvailable;
 
-        // Update button text
+        // Update button text - show both blocking reasons at once if both are active,
+        // rather than letting maxHintsReached mask the cooldown entirely
         if (requestHintButtonText != null)
         {
-            if (maxHintsReached)
+            if (maxHintsReached && onCooldown)
+            {
+                requestHintButtonText.text = $"Max Hints Reached — next hint in {Mathf.CeilToInt(RemainingCooldownSeconds)}s";
+            }
+            else if (maxHintsReached)
             {
                 requestHintButtonText.text = "Max Hints Reached";
             }
-            else if (isOnCooldown)
+            else if (onCooldown)
             {
-                requestHintButtonText.text = $"Cooldown: {Mathf.CeilToInt(cooldownTimer)}s";
+                requestHintButtonText.text = $"Cooldown: {Mathf.CeilToInt(RemainingCooldownSeconds)}s";
             }
             else if (!clueManagerAvailable)
             {
@@ -270,9 +285,9 @@ public class HintsMenuUI : MonoBehaviour
     {
         if (cooldownTimerText != null)
         {
-            if (isOnCooldown)
+            if (IsOnCooldown)
             {
-                cooldownTimerText.text = $"Next hint available in: {Mathf.CeilToInt(cooldownTimer)}s";
+                cooldownTimerText.text = $"Next hint available in: {Mathf.CeilToInt(RemainingCooldownSeconds)}s";
                 cooldownTimerText.gameObject.SetActive(true);
             }
             else
@@ -337,7 +352,7 @@ public class HintsMenuUI : MonoBehaviour
             return;
         }
 
-        if (isOnCooldown)
+        if (IsOnCooldown)
         {
             GameLog.Log("[HintsMenuUI] Cannot request hint - on cooldown");
             UIAudioManager.Instance?.PlayError();
@@ -359,9 +374,9 @@ public class HintsMenuUI : MonoBehaviour
         // Request hint for a random puzzle (or most recently failed puzzle)
         RequestManualHint();
 
-        // Start cooldown
-        isOnCooldown = true;
-        cooldownTimer = hintCooldown;
+        // Start cooldown - store the absolute end time so it stays correct even if this
+        // GameObject gets deactivated (and Update() stops) for part of the wait
+        cooldownEndsAtTime = Time.unscaledTime + hintCooldown;
 
         // Increment counter
         hintsRequested++;
@@ -491,8 +506,7 @@ public class HintsMenuUI : MonoBehaviour
     private void TestResetStats()
     {
         hintsRequested = 0;
-        isOnCooldown = false;
-        cooldownTimer = 0f;
+        cooldownEndsAtTime = -1f;
         RefreshAllDisplays();
         GameLog.Log("[HintsMenuUI] Statistics reset");
     }
