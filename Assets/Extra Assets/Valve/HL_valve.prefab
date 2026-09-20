@@ -347,7 +347,7 @@ MonoBehaviour:
   collidersToDisable: []
   renderersToHide: []
   showDebugLogs: 1
-  _socketRotator: {fileID: 0}
+  _socketRotator: {fileID: 1531748615371211700}
   _isOiled: 0
 --- !u!1 &7841248003728799217
 GameObject:
