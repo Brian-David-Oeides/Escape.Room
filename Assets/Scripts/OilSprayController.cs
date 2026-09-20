@@ -27,6 +27,10 @@ public class OilSprayController : MonoBehaviour
     private XRGrabInteractable grabInteractable;
     private bool isGrabbed = false;
 
+    // The trigger action belonging to the hand currently holding this tool. Both hands'
+    // callbacks stay subscribed while enabled, so handlers filter on this instead.
+    private InputActionReference heldTriggerAction;
+
     void Start()
     {
         // Get the XR Grab Interactable component
@@ -73,45 +77,54 @@ public class OilSprayController : MonoBehaviour
         }
     }
 
-    // Determine which hand's trigger action to use, based on the grabbing interactor's transform name
-    // (matches the existing name-based hand-detection pattern used in DynamicAttachPoint.cs)
+    // Determine which hand's trigger action to use. The interactor GameObjects themselves are
+    // named "Direct Interactor"/"Ray Interactor" for both hands, so walk up to the hand's
+    // controller object ("Left Controller"/"Right Controller") and check that name instead -
+    // the same object DynamicAttachPoint.cs does its name-based hand detection on.
     private InputActionReference GetTriggerActionForInteractor(Transform interactorTransform)
     {
-        bool isLeftHand = interactorTransform != null && interactorTransform.name.ToLower().Contains("left");
-        return isLeftHand ? leftTriggerAction : rightTriggerAction;
+        ActionBasedController controller = interactorTransform != null
+            ? interactorTransform.GetComponentInParent<ActionBasedController>()
+            : null;
+
+        for (Transform t = controller != null ? controller.transform : interactorTransform; t != null; t = t.parent)
+        {
+            string name = t.name.ToLower();
+            if (name.Contains("left")) return leftTriggerAction;
+            if (name.Contains("right")) return rightTriggerAction;
+        }
+
+        GameLog.LogWarning($"[OilSprayController] Could not determine hand for interactor '{interactorTransform?.name}' - defaulting to right");
+        return rightTriggerAction;
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
     {
         isGrabbed = true;
 
-        // Enable ONLY the action for the hand that grabbed this
-        InputActionReference triggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
-        if (triggerAction != null)
-        {
-            triggerAction.action.Enable();
-        }
+        // Remember which hand's trigger should drive the spray. The rig-owned Activate action
+        // must never be enabled/disabled from here - the XR controllers depend on it.
+        heldTriggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
     }
 
     private void OnReleased(SelectExitEventArgs args)
     {
         isGrabbed = false;
-
-        // Disable ONLY the action for the hand that released this
-        InputActionReference triggerAction = GetTriggerActionForInteractor(args.interactorObject.transform);
-        if (triggerAction != null)
-        {
-            triggerAction.action.Disable();
-        }
+        heldTriggerAction = null;
 
         // Stop particle system when object is released
         StopSpray();
     }
 
+    private bool IsHeldHandAction(InputAction.CallbackContext context)
+    {
+        return isGrabbed && heldTriggerAction != null && context.action == heldTriggerAction.action;
+    }
+
     private void OnTriggerPressed(InputAction.CallbackContext context)
     {
-        // Only spray if the object is currently grabbed
-        if (isGrabbed && oilParticleSystem != null)
+        // Only spray if grabbed, and only for the trigger of the hand holding this tool
+        if (IsHeldHandAction(context) && oilParticleSystem != null)
         {
             oilParticleSystem.Play();
 
@@ -128,8 +141,12 @@ public class OilSprayController : MonoBehaviour
 
     private void OnTriggerReleased(InputAction.CallbackContext context)
     {
-        // Stop spraying when trigger is released
-        StopSpray();
+        // Stop spraying when the holding hand's trigger is released
+        // (dropping the tool mid-spray is handled by OnReleased)
+        if (IsHeldHandAction(context))
+        {
+            StopSpray();
+        }
     }
 
     // Shared stop path for both "trigger released" and "tool dropped" - only fires
