@@ -14,6 +14,12 @@ public class HammerStrikeTrigger : PuzzleBase
     [Tooltip("Torque impulse applied along the hinge axis (opening direction) on unlock, to make the door swing open decisively instead of creeping.")]
     public float openTorqueImpulse = 8f;
 
+    [Tooltip("The Cabinet's floor BoxCollider ('Cabinet Base floor'). The open door sweeps through this panel, so collision response against it is disabled - otherwise the solver pushes the door off its hinge arc every step and it never settles.")]
+    [SerializeField] private Collider cabinetFloorCollider;
+
+    [Tooltip("The Cabinet's side-wall BoxCollider ('Cabinet Base side'). Same reasoning as cabinetFloorCollider - the open door overlaps this panel across most of its swing.")]
+    [SerializeField] private Collider cabinetSideCollider;
+
     [SerializeField] private AudioSource hammerAudioSource;
     [SerializeField] private AudioClip stakeHitClip;
 
@@ -24,6 +30,43 @@ public class HammerStrikeTrigger : PuzzleBase
     public XRSocketInteractor stakeSocket;
 
     private bool _hasTriggered = false;
+
+    private void Awake()
+    {
+        // Must run before Start(), since a save with this puzzle completed unlocks the
+        // door there and it starts falling on the very next physics step.
+        IgnoreCabinetShellCollisions();
+    }
+
+    /// <summary>
+    /// Disable collision response between the cabinet door and the Cabinet's two static
+    /// shell panels. The door's HingeJoint constrains it to a fixed arc, and that arc
+    /// passes through both panels (measured: up to ~7mm into 'Cabinet Base side' and
+    /// ~2mm into 'Cabinet Base floor' within the joint's own -90..-180 limit range).
+    /// The contact solver pushes the door off the arc, the joint pulls it back, and
+    /// neither wins - so the door jitters forever instead of coming to rest and sleeping.
+    /// The joint's own m_EnableCollision:0 only covers the door vs its connected body
+    /// ('Base'); these two panels are separate static colliders it does not protect.
+    /// Same fix as BronzeKeyDrawerFollow and PlumbersWrenchCabinetRest.
+    /// </summary>
+    private void IgnoreCabinetShellCollisions()
+    {
+        if (targetRigidbody == null) return;
+
+        foreach (Collider doorCollider in targetRigidbody.GetComponentsInChildren<Collider>(true))
+        {
+            // Triggers produce no collision response to suppress, and ignoring them here
+            // would silently kill their trigger events too (the door's child StakeSocket
+            // is a trigger) - so leave them alone.
+            if (doorCollider.isTrigger) continue;
+
+            if (cabinetFloorCollider != null)
+                Physics.IgnoreCollision(doorCollider, cabinetFloorCollider, true);
+
+            if (cabinetSideCollider != null)
+                Physics.IgnoreCollision(doorCollider, cabinetSideCollider, true);
+        }
+    }
 
     protected override void Start()
     {
@@ -88,6 +131,11 @@ public class HammerStrikeTrigger : PuzzleBase
     /// </summary>
     private void ApplyUnlockedState(bool skipAnimation)
     {
+        // Unity resets an ignored collider pair whenever either collider is disabled and
+        // re-enabled, so re-assert it at the moment the door actually starts moving.
+        // Idempotent - Awake() has already done this once.
+        IgnoreCabinetShellCollisions();
+
         // Step 1: Unlock cabinet door
         if (targetRigidbody != null)
         {

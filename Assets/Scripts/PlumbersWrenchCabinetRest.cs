@@ -81,6 +81,43 @@ public class PlumbersWrenchCabinetRest : MonoBehaviour
     }
 
     /// <summary>
+    /// Permanently hand the wrench's Rigidbody over to another owner - called by
+    /// SocketRotator once the wrench belongs to the valve socket, whether that happened
+    /// live or was restored from a save.
+    ///
+    /// This has to be permanent, not just `resting = false`: `resting` is a serialized
+    /// field that comes back TRUE on every scene load, so after loading a save where the
+    /// valve was already solved, FixedUpdate above would MovePosition the wrench ~19m back
+    /// to the Cabinet every physics step while SocketRotator's LateUpdate locked it to the
+    /// socket every frame. That fight teleported the wrench across the room at ~950 m/s,
+    /// slamming it through everything in between (Cabinet Door, Mop, toolbox lid, drawer
+    /// handles) and leaving all of them jittering. Disabling the component means no
+    /// serialized default can resurrect it.
+    ///
+    /// Idempotent - safe to call from more than one path, and on every load.
+    /// </summary>
+    public void ReleaseOwnership()
+    {
+        if (!resting && !enabled) return;
+
+        resting = false;
+
+        // Leave the Rigidbody non-kinematic as part of the handoff. Awake() made it
+        // kinematic to hold the rest pose, and disabling this component below fires
+        // OnDisable, dropping the selectExited listener that used to clear that on
+        // release - so without this line a wrench that is socketed but NOT yet fully
+        // turned (still grabbable, since SocketRotator only disables the interactable
+        // once the valve is solved) would freeze in mid-air when dropped. SocketRotator
+        // re-asserts isKinematic itself for the fully-turned/locked case.
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+        }
+
+        enabled = false;
+    }
+
+    /// <summary>
     /// Computes and applies the rest pose directly via Transform, not Rigidbody.MovePosition -
     /// this is what lets it work both at Awake (before physics has stepped) and from the Editor
     /// context menu below (no physics simulation running at all outside Play mode).

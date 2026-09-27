@@ -39,6 +39,11 @@ public class SocketRotator : MonoBehaviour, ISaveable, ISabotageable
     [Header("Events")]
     public UnityEvent onFullyTurned;
 
+    [Tooltip("Fired when loading a save where the valve was already fully turned. Wire persistent " +
+             "unlocks here (e.g. enabling Lever 2), NOT one-shot feedback like haptics/audio - " +
+             "mirrors PuzzleBase.OnLoadCompletedState.")]
+    public UnityEvent onLoadFullyTurnedState;
+
     // Control variables
     private XRBaseInteractor interactor;
     private float currentXRotation = 0f;  
@@ -159,6 +164,10 @@ public class SocketRotator : MonoBehaviour, ISaveable, ISabotageable
         if (eventFired && interactableObj != null &&
             interactableObj.transform.gameObject == wrench.gameObject)
         {
+            // Same hand-off as in RestoreSocketState(), so solving the valve live and
+            // restoring it from a save leave the wrench under identical ownership.
+            wrench.GetComponent<PlumbersWrenchCabinetRest>()?.ReleaseOwnership();
+
             // Lock the wrench at max rotation position
             wrench.transform.position = socketPivot.position;
             wrench.transform.rotation = Quaternion.Euler(
@@ -348,6 +357,17 @@ public class SocketRotator : MonoBehaviour, ISaveable, ISabotageable
 
                 // Restore the socket state
                 RestoreSocketState();
+
+                // Re-apply downstream unlocks that onFullyTurned granted at completion time.
+                // Those live on other objects (e.g. Lever 2's XRSimpleInteractable.enabled) and
+                // aren't persisted themselves, and the wrench is re-locked above so the player
+                // can't re-turn the valve to trigger them again - without this the save soft-locks.
+                // Deliberately NOT re-invoking onFullyTurned: that would replay the haptic/audio too.
+                if (eventFired)
+                {
+                    onLoadFullyTurnedState?.Invoke();
+                    Debug.Log($"[SocketRotator] Re-applied fully-turned unlocks for {socketID} from save");
+                }
             }
         }
         else
@@ -370,6 +390,15 @@ public class SocketRotator : MonoBehaviour, ISaveable, ISabotageable
         // If wrench was socketed when saved
         if (isSocketed)
         {
+            // The wrench belongs to this socket now, so stop its cabinet rest-pose script
+            // competing for the same Rigidbody. Its 'resting' flag is serialized true and so
+            // comes back on every load - without this it MovePosition's the wrench back to
+            // the Cabinet every physics step while EnforceLocking() holds it here every
+            // frame, flinging it across the room and shaking everything it passes through.
+            // Done here rather than checked from that script's own Awake/Start, because
+            // those run about two frames before this LoadState and would read stale state.
+            wrench.GetComponent<PlumbersWrenchCabinetRest>()?.ReleaseOwnership();
+
             // Position wrench at socket pivot
             wrench.transform.position = socketPivot.position;
 

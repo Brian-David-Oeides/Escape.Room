@@ -4924,6 +4924,8 @@ MonoBehaviour:
   targetRigidbody: {fileID: 423719841}
   targetHinge: {fileID: 879312334230317999}
   openTorqueImpulse: 8
+  cabinetFloorCollider: {fileID: 3369577471307738536}
+  cabinetSideCollider: {fileID: 4481758601053072151}
   hammerAudioSource: {fileID: 187258448301}
   stakeHitClip: {fileID: 8300000, guid: 567bb90aefc2db442b0e72af7cc71a1c, type: 3}
   hammerTag: Hammer
@@ -10796,7 +10798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 877264097}
   - component: {fileID: 877264098}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mop Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19139,7 +19141,7 @@ GameObject:
   - component: {fileID: 1085039381}
   - component: {fileID: 1085039382}
   - component: {fileID: 1085039383}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mophead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19890,7 +19892,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1110749523}
   - component: {fileID: 1110749524}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MopHandleAttachPoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20149,6 +20151,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ExitSign02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111411749164029173, guid: 95a82343fb2a76a47aad1c28e530f643,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -25851,7 +25858,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1611625982}
   - component: {fileID: 1611625983}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GrabPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29261,7 +29268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2009420796}
   - component: {fileID: 2009420797}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MopHandleAttachPoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33775,7 +33782,7 @@ GameObject:
   - component: {fileID: 579034555317396463}
   - component: {fileID: 579034555317396464}
   - component: {fileID: 579034555317396465}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LidTop_Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45546,6 +45553,46 @@ PrefabInstance:
     - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
         type: 3}
       propertyPath: onFullyTurned.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value:
+      objectReference: {fileID: 5337178919539709558}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531748615371211700, guid: 1c123664712e7ad4781b7a4a4ff97c86,
+        type: 3}
+      propertyPath: onLoadFullyTurnedState.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -74874,7 +74921,7 @@ GameObject:
   - component: {fileID: 5888904372560680164}
   - component: {fileID: 6773406010166350799}
   - component: {fileID: 6773406010166350798}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
