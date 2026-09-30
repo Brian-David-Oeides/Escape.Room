@@ -116,7 +116,7 @@ public abstract class PuzzleBase : MonoBehaviour, ISaveable
 
     #region ISaveable Implementation
 
-    public void SaveState(SaveData saveData)
+    public virtual void SaveState(SaveData saveData)
     {
         // If completed, add to completed puzzles list
         if (isCompleted && !saveData.completedPuzzleIDs.Contains(puzzleID))

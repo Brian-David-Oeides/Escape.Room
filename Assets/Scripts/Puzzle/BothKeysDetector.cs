@@ -58,6 +58,12 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
     private bool _lock2HasKey = false;
     private bool _dialUnlocked = false;  // Once true, stays true forever
 
+    // Whether each lock's sub-completion has been registered with PuzzleManager. Unlike
+    // _lockXHasKey these never go back to false when a key is removed, matching the
+    // registration itself, so SaveState can persist them
+    private bool _lock1Registered = false;
+    private bool _lock2Registered = false;
+
     #region Unity Lifecycle
 
     private void Start()
@@ -112,6 +118,7 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
         _lock1HasKey = true;
         DebugLog($"Lock 1: Key inserted ({args.interactableObject.transform.name})");
         PuzzleManager.Instance?.RegisterPuzzleCompletion("bronzeKey_lock1_001");
+        _lock1Registered = true;
         CheckBothKeys();
     }
 
@@ -133,6 +140,7 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
         _lock2HasKey = true;
         DebugLog($"Lock 2: Key inserted ({args.interactableObject.transform.name})");
         PuzzleManager.Instance?.RegisterPuzzleCompletion("bronzeKey_lock2_001");
+        _lock2Registered = true;
         CheckBothKeys();
     }
 
@@ -187,11 +195,32 @@ public class BothKeysDetector : MonoBehaviour, ISaveable
 
         saveData.moveableObjects.Add(objectState);
 
+        // Save puzzle completion states so PuzzleManager's restored count includes them
+        if (_lock1Registered && !saveData.completedPuzzleIDs.Contains("bronzeKey_lock1_001"))
+        {
+            saveData.completedPuzzleIDs.Add("bronzeKey_lock1_001");
+        }
+
+        if (_lock2Registered && !saveData.completedPuzzleIDs.Contains("bronzeKey_lock2_001"))
+        {
+            saveData.completedPuzzleIDs.Add("bronzeKey_lock2_001");
+        }
+
+        if (_dialUnlocked && !saveData.completedPuzzleIDs.Contains(puzzleID))
+        {
+            saveData.completedPuzzleIDs.Add(puzzleID);
+        }
+
         DebugLog($"State saved: Lock1={_lock1HasKey}, Lock2={_lock2HasKey}, DialUnlocked={_dialUnlocked}");
     }
 
     public void LoadState(SaveData saveData)
     {
+        // Restore the registered flags from the completion list itself, so a lock whose key
+        // was later removed still gets re-saved next time
+        _lock1Registered = saveData.completedPuzzleIDs.Contains("bronzeKey_lock1_001");
+        _lock2Registered = saveData.completedPuzzleIDs.Contains("bronzeKey_lock2_001");
+
         // Find this object's saved state
         MoveableObjectData savedState = saveData.moveableObjects.Find(obj => obj.objectID == puzzleID);
 

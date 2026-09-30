@@ -278,6 +278,27 @@ public class FrameLock : PuzzleBase
         DebugLog("All frames restored and locked in sockets");
     }
 
+    /// <summary>
+    /// Also save the per-socket sub-completions, which are registered with PuzzleManager
+    /// directly in EnterSocket0/1/2 rather than through PuzzleBase
+    /// </summary>
+    public override void SaveState(SaveData saveData)
+    {
+        base.SaveState(saveData);
+
+        // _enteredCode[i] is set non-zero exactly when that socket's ID is registered and
+        // is never reset; isCompleted covers a solved puzzle restored from a save, where
+        // _enteredCode is back to its zero defaults
+        string[] socketIDs = { "frame_socket0_001", "frame_socket1_001", "frame_socket2_001" };
+        for (int i = 0; i < socketIDs.Length; i++)
+        {
+            if ((isCompleted || _enteredCode[i] != 0) && !saveData.completedPuzzleIDs.Contains(socketIDs[i]))
+            {
+                saveData.completedPuzzleIDs.Add(socketIDs[i]);
+            }
+        }
+    }
+
     private void RegisterFailedAttempt()
     {
         if (ClueManager.Instance != null)

@@ -334,6 +334,12 @@ public class SocketRotator : MonoBehaviour, ISaveable, ISabotageable
 
         saveData.moveableObjects.Add(objectState);
 
+        // Save puzzle completion state so PuzzleManager's restored count includes it
+        if (eventFired && !saveData.completedPuzzleIDs.Contains(puzzleID))
+        {
+            saveData.completedPuzzleIDs.Add(puzzleID);
+        }
+
         Debug.Log($"[SocketRotator] Saved state for {socketID}: rotation={currentXRotation:F2}, completed={eventFired}, socketed={isSocketed}");
     }
 
